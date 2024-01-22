@@ -124,7 +124,7 @@
 			<ul>
 			  <li>Globaalisti skaalautuva turvallinen WS-kanava valitsemillesi pankeille (AWS API Gateway, Lambda, KMS, Cognito, DynamoDB, jne.)
 			  <li>Amazon AWS KMS avaintenhallintaan perustuva sertifikaattien salaisen avaimen suojaus
-			  <li>Swagger REST API kuvaus (JSON data) ja valmis testiympäristö integraatiota varten, integraatio yhdessä päivässä
+			  <li>OpenAPI REST API kuvaus (JSON data) ja valmis testiympäristö integraatiota varten, integraatio yhdessä päivässä
               <li>Automaattinen sertifikaattien uusinta
 			  <li>Automaattiset tietoturva- ja korjauspäivitykset (huom palveliton ympäristö AWS Lambdalla)
               <li>Kaksitasoinen käyttäjätunnus (luku ja luku+kirjoitus SMS MFA:lla), mahdollisuus myös GPG allekirjoituksille (n allekirjoitusta m:stä maksujen hyväksyntää varten)

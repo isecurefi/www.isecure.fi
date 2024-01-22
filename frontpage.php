@@ -13,7 +13,7 @@
        </div>
      </div>
      <!-- /.row -->
-    <div class="col-md-4 col-sm-4 col-xs-12">
+    <!-- <div class="col-md-6 col-sm-6 col-xs-12">
       <div class="panel panel-primary">
         <div class="panel-heading panel-heading-first">
           <h2 class="panel-title">TUOTEKEHITT&Auml;JILLE<br><br>ISECure WS-Kanava</h2>
@@ -34,14 +34,14 @@
 	  </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-4 col-sm-4 col-xs-12">
+    </div> -->
+    <div class="col-md-6 col-sm-6 col-xs-12">
       <div class="panel panel-primary">
         <div class="panel-heading panel-heading-second">
           <h2 class="panel-title">API<br><br>ISECure WS-Kanava API</h2>
         </div>
         <div class="panel-body">
-          <p>WS-KANAVA API (REST), SWAGGER KUVAUS JA WSCLI KOMENTORIVITY&Ouml;KALU</p>
+          <p>WS-KANAVA API (REST), OPENAPI KUVAUS JA WSCLI KOMENTORIVITY&Ouml;KALU</p>
 	  
 	      <p>Oletko kehittämässä omaa palvelua tai tuotetta, jossa
 	        hyödynnät WS-kanavaa? Tarjoamme kilpailukykyiseen
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="col-md-6 col-sm-6 col-xs-12">
       <div class="panel panel-primary">
         <div class="panel-heading panel-heading-second">
           <h2 class="panel-title">Pankkitiedostot palveluna<br><br>ISECure WS-Kanava SYNC</h2>

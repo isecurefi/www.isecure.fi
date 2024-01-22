@@ -46,7 +46,7 @@
         <li>Kirjautuminen käyttää julkisen avaimen RSA kryptausta ja challenge-response metodia. API ajetaan SSL:n yli, vaikkakin itse kirjautumisen tietoturva on siitä riippumaton (MitM). "admin" -tunnuksen kirjautuminen vaatii kertakäyttöisen SMS koodin (2FA).
         <li>Paranneltu <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK ja client</a> helppoa integroimista varten.
         <li><a href="https://github.com/isecurefi/wscli-php">WSCLI SDK ja client - GitHub repository</a>
-        <li><a href="https://isecure.fi/wsapi_v2.json">WSAPI v2 Swagger API rajapintakuvaus JSON -muodossa</a>
+        <li><a href="https://isecure.fi/wsapi_v2.json">WSAPI OpenAPI API rajapintakuvaus JSON -muodossa</a>
         <li><a href="https://isecure.fi/wsapi_v2/index.html">WSAPI v2 API Dokumentaatio</a>
 	      </ul>
               <p>Halutessasi autamme integroinnissa ja tarvittaessa asennamme teille työkalut ja hoidamme boardauksen - rekisteröimme sinut ja hoidamme sertifikaattien enrollauksen puolestasi.</p>

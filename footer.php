@@ -27,7 +27,7 @@
             </div>
             <div class="col-xs-6 col-sm-4">
 	      <p>
-        London/UK<br>
+    Helsinki<br>
 		Finland (Y-tunnus: 2296336-9)<br><br>
 		<a href="https://twitter.com/isecurefi">
 		  <img src="images/twitter.png" class="soclogo">
