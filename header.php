@@ -3,6 +3,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="ISECure Oy">
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-BJ6B7H7K8E');
+</script>
+
 <!-- Global site tag (gtag.js) - Google Ads: 1025469048 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1025469048"></script>
 <script>

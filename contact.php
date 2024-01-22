@@ -24,7 +24,6 @@
         <br>
         <br>
         +358 40 483 5507 (Finland)<br>
-        +44 7391 228 338 (UK)<br>
         <br>
         Y-tunnus: 2296336-9<br><br>
       </div>

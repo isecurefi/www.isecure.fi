@@ -23,6 +23,7 @@ function SendSNS(msg, name, email, result, thankyou)
     }, function (err, data) {
         if (!err) {
             if (result) result.innerHTML = "<b>Viesti l&auml;hetetty!</b>";
+            console.log(data);
             var callback = function () {
                 window.location = thankyou;
             };

@@ -34,9 +34,7 @@
         <!-- Features Section -->
         <div class="row">
             <div class="col-md-8">
-	      <p>WS-KANAVA LÄHDEKOODINA PALVELUKEHITTÄJILLE JA
-	      OHJELMISTOTALOILLE, TAI SUORAAN PILVIPALVELUNA
-	      YRITYKSILLE</p>
+	      <p>WS-KANAVA SUORAAN PILVIPALVELUNA YRITYKSILLE</p>
  
 	      <p>Tarjoamme testatun ja verifioidun koodin täydellä
 	      lisenssillä kehitys- ja asiakastarpeisiinne.</p>
@@ -54,15 +52,11 @@
 	      Handelsbanken, Aktia, POP, Säästöpankki. Tuemme sekä
 	      APP- että PKI-puolta (mm. sertifikaatin haku PIN
 	      -koodilla ja uusinta). WS-kanava on ollut tuotannossa
-	      yli 4 vuotta (Nordea, OP, DanskeBank) ja on käytössä
-	      useilla asiakkailla.</p>
+	      yli 10 vuotta ja on käytössä useilla asiakkailla.</p>
             </div>
             <div class="col-md-4">
-	      <p class="blue-text">Selected-paketilla saat valitsemasi pankin WS-kanavan
-	      lähdekoodin, Collaborator-paketilla saat mukaan
-	      päivitykset ja pääset osallistumaan
-	      mm. rajapintakehitykseen toiveidesi mukaan. Voit ostaa
-	      myös WS-kanavan suoraan palveluna Hosting -paketilla
+	      <p class="blue-text">Voit ostaa
+	      WS-kanavan suoraan palveluna Hosting -paketilla (SaaS)
 	      valitsemillesi tai kaikille pankeille.</p>
 	      
               <a href="#contact" class="btn btn-primary">Kysy Lis&auml;&auml;</a>
@@ -80,7 +74,7 @@
             <div class="col-lg-12">
                 <h2 class="page-header"></h2>
             </div>
-            <div class="col-md-4 col-md-7">
+            <!-- <div class="col-md-4 col-md-7">
                 <div class="panel panel-default text-center">
                     <div class="panel-heading">
                         <h4>SELECTED CODE</h4>
@@ -119,8 +113,8 @@
                         <a href="#contact" class="btn btn-primary">Kysy Lis&auml;&auml;</a>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 col-md-7">
+            </div> -->
+            <div class="col-md-8">
                 <div class="panel panel-default text-center">
                     <div class="panel-heading">
                         <h4>SAAS</h4>

@@ -12,5 +12,5 @@ aws s3 cp --cache-control "public, max-age=86400" --recursive images s3://www2.i
 aws s3 cp --cache-control "public, max-age=86400" --recursive --exclude "*.css__" css s3://www2.isecure.fi/css/
 aws s3 cp --cache-control "public, max-age=86400" --recursive font-awesome s3://www2.isecure.fi/font-awesome/
 
-scp -r googlef9de7a9770f69bd9.html sitemap.xml fsga762f.txt robots.txt js images css font-awesome ssh.isecure.fi:/var/www/isecure.fi-SSL/
+# scp -r googlef9de7a9770f69bd9.html sitemap.xml fsga762f.txt robots.txt js images css font-awesome ssh.isecure.fi:/var/www/isecure.fi-SSL/
 

@@ -5,12 +5,12 @@ FILES="$FILES thankyou"
 
 echo "Creating HTML files.."
 echo $FILES | xargs -I{} -n1 sh -c 'php "$1.php" > "$1.html__"' -- {}
-echo $FILES | xargs -I{} -n1 sh -c 'html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true "$1.html__" > "$1.html"' -- {}
+echo $FILES | xargs -I{} -n1 sh -c './node_modules/.bin/html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true "$1.html__" > "$1.html"' -- {}
 rm *.html__
 
 echo "Creating compacted and combined CSS file.."
 cat css/bootstrap.min.css__ css/modern-business.css__  font-awesome/css/font-awesome.min.css css/isecure.css__ > css/combined.css__
-postcss css/combined.css__ > css/combined.css
+./node_modules/.bin/postcss css/combined.css__ > css/combined.css
 /bin/rm -f css/combined.css__
 
 # Change hrefs from .php to .html

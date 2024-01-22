@@ -1,7 +1,7 @@
 <?php include_once('ib64.php'); ?>
         <footer>
           <div class="row footer">
-            <p style="padding:5px;margin:0px;text-align:left;">Copyright &copy; ISECure Oy 2018</p>
+            <p style="padding:5px;margin:0px;text-align:left;">Copyright &copy; ISECure Oy 2024</p>
           </div>
           <div class="row footer2">
           <br>
@@ -14,7 +14,6 @@
         Founder Dan Forsberg, D.Sc.<br>
 		<i>dan.forsberg@isecure.fi</i><br>
         +358 40 483 5507 (Finland)<br>
-        +44 7391 228 338 (UK)<br>
             <img src="<?php ib64('images/AWS_SAP.png'); ?>" class="awslogos2">
             <img src="<?php ib64('images/AWS_DOP.png'); ?>" class="awslogos2">
             <img src="<?php ib64('images/AWS_SS.png'); ?>" class="awslogos2">
