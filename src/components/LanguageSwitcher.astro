@@ -18,13 +18,13 @@ const languages: Record<Lang, string> = {
 <div class="language-switcher">
   {Object.entries(languages).map(([lang, label]) => (
     <a
-      href={getLocalizedPathname(Astro.url.pathname.replace('/index.html', '/'), lang as Lang)}
+      href={lang === 'fi' ? '/' : getLocalizedPathname(Astro.url.pathname.replace('/index.html', '/'), lang as Lang)}
       class={`lang-link ${currentLang === lang ? 'active' : ''}`}
       data-lang={lang}
       aria-label={`Switch to ${label}`}
       onclick={`
         localStorage.setItem('preferred-lang', '${lang}');
-        window.location.href = '${getLocalizedPathname(Astro.url.pathname.replace('/index.html', '/'), lang as Lang)}';
+        window.location.href = '${lang === 'fi' ? '/' : getLocalizedPathname(Astro.url.pathname.replace('/index.html', '/'), lang as Lang)}';
         return false;
       `}
     >
