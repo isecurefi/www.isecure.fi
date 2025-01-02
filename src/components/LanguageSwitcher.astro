@@ -20,12 +20,33 @@ const languages: Record<Lang, string> = {
       href={`${Astro.url.pathname}?lang=${lang}`}
       class={`lang-link ${currentLang === lang ? 'active' : ''}`}
       aria-label={`Switch to ${label}`}
-      onclick={`localStorage.setItem('preferred-lang', '${lang}')`}
+      onclick={`
+        localStorage.setItem('preferred-lang', '${lang}');
+        document.querySelectorAll('.lang-link').forEach(link => {
+          link.classList.remove('active');
+        });
+        this.classList.add('active');
+      `}
     >
       {label}
     </a>
   ))}
 </div>
+
+<script>
+  // Set initial active state based on stored language
+  const storedLang = localStorage.getItem('preferred-lang') || 'fi';
+  const links = document.querySelectorAll('.lang-link');
+  links.forEach(link => {
+    const langParam = new URL(link.getAttribute('href'), window.location.href)
+      .searchParams.get('lang');
+    if (langParam === storedLang) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+</script>
 
 <style>
   .language-switcher {
