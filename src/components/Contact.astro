@@ -39,6 +39,7 @@ import '../styles/Contact.css';
             minlength="2"
             maxlength="50"
             pattern="[A-Za-z]([A-Za-z]| |-){1,48}[A-Za-z]"
+            onblur="validateInput(this)"
           >
           <div class="invalid-feedback">Nimi on pakollinen ja voi sisältää vain kirjaimia</div>
         </div>
@@ -50,6 +51,7 @@ import '../styles/Contact.css';
             aria-label="Sähköposti"
             required
             pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+            onblur="validateInput(this)"
           >
           <div class="invalid-feedback">Anna kelvollinen sähköpostiosoite</div>
         </div>
@@ -62,6 +64,7 @@ import '../styles/Contact.css';
             required
             minlength="10"
             maxlength="1000"
+            onblur="validateInput(this)"
           ></textarea>
           <div class="invalid-feedback">Viestin tulee olla vähintään 10 merkkiä pitkä</div>
         </div>
@@ -121,44 +124,36 @@ import '../styles/Contact.css';
     IdentityPoolId: 'eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c'
   });
 
-  function validateForm(): boolean {
-    const nameInput = document.getElementById('name') as HTMLInputElement;
-    const emailInput = document.getElementById('email') as HTMLInputElement;
-    const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+  function validateInput(input: HTMLInputElement | HTMLTextAreaElement): boolean {
+    input.classList.remove('is-invalid', 'is-valid');
     
-    let isValid = true;
-
-    // Reset previous validation states
-    [nameInput, emailInput, messageInput].forEach(input => {
-      input.classList.remove('is-invalid');
-      input.classList.remove('is-valid');
-    });
-
-    // Name validation
-    if (!nameInput.value.trim() || !nameInput.checkValidity()) {
-      nameInput.classList.add('is-invalid');
-      isValid = false;
-    } else {
-      nameInput.classList.add('is-valid');
+    const value = input.value.trim();
+    
+    // Skip validation if empty (let required attribute handle it)
+    if (!value) {
+      input.classList.add('is-invalid');
+      return false;
     }
 
-    // Email validation
-    if (!emailInput.value.trim() || !emailInput.checkValidity()) {
-      emailInput.classList.add('is-invalid');
+    let isValid = input.checkValidity();
+    
+    // Additional validation for message length
+    if (input.id === 'message' && value.length < 10) {
       isValid = false;
-    } else {
-      emailInput.classList.add('is-valid');
     }
 
-    // Message validation
-    if (!messageInput.value.trim() || messageInput.value.length < 10) {
-      messageInput.classList.add('is-invalid');
-      isValid = false;
-    } else {
-      messageInput.classList.add('is-valid');
-    }
-
+    input.classList.add(isValid ? 'is-valid' : 'is-invalid');
     return isValid;
+  }
+
+  function validateForm(): boolean {
+    const inputs = [
+      document.getElementById('name') as HTMLInputElement,
+      document.getElementById('email') as HTMLInputElement,
+      document.getElementById('message') as HTMLTextAreaElement
+    ];
+    
+    return inputs.every(input => validateInput(input));
   }
 
   // Clear validation state on input
@@ -166,8 +161,7 @@ import '../styles/Contact.css';
     const element = document.getElementById(id);
     if (element) {
       element.addEventListener('input', () => {
-        const input = element as HTMLInputElement | HTMLTextAreaElement;
-        input.classList.remove('is-invalid', 'is-valid');
+        element.classList.remove('is-invalid', 'is-valid');
       });
     }
   });
