@@ -35,14 +35,15 @@ const languages: Record<Lang, string> = {
 <script>
   // Set initial active state based on current URL path
   const currentPath = window.location.pathname;
-  const pathParts = currentPath.split('/').filter(Boolean);
   
-  // Default to 'fi' for root path, paths without language code, or paths starting with anything other than en/se
+  // Default to 'fi' for all paths except those explicitly starting with /en/ or /se/
   let currentLang = 'fi';
   
-  // Only change from Finnish if explicitly en or se
-  if (pathParts.length > 0 && (pathParts[0] === 'en' || pathParts[0] === 'se')) {
-    currentLang = pathParts[0];
+  // Only change from Finnish if path explicitly starts with /en/ or /se/
+  if (currentPath.startsWith('/en/') || currentPath === '/en') {
+    currentLang = 'en';
+  } else if (currentPath.startsWith('/se/') || currentPath === '/se') {
+    currentLang = 'se';
   }
   
   const links = document.querySelectorAll('.lang-link');
