@@ -337,6 +337,9 @@ export function getStoredLang(): Lang {
 }
 
 export function setStoredLang(lang: Lang): void {
+  if (!lang) {
+    return;
+  }
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem('preferred-lang', lang);
   }

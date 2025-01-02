@@ -170,6 +170,9 @@ const { lang = 'fi' } = Astro.props;
 
   
   function validateForm(): boolean {
+    if (!document.getElementById('name') || !document.getElementById('email') || !document.getElementById('message')) {
+      return false;
+    }
     const inputs = [
       document.getElementById('name') as HTMLInputElement,
       document.getElementById('email') as HTMLInputElement,
