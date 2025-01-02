@@ -5,10 +5,12 @@ import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import Contact from '../components/Contact.astro';
 
-import type { LayoutProps } from '../types/layout';
-type Props = LayoutProps;
+interface Props {
+  title: string;
+  lang?: 'fi' | 'en' | 'se';
+}
 
-const { title, lang = 'fi' } = Astro.props;
+const { title, lang = 'fi' } = Astro.props as Props;
 ---
 
 <!DOCTYPE html>
