@@ -1,0 +1,8 @@
+{
+  "name": "ISECure",
+  "short_name": "ISECure",
+  "icons": [],
+  "theme_color": "#0d6efd",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
