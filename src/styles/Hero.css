@@ -22,16 +22,23 @@
 .hero-container {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--hero-gap);
+  gap: 1rem;
+  padding: 0.5rem;
 }
 
 .hero-item {
   display: flex;
   flex-direction: column;
-  background-color: var(--hero-background);
-  padding: var(--hero-padding);
-  border-radius: var(--hero-border-radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--background-color);
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease-in-out;
+}
+
+.hero-item:hover {
+  transform: translateY(-2px);
 }
 
 .hero-image {
