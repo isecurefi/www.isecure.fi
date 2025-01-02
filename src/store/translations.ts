@@ -304,9 +304,9 @@ export const translations = {
       se: 'Web Service-kanalen är ett säkert och pålitligt sätt att hantera företagets betalningstrafik. Anslutningen till banken är alltid SSL-skyddad och material signeras digitalt med ett PKI-certifikat.'
     },
     banks: {
-      fi: 'Tuemme kaikkia Suomessa yleisimmin toimivia pankkeja:',
-      en: 'We support all commonly operating banks in Finland:',
-      se: 'Vi stöder alla vanligt förekommande banker i Finland:'
+      fi: 'Tuetut pankit',
+      en: 'Supported Banks',
+      se: 'Stödda banker'
     }
   }
 };
