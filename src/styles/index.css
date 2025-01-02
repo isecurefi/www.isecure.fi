@@ -1,8 +1,10 @@
+/* Third party first */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
 /* Base styles */
 @import './global.css';
+
+/* Component styles */
 @import './Hero.css';
 @import './Contact.css';
 @import './PageContent.css';
-
-/* Third party */
-@import 'bootstrap/dist/css/bootstrap.min.css';
