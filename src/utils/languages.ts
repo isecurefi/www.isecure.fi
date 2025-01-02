@@ -3,8 +3,8 @@ import type { Lang } from '../types';
 export const languages: Lang[] = ['fi', 'en', 'se'];
 export const defaultLanguage: Lang = 'fi';
 
-export function getLanguageFromUrl(url: URL): Lang {
-  if (!url) {
+export function getLanguageFromUrl(url: URL | null): Lang {
+  if (!url || !url.pathname) {
     return defaultLanguage;
   }
   const [, lang] = url.pathname.split('/');

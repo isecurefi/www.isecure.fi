@@ -127,6 +127,9 @@ const { lang = 'fi' } = Astro.props;
   }
 
   function validateInput(input: HTMLInputElement | HTMLTextAreaElement): boolean {
+    if (!input) {
+      return false;
+    }
     input.classList.remove('is-invalid', 'is-valid');
     
     const value = input.value.trim();
@@ -222,6 +225,9 @@ const { lang = 'fi' } = Astro.props;
       Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
       Subject: `ISECure ${lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'} contact: ${name} <${email}>`
     }, function(err: Error | null, data: Record<string, unknown>): void {
+      if (!data) {
+        console.error('No data received from SNS publish');
+      }
       // Re-enable button and hide spinner
       if (button) button.disabled = false;
       if (spinner) spinner.classList.add('d-none');
