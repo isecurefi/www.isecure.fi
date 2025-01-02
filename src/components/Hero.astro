@@ -2,6 +2,7 @@
 import '../styles/Hero.css';
 import { getText } from '../store/translations';
 import type { Lang } from '../types';
+import OptimizedImage from './OptimizedImage.astro';
 
 interface Props {
   lang: Lang;
@@ -19,15 +20,16 @@ const { lang } = Astro.props;
       <div class="hero-content">
         <div class="hero-upper">
           <div class="hero-image-container">
-            <img 
-              src="/images/isecure_header1_b.png" 
+            <OptimizedImage
+              src="/images/isecure_header1_b.png"
               alt={lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'}
               class="hero-image"
-              width="600"
-              height="400"
+              width={600}
+              height={400}
               loading="eager"
               decoding="async"
               fetchpriority="high"
+              format="webp"
             />
           </div>
           <div class="hero-text">
@@ -47,15 +49,16 @@ const { lang } = Astro.props;
       <div class="hero-content">
         <div class="hero-upper">
           <div class="hero-image-container">
-            <img 
-              src="/images/kustom.png" 
+            <OptimizedImage
+              src="/images/kustom.png"
               alt={`${lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'} API`}
               class="hero-image"
-              width="600"
-              height="400"
+              width={600}
+              height={400}
               loading="eager"
               decoding="async"
               fetchpriority="high"
+              format="webp"
             />
           </div>
           <div class="hero-text">

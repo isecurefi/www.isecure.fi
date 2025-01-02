@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import type { OptimizedImageProps } from '../utils/imageOptimization';
+import { getResponsiveSizes } from '../utils/imageOptimization';
+
+interface Props extends OptimizedImageProps {
+  format?: 'webp' | 'avif' | 'png' | 'jpeg';
+}
+
+const { 
+  src, 
+  alt, 
+  width, 
+  height,
+  class: className,
+  loading = 'lazy',
+  decoding = 'async',
+  sizes,
+  fetchpriority,
+  format = 'webp'
+} = Astro.props;
+
+const imageWidth = width || 800;
+const imageHeight = height || Math.round(imageWidth * (9/16));
+const imageSizes = sizes || getResponsiveSizes(imageWidth);
+---
+
+<Image
+  src={src}
+  alt={alt}
+  width={imageWidth}
+  height={imageHeight}
+  class={className}
+  loading={loading}
+  decoding={decoding}
+  sizes={imageSizes}
+  fetchpriority={fetchpriority}
+  format={format}
+  quality={90}
+/>
