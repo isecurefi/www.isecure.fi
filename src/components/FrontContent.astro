@@ -24,14 +24,17 @@ const { lang = 'fi' } = Astro.props;
       <div class="col-md-6">
       <div class="panel panel-primary">
         <div class="panel-heading panel-heading-second">
-          <h2 class="panel-title">API<br><br>
-            {lang === 'en' ? 'ISECure WS-Channel API' : 
-             lang === 'se' ? 'ISECure WS-Kanal API' : 
-             'ISECure WS-Kanava API'}
+          <h2 class="panel-title">
+            <span class="panel-subtitle">API</span><br>
+            <span class="panel-main-title">
+              {lang === 'en' ? 'ISECure WS-Channel API' : 
+               lang === 'se' ? 'ISECure WS-Kanal API' : 
+               'ISECure WS-Kanava API'}
+            </span>
           </h2>
         </div>
         <div class="panel-body">
-          <p>{getText('frontContent.apiSection.title', lang)}</p>
+          <h3 class="content-subtitle">{getText('frontContent.apiSection.title', lang)}</h3>
           
           <p>{getText('frontContent.apiSection.description', lang)}</p>
               
@@ -57,12 +60,17 @@ const { lang = 'fi' } = Astro.props;
       <div class="col-md-6">
       <div class="panel panel-primary">
         <div class="panel-heading panel-heading-second">
-          <h2 class="panel-title">{getText('frontContent.apiSection.bankFiles.title', lang)}<br><br>{lang === 'en' ? 'ISECure WS-Channel' : 
-             lang === 'se' ? 'ISECure WS-Kanal' : 
-             'ISECure WS-Kanava'} SFTP Sync</h2>
+          <h2 class="panel-title">
+            <span class="panel-subtitle">{getText('frontContent.apiSection.bankFiles.title', lang)}</span><br>
+            <span class="panel-main-title">
+              {lang === 'en' ? 'ISECure WS-Channel' : 
+               lang === 'se' ? 'ISECure WS-Kanal' : 
+               'ISECure WS-Kanava'} SFTP Sync
+            </span>
+          </h2>
         </div>
         <div class="panel-body">
-          <p>{getText('frontContent.apiSection.bankFiles.subtitle', lang)}</p>
+          <h3 class="content-subtitle">{getText('frontContent.apiSection.bankFiles.subtitle', lang)}</h3>
           
           <p>{getText('frontContent.apiSection.bankFiles.description', lang)}</p>
           
