@@ -166,11 +166,16 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
       }
     </script>
     
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+    
     <!-- Preload critical assets -->
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" type="font/woff2" crossorigin>
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa2ZL7.woff2" type="font/woff2" crossorigin>
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa25L7.woff2" type="font/woff2" crossorigin>
-    <link rel="preload" as="image" href="/images/isecure-small-logo.png">
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" type="font/woff2" crossorigin fetchpriority="high">
+    <link rel="preload" as="image" href="/images/isecure-small-logo.png" fetchpriority="high">
+    <link rel="modulepreload" href="/index.js">
     
     <!-- Critical CSS -->
     <style is:inline>
@@ -211,8 +216,10 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
     <link rel="preconnect" href="https://www.google-analytics.com">
     
     <!-- Optimize font loading -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&display=optional" 
+          media="print" onload="this.media='all'"
+          fetchpriority="low">
     
     <!-- Analytics -->
     <script async is:inline>

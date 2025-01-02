@@ -8,4 +8,20 @@ export default defineConfig({
     sourcemap: false,
   },
   integrations: [sitemap()],
+  vite: {
+    build: {
+      cssCodeSplit: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor': ['bootstrap'],
+            'utils': ['./src/utils/'],
+          }
+        }
+      }
+    },
+    ssr: {
+      noExternal: ['bootstrap']
+    }
+  },
 });
