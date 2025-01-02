@@ -122,6 +122,12 @@ export const defaultLang: Lang = 'fi';
 
 export function getStoredLang(): Lang {
   if (typeof localStorage !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang') as Lang;
+    if (urlLang) {
+      localStorage.setItem('preferred-lang', urlLang);
+      return urlLang;
+    }
     const stored = localStorage.getItem('preferred-lang') as Lang;
     return stored || defaultLang;
   }
