@@ -22,7 +22,6 @@ const banks = [
           alt={`${bank.name} logo`} 
           class="bank-icon"
           loading="lazy"
-          height="40"
           decoding="async"
         />
       ))}
@@ -39,8 +38,13 @@ const banks = [
 }
 
 .bank-icon {
-  height: 40px;
+  max-height: 40px;
   width: auto;
   object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.bank-icon:hover {
+  transform: scale(1.05);
 }
 </style>
