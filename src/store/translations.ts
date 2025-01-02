@@ -76,7 +76,28 @@ export const translations = {
       DSS -säkerhetsplanering och AWS-molntjänster.`
   },
   'ws-info': {
-    en: '',
+    en: `<p>A company's bank connection, or Web Service channel
+      (or <b>WS-channel</b>), is essential for organizations that
+      want to manage and monitor their payment traffic through their
+      own software.</p>
+      
+      <p>A company needs a connection channel for transmitting
+      payment transaction data between the company's financial
+      management and the bank. In 2014, many banking groups
+      abandoned the PATU channel and switched to using only the
+      new Web Services channel, which complies with the
+      European-wide SEPA standard, for transmitting payment
+      transaction data. With the company's bank connection or Web
+      Service channel, it is possible to handle payment traffic
+      directly from the company's own financial management
+      software.</p>
+      
+      <p>Building a WS channel can be a year-long project even
+      for an expert programmer, requiring in-depth programming
+      work. Development work often needs to be done in parallel
+      with multiple banks. Testing and applying for credentials
+      takes considerable calendar time. Using ISECure's ready-made
+      Web Service code saves time and costs.</p>`,
     fi: `<p>Yrityksen pankkiyhteys eli Web Service -kanava
       (tai <b>WS-kanava</b>) on välttämätön organisaatioille, jotka
       haluavat hoitaa ja seurata maksuliikennettään omien
