@@ -3,14 +3,13 @@
 <div class="container">
   <div class="row" style="margin-right:auto;margin-left:auto;">
   </div>
-  <div class="row">
-    <div class="col-xs-12">
+  <div class="content-section">
+    <div class="section-header">
       <h1>Tarvitsetko ratkaisuja pankkiyhteyksien rakentamiseen?</h1>
       <p>Tarjoamme ISECure WS-Kanava:aan perustuvia paketteja:</p>
     </div>
-  </div>
 
-  <div class="row">
+    <div class="solutions-grid">
     <div class="col-md-6 col-sm-6 col-xs-12">
       <div class="panel panel-primary">
         <div class="panel-heading panel-heading-second">
@@ -48,9 +47,10 @@
     </div>
   </div>
 
-  <h3>Tuetut pankit</h3>
-  <p>Tuemme kaikkia Suomessa yleisimmin toimivia pankkeja.</p>
-  <div class="bank-logos">
+  <div class="banks-section">
+    <h3>Tuetut pankit</h3>
+    <p>Tuemme kaikkia Suomessa yleisimmin toimivia pankkeja.</p>
+    <div class="bank-logos">
     <img src="/images/bank_icons/aktia_logo.png" alt="Aktia" class="bank-icon">
     <img src="/images/bank_icons/alandsbanken_logo.gif" alt="Ålandsbanken" class="bank-icon">
     <img src="/images/bank_icons/handelsbanken_logo.gif" alt="Handelsbanken" class="bank-icon">
@@ -61,5 +61,95 @@
     <img src="/images/bank_icons/sampo_logo.png" alt="Sampo" class="bank-icon">
     <img src="/images/bank_icons/spankki_lahitapiola.png" alt="S-Pankki LähiTapiola" class="bank-icon">
     <img src="/images/bank_icons/SEBlogo.png" alt="SEB" class="bank-icon">
+    </div>
   </div>
 </div>
+
+<style>
+  .content-section {
+    padding: 3rem 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-header h1 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+
+  .solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--background-light);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .panel-heading {
+    padding: 1.5rem;
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .panel-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel-body img {
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .panel-body .btn {
+    margin-top: auto;
+    align-self: center;
+  }
+
+  .banks-section {
+    text-align: center;
+    padding: 2rem;
+    background: var(--background-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .banks-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+
+  .bank-logos {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .content-section {
+      padding: 2rem 0;
+    }
+
+    .solutions-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
