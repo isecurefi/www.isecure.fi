@@ -17,7 +17,7 @@ const languages: Record<Lang, string> = {
 <div class="language-switcher">
   {Object.entries(languages).map(([lang, label]) => (
     <a
-      href={`${Astro.url.pathname}?lang=${lang}`}
+      href={getLocalizedPathname(Astro.url.pathname, lang as Lang)}
       class={`lang-link ${currentLang === lang ? 'active' : ''}`}
       aria-label={`Switch to ${label}`}
       onclick={`

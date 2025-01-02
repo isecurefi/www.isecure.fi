@@ -1,0 +1,25 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import FrontContent from '../../components/FrontContent.astro';
+import References from '../../components/References.astro';
+import '../../styles/Hero.css';
+import type { Lang } from '../../types';
+import { languages, defaultLanguage } from '../../utils/languages';
+
+export async function getStaticPaths() {
+  return languages.map(lang => ({
+    params: { lang },
+    props: { lang }
+  }));
+}
+
+const { lang } = Astro.props;
+---
+
+<Layout title="iSecure" lang={lang}>
+  <Hero lang={lang} />
+  <FrontContent lang={lang} />
+  <hr />
+  <References />
+</Layout>

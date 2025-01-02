@@ -10,24 +10,17 @@ interface Props {
 const { lang } = Astro.props;
 
 const currentPath = Astro.url.pathname;
+import { getLocalizedPathname } from '../utils/languages';
+
 const navItems = [
   { href: '/', text: getText('nav.home', lang) },
   { href: '/ws-kanava', text: getText('nav.wsChannel', lang) },
   { href: '/ws-api', text: getText('nav.api', lang) },
   { href: '#contact', text: getText('nav.contact', lang) }
-].map(item => {
-  // Only add lang parameter if:
-  // 1. It's not an anchor link (#)
-  // 2. The current page has a lang parameter
-  // 3. We have a valid lang value
-  if (!item.href.startsWith('#') && Astro.url.searchParams.has('lang') && lang) {
-    return {
-      ...item,
-      href: `${item.href}?lang=${lang}`
-    };
-  }
-  return item;
-});
+].map(item => ({
+  ...item,
+  href: item.href.startsWith('#') ? item.href : getLocalizedPathname(item.href, lang)
+}));
 ---
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm" role="navigation">
   <div class="container">
