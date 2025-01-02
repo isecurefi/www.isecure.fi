@@ -12,12 +12,19 @@ export function getLanguageFromUrl(url: URL | null): Lang {
   if (!possibleLang || possibleLang === "index.html") {
     return "fi";
   }
-  return languages.includes(possibleLang as Lang) ? (possibleLang as Lang) : defaultLanguage;
+  return languages.includes(possibleLang as Lang)
+    ? (possibleLang as Lang)
+    : defaultLanguage;
 }
 
 export function getLocalizedPathname(pathname: string, lang: Lang): string {
   // Special case for root path with Finnish language
-  if (lang === "fi" && (pathname === "/" || pathname === "/index.html" || pathname === "/fi/index.html")) {
+  if (
+    lang === "fi" &&
+    (pathname === "/" ||
+      pathname === "/index.html" ||
+      pathname === "/fi/index.html")
+  ) {
     return "/index.html";
   }
 
