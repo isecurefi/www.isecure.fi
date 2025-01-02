@@ -321,18 +321,34 @@ export const translations = {
 export const defaultLang: Lang = 'fi';
 
 export function getStoredLang(): Lang {
-  if (typeof window !== 'undefined') {
+  if (typeof window === 'undefined') {
+    return defaultLang;
+  }
+  
+  try {
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang') as Lang;
     if (urlLang && ['fi', 'en', 'se'].includes(urlLang)) {
-      localStorage.setItem('preferred-lang', urlLang);
+      try {
+        window.localStorage.setItem('preferred-lang', urlLang);
+      } catch (e) {
+        console.warn('Failed to set localStorage:', e);
+      }
       return urlLang;
     }
-    const stored = localStorage.getItem('preferred-lang') as Lang;
-    if (stored && ['fi', 'en', 'se'].includes(stored)) {
-      return stored;
+    
+    try {
+      const stored = window.localStorage.getItem('preferred-lang') as Lang;
+      if (stored && ['fi', 'en', 'se'].includes(stored)) {
+        return stored;
+      }
+    } catch (e) {
+      console.warn('Failed to get localStorage:', e);
     }
+  } catch (e) {
+    console.warn('Error accessing window:', e);
   }
+  
   return defaultLang;
 }
 
@@ -340,17 +356,21 @@ export function setStoredLang(lang: Lang): void {
   if (!lang) {
     return;
   }
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('preferred-lang', lang);
+  if (typeof window !== 'undefined') {
+    try {
+      window.localStorage.setItem('preferred-lang', lang);
+    } catch (e) {
+      console.warn('Failed to set localStorage:', e);
+    }
   }
 }
 
 export function getText(key: string, lang: Lang = getStoredLang()): string | Record<string, string> {
   const keys = key.split('.');
-  let result = translations;
+  let result: unknown = translations;
   for (const k of keys) {
-    if (result[k]) {
-      result = result[k];
+    if (result && typeof result === 'object' && k in result) {
+      result = (result as Record<string, unknown>)[k];
     } else {
       return key;
     }
