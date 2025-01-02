@@ -110,13 +110,13 @@ const { lang = "fi" } = Astro.props;
   }
 
   // Add blur event listeners to all form fields
-  document.addEventListener('DOMContentLoaded', () => {
-    const formFields = ['name', 'email', 'message'];
-    formFields.forEach(id => {
+  document.addEventListener("DOMContentLoaded", () => {
+    const formFields = ["name", "email", "message"];
+    formFields.forEach((id) => {
       const element = document.getElementById(id);
       if (element) {
-        element.addEventListener('blur', () => {
-          element.dataset.attempted = 'true';
+        element.addEventListener("blur", () => {
+          element.dataset.attempted = "true";
           validateInput(element);
         });
       }
@@ -125,12 +125,12 @@ const { lang = "fi" } = Astro.props;
 </script>
 
 <script>
-  import { getText } from '../store/translations';
-  import type { Lang } from '../types';
+  import { getText } from "../store/translations";
+  import type { Lang } from "../types";
 
   // Get the current language from the URL
-  const pathSegments = window.location.pathname.split('/');
-  const lang = (pathSegments[1] && ['fi', 'en', 'se'].includes(pathSegments[1])) ? pathSegments[1] as Lang : 'fi';
+  const pathSegments = window.location.pathname.split("/");
+  const lang = pathSegments[1] && ["fi", "en", "se"].includes(pathSegments[1]) ? (pathSegments[1] as Lang) : "fi";
 
   interface AWSCredentials {
     IdentityPoolId: string;
@@ -208,8 +208,8 @@ const { lang = "fi" } = Astro.props;
     region: "eu-west-1",
     credentials: fromCognitoIdentityPool({
       clientConfig: { region: "eu-west-1" },
-      identityPoolId: "eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c"
-    })
+      identityPoolId: "eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c",
+    }),
   });
 
   function validateForm(): boolean {
@@ -235,7 +235,7 @@ const { lang = "fi" } = Astro.props;
     }
   });
 
-  document.getElementById("sendButton")?.addEventListener("click", () => {
+  document.getElementById("sendButton")?.addEventListener("click", async () => {
     if (!validateForm()) {
       return;
     }
@@ -270,18 +270,18 @@ const { lang = "fi" } = Astro.props;
       const command = new PublishCommand({
         Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
         Subject: `ISECure ${lang === "en" ? "WS-Channel" : lang === "se" ? "WS-Kanal" : "WS-Kanava"} contact: ${name} <${email}>`,
-        TopicArn: "arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail"
+        TopicArn: "arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail",
       });
 
       const data = await snsClient.send(command);
-      
+
       if (result) {
         result.className = "success";
         result.innerHTML = `<b>${getText("contactForm.success", lang as Lang)}</b>`;
       }
       console.log("Message sent successfully:", data);
       setTimeout(() => {
-        window.location.href = lang === 'fi' ? '/thankyou' : `/${lang}/thankyou`;
+        window.location.href = lang === "fi" ? "/thankyou" : `/${lang}/thankyou`;
       }, 1500);
     } catch (err) {
       console.error("Error sending message:", err);
