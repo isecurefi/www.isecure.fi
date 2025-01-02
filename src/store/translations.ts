@@ -121,15 +121,17 @@ export const translations = {
 export const defaultLang: Lang = 'fi';
 
 export function getStoredLang(): Lang {
-  if (typeof localStorage !== 'undefined') {
+  if (typeof window !== 'undefined') {
     const urlParams = new URLSearchParams(window.location.search);
     const urlLang = urlParams.get('lang') as Lang;
-    if (urlLang) {
+    if (urlLang && ['fi', 'en', 'se'].includes(urlLang)) {
       localStorage.setItem('preferred-lang', urlLang);
       return urlLang;
     }
     const stored = localStorage.getItem('preferred-lang') as Lang;
-    return stored || defaultLang;
+    if (stored && ['fi', 'en', 'se'].includes(stored)) {
+      return stored;
+    }
   }
   return defaultLang;
 }
