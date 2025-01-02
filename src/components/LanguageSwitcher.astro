@@ -20,6 +20,7 @@ const languages: Record<Lang, string> = {
     <a
       href={getLocalizedPathname(Astro.url.pathname, lang as Lang)}
       class={`lang-link ${currentLang === lang ? 'active' : ''}`}
+      data-lang={lang}
       aria-label={`Switch to ${label}`}
       onclick={`
         localStorage.setItem('preferred-lang', '${lang}');
@@ -33,38 +34,47 @@ const languages: Record<Lang, string> = {
 </div>
 
 <script>
-  function updateActiveState() {
-    const currentPath = window.location.pathname;
+  function detectCurrentLanguage() {
+    const path = window.location.pathname;
     
-    // Default to 'fi' for all paths except those explicitly starting with /en/ or /se/
-    let currentLang = 'fi';
-    
-    // Only change from Finnish if path explicitly starts with /en/ or /se/
-    if (currentPath.startsWith('/en/') || currentPath === '/en') {
-      currentLang = 'en';
-    } else if (currentPath.startsWith('/se/') || currentPath === '/se') {
-      currentLang = 'se';
+    // Special cases for Finnish
+    if (path === "/" || 
+        path === "/index.html" || 
+        path === "/ws-channel" || 
+        path === "/ws-api" ||
+        path.startsWith("/ws-channel/") || 
+        path.startsWith("/ws-api/")) {
+      return "fi";
     }
     
-    const links = document.querySelectorAll('.lang-link');
-    links.forEach(link => {
-      const href = link.getAttribute('href');
-      const linkLang = href === '/' ? 'fi' : href.split('/')[1] || 'fi';
-      
-      // Set active class based on current language
-      if (currentLang === linkLang) {
-        link.classList.add('active');
-      } else {
-        link.classList.remove('active');
-      }
-    });
+    // Check for explicit language prefixes
+    if (path.startsWith("/en") || path === "/en") return "en";
+    if (path.startsWith("/se") || path === "/se") return "se";
+    
+    // Default to Finnish for any other path
+    return "fi";
   }
 
-  // Run once when the script loads
-  updateActiveState();
+  function updateLanguageHighlight() {
+    const currentLang = detectCurrentLanguage();
+    
+    // Remove all active classes first
+    document.querySelectorAll('.lang-link').forEach(link => {
+      link.classList.remove('active');
+    });
+    
+    // Find and highlight the correct language link
+    const linkToActivate = document.querySelector(`.lang-link[data-lang="${currentLang}"]`);
+    if (linkToActivate) {
+      linkToActivate.classList.add('active');
+    }
+  }
 
-  // Also update when the page content changes (for client-side navigation)
-  document.addEventListener('astro:page-load', updateActiveState);
+  // Update on initial load
+  updateLanguageHighlight();
+
+  // Update on Astro page transitions
+  document.addEventListener('astro:page-load', updateLanguageHighlight);
 </script>
 
 <style>
