@@ -73,16 +73,20 @@ import '../styles/Contact.css';
 </div>
 
 <script>
+  interface AWSConfig {
+    region: string;
+    credentials: any;
+  }
+
+  interface AWSConstructors {
+    config: AWSConfig;
+    CognitoIdentityCredentials: new (params: { IdentityPoolId: string }) => any;
+    SNS: new (params: { params: { TopicArn: string } }) => any;
+  }
+
   declare global {
     interface Window {
-      AWS: {
-        config: {
-          region: string;
-          credentials: any;
-        };
-        CognitoIdentityCredentials: new (params: { IdentityPoolId: string }) => any;
-        SNS: new (params: { params: { TopicArn: string } }) => any;
-      }
+      AWS: AWSConstructors;
     }
   }
 
