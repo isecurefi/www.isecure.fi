@@ -33,7 +33,11 @@ const { lang } = Astro.props;
     }
   </script>
   <div class="container page-container">
-    <h1 class="page-header">ISECure WS-Kanava API</h1>
+    <h1 class="page-header">{
+      lang === 'en' ? 'ISECure WS-Channel API' :
+      lang === 'se' ? 'ISECure WS-Kanal API' :
+      'ISECure WS-Kanava API'
+    }</h1>
 
     <div class="content-section">
       <div class="main-content">
