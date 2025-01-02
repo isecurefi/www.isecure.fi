@@ -9,6 +9,24 @@ interface Props {
 const { lang = 'fi' } = Astro.props;
 ---
 <div class="container">
+  <div class="info-section">
+    <h3>{getText('webService.title', lang)}</h3>
+    <p>{getText('webService.description', lang)}</p>
+    <p>{getText('webService.security', lang)}</p>
+    <p>{getText('webService.banks', lang)}</p>
+    <div class="bank-logos">
+    <img src="/images/bank_icons/aktia_logo.png" alt="Aktia" class="bank-icon">
+    <img src="/images/bank_icons/alandsbanken_logo.gif" alt="Ålandsbanken" class="bank-icon">
+    <img src="/images/bank_icons/handelsbanken_logo.gif" alt="Handelsbanken" class="bank-icon">
+    <img src="/images/bank_icons/nooa_logo.gif" alt="Nooa" class="bank-icon">
+    <img src="/images/bank_icons/nordea_logo.gif" alt="Nordea" class="bank-icon">
+    <img src="/images/bank_icons/oko_logo.gif" alt="OKO" class="bank-icon">
+    <img src="/images/bank_icons/pop_logo.png" alt="POP Pankki" class="bank-icon">
+    <img src="/images/bank_icons/sampo_logo.png" alt="Sampo" class="bank-icon">
+    <img src="/images/bank_icons/spankki_lahitapiola.png" alt="S-Pankki LähiTapiola" class="bank-icon">
+    <img src="/images/bank_icons/SEBlogo.png" alt="SEB" class="bank-icon">
+    </div>
+  </div>
   <div class="row" style="margin-right:auto;margin-left:auto;">
   </div>
   <div class="content-section">
@@ -46,24 +64,6 @@ const { lang = 'fi' } = Astro.props;
     </div>
   </div>
 
-  <div class="info-section">
-    <h3>{getText('webService.title', lang)}</h3>
-    <p>{getText('webService.description', lang)}</p>
-    <p>{getText('webService.security', lang)}</p>
-    <p>{getText('webService.banks', lang)}</p>
-    <div class="bank-logos">
-    <img src="/images/bank_icons/aktia_logo.png" alt="Aktia" class="bank-icon">
-    <img src="/images/bank_icons/alandsbanken_logo.gif" alt="Ålandsbanken" class="bank-icon">
-    <img src="/images/bank_icons/handelsbanken_logo.gif" alt="Handelsbanken" class="bank-icon">
-    <img src="/images/bank_icons/nooa_logo.gif" alt="Nooa" class="bank-icon">
-    <img src="/images/bank_icons/nordea_logo.gif" alt="Nordea" class="bank-icon">
-    <img src="/images/bank_icons/oko_logo.gif" alt="OKO" class="bank-icon">
-    <img src="/images/bank_icons/pop_logo.png" alt="POP Pankki" class="bank-icon">
-    <img src="/images/bank_icons/sampo_logo.png" alt="Sampo" class="bank-icon">
-    <img src="/images/bank_icons/spankki_lahitapiola.png" alt="S-Pankki LähiTapiola" class="bank-icon">
-    <img src="/images/bank_icons/SEBlogo.png" alt="SEB" class="bank-icon">
-    </div>
-  </div>
 </div>
 
 <style>
