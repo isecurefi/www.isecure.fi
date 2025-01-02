@@ -1,5 +1,5 @@
 .hero-section {
-  --hero-padding: 2rem;
+  --hero-padding: 1rem;
   --hero-gap: 1.5rem;
   --hero-max-width: 1200px;
   --hero-background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -9,6 +9,20 @@
   width: 100%;
   background: var(--hero-background);
   margin-bottom: 2rem;
+}
+
+.hero-title {
+  text-align: center;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.hero-title h1 {
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  font-weight: 700;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .hero-container {
