@@ -1,6 +1,6 @@
 .hero-section {
-  --hero-padding: 4rem;
-  --hero-gap: 2rem;
+  --hero-padding: 2rem;
+  --hero-gap: 1.5rem;
   --hero-max-width: 1200px;
   --hero-background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   --hero-border-radius: 1rem;
@@ -40,12 +40,12 @@
 }
 
 .hero-content h1 {
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
   color: var(--primary-color);
 }
 
 .hero-content h3 {
-  margin-bottom: 1.5rem;
+  margin: 0.75rem 0 1rem;
   color: var(--secondary-color);
 }
 
