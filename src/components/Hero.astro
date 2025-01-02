@@ -1,5 +1,13 @@
 ---
 import '../styles/Hero.css';
+import { getText } from '../store/translations';
+import type { Lang } from '../types';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
 ---
 
 <section class="hero-section bg-gradient">
@@ -11,8 +19,8 @@ import '../styles/Hero.css';
           alt="WS-Kanava"
           class="hero-image"
         />
-        <h1>WS-Kanava</h1>
-        <h3>Kun tarvitset liikeideaasi tai asiakas-projektiasi varten pankkiyhteyskanavan tai haluat automatisoida pankkiaineistojen käsittelyä</h3>
+        <h1>{getText('hero.title1', lang)}</h1>
+        <h3>{getText('hero.subtitle1', lang)}</h3>
         <a href="/ws-kanava" class="btn btn-primary">WS-Kanava</a>
       </div>
     </div>
@@ -24,8 +32,8 @@ import '../styles/Hero.css';
           alt="WS-Kanava API"
           class="hero-image"
         />
-        <h1>WS-Kanava API</h1>
-        <h3>Yksi ja sama API rajapinta integraatiotasi varten kaikille pankeille. Skaalautuu automaattisesti tarpeidesi mukaan.</h3>
+        <h1>{getText('hero.title2', lang)}</h1>
+        <h3>{getText('hero.subtitle2', lang)}</h3>
         <a href="/ws-api" class="btn btn-primary">WS-Kanava API</a>
       </div>
     </div>

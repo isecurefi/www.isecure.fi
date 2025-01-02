@@ -1,6 +1,28 @@
 import type { Lang } from '../types';
 
 export const translations = {
+  hero: {
+    title1: {
+      en: 'WS-Channel',
+      fi: 'WS-Kanava',
+      se: 'WS-Kanal'
+    },
+    subtitle1: {
+      en: 'When you need a bank connection channel for your business idea or customer project, or want to automate bank file processing',
+      fi: 'Kun tarvitset liikeideaasi tai asiakas-projektiasi varten pankkiyhteyskanavan tai haluat automatisoida pankkiaineistojen käsittelyä',
+      se: 'När du behöver en bankförbindelsekanal för din affärsidé eller kundprojekt, eller vill automatisera bankfilshantering'
+    },
+    title2: {
+      en: 'WS-Channel API',
+      fi: 'WS-Kanava API',
+      se: 'WS-Kanal API'
+    },
+    subtitle2: {
+      en: 'One and the same API interface for your integration with all banks. Scales automatically according to your needs.',
+      fi: 'Yksi ja sama API rajapinta integraatiotasi varten kaikille pankeille. Skaalautuu automaattisesti tarpeidesi mukaan.',
+      se: 'Ett och samma API-gränssnitt för din integration med alla banker. Skalar automatiskt enligt dina behov.'
+    }
+  },
   contact: {
     en: '',
     fi: `ISECure Oy on ohjelmistokehittäjä Dan Forsbergin perustama
