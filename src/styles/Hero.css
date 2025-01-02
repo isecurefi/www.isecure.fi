@@ -99,6 +99,14 @@
 
 .hero-button {
   padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-button .btn {
+  min-width: 200px;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
