@@ -1,4 +1,7 @@
 ---
 import { defaultLanguage } from '../utils/languages';
+export const prerender = true;
+
+// Redirect to the default language version
+return Astro.redirect(`/${defaultLanguage === 'fi' ? '' : defaultLanguage}`);
 ---
-<meta http-equiv="refresh" content={`0;url=/${defaultLanguage === 'fi' ? '' : defaultLanguage}`}>

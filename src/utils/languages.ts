@@ -15,11 +15,11 @@ export function getLocalizedPathname(pathname: string, lang: Lang): string {
   // Remove existing language prefix if present
   const cleanPath = pathname.replace(/^\/(fi|en|se)/, '');
   
-  // Don't add language prefix for default language unless it's not the root path
-  if (lang === defaultLanguage && cleanPath === '/') {
-    return '/';
+  // For root path
+  if (cleanPath === '/') {
+    return lang === defaultLanguage ? '/' : `/${lang}`;
   }
   
-  // Add language prefix for other languages and non-root paths
+  // For other paths
   return lang === defaultLanguage ? cleanPath : `/${lang}${cleanPath}`;
 }
