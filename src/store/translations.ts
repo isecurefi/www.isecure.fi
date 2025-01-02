@@ -72,8 +72,9 @@ export const translations = {
       dataskydd, telecom, ekonomi och mjukvaruutveckling. Under tio år
       ledde han forskningsprojekt vid Nokia Research Center och
       övergick sedan till Poplatek Oy som utvecklingsdirektör.
-      Forsbergs specialkompetens ligger inom områdena PCI
-      DSS -säkerhetsplanering och AWS-molntjänster.`
+      Nu arbetar han i London som Cloud Architect på Cloudreach.
+      Forsbergs specialkompetens ligger inom områdena AWS-molntjänster
+      och PCI DSS -säkerhetsplanering.`
   },
   'ws-info': {
     en: `<p>A company's bank connection, or Web Service channel
