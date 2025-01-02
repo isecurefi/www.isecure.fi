@@ -86,14 +86,11 @@
   color: var(--error-color);
 }
 
-.is-invalid ~ .invalid-feedback,
-input:invalid ~ .invalid-feedback,
-textarea:invalid ~ .invalid-feedback {
+.is-invalid ~ .invalid-feedback {
   display: block;
 }
 
-input:focus:invalid,
-textarea:focus:invalid {
+.is-invalid {
   border-color: var(--error-color);
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
