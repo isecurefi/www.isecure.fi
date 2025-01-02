@@ -19,10 +19,13 @@ body {
   padding-top: 76px;
   position: relative;
   min-height: 100vh;
-  margin: 0 auto;
+  margin: 0;
+}
+
+.main-content {
   max-width: 1200px;
-  padding-left: 20px;
-  padding-right: 20px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .navbar {
