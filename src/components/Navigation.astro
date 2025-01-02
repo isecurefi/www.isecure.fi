@@ -1,9 +1,19 @@
 ---
+import { getText } from '../store/translations';
+import type { Lang } from '../types';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
 const navItems = [
-  { href: '/', text: 'Etusivu' },
-  { href: '/ws-kanava.html', text: 'WS-Kanava' },
-  { href: '/ws-api.html', text: 'API' },
-  { href: '#contact', text: 'Yhteystiedot' }
+  { href: '/', text: getText('nav.home', lang) },
+  { href: '/ws-kanava.html', text: getText('nav.wsChannel', lang) },
+  { href: '/ws-api.html', text: getText('nav.api', lang) },
+  { href: '#contact', text: getText('nav.contact', lang) }
 ];
 ---
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm" role="navigation">
