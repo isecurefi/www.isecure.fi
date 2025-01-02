@@ -47,6 +47,16 @@
     </div>
   </div>
 
+  <div class="info-section">
+    <h3>Yrityksen pankkiyhteys eli Web Service</h3>
+    <p>
+      Web Service -kanava on pankkien tarjoama yritysasiakkaille suunnattu pankkiyhteys, joka mahdollistaa pankkiaineistojen automaattisen lähetyksen ja noudon. Web Service -kanava on korvannut vanhan eräsiirtopalvelun (PATU). Web Service -kanava on standardoitu ja se perustuu kansainvälisiin XML-standardeihin.
+    </p>
+    <p>
+      Web Service -kanava on tietoturvallinen ja luotettava tapa hoitaa yrityksen maksuliikenne. Yhteys pankkiin muodostetaan aina SSL-suojattuna ja aineistot allekirjoitetaan digitaalisesti PKI-varmenteella. Web Service -kanava on käytössä kaikissa Suomen suurimmissa pankeissa.
+    </p>
+  </div>
+
   <div class="banks-section">
     <h3>Tuetut pankit</h3>
     <p>Tuemme kaikkia Suomessa yleisimmin toimivia pankkeja.</p>
@@ -66,6 +76,25 @@
 </div>
 
 <style>
+  .info-section {
+    text-align: left;
+    padding: 2rem;
+    background: var(--background-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+
+  .info-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+
+  .info-section p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
   .content-section {
     padding: 3rem 0;
   }
