@@ -40,10 +40,11 @@ const languages: Record<Lang, string> = {
   // Default to 'fi' for root path or paths without language code
   let currentLang = 'fi';
   
-  // Only update currentLang if a valid language code is found
-  if (pathParts[0] && ['en', 'se'].includes(pathParts[0])) {
+  // Only update currentLang if the first path segment is a valid non-Finnish language code
+  if (pathParts[0] === 'en' || pathParts[0] === 'se') {
     currentLang = pathParts[0];
   }
+  // Keep 'fi' for all other cases including sub-pages without language prefix
   
   const links = document.querySelectorAll('.lang-link');
   links.forEach(link => {
