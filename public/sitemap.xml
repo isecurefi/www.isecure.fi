@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Finnish URLs -->
+  <url>
+    <loc>https://www.isecure.fi/fi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.isecure.fi/en"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.isecure.fi/se"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.isecure.fi/fi"/>
+  </url>
+  <url>
+    <loc>https://www.isecure.fi/fi/ws-channel</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.isecure.fi/en/ws-channel"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.isecure.fi/se/ws-channel"/>
+  </url>
+  <url>
+    <loc>https://www.isecure.fi/fi/ws-api</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.isecure.fi/en/ws-api"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.isecure.fi/se/ws-api"/>
+  </url>
+
+  <!-- English URLs -->
+  <url>
+    <loc>https://www.isecure.fi/en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://www.isecure.fi/fi"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.isecure.fi/se"/>
+  </url>
+  <url>
+    <loc>https://www.isecure.fi/en/ws-channel</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://www.isecure.fi/fi/ws-channel"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.isecure.fi/se/ws-channel"/>
+  </url>
+  <url>
+    <loc>https://www.isecure.fi/en/ws-api</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://www.isecure.fi/fi/ws-api"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.isecure.fi/se/ws-api"/>
+  </url>
+
+  <!-- Swedish URLs -->
+  <url>
+    <loc>https://www.isecure.fi/se</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://www.isecure.fi/fi"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.isecure.fi/en"/>
+  </url>
+  <url>
+    <loc>https://www.isecure.fi/se/ws-channel</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://www.isecure.fi/fi/ws-channel"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.isecure.fi/en/ws-channel"/>
+  </url>
+  <url>
+    <loc>https://www.isecure.fi/se/ws-api</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://www.isecure.fi/fi/ws-api"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.isecure.fi/en/ws-api"/>
+  </url>
+
+  <!-- API Documentation -->
+  <url>
+    <loc>https://www.isecure.fi/wsapi_v2/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
