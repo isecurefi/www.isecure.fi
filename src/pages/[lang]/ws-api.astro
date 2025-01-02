@@ -16,16 +16,7 @@ const { lang } = Astro.props;
 ---
 import '../../styles/PageContent.css';
 ---
-<Layout 
-  title={
-    lang === 'en'
-      ? "WS-Channel API - Secure Bank Integration Solutions | Nordic Banks"
-      : lang === 'se'
-      ? "WS-Kanal API - Säkra Banktintegrationslösningar | Nordiska Banker"
-      : "WS-Kanava API - Turvalliset Pankkiintegraatioratkaisut | Pohjoismaiset Pankit"
-  }
-  lang={lang}
->
+<Layout title={`${getText('webService.wsChannel.api.title', lang)} | iSecure`} lang={lang}>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",

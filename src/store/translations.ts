@@ -291,6 +291,13 @@ export const translations = {
         fi: 'Voit ostaa WS-kanavan suoraan palveluna Hosting -paketilla (SaaS) valitsemillesi tai kaikille pankeille.',
         en: 'You can purchase the WS-channel directly as a service with a Hosting package (SaaS) for your selected banks or all banks.',
         se: 'Du kan köpa WS-kanalen direkt som en tjänst med ett Hosting-paket (SaaS) för dina valda banker eller alla banker.'
+      },
+      api: {
+        title: {
+          fi: 'WS-Kanava API - Turvalliset Pankkiintegraatioratkaisut | Pohjoismaiset Pankit',
+          en: 'WS-Channel API - Secure Bank Integration Solutions | Nordic Banks',
+          se: 'WS-Kanal API - Säkra Banktintegrationslösningar | Nordiska Banker'
+        }
       }
     },
     description: {
