@@ -18,8 +18,7 @@
 
 .hero-item {
   display: flex;
-  align-items: center;
-  gap: var(--hero-gap);
+  flex-direction: column;
   background-color: var(--hero-background);
   padding: var(--hero-padding);
   border-radius: var(--hero-border-radius);
@@ -27,14 +26,16 @@
 }
 
 .hero-image {
-  width: 50%;
+  width: 100%;
   height: auto;
   object-fit: contain;
   border-radius: 4px;
+  margin-bottom: var(--hero-gap);
 }
 
 .hero-content {
-  max-width: 400px;
+  width: 100%;
+  text-align: center;
 }
 
 .hero-content h1 {
@@ -51,13 +52,8 @@
   .hero-container {
     grid-template-columns: 1fr;
   }
-
-  .hero-item {
-    flex-direction: column;
-    text-align: center;
-  }
   
   .hero-content {
-    max-width: 100%;
+    width: 100%;
   }
 }
