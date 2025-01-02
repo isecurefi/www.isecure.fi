@@ -109,7 +109,34 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
     
     <!-- Critical CSS -->
     <style is:inline>
-      @import '../styles/critical.css';
+      :root {
+        --primary-color: #0d6efd;
+        --background-color: #ffffff;
+        --text-color: #212529;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        padding-top: 76px;
+        margin: 0;
+      }
+
+      .navbar {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1030;
+      }
+
+      .main-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
     </style>
     
     <!-- Optimize font loading -->
