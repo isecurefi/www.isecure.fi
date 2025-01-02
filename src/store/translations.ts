@@ -255,6 +255,13 @@ export const translations = {
       se: "Referenser",
     },
   },
+  quote: {
+    text: {
+      fi: "ISECuren tarjoama pankkiyhteys on pitänyt asiakkaat tyytyväisenä yli 10v!",
+      en: "ISECure's bank connection has kept customers satisfied for over 10 years!",
+      se: "ISECures bankförbindelse har hållit kunderna nöjda i över 10 år!"
+    }
+  },
   webService: {
     title: {
       fi: "Yrityksen pankkiyhteys eli Web Service",
