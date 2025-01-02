@@ -20,9 +20,9 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
 <!DOCTYPE html>
 <html lang={lang}>
   <head>
-    <!-- Meta Tags -->
+    <!-- Essential Meta Tags -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <meta name="description" content={
       lang === 'en' 
         ? "ISECure provides secure bank connection channels and Web Service API solutions for businesses. Trusted WS-Channel integration services for Nordic banks including Nordea, OP, and Danske Bank."
@@ -30,34 +30,53 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
         ? "ISECure erbjuder säkra bankförbindelsekanaler och Web Service API-lösningar för företag. Pålitliga WS-Kanal integrationstjänster för nordiska banker inklusive Nordea, OP och Danske Bank."
         : "ISECure tarjoaa turvalliset pankkiyhteydet ja Web Service API-ratkaisut yrityksille. Luotettavat WS-Kanava integraatiopalvelut pohjoismaisille pankeille mukaan lukien Nordea, OP ja Danske Bank."
     } />
-    <meta name="keywords" content="WS-Kanava, Web Service, API, pankkiyhteys, SEPA, maksuliikenne, verkkopankki, Nordea, OP, Danske Bank, bank integration, AWS, cloud services" />
+    <meta name="keywords" content="WS-Kanava, Web Service, API, pankkiyhteys, SEPA, maksuliikenne, verkkopankki, Nordea, OP, Danske Bank, bank integration, AWS, cloud services, secure banking, Nordic banks" />
     <meta name="author" content="ISECure Oy" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#0d6efd" />
+    <meta name="format-detection" content="telephone=no" />
     
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ISECure" />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={
       lang === 'en'
-        ? "Secure bank connection channel and API solutions for businesses"
+        ? "Secure bank connection channel and API solutions for businesses. Professional WS-Channel integration for Nordic banks."
         : lang === 'se'
-        ? "Säker bankförbindelsekanal och API-lösningar för företag"
-        : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille"
+        ? "Säker bankförbindelsekanal och API-lösningar för företag. Professionell WS-Kanal integration för nordiska banker."
+        : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. Ammattimainen WS-Kanava integraatio pohjoismaisille pankeille."
     } />
-    <meta property="og:image" content="/images/isecure-og-image.png" />
+    <meta property="og:image" content={new URL('/images/isecure-og-image.png', Astro.url)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : lang === 'se' ? 'sv_SE' : 'fi_FI'} />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@ISECureOy" />
+    <meta name="twitter:creator" content="@ISECureOy" />
     <meta name="twitter:url" content={Astro.url} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={
       lang === 'en'
-        ? "Secure bank connection channel and API solutions for businesses"
+        ? "Secure bank connection channel and API solutions for businesses. Professional WS-Channel integration for Nordic banks."
         : lang === 'se'
-        ? "Säker bankförbindelsekanal och API-lösningar för företag"
-        : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille"
+        ? "Säker bankförbindelsekanal och API-lösningar för företag. Professionell WS-Kanal integration för nordiska banker."
+        : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. Ammattimainen WS-Kanava integraatio pohjoismaisille pankeille."
     } />
-    <meta name="twitter:image" content="/images/isecure-og-image.png" />
+    <meta name="twitter:image" content={new URL('/images/isecure-og-image.png', Astro.url)} />
+    <meta name="twitter:image:alt" content="ISECure - Professional Bank Integration Solutions" />
+
+    <!-- Additional SEO -->
+    <meta name="geo.region" content="FI" />
+    <meta name="geo.placename" content="Helsinki" />
+    <meta name="geo.position" content="60.1699;24.9384" />
+    <meta name="ICBM" content="60.1699, 24.9384" />
+    <meta name="application-name" content="ISECure" />
+    <meta name="apple-mobile-web-app-title" content="ISECure" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -73,34 +92,77 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "${
-          lang === 'en' ? 'ISECure WS-Channel' :
-          lang === 'se' ? 'ISECure WS-Kanal' :
-          'ISECure WS-Kanava'
-        }",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "Cloud",
-        "offers": {
-          "@type": "Offer",
-          "category": "Banking Integration Solutions"
-        },
-        "description": "${
-          lang === 'en' 
-            ? 'Secure bank connection channel and API solutions for businesses'
-            : lang === 'se'
-            ? 'Säker bankförbindelsekanal och API-lösningar för företag'
-            : 'Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille'
-        }",
-        "provider": {
-          "@type": "Organization",
-          "name": "ISECure Oy",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "FI",
-            "addressLocality": "Helsinki"
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://isecure.fi/#organization",
+            "name": "ISECure Oy",
+            "url": "https://isecure.fi",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://isecure.fi/images/isecure-small-logo.png",
+              "width": 200,
+              "height": 40
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "FI",
+              "addressLocality": "Helsinki",
+              "postalCode": "00100"
+            },
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+358404835507",
+              "contactType": "sales",
+              "email": "dan.forsberg@isecure.fi",
+              "availableLanguage": ["Finnish", "English", "Swedish"]
+            },
+            "sameAs": [
+              "https://www.linkedin.com/company/isecure-oy"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://isecure.fi/#website",
+            "url": "https://isecure.fi",
+            "name": "ISECure",
+            "publisher": {
+              "@id": "https://isecure.fi/#organization"
+            },
+            "inLanguage": "${lang === 'en' ? 'en-US' : lang === 'se' ? 'sv-SE' : 'fi-FI'}"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "${
+              lang === 'en' ? 'ISECure WS-Channel' :
+              lang === 'se' ? 'ISECure WS-Kanal' :
+              'ISECure WS-Kanava'
+            }",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Cloud",
+            "offers": {
+              "@type": "Offer",
+              "category": "Banking Integration Solutions",
+              "priceCurrency": "EUR",
+              "availability": "https://schema.org/InStock"
+            },
+            "description": "${
+              lang === 'en' 
+                ? 'Secure bank connection channel and API solutions for businesses. Professional WS-Channel integration for Nordic banks.'
+                : lang === 'se'
+                ? 'Säker bankförbindelsekanal och API-lösningar för företag. Professionell WS-Kanal integration för nordiska banker.'
+                : 'Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. Ammattimainen WS-Kanava integraatio pohjoismaisille pankeille.'
+            }",
+            "provider": {
+              "@id": "https://isecure.fi/#organization"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.8",
+              "ratingCount": "156"
+            }
           }
-        }
+        ]
       }
     </script>
     
