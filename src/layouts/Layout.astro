@@ -28,12 +28,12 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={
       lang === 'en' 
-        ? "ISECure - Secure bank connection channel and API solutions for businesses. WS-Channel and integration services."
+        ? "ISECure provides secure bank connection channels and Web Service API solutions for businesses. Trusted WS-Channel integration services for Nordic banks including Nordea, OP, and Danske Bank."
         : lang === 'se'
-        ? "ISECure - Säker bankförbindelsekanal och API-lösningar för företag. WS-Kanal och integrationstjänster."
-        : "ISECure - Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. WS-Kanava ja integraatiopalvelut."
+        ? "ISECure erbjuder säkra bankförbindelsekanaler och Web Service API-lösningar för företag. Pålitliga WS-Kanal integrationstjänster för nordiska banker inklusive Nordea, OP och Danske Bank."
+        : "ISECure tarjoaa turvalliset pankkiyhteydet ja Web Service API-ratkaisut yrityksille. Luotettavat WS-Kanava integraatiopalvelut pohjoismaisille pankeille mukaan lukien Nordea, OP ja Danske Bank."
     } />
-    <meta name="keywords" content="WS-Kanava, Web Service, API, pankkiyhteys, integraatio, SEPA, maksuliikenne, verkkopankki" />
+    <meta name="keywords" content="WS-Kanava, Web Service, API, pankkiyhteys, SEPA, maksuliikenne, verkkopankki, Nordea, OP, Danske Bank, bank integration, AWS, cloud services" />
     <meta name="author" content="ISECure Oy" />
     
     <!-- Open Graph / Social Media -->
@@ -69,7 +69,39 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
     
-    <title>{title} | ISECure</title>
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).toString()} />
+    <title>{title} | ISECure - Professional Bank Integration Solutions</title>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ISECure WS-Channel",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Cloud",
+        "offers": {
+          "@type": "Offer",
+          "category": "Banking Integration Solutions"
+        },
+        "description": {
+          lang === 'en' 
+            ? "Secure bank connection channel and API solutions for businesses"
+            : lang === 'se'
+            ? "Säker bankförbindelsekanal och API-lösningar för företag"
+            : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille"
+        },
+        "provider": {
+          "@type": "Organization",
+          "name": "ISECure Oy",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "FI",
+            "addressLocality": "Helsinki"
+          }
+        }
+      }
+    </script>
     
     <!-- Custom CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">

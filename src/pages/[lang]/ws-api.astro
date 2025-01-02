@@ -16,13 +16,30 @@ const { lang } = Astro.props;
 <Layout 
   title={
     lang === 'en'
-      ? "WS-Channel API - Bank Integration Solutions"
+      ? "WS-Channel API - Secure Bank Integration Solutions | Nordic Banks"
       : lang === 'se'
-      ? "WS-Kanal API - Banktintegrationslösningar"
-      : "WS-Kanava API - Pankkiintegraatioratkaisut"
+      ? "WS-Kanal API - Säkra Banktintegrationslösningar | Nordiska Banker"
+      : "WS-Kanava API - Turvalliset Pankkiintegraatioratkaisut | Pohjoismaiset Pankit"
   }
   lang={lang}
 >
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "ISECure WS-Channel API",
+      "description": "Professional bank integration API solution for Nordic banks",
+      "category": "Financial Software",
+      "brand": {
+        "@type": "Brand",
+        "name": "ISECure"
+      },
+      "offers": {
+        "@type": "Offer",
+        "category": "Bank Integration API"
+      }
+    }
+  </script>
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
