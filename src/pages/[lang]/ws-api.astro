@@ -6,10 +6,13 @@ import BankLogos from '../../components/BankLogos.astro';
 import '../../styles/PageContent.css';
 
 export async function getStaticPaths() {
-  return languages.map(lang => ({
-    params: { lang },
-    props: { lang }
-  }));
+  // Only generate pages for non-Finnish languages since Finnish is at root
+  return languages
+    .filter(lang => lang !== 'fi')
+    .map(lang => ({
+      params: { lang },
+      props: { lang }
+    }));
 }
 
 const { lang } = Astro.props;
