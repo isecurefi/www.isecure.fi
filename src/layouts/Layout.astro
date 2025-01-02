@@ -5,10 +5,8 @@ import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import Contact from '../components/Contact.astro';
 
-interface Props {
-  title: string;
-  lang?: 'fi' | 'en' | 'se';
-}
+import type { LayoutProps } from '../types/layout';
+type Props = LayoutProps;
 
 const { title, lang = 'fi' } = Astro.props;
 ---
