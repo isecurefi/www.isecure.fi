@@ -197,6 +197,38 @@ export const translations = {
       en: 'Company Bank Connection - Web Service',
       se: 'Företagets bankförbindelse - Web Service'
     },
+    wsChannel: {
+      title: {
+        fi: 'ISECure WS-Kanava',
+        en: 'ISECure WS-Channel',
+        se: 'ISECure WS-Kanal'
+      },
+      subtitle: {
+        fi: 'WS-KANAVA SUORAAN PILVIPALVELUNA YRITYKSILLE',
+        en: 'WS-CHANNEL DIRECTLY AS A CLOUD SERVICE FOR COMPANIES',
+        se: 'WS-KANAL DIREKT SOM MOLNTJÄNST FÖR FÖRETAG'
+      },
+      description: {
+        fi: 'Tarjoamme testatun ja verifioidun koodin täydellä lisenssillä kehitys- ja asiakastarpeisiinne.',
+        en: 'We offer tested and verified code with full license for your development and customer needs.',
+        se: 'Vi erbjuder testad och verifierad kod med full licens för dina utvecklings- och kundbehov.'
+      },
+      quote: {
+        fi: 'ISECuren WS-kanavalla voi esimerkiksi ladata automaattisesti konekieliset tiliotteet ja viitesiirrot ja yhdistää ne korkealaatuisen JavaScript-kirjaston kanssa interaktiivisten statistiikkojen luomiseksi.',
+        en: 'With ISECure\'s WS-channel, you can automatically download machine-readable account statements and reference transfers and combine them with a high-quality JavaScript library to create interactive statistics.',
+        se: 'Med ISECures WS-kanal kan du automatiskt ladda ner maskinläsbara kontoutdrag och referensöverföringar och kombinera dem med ett högkvalitativt JavaScript-bibliotek för att skapa interaktiv statistik.'
+      },
+      details: {
+        fi: 'ISECuren WS-Kanava sisältää WebService-pankkiyhteysohjelmisto SDK:n usealle pankille: Nordea, DanskeBank, Osuuspankki, S-Pankki/LähiTapiola, Ålandsbanken, Samlink -pankit: Handelsbanken, Aktia, POP, Säästöpankki. Tuemme sekä APP- että PKI-puolta (mm. sertifikaatin haku PIN -koodilla ja uusinta). WS-kanava on ollut tuotannossa yli 10 vuotta ja on käytössä useilla asiakkailla.',
+        en: 'ISECure\'s WS-Channel includes WebService banking software SDK for multiple banks: Nordea, DanskeBank, OP Bank, S-Bank/LähiTapiola, Ålandsbanken, Samlink banks: Handelsbanken, Aktia, POP, Savings Bank. We support both APP and PKI sides (including certificate retrieval with PIN code and renewal). The WS-channel has been in production for over 10 years and is used by multiple customers.',
+        se: 'ISECures WS-Kanal inkluderar WebService bankprogramvaru-SDK för flera banker: Nordea, DanskeBank, OP Bank, S-Bank/LähiTapiola, Ålandsbanken, Samlink banker: Handelsbanken, Aktia, POP, Sparbanken. Vi stöder både APP- och PKI-sidor (inklusive certifikathämtning med PIN-kod och förnyelse). WS-kanalen har varit i produktion i över 10 år och används av flera kunder.'
+      },
+      saas: {
+        fi: 'Voit ostaa WS-kanavan suoraan palveluna Hosting -paketilla (SaaS) valitsemillesi tai kaikille pankeille.',
+        en: 'You can purchase the WS-channel directly as a service with a Hosting package (SaaS) for your selected banks or all banks.',
+        se: 'Du kan köpa WS-kanalen direkt som en tjänst med ett Hosting-paket (SaaS) för dina valda banker eller alla banker.'
+      }
+    },
     description: {
       fi: 'Web Service -kanava on pankkien tarjoama yritysasiakkaille suunnattu pankkiyhteys, joka mahdollistaa pankkiaineistojen automaattisen lähetyksen ja noudon. Web Service -kanava on korvannut vanhan eräsiirtopalvelun (PATU). Web Service -kanava on standardoitu ja se perustuu kansainvälisiin XML-standardeihin.',
       en: 'The Web Service channel is a bank connection offered by banks for corporate customers, enabling automatic transmission and retrieval of banking materials. The Web Service channel has replaced the old batch transfer service (PATU). The Web Service channel is standardized and based on international XML standards.',

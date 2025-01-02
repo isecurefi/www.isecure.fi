@@ -12,27 +12,27 @@ export async function getStaticPaths() {
 
 const { lang } = Astro.props;
 ---
-<Layout title="WS-Kanava | iSecure" lang={lang}>
+<Layout title={`${getText('webService.wsChannel.title', lang)} | iSecure`} lang={lang}>
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="page-header">ISECure WS-Kanava</h1>
+        <h1 class="page-header">{getText('webService.wsChannel.title', lang)}</h1>
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-8">
-        <p>WS-KANAVA SUORAAN PILVIPALVELUNA YRITYKSILLE</p>
+        <p>{getText('webService.wsChannel.subtitle', lang)}</p>
  
-        <p>Tarjoamme testatun ja verifioidun koodin täydellä lisenssillä kehitys- ja asiakastarpeisiinne.</p>
+        <p>{getText('webService.wsChannel.description', lang)}</p>
  
-        <p class="blue-text"><i>"ISECuren WS-kanavalla voi esimerkiksi ladata automaattisesti konekieliset tiliotteet ja viitesiirrot ja yhdistää ne korkealaatuisen JavaScript-kirjaston kanssa interaktiivisten statistiikkojen luomiseksi."</i></p>
+        <p class="blue-text"><i>"{getText('webService.wsChannel.quote', lang)}"</i></p>
  
-        <p>ISECuren WS-Kanava sisältää WebService-pankkiyhteysohjelmisto SDK:n usealle pankille: Nordea, DanskeBank, Osuuspankki, S-Pankki/LähiTapiola, Ålandsbanken, Samlink -pankit: Handelsbanken, Aktia, POP, Säästöpankki. Tuemme sekä APP- että PKI-puolta (mm. sertifikaatin haku PIN -koodilla ja uusinta). WS-kanava on ollut tuotannossa yli 10 vuotta ja on käytössä useilla asiakkailla.</p>
+        <p>{getText('webService.wsChannel.details', lang)}</p>
       </div>
       <div class="col-md-4">
-        <p class="blue-text">Voit ostaa WS-kanavan suoraan palveluna Hosting -paketilla (SaaS) valitsemillesi tai kaikille pankeille.</p>
-        <a href="#contact" class="btn btn-primary">Kysy Lisää</a>
+        <p class="blue-text">{getText('webService.wsChannel.saas', lang)}</p>
+        <a href="#contact" class="btn btn-primary">{lang === 'fi' ? 'Kysy Lisää' : lang === 'se' ? 'Fråga Mer' : 'Ask More'}</a>
       </div>
     </div>
 
