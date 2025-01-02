@@ -15,11 +15,11 @@
     "vitest": "^0.34.6"
   },
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "test": "vitest"
+    "dev": "yarn astro dev",
+    "start": "yarn astro dev",
+    "build": "yarn astro build",
+    "preview": "yarn astro preview",
+    "test": "yarn vitest"
   },
   "repository": {
     "type": "git",
