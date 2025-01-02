@@ -19,7 +19,9 @@ const navItems = [
   ...item,
   href: item.href.startsWith('#') 
     ? item.href 
-    : getLocalizedPathname(item.href, lang)
+    : lang === 'fi' 
+      ? item.href
+      : getLocalizedPathname(item.href, lang)
 }));
 ---
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm" role="navigation">
