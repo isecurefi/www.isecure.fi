@@ -23,9 +23,6 @@ const languages: Record<Lang, string> = {
       aria-label={`Switch to ${label}`}
       onclick={`
         localStorage.setItem('preferred-lang', '${lang}');
-        const currentPath = window.location.pathname;
-        window.location.href = currentPath + '?lang=${lang}';
-        return false;
       `}
     >
       {label}
@@ -34,13 +31,14 @@ const languages: Record<Lang, string> = {
 </div>
 
 <script>
-  // Set initial active state based on stored language
-  const storedLang = localStorage.getItem('preferred-lang') || 'fi';
+  // Set initial active state based on current URL path
+  const currentPath = window.location.pathname;
+  const currentLang = currentPath.split('/')[1] || 'fi';
   const links = document.querySelectorAll('.lang-link');
   links.forEach(link => {
-    const langParam = new URL(link.getAttribute('href'), window.location.href)
-      .searchParams.get('lang');
-    if (langParam === storedLang) {
+    const href = link.getAttribute('href');
+    const linkLang = href.split('/')[1];
+    if (linkLang === currentLang) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');
