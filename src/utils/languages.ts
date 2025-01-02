@@ -4,6 +4,9 @@ export const languages: Lang[] = ['fi', 'en', 'se'];
 export const defaultLanguage: Lang = 'fi';
 
 export function getLanguageFromUrl(url: URL): Lang {
+  if (!url) {
+    return defaultLanguage;
+  }
   const [, lang] = url.pathname.split('/');
   return (lang && languages.includes(lang as Lang)) ? (lang as Lang) : defaultLanguage;
 }

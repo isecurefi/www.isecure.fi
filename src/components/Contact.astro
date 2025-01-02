@@ -221,7 +221,7 @@ const { lang = 'fi' } = Astro.props;
     sns.publish({
       Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
       Subject: `ISECure ${lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'} contact: ${name} <${email}>`
-    }, function(err: Error | null, data: Record<string, unknown>) {
+    }, function(err: Error | null, data: Record<string, unknown>): void {
       // Re-enable button and hide spinner
       if (button) button.disabled = false;
       if (spinner) spinner.classList.add('d-none');

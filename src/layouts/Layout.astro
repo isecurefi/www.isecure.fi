@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 import Contact from '../components/Contact.astro';
 
 import type { Lang } from '../types';
-import { defaultLang, getText } from '../store/translations';
+import { defaultLang } from '../store/translations';
 
 export interface Props {
   title: string;
@@ -14,8 +14,6 @@ export interface Props {
 }
 
 const { title } = Astro.props;
-import { getStoredLang } from '../store/translations';
-
 const [, pathLang] = Astro.url.pathname.split('/');
 const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as Lang : defaultLang;
 ---

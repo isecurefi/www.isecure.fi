@@ -342,7 +342,7 @@ export function setStoredLang(lang: Lang): void {
   }
 }
 
-export function getText(key: string, lang: Lang = getStoredLang()): string {
+export function getText(key: string, lang: Lang = getStoredLang()): string | Record<string, unknown> {
   const keys = key.split('.');
   let result = translations;
   for (const k of keys) {
