@@ -4,7 +4,7 @@ import type { OptimizedImageProps } from '../utils/imageOptimization';
 import { getResponsiveSizes } from '../utils/imageOptimization';
 
 interface Props extends OptimizedImageProps {
-  format?: 'webp' | 'avif' | 'png' | 'jpeg';
+  quality?: number;
 }
 
 const { 
@@ -17,7 +17,7 @@ const {
   decoding = 'async',
   sizes,
   fetchpriority,
-  format = 'webp'
+  quality = 90
 } = Astro.props;
 
 const imageWidth = width || 800;
@@ -35,6 +35,5 @@ const imageSizes = sizes || getResponsiveSizes(imageWidth);
   decoding={decoding}
   sizes={imageSizes}
   fetchpriority={fetchpriority}
-  format={format}
-  quality={90}
+  quality={quality}
 />

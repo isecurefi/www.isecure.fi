@@ -10,6 +10,7 @@ export interface OptimizedImageProps {
   decoding?: 'async' | 'sync' | 'auto';
   sizes?: string;
   fetchpriority?: 'high' | 'low' | 'auto';
+  quality?: number;
 }
 
 export const defaultImageSizes = {
