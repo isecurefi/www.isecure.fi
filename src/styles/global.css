@@ -22,8 +22,8 @@ body {
 }
 
 .navbar {
-  background-color: #222;
-  border-color: #080808;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
   z-index: 1030;
 }
 
@@ -36,14 +36,14 @@ body {
 }
 
 .nav-link {
-  color: #9d9d9d !important;
+  color: #495057 !important;
   font-size: 16px;
   padding: 15px 10px !important;
   transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #fff !important;
+  color: #007bff !important;
   text-decoration: none;
 }
 
@@ -57,9 +57,10 @@ body {
 }
 
 .footer2 {
-  background-color: #222;
-  color: #9d9d9d;
+  background-color: #f8f9fa;
+  color: #495057;
   padding: 20px 0;
+  border-top: 1px solid #dee2e6;
 }
 
 .awslogos2 {
