@@ -125,6 +125,13 @@ const { lang = "fi" } = Astro.props;
 </script>
 
 <script>
+  import { getText } from '../store/translations';
+  import type { Lang } from '../types';
+
+  // Get the current language from the URL
+  const pathSegments = window.location.pathname.split('/');
+  const lang = (pathSegments[1] && ['fi', 'en', 'se'].includes(pathSegments[1])) ? pathSegments[1] as Lang : 'fi';
+
   interface AWSCredentials {
     IdentityPoolId: string;
   }
@@ -239,7 +246,7 @@ const { lang = "fi" } = Astro.props;
     if (!msg || !name || !email) {
       if (result) {
         result.className = "error";
-        result.innerHTML = `<b>${getText("contactForm.validation.required", lang)}</b>`;
+        result.innerHTML = `<b>${getText("contactForm.validation.required", lang as Lang)}</b>`;
       }
       return;
     }
@@ -252,7 +259,7 @@ const { lang = "fi" } = Astro.props;
     const sns = new AWS.SNS({ params: { TopicArn: "arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail" } });
     if (result) {
       result.className = "";
-      result.innerHTML = `<b>${getText("contactForm.sending", lang)}</b>`;
+      result.innerHTML = `<b>${getText("contactForm.sending", lang as Lang)}</b>`;
     }
 
     sns.publish(
@@ -272,7 +279,7 @@ const { lang = "fi" } = Astro.props;
         if (!err && result) {
           if (result) {
             result.className = "success";
-            result.innerHTML = `<b>${getText("contactForm.success", lang)}</b>`;
+            result.innerHTML = `<b>${getText("contactForm.success", lang as Lang)}</b>`;
           }
           console.log(data);
           setTimeout(() => {
@@ -282,7 +289,7 @@ const { lang = "fi" } = Astro.props;
           console.log(err, err.stack);
           if (result) {
             result.className = "error";
-            result.innerHTML = `<b>${getText("contactForm.error", lang)}</b>`;
+            result.innerHTML = `<b>${getText("contactForm.error", lang as Lang)}</b>`;
           }
         }
       }
