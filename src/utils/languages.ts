@@ -14,8 +14,8 @@ export function getLanguageFromUrl(url: URL | null): Lang {
   if (
     path === "/" ||
     path === "/index.html" ||
-    path === "/ws-channel" ||
-    path === "/ws-api"
+    path === "/ws-channel/index.html" ||
+    path === "/ws-api/index.html"
   ) {
     return "fi";
   }
@@ -40,8 +40,10 @@ export function getLocalizedPathname(pathname: string, lang: Lang): string {
     ) {
       return "/";
     }
-    // Remove /fi/ prefix for Finnish URLs
-    return pathname.replace(/^\/fi\//, "/");
+    // Remove /fi/ prefix for Finnish URLs and ensure index.html
+    const cleanPath = pathname.replace(/^\/fi\//, "/");
+    // Add index.html if it's a directory path
+    return cleanPath.endsWith('/') ? `${cleanPath}index.html` : cleanPath;
   }
 
   // Remove existing language prefix if present

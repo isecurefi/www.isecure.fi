@@ -281,7 +281,7 @@ const { lang = "fi" } = Astro.props;
       }
       console.log("Message sent successfully:", data);
       setTimeout(() => {
-        window.location.href = lang === "fi" ? "/thankyou" : `/${lang}/thankyou`;
+        window.location.href = lang === "fi" ? "/thankyou/index.html" : `/${lang}/thankyou/index.html`;
       }, 1500);
     } catch (err) {
       console.error("Error sending message:", err);
