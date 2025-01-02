@@ -19,8 +19,8 @@ function SendSNS(msg, name, email, result, thankyou) {
     var sns = new AWS.SNS({params: {TopicArn: 'arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail'}});
     if (result) result.innerHTML = "<b>L&auml;hetet&auml;&auml;n viesti&auml;..</b>\n";
     sns.publish({
-        Message: "From: "+name+" <"+email+">\n"+"Message:\n"+msg,
-        Subject: "ISECure WS-Kanava contact: "+name+" <"+email+">"
+        Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
+        Subject: `ISECure WS-Kanava contact: ${name} <${email}>`
     }, function (err, data) {
         if (!err) {
             if (result) result.innerHTML = "<b>Viesti l&auml;hetetty!</b>";

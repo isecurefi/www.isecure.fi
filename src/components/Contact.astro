@@ -73,15 +73,30 @@ import '../styles/Contact.css';
 </div>
 
 <script>
+  interface AWSCredentials {
+    IdentityPoolId: string;
+  }
+
+  interface SNSParams {
+    Message: string;
+    Subject: string;
+  }
+
+  interface SNSCallback {
+    (err: Error | null, data?: unknown): void;
+  }
+
   interface AWSConfig {
     region: string;
-    credentials: any;
+    credentials: AWSCredentials;
   }
 
   interface AWSConstructors {
     config: AWSConfig;
-    CognitoIdentityCredentials: new (params: { IdentityPoolId: string }) => any;
-    SNS: new (params: { params: { TopicArn: string } }) => any;
+    CognitoIdentityCredentials: new (params: { IdentityPoolId: string }) => AWSCredentials;
+    SNS: new (params: { params: { TopicArn: string } }) => {
+      publish: (params: SNSParams, callback: SNSCallback) => void;
+    };
   }
 
   declare global {
