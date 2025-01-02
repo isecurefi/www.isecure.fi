@@ -69,12 +69,17 @@ const { lang = 'fi' } = Astro.props;
           <img 
             src="/images/sftp-sync.png" 
             alt="SFTP Sync Architecture"
-            style="width:100%; height:auto; margin: 1.5rem 0;"
+            style="width:100%; height:auto;"
             width="800"
             height="533"
             loading="lazy"
             decoding="async"
-          >
+          ><br><br>
+          <div style="text-align:center;">
+            <a href={`/${lang}/ws-api#sftp`} class="btn btn-primary">
+              {lang === 'en' ? 'READ MORE' : lang === 'se' ? 'LÄS MER' : 'LUE LISÄÄ'}
+            </a>
+          </div>
         </div>
       </div>
     </div>
