@@ -1,0 +1,27 @@
+---
+const navItems = [
+  { href: '/', text: 'Etusivu' },
+  { href: '/ws-kanava', text: 'WS-Kanava' },
+  { href: '/ws-api', text: 'WS-Kanava API' },
+  { href: '/contact', text: 'Yhteystiedot' }
+];
+---
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="/images/logo.png" alt="iSecure" height="30">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        {navItems.map(item => (
+          <li class="nav-item">
+            <a class="nav-link" href={item.href}>{item.text}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
@@ -19,8 +22,11 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <main>
+    <Navigation />
+    <main class="container mt-5 pt-5">
       <slot />
     </main>
+    <Footer />
+    <script src="bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
