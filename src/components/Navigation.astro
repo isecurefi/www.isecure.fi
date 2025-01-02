@@ -12,8 +12,8 @@ const { lang } = Astro.props;
 const currentPath = Astro.url.pathname;
 const navItems = [
   { href: '/', text: getText('nav.home', lang) },
-  { href: '/ws-kanava.html', text: getText('nav.wsChannel', lang) },
-  { href: '/ws-api.html', text: getText('nav.api', lang) },
+  { href: '/ws-kanava', text: getText('nav.wsChannel', lang) },
+  { href: '/ws-api', text: getText('nav.api', lang) },
   { href: '#contact', text: getText('nav.contact', lang) }
 ].map(item => ({
   ...item,

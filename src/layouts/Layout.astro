@@ -17,7 +17,7 @@ const { title } = Astro.props;
 import { getStoredLang } from '../store/translations';
 
 const urlLang = Astro.url.searchParams.get('lang') as Lang;
-const lang = (urlLang && ['fi', 'en', 'se'].includes(urlLang)) ? urlLang : defaultLang;
+const lang = (urlLang && ['fi', 'en', 'se'].includes(urlLang)) ? urlLang : getStoredLang();
 ---
 
 <!DOCTYPE html>

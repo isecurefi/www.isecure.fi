@@ -11,6 +11,23 @@ export const translations = {
       fi: 'Tarjoamme ISECure WS-Kanava:aan perustuvia paketteja:',
       en: 'We offer packages based on ISECure WS-Channel:',
       se: 'Vi erbjuder paket baserade på ISECure WS-Kanal:'
+    },
+    apiSection: {
+      title: {
+        fi: 'WS-KANAVA API (REST), OPENAPI KUVAUS JA WSCLI KOMENTORIVITYÖKALU',
+        en: 'WS-CHANNEL API (REST), OPENAPI DESCRIPTION AND WSCLI COMMAND LINE TOOL',
+        se: 'WS-KANAL API (REST), OPENAPI BESKRIVNING OCH WSCLI KOMMANDORADSVERKTYG'
+      },
+      description: {
+        fi: 'Oletko kehittämässä omaa palvelua tai tuotetta, jossa hyödynnät WS-kanavaa? Tarjoamme kilpailukykyiseen hintaan WS-Kanavan SaaS palveluna.',
+        en: 'Are you developing your own service or product that utilizes the WS-Channel? We offer WS-Channel as a SaaS service at a competitive price.',
+        se: 'Utvecklar du en egen tjänst eller produkt som använder WS-Kanal? Vi erbjuder WS-Kanal som SaaS-tjänst till ett konkurrenskraftigt pris.'
+      },
+      services: {
+        fi: 'Palvelumme käyttää mm. AWS:n API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch ja Lambda palveluita ja skaalautuu tarpeidesi mukaan.',
+        en: 'Our service uses AWS services including API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch and Lambda, and scales according to your needs.',
+        se: 'Vår tjänst använder AWS-tjänster som API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch och Lambda, och skalar enligt dina behov.'
+      }
     }
   },
   hero: {

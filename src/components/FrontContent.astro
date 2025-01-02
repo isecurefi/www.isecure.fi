@@ -24,13 +24,11 @@ const { lang = 'fi' } = Astro.props;
           <h2 class="panel-title">API<br><br>ISECure WS-Kanava API</h2>
         </div>
         <div class="panel-body">
-          <p>WS-KANAVA API (REST), OPENAPI KUVAUS JA WSCLI KOMENTORIVITYÖKALU</p>
+          <p>{getText('frontContent.apiSection.title', lang)}</p>
           
-          <p>Oletko kehittämässä omaa palvelua tai tuotetta, jossa hyödynnät WS-kanavaa? 
-             Tarjoamme kilpailukykyiseen hintaan WS-Kanavan SaaS palveluna.</p>
+          <p>{getText('frontContent.apiSection.description', lang)}</p>
               
-          <p>Palvelumme käyttää mm. AWS:n API Gateway, Dynamo DB, Cognito Your User Pool, 
-             KMS, IAM, CloudWatch ja Lambda palveluita ja skaalautuu tarpeidesi mukaan.</p>
+          <p>{getText('frontContent.apiSection.services', lang)}</p>
           
           <img src="/images/kustom.png" style="width:100%;"><br><br>
           <div style="text-align:center;">
