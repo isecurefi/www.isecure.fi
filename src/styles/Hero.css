@@ -1,13 +1,14 @@
 .hero-section {
-  --hero-padding: 2rem;
+  --hero-padding: 4rem;
   --hero-gap: 2rem;
   --hero-max-width: 1200px;
-  --hero-background: #f8f9fa;
-  --hero-border-radius: 8px;
+  --hero-background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  --hero-border-radius: 1rem;
 
-  padding: var(--hero-padding);
-  max-width: var(--hero-max-width);
-  margin: 0 auto;
+  padding: var(--hero-padding) 0;
+  width: 100%;
+  background: var(--hero-background);
+  margin-bottom: 2rem;
 }
 
 .hero-container {

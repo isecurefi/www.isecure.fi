@@ -1,15 +1,18 @@
 :root {
-  --primary-color: #007bff;
+  --primary-color: #0d6efd;
   --secondary-color: #6c757d;
   --background-color: #ffffff;
   --background-light: #f8f9fa;
-  --text-color: #333333;
+  --text-color: #212529;
   --border-color: #dee2e6;
   --input-background: #f8f9fa;
-  --success-color: #28a745;
+  --success-color: #198754;
   --error-color: #dc3545;
-  --success-background: #d4edda;
+  --success-background: #d1e7dd;
   --error-background: #f8d7da;
+  --section-padding: 5rem 0;
+  --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --transition-base: all 0.3s ease-in-out;
 }
 
 * {

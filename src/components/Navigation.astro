@@ -6,12 +6,15 @@ const navItems = [
   { href: '#contact', text: 'Yhteystiedot' }
 ];
 ---
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" role="navigation">
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm" role="navigation">
   <div class="container">
     <a class="navbar-brand" href="/">
       <img src="/images/isecure-small-logo.png" style="height:40px" alt="iSecure">
     </a>
-    <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="nav navbar-nav navbar-right">
         {navItems.map(item => (
           <li class="nav-item">
