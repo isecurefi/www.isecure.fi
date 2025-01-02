@@ -106,28 +106,6 @@ body {
   gap: 1rem;
 }
 
-.aws-certs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-@media (max-width: 768px) {
-  .footer-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .contact-info {
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
-
-.awslogos2 {
-  height: 30px;
-  margin: 5px;
-}
 
 .soclogo {
   height: 30px;
