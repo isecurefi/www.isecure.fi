@@ -33,19 +33,22 @@ const languages: Record<Lang, string> = {
 </div>
 
 <script>
-  // Set initial active state based on current URL path and handle root path
+  // Set initial active state based on current URL path
   const currentPath = window.location.pathname;
   const pathParts = currentPath.split('/').filter(Boolean);
-  const currentLang = (pathParts[0] && ['en', 'se'].includes(pathParts[0])) ? pathParts[0] : 'fi';
+  const currentLang = pathParts[0] || 'fi';
   
   const links = document.querySelectorAll('.lang-link');
   links.forEach(link => {
     const href = link.getAttribute('href');
     const linkLang = href === '/' ? 'fi' : href.split('/')[1] || 'fi';
-    if (linkLang === currentLang) {
+    
+    // Clear any existing active states first
+    link.classList.remove('active');
+    
+    // Only add active class if languages match exactly
+    if (currentLang === linkLang) {
       link.classList.add('active');
-    } else {
-      link.classList.remove('active');
     }
   });
 </script>
