@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import type { Lang } from '../../types';
 import { languages } from '../../utils/languages';
 import { getText } from '../../store/translations';
+import '../../styles/PageContent.css';
 
 export async function getStaticPaths() {
   return languages.map(lang => ({
@@ -12,10 +13,6 @@ export async function getStaticPaths() {
 }
 
 const { lang } = Astro.props;
----
-
----
-import '../../styles/PageContent.css';
 ---
 <Layout title={`${getText('webService.wsChannel.api.title', lang)} | iSecure`} lang={lang}>
   <script type="application/ld+json">
