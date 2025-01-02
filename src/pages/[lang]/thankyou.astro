@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { languages } from '../../utils/languages';
+import type { Lang } from '../../types';
+
+export async function getStaticPaths() {
+  return languages.map(lang => ({
+    params: { lang },
+    props: { lang }
+  }));
+}
+
+const { lang } = Astro.props;
+
+const messages = {
+  title: {
+    en: "Thank You - Message Sent Successfully",
+    se: "Tack - Meddelandet har skickats",
+    fi: "Kiitos - Viesti lähetetty onnistuneesti"
+  },
+  heading: {
+    en: "Thank you for contacting us",
+    se: "Tack för att du kontaktade oss",
+    fi: "Kiitos yhteydenotosta"
+  },
+  message: {
+    en: "We will be in touch with you soon!",
+    se: "Vi kommer att kontakta dig snart!",
+    fi: "Olemme teihin yhteydessä!"
+  },
+  regards: {
+    en: "Best regards,",
+    se: "Med vänliga hälsningar,",
+    fi: "Ystävällisin terveisin,"
+  }
+};
+---
+<Layout title={messages.title[lang]} lang={lang}>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">{messages.heading[lang]}</h3>
+          </div>
+          <div class="panel-body text-center">
+            <p>{messages.message[lang]}</p>
+            <br>
+            <p>{messages.regards[lang]}<br>
+            -&nbsp;Dan Forsberg</p>
+            <br>
+            <img src="/images/isecure-small-logo.png" alt="iSecure" style="max-width: 200px">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+.panel {
+  margin-top: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+}
+
+.panel-heading {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px 8px 0 0;
+}
+
+.panel-body {
+  padding: 2rem;
+}
+</style>
