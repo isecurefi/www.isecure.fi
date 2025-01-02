@@ -95,6 +95,11 @@ export const translations = {
       en: "SEND",
       se: "SKICKA",
     },
+    readMore: {
+      fi: "LUE LISÄÄ",
+      en: "READ MORE",
+      se: "LÄS MER",
+    },
     validation: {
       required: {
         fi: "Anna nimi, sähköposti ja viesti.",
