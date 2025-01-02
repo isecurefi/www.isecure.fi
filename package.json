@@ -33,7 +33,7 @@
     "preview": "yarn astro preview",
     "lint": "yarn eslint \"src/**/*.{js,ts,astro}\"",
     "format": "yarn prettier --write .",
-    "deploy": "aws s3 cp --cache-control \"public, max-age=86400\" --recursive dist/ s3://www2.isecure.fi/"
+    "deploy": "yarn lint && yarn format && yarn build && aws s3 cp --cache-control \"public, max-age=86400\" --recursive dist/ s3://www2.isecure.fi/"
   },
   "repository": {
     "type": "git",
