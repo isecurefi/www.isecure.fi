@@ -7,20 +7,25 @@ export function getLanguageFromUrl(url: URL | null): Lang {
   if (!url || !url.pathname) {
     return defaultLanguage;
   }
-  
+
   const path = url.pathname;
-  
+
   // Special cases for Finnish
-  if (path === "/" || path === "/index.html" || path === "/ws-channel" || path === "/ws-api") {
+  if (
+    path === "/" ||
+    path === "/index.html" ||
+    path === "/ws-channel" ||
+    path === "/ws-api"
+  ) {
     return "fi";
   }
-  
+
   // Check if path starts with a language code
   const match = path.match(/^\/([^/]+)/);
   if (match && languages.includes(match[1] as Lang)) {
     return match[1] as Lang;
   }
-  
+
   return defaultLanguage;
 }
 
