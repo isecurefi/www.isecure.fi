@@ -40,8 +40,17 @@ import '../styles/Contact.css';
 </div>
 
 <script>
-  declare var AWS: any;
-  
+  interface AWS {
+    config: {
+      region: string;
+      credentials: any;
+    };
+    CognitoIdentityCredentials: new (params: { IdentityPoolId: string }) => any;
+    SNS: new (params: { params: { TopicArn: string } }) => any;
+  }
+
+  declare var AWS: AWS;
+
   AWS.config.region = 'eu-west-1';
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: 'eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c'

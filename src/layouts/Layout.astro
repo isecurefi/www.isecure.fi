@@ -16,30 +16,28 @@ const { title, lang = 'fi' } = Astro.props;
 <!DOCTYPE html>
 <html lang={lang}>
   <head>
+    <!-- Meta Tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="ISECure - Pankkiyhteyskanava ja API-ratkaisut" />
     <meta name="keywords" content="WS-Kanava, API, pankkiyhteys, integraatio" />
+    <meta name="author" content="ISECure Oy" />
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    
     <title>{title}</title>
     
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"></script>
-    <script>
+    <!-- Analytics -->
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-BJ6B7H7K8E');
-    </script>
-
-    <!-- Global site tag (gtag.js) - Google Ads -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1025469048"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
       gtag('config', 'AW-1025469048');
     </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1025469048"></script>
   </head>
   <body>
     <Navigation />

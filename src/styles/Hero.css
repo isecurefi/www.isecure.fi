@@ -1,19 +1,26 @@
 .hero-section {
+  --hero-padding: 2rem;
+  --hero-gap: 2rem;
+  --hero-max-width: 1200px;
+  --hero-background: #f8f9fa;
+  --hero-border-radius: 8px;
+
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  padding: 2rem;
-  max-width: 1200px;
+  gap: var(--hero-gap);
+  padding: var(--hero-padding);
+  max-width: var(--hero-max-width);
   margin: 0 auto;
 }
 
 .hero-item {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  background-color: #f8f9fa;
-  padding: 2rem;
-  border-radius: 8px;
+  gap: var(--hero-gap);
+  background-color: var(--hero-background);
+  padding: var(--hero-padding);
+  border-radius: var(--hero-border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .hero-image {

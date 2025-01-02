@@ -15,11 +15,13 @@
     "vitest": "^0.34.6"
   },
   "scripts": {
-    "dev": "yarn astro dev",
-    "start": "yarn astro dev",
-    "build": "yarn astro build",
-    "preview": "yarn astro preview",
-    "test": "yarn vitest"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest",
+    "lint": "eslint . --ext .js,.ts,.astro",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
