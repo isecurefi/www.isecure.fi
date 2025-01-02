@@ -52,25 +52,6 @@ body {
   z-index: 1030;
 }
 
-.navbar-brand {
-  padding: 5px 15px;
-}
-
-.nav-item {
-  margin: 0 10px;
-}
-
-.nav-link {
-  color: #495057 !important;
-  font-size: 16px;
-  padding: 15px 10px !important;
-  transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-  color: #007bff !important;
-  text-decoration: none;
-}
 
 .footer {
   background-color: #2d3436;
