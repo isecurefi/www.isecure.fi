@@ -49,7 +49,7 @@ const { lang = 'fi' } = Astro.props;
             pattern="[\p{L}][\p{L} -]{1,48}[\p{L}]"
             onblur="validateInput(this)"
           >
-          <div class="invalid-feedback" style="display: block;">{getText('contactForm.validation.nameRequired', lang)}</div>
+          <div class="invalid-feedback">{getText('contactForm.validation.nameRequired', lang)}</div>
         </div>
         <div class="form-group">
           <input 
@@ -61,7 +61,7 @@ const { lang = 'fi' } = Astro.props;
             pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
             onblur="validateInput(this)"
           >
-          <div class="invalid-feedback" style="display: block;">{getText('contactForm.validation.emailInvalid', lang)}</div>
+          <div class="invalid-feedback">{getText('contactForm.validation.emailInvalid', lang)}</div>
         </div>
         <div class="form-group">
           <textarea 
@@ -74,7 +74,7 @@ const { lang = 'fi' } = Astro.props;
             maxlength="1000"
             onblur="validateInput(this)"
           ></textarea>
-          <div class="invalid-feedback" style="display: block;">{getText('contactForm.validation.messageLength', lang)}</div>
+          <div class="invalid-feedback">{getText('contactForm.validation.messageLength', lang)}</div>
         </div>
         <button 
           class="btn btn-primary" 
@@ -131,9 +131,8 @@ const { lang = 'fi' } = Astro.props;
     
     const value = input.value.trim();
     
-    // Skip validation if empty (let required attribute handle it)
-    if (!value) {
-      input.classList.add('is-invalid');
+    // Don't show validation on empty fields until form submission
+    if (!value && !input.dataset.attempted) {
       return false;
     }
 
@@ -147,6 +146,17 @@ const { lang = 'fi' } = Astro.props;
     input.classList.add(isValid ? 'is-valid' : 'is-invalid');
     return isValid;
   }
+
+  // Mark fields as attempted on blur
+  ['name', 'email', 'message'].forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener('blur', () => {
+        element.dataset.attempted = 'true';
+        validateInput(element as HTMLInputElement | HTMLTextAreaElement);
+      });
+    }
+  });
 
   const AWS = window.AWS;
 
