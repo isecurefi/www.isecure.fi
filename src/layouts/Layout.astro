@@ -84,13 +84,13 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
           "@type": "Offer",
           "category": "Banking Integration Solutions"
         },
-        "description": {
+        "description": "${
           lang === 'en' 
-            ? "Secure bank connection channel and API solutions for businesses"
+            ? 'Secure bank connection channel and API solutions for businesses'
             : lang === 'se'
-            ? "Säker bankförbindelsekanal och API-lösningar för företag"
-            : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille"
-        },
+            ? 'Säker bankförbindelsekanal och API-lösningar för företag'
+            : 'Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille'
+        }",
         "provider": {
           "@type": "Organization",
           "name": "ISECure Oy",
