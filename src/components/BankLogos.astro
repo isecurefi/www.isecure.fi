@@ -1,0 +1,43 @@
+---
+const banks = [
+  { name: 'Aktia', logo: '/images/bank_icons/aktia_logo.png' },
+  { name: 'Ålandsbanken', logo: '/images/bank_icons/alandsbanken_logo.gif' },
+  { name: 'Handelsbanken', logo: '/images/bank_icons/handelsbanken_logo.gif' },
+  { name: 'Nooa', logo: '/images/bank_icons/nooa_logo.gif' },
+  { name: 'Nordea', logo: '/images/bank_icons/nordea_logo.gif' },
+  { name: 'OKO', logo: '/images/bank_icons/oko_logo.gif' },
+  { name: 'POP', logo: '/images/bank_icons/pop_logo.png' },
+  { name: 'Sampo', logo: '/images/bank_icons/sampo_logo.png' },
+  { name: 'S-Pankki', logo: '/images/bank_icons/spankki_lahitapiola.png' },
+  { name: 'SEB', logo: '/images/bank_icons/SEBlogo.png' }
+];
+---
+<div class="row">
+  <div class="col-md-12">
+    <br>
+    <div class="bank-logos">
+      {banks.map(bank => (
+        <img 
+          src={bank.logo} 
+          alt={`${bank.name} logo`} 
+          class="bank-icon"
+          loading="lazy"
+        />
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+.bank-logos {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.bank-icon {
+  height: 40px;
+  object-fit: contain;
+}
+</style>
