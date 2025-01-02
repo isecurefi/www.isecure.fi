@@ -57,7 +57,9 @@ const { lang = 'fi' } = Astro.props;
       <div class="col-md-6">
       <div class="panel panel-primary">
         <div class="panel-heading panel-heading-second">
-          <h2 class="panel-title">{getText('frontContent.apiSection.bankFiles.title', lang)}<br><br>ISECure WS-Kanava SFTP Sync</h2>
+          <h2 class="panel-title">{getText('frontContent.apiSection.bankFiles.title', lang)}<br><br>{lang === 'en' ? 'ISECure WS-Channel' : 
+             lang === 'se' ? 'ISECure WS-Kanal' : 
+             'ISECure WS-Kanava'} SFTP Sync</h2>
         </div>
         <div class="panel-body">
           <p>{getText('frontContent.apiSection.bankFiles.subtitle', lang)}</p>
