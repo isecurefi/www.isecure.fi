@@ -12,7 +12,7 @@ const { lang } = Astro.props;
 
 const navItems = [
   { href: '/index.html', text: getText('nav.home', lang) },
-  { href: lang === 'fi' ? '/ws-channel' : `/${lang}/ws-channel`, text: getText('nav.wsChannel', lang) },
+  { href: lang === 'fi' ? '/ws-channel' : `/${lang}/ws-channel/`, text: getText('nav.wsChannel', lang) },
   { href: '/ws-api/', text: getText('nav.api', lang) },
   { href: '#contact', text: getText('nav.contact', lang) }
 ].map(item => ({
