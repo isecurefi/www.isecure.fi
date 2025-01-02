@@ -65,10 +65,12 @@ body {
 }
 
 .footer {
-  background-color: #f5f5f5;
+  background-color: #2d3436;
+  color: #f5f5f5;
   padding: 40px 0;
   margin-top: 30px;
   width: 100%;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .footer-grid {
@@ -76,6 +78,9 @@ body {
   grid-template-columns: 1fr 2fr;
   gap: 2rem;
   align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .footer-left {
