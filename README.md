@@ -1,3 +1,3 @@
-# ISECure.fi Website
+# ISECure.fi website
 
-- Original [README.md](https://github.com/IronSummitMedia/startbootstrap-modern-business/blob/gh-pages/README.md)
+Made with Aider + Anthropic Claude 3.5 Sonnet by switching to using Astro as the framework.
