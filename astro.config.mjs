@@ -14,14 +14,14 @@ export default defineConfig({
       rollupOptions: {
         output: {
           manualChunks: {
-            'vendor': ['bootstrap'],
-            'utils': ['./src/utils/'],
-          }
-        }
-      }
+            vendor: ["bootstrap"],
+            utils: ["./src/utils/"],
+          },
+        },
+      },
     },
     ssr: {
-      noExternal: ['bootstrap']
-    }
+      noExternal: ["bootstrap"],
+    },
   },
 });

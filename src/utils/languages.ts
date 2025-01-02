@@ -52,5 +52,5 @@ export function getLocalizedPathname(pathname: string, lang: Lang): string {
   // For non-Finnish languages or non-root paths, include language prefix and index.html
   const path = lang === "fi" ? cleanPath : `/${lang}${cleanPath}`;
   // Add index.html if it's a directory path
-  return path.endsWith('/') ? `${path}index.html` : path;
+  return path.endsWith("/") ? `${path}index.html` : path;
 }
