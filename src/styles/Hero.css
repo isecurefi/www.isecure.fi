@@ -89,6 +89,7 @@
   flex-direction: column;
   justify-content: center;
   min-height: 120px;
+  padding: 0 1rem;
 }
 
 .hero-text h1 {

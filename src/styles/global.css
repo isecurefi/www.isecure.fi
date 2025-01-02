@@ -127,9 +127,10 @@ main {
   margin: 4rem auto;
   max-width: 1000px;
   position: relative;
-  background: #ff8c00;
+  background: linear-gradient(135deg, #ff8c00 0%, #ff7300 100%);
   box-shadow: 0 15px 40px rgba(255, 140, 0, 0.2);
   border-radius: 8px;
+  transform: translateZ(0);
 }
 
 .customer-quote {
