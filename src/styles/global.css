@@ -19,6 +19,10 @@ body {
   padding-top: 76px;
   position: relative;
   min-height: 100vh;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .navbar {
