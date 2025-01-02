@@ -21,9 +21,14 @@ export default [
     languageOptions: {
       parser: astroParser,
       parserOptions: {
+        parser: 'espree',
         extraFileExtensions: ['.astro'],
+        sourceType: 'module'
       },
     },
-    rules: {},
+    rules: {
+      'no-unused-vars': 'warn',
+      'no-undef': 'error'
+    },
   },
 ];
