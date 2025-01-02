@@ -22,7 +22,6 @@ const banks = [
           alt={`${bank.name} logo`} 
           class="bank-icon"
           loading="lazy"
-          width="150"
           height="40"
           decoding="async"
         />
@@ -41,6 +40,7 @@ const banks = [
 
 .bank-icon {
   height: 40px;
+  width: auto;
   object-fit: contain;
 }
 </style>
