@@ -19,13 +19,15 @@ export function getLanguageFromUrl(url: URL | null): Lang {
 
 export function getLocalizedPathname(pathname: string, lang: Lang): string {
   // Special case for root path with Finnish language
-  if (
-    lang === "fi" &&
-    (pathname === "/" ||
-      pathname === "/index.html" ||
-      pathname === "/fi/index.html")
-  ) {
-    return "/index.html";
+  if (lang === "fi") {
+    if (pathname === "/" || 
+        pathname === "/index.html" || 
+        pathname === "/fi/index.html" ||
+        pathname === "/fi") {
+      return "/";
+    }
+    // Remove /fi/ prefix for Finnish URLs
+    return pathname.replace(/^\/fi\//, '/');
   }
 
   // Remove existing language prefix if present

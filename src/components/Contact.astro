@@ -200,12 +200,24 @@ const { lang = "fi" } = Astro.props;
     }
   });
 
-  const AWS = window.AWS;
+  try {
+    const AWS = window.AWS;
+    if (!AWS) {
+      throw new Error('AWS SDK not loaded');
+    }
 
-  AWS.config.region = "eu-west-1";
-  AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: "eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c",
-  });
+    AWS.config.region = "eu-west-1";
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: "eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c",
+    });
+  } catch (error) {
+    console.error('Failed to initialize AWS:', error);
+    const result = document.getElementById("result");
+    if (result) {
+      result.className = "error";
+      result.innerHTML = `<b>${getText("contactForm.error", lang as Lang)}</b>`;
+    }
+  }
 
   function validateForm(): boolean {
     if (!document.getElementById("name") || !document.getElementById("email") || !document.getElementById("message")) {

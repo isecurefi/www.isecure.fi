@@ -14,7 +14,8 @@ export interface Props {
 const { title } = Astro.props;
 import { defaultLanguage as defaultLang } from '../utils/languages';
 const [, pathLang] = Astro.url.pathname.split('/');
-const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as Lang : defaultLang;
+const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as Lang : 
+  Astro.props.lang || defaultLang;
 ---
 
 <!DOCTYPE html>
