@@ -6,21 +6,23 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 });
 
 function SendSNS(msg, name, email, result, thankyou) {
-    msg = msg.trim()
-    name = name.trim()
-    email = email.trim()
-    thankyou = thankyou.trim()
+    const trimmedMsg = msg.trim();
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedThankyou = thankyou.trim();
     
-    if (msg === '' || name === '' || email === '') {
-        if (result) result.innerHTML = "<b>Anna nimi, s&auml;hk&ouml;posti ja viesti.</b>";
+    if (trimmedMsg === '' || trimmedName === '' || trimmedEmail === '') {
+        if (result) {
+            result.innerHTML = "<b>Anna nimi, s&auml;hk&ouml;posti ja viesti.</b>";
+        }
         return;
     }
     
     var sns = new AWS.SNS({params: {TopicArn: 'arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail'}});
     if (result) result.innerHTML = "<b>L&auml;hetet&auml;&auml;n viesti&auml;..</b>\n";
     sns.publish({
-        Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
-        Subject: `ISECure WS-Kanava contact: ${name} <${email}>`
+        Message: `From: ${trimmedName} <${trimmedEmail}>\nMessage:\n${trimmedMsg}`,
+        Subject: `ISECure WS-Kanava contact: ${trimmedName} <${trimmedEmail}>`
     }, function (err, data) {
         if (!err) {
             if (result) result.innerHTML = "<b>Viesti l&auml;hetetty!</b>";

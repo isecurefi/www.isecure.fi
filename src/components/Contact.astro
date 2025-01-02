@@ -83,7 +83,7 @@ import '../styles/Contact.css';
   }
 
   interface SNSCallback {
-    (err: Error | null, data?: unknown): void;
+    (err: Error | null, data?: Record<string, unknown>): void;
   }
 
   interface AWSConfig {
@@ -144,7 +144,7 @@ import '../styles/Contact.css';
     sns.publish({
       Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
       Subject: `ISECure WS-Kanava contact: ${name} <${email}>`
-    }, function(err: any, data: any) {
+    }, function(err: Error | null, data: Record<string, unknown>) {
       // Re-enable button and hide spinner
       if (button) button.disabled = false;
       if (spinner) spinner.classList.add('d-none');
