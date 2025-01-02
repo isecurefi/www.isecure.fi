@@ -252,7 +252,7 @@ export const translations = {
     title: {
       fi: "Joitain referenssejä",
       en: "Some References",
-      se: "Referenser",
+      se: "Några referenser",
     },
   },
   quote: {
