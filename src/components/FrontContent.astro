@@ -40,14 +40,12 @@ const { lang = 'fi' } = Astro.props;
       <div class="col-md-6">
       <div class="panel panel-primary">
         <div class="panel-heading panel-heading-second">
-          <h2 class="panel-title">Pankkitiedostot palveluna<br><br>ISECure WS-Kanava SYNC</h2>
+          <h2 class="panel-title">{getText('frontContent.apiSection.bankFiles.title', lang)}<br><br>ISECure WS-Kanava SYNC</h2>
         </div>
         <div class="panel-body">
-          <p>PANKKITIEDOSTOT SUORAAN PALVEIMELLESI</p>
+          <p>{getText('frontContent.apiSection.bankFiles.subtitle', lang)}</p>
           
-          <p>Palvelu synkronoi tiedostot pankista esim. SFTP palvelimellesi tai vaikkapa AWS S3 Bucket:iin 
-             säännöllisesti ja luotettavasti haluamansi ajankohtana. Pankkitiedostojen lähetys onnistuu 
-             myös lähettämällä tiedostot suoraan S3 Bucketiin. Selkeät raportit sekä lähetyksistä että vastaanotoista.</p>
+          <p>{getText('frontContent.apiSection.bankFiles.description', lang)}</p>
         </div>
       </div>
     </div>

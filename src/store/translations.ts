@@ -18,6 +18,23 @@ export const translations = {
         en: 'WS-CHANNEL API (REST), OPENAPI DESCRIPTION AND WSCLI COMMAND LINE TOOL',
         se: 'WS-KANAL API (REST), OPENAPI BESKRIVNING OCH WSCLI KOMMANDORADSVERKTYG'
       },
+      bankFiles: {
+        title: {
+          fi: 'Pankkitiedostot palveluna',
+          en: 'Bank Files as a Service',
+          se: 'Bankfiler som tjänst'
+        },
+        subtitle: {
+          fi: 'PANKKITIEDOSTOT SUORAAN PALVEIMELLESI',
+          en: 'BANK FILES DIRECTLY TO YOUR SERVER',
+          se: 'BANKFILER DIREKT TILL DIN SERVER'
+        },
+        description: {
+          fi: 'Palvelu synkronoi tiedostot pankista esim. SFTP palvelimellesi tai vaikkapa AWS S3 Bucket:iin säännöllisesti ja luotettavasti haluamansi ajankohtana. Pankkitiedostojen lähetys onnistuu myös lähettämällä tiedostot suoraan S3 Bucketiin. Selkeät raportit sekä lähetyksistä että vastaanotoista.',
+          en: 'The service synchronizes files from the bank to your SFTP server or AWS S3 Bucket regularly and reliably at your desired time. Bank files can also be sent by uploading directly to an S3 Bucket. Clear reports for both sent and received files.',
+          se: 'Tjänsten synkroniserar filer från banken till din SFTP-server eller AWS S3 Bucket regelbundet och pålitligt vid önskad tidpunkt. Bankfiler kan också skickas genom att ladda upp direkt till en S3 Bucket. Tydliga rapporter för både skickade och mottagna filer.'
+        }
+      },
       description: {
         fi: 'Oletko kehittämässä omaa palvelua tai tuotetta, jossa hyödynnät WS-kanavaa? Tarjoamme kilpailukykyiseen hintaan WS-Kanavan SaaS palveluna.',
         en: 'Are you developing your own service or product that utilizes the WS-Channel? We offer WS-Channel as a SaaS service at a competitive price.',
