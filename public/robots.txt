@@ -1,11 +1,32 @@
+# Global rules
 User-agent: *
 Allow: /
 
-# Block access to specific files
+# Crawl-delay for better server performance
+Crawl-delay: 10
+
+# Block access to system files and private areas
 Disallow: /thankyou
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /backup/
+
+# Block access to specific file types
 Disallow: /*.json$
 Disallow: /*.js$
 Disallow: /*.css$
+Disallow: /*.md$
+Disallow: /*.yml$
+Disallow: /*.yaml$
+Disallow: /*.xml$
+Disallow: /*.txt$
+Disallow: /*.log$
+Disallow: /*.config$
+Disallow: /*.env$
 
-# Sitemap
+# Canonical domain
+Host: https://www.isecure.fi
+
+# Sitemap location
 Sitemap: https://www.isecure.fi/sitemap-index.xml
