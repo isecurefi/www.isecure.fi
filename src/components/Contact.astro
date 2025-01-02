@@ -39,6 +39,8 @@ import '../styles/Contact.css';
             minlength="2"
             maxlength="50"
             pattern="[A-Za-z]([A-Za-z]| |-){1,48}[A-Za-z]"
+            oninvalid="this.classList.add('is-invalid')"
+            oninput="this.classList.remove('is-invalid')"
           >
           <div class="invalid-feedback">Nimi on pakollinen ja voi sisältää vain kirjaimia</div>
         </div>

@@ -79,16 +79,23 @@
 }
 
 .invalid-feedback {
-  display: block;
+  display: none;
   width: 100%;
   margin-top: 0.25rem;
   font-size: 0.875em;
   color: var(--error-color);
-  visibility: hidden;
 }
 
-.is-invalid ~ .invalid-feedback {
-  visibility: visible;
+.is-invalid ~ .invalid-feedback,
+input:invalid ~ .invalid-feedback,
+textarea:invalid ~ .invalid-feedback {
+  display: block;
+}
+
+input:focus:invalid,
+textarea:focus:invalid {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
 
 .contact-form textarea {
