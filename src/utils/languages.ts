@@ -5,10 +5,7 @@ export const defaultLanguage: Lang = 'fi';
 
 export function getLanguageFromUrl(url: URL): Lang {
   const [, lang] = url.pathname.split('/');
-  if (lang && languages.includes(lang as Lang)) {
-    return lang as Lang;
-  }
-  return defaultLanguage;
+  return (lang && languages.includes(lang as Lang)) ? (lang as Lang) : defaultLanguage;
 }
 
 export function getLocalizedPathname(pathname: string, lang: Lang): string {

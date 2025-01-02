@@ -1,7 +1,8 @@
 ---
 import { defaultLanguage } from '../utils/languages';
+import { getLanguageFromUrl } from '../utils/languages';
 export const prerender = true;
 
-// Redirect to the default language version
-return Astro.redirect(`/${defaultLanguage === 'fi' ? '' : defaultLanguage}`);
+const lang = getLanguageFromUrl(Astro.url) || defaultLanguage;
+return Response.redirect(new URL(`/${lang === defaultLanguage ? '' : lang}`, Astro.url), 301);
 ---
