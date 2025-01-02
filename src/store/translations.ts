@@ -278,9 +278,9 @@ export const translations = {
         se: "Vi erbjuder testad och verifierad kod med full licens för dina utvecklings- och kundbehov.",
       },
       quote: {
-        fi: "ISECuren WS-kanavalla voi esimerkiksi ladata automaattisesti konekieliset tiliotteet ja viitesiirrot ja yhdistää ne korkealaatuisen JavaScript-kirjaston kanssa interaktiivisten statistiikkojen luomiseksi.",
-        en: "With ISECure's WS-channel, you can automatically download machine-readable account statements and reference transfers and combine them with a high-quality JavaScript library to create interactive statistics.",
-        se: "Med ISECures WS-kanal kan du automatiskt ladda ner maskinläsbara kontoutdrag och referensöverföringar och kombinera dem med ett högkvalitativt JavaScript-bibliotek för att skapa interaktiv statistik.",
+        fi: "ISECuren WS-kanavalla voi esimerkiksi ladata automaattisesti konekieliset tiliotteet ja viitesiirrot.",
+        en: "With ISECure's WS-channel, you can automatically download for example machine-readable account statements and reference transfers.",
+        se: "Med ISECures WS-kanal kan du automatiskt ladda till exempel ner maskinläsbara kontoutdrag och referensöverföringar.",
       },
       details: {
         fi: "ISECuren WS-Kanava sisältää WebService-pankkiyhteysohjelmisto SDK:n usealle pankille: Nordea, DanskeBank, Osuuspankki, S-Pankki/LähiTapiola, Ålandsbanken, Samlink -pankit: Handelsbanken, Aktia, POP, Säästöpankki. Tuemme sekä APP- että PKI-puolta (mm. sertifikaatin haku PIN -koodilla ja uusinta). WS-kanava on ollut tuotannossa yli 10 vuotta ja on käytössä useilla asiakkailla.",
