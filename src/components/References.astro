@@ -13,7 +13,15 @@ const { lang = 'fi' } = Astro.props;
     <div class="col-md-12">
       <h3>{getText('references.title', lang)}</h3>
       <div class="references">
-        <img src="/images/references/fennoa.png" class="reference" alt="Fennoa">
+        <img 
+          src="/images/references/fennoa.png" 
+          class="reference" 
+          alt="Fennoa"
+          loading="lazy"
+          width="150"
+          height="60"
+          decoding="async"
+        >
         <img src="/images/references/briox.svg" class="reference" style="width:30%;" alt="Briox">
         <img src="/images/references/graphia-logo.jpg" class="reference" alt="Graphia">
         <img src="/images/references/hostingpalvelu.png" class="reference" alt="Hostingpalvelu">
