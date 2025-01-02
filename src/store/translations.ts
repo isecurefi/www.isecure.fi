@@ -250,8 +250,8 @@ export const translations = {
   },
   references: {
     title: {
-      fi: "Referenssit",
-      en: "References",
+      fi: "Joitain referenssejä",
+      en: "Some References",
       se: "Referenser",
     },
   },
@@ -259,8 +259,8 @@ export const translations = {
     text: {
       fi: "Luotettava pankkiyhteys jo yli 10 vuotta!",
       en: "Reliable bank connection for over 10 years!",
-      se: "Pålitlig bankförbindelse i över 10 år!"
-    }
+      se: "Pålitlig bankförbindelse i över 10 år!",
+    },
   },
   webService: {
     title: {
