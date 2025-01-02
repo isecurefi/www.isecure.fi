@@ -2,16 +2,13 @@
 import { getText } from '../store/translations';
 import type { Lang } from '../types';
 import LanguageSwitcher from './LanguageSwitcher.astro';
-import { defaultLanguage } from '../utils/languages';
+import { getLocalizedPathname } from '../utils/languages';
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
-
-const currentPath = Astro.url.pathname;
-import { getLocalizedPathname } from '../utils/languages';
 
 const navItems = [
   { href: '/', text: getText('nav.home', lang) },

@@ -4,8 +4,7 @@ import Hero from '../../components/Hero.astro';
 import FrontContent from '../../components/FrontContent.astro';
 import References from '../../components/References.astro';
 import '../../styles/Hero.css';
-import type { Lang } from '../../types';
-import { languages, defaultLanguage } from '../../utils/languages';
+import { languages } from '../../utils/languages';
 
 export async function getStaticPaths() {
   return languages.map(lang => ({
