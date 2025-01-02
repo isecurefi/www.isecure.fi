@@ -94,8 +94,16 @@ const { lang } = Astro.props;
           )}
           <li>Paranneltu <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK ja client</a> helppoa integroimista varten.</li>
           <li><a href="https://github.com/isecurefi/wscli-php">WSCLI SDK ja client - GitHub repository</a></li>
-          <li><a href="https://isecure.fi/wsapi_v2.json">WSAPI OpenAPI API rajapintakuvaus JSON -muodossa</a></li>
-          <li><a href="https://isecure.fi/wsapi_v2/index.html">WSAPI v2 API Dokumentaatio</a></li>
+          <li><a href="https://isecure.fi/wsapi_v2.json">{
+            lang === 'en' ? 'WSAPI OpenAPI API description in JSON format' :
+            lang === 'se' ? 'WSAPI OpenAPI API-beskrivning i JSON-format' :
+            'WSAPI OpenAPI API rajapintakuvaus JSON -muodossa'
+          }</a></li>
+          <li><a href="https://isecure.fi/wsapi_v2/index.html">{
+            lang === 'en' ? 'WSAPI v2 API Documentation' :
+            lang === 'se' ? 'WSAPI v2 API Dokumentation' :
+            'WSAPI v2 API Dokumentaatio'
+          }</a></li>
           </ul>
 
           <p>{
