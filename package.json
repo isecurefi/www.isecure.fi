@@ -23,14 +23,15 @@
     "typescript": "^5.7.2",
     "vitest": "^0.34.6"
   },
+  "packageManager": "yarn@4.0.2",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "test": "vitest",
-    "lint": "eslint \"src/**/*.{js,ts,astro}\"",
-    "format": "prettier --write ."
+    "dev": "yarn astro dev",
+    "start": "yarn astro dev",
+    "build": "yarn astro build",
+    "preview": "yarn astro preview",
+    "test": "yarn vitest",
+    "lint": "yarn eslint \"src/**/*.{js,ts,astro}\"",
+    "format": "yarn prettier --write ."
   },
   "repository": {
     "type": "git",
