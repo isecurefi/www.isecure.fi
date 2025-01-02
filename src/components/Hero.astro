@@ -21,6 +21,11 @@ const { lang } = Astro.props;
           src="/images/isecure_header1_b.png" 
           alt="WS-Kanava"
           class="hero-image"
+          width="600"
+          height="400"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
         />
         <h1>{getText('hero.title1', lang)}</h1>
         <h3>{getText('hero.subtitle1', lang)}</h3>
@@ -34,6 +39,11 @@ const { lang } = Astro.props;
           src="/images/kustom.png" 
           alt="WS-Kanava API"
           class="hero-image"
+          width="600"
+          height="400"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
         />
         <h1>{getText('hero.title2', lang)}</h1>
         <h3>{getText('hero.subtitle2', lang)}</h3>

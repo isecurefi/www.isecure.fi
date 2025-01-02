@@ -43,7 +43,15 @@ const { lang = 'fi' } = Astro.props;
               
           <p>{getText('frontContent.apiSection.services', lang)}</p>
           
-          <img src="/images/kustom.png" style="width:100%;"><br><br>
+          <img 
+            src="/images/kustom.png" 
+            alt="WS-Kanava API Integration"
+            style="width:100%; height:auto;"
+            width="800"
+            height="533"
+            loading="lazy"
+            decoding="async"
+          ><br><br>
           <div style="text-align:center;">
             <a href={`/${lang}/ws-api`} class="btn btn-primary">LUE LISÄÄ</a>
           </div>
