@@ -1,1 +1,11 @@
-Sitemap: https://www.isecure.fi/sitemap.xml
+User-agent: *
+Allow: /
+
+# Block access to specific files
+Disallow: /thankyou
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+
+# Sitemap
+Sitemap: https://www.isecure.fi/sitemap-index.xml
