@@ -79,11 +79,15 @@
 }
 
 .invalid-feedback {
-  display: none;
   width: 100%;
   margin-top: 0.25rem;
   font-size: 0.875em;
   color: var(--error-color);
+  display: none;
+}
+
+.is-invalid + .invalid-feedback {
+  display: block !important;
 }
 
 .is-invalid ~ .invalid-feedback {
