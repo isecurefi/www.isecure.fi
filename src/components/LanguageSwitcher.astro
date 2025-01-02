@@ -36,7 +36,14 @@ const languages: Record<Lang, string> = {
   // Set initial active state based on current URL path
   const currentPath = window.location.pathname;
   const pathParts = currentPath.split('/').filter(Boolean);
-  const currentLang = pathParts[0] || 'fi';
+  
+  // Default to 'fi' for root path or paths without language code
+  let currentLang = 'fi';
+  
+  // Only update currentLang if a valid language code is found
+  if (pathParts[0] && ['en', 'se'].includes(pathParts[0])) {
+    currentLang = pathParts[0];
+  }
   
   const links = document.querySelectorAll('.lang-link');
   links.forEach(link => {
