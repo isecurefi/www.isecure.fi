@@ -134,3 +134,20 @@ main {
   min-height: calc(100vh - 400px);
   margin-bottom: 0;
 }
+
+.quote-section {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: var(--background-light);
+  margin: 2rem 0;
+  border-radius: 8px;
+}
+
+.customer-quote {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  font-weight: 500;
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+}

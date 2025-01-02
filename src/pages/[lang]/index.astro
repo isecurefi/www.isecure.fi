@@ -27,6 +27,11 @@ const { lang } = Astro.props;
   lang={lang}
 >
   <Hero lang={lang} />
+  <div class="quote-section">
+    <blockquote class="customer-quote">
+      {getText("quote.text", lang)}
+    </blockquote>
+  </div>
   <FrontContent lang={lang} />
   <hr />
   <References lang={lang} />
