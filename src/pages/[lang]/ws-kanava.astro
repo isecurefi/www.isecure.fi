@@ -14,27 +14,25 @@ export async function getStaticPaths() {
 
 const { lang } = Astro.props;
 ---
+---
+import '../../styles/PageContent.css';
+---
 <Layout title={`${getText('webService.wsChannel.title', lang)} | iSecure`} lang={lang}>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <h1 class="page-header">{getText('webService.wsChannel.title', lang)}</h1>
-      </div>
-    </div>
+  <div class="container page-container">
+    <h1 class="page-header">{getText('webService.wsChannel.title', lang)}</h1>
 
-    <div class="row">
-      <div class="col-md-8">
+    <div class="content-section">
+      <div class="main-content">
         <p>{getText('webService.wsChannel.subtitle', lang)}</p>
- 
         <p>{getText('webService.wsChannel.description', lang)}</p>
- 
         <p class="blue-text"><i>"{getText('webService.wsChannel.quote', lang)}"</i></p>
- 
         <p>{getText('webService.wsChannel.details', lang)}</p>
       </div>
-      <div class="col-md-4">
+      <div class="sidebar-content">
         <p class="blue-text">{getText('webService.wsChannel.saas', lang)}</p>
-        <a href="#contact" class="btn btn-primary">{lang === 'fi' ? 'Kysy Lisää' : lang === 'se' ? 'Fråga Mer' : 'Ask More'}</a>
+        <a href="#contact" class="btn btn-primary">
+          {lang === 'fi' ? 'Kysy Lisää' : lang === 'se' ? 'Fråga Mer' : 'Ask More'}
+        </a>
       </div>
     </div>
 

@@ -13,6 +13,9 @@ export async function getStaticPaths() {
 const { lang } = Astro.props;
 ---
 
+---
+import '../../styles/PageContent.css';
+---
 <Layout 
   title={
     lang === 'en'
@@ -40,15 +43,11 @@ const { lang } = Astro.props;
       }
     }
   </script>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <h1 class="page-header">ISECure WS-Kanava API</h1>
-      </div>
-    </div>
+  <div class="container page-container">
+    <h1 class="page-header">ISECure WS-Kanava API</h1>
 
-    <div class="row">
-      <div class="col-md-8">
+    <div class="content-section">
+      <div class="main-content">
         <p>{
           lang === 'en' ? 'WS-Channel SaaS service - API' :
           lang === 'se' ? 'WS-Kanal som SaaS-tjänst - API' :
@@ -111,7 +110,8 @@ const { lang } = Astro.props;
           'Halutessasi autamme integroinnissa ja tarvittaessa asennamme teille työkalut ja hoidamme boardauksen - rekisteröimme sinut ja hoidamme sertifikaattien enrollauksen puolestasi.'
         }</p>
       </div>
-      <div class="col-md-4 blue-text">
+      <div class="sidebar-content">
+        <p class="blue-text">Haluatko kuulla lisää WS-Kanava API:sta?</p>
         <a href="#contact" class="btn btn-primary">Kysy Lisää</a>
       </div>
     </div>
