@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import type { Lang } from '../../types';
 import { languages } from '../../utils/languages';
 import { getText } from '../../store/translations';
+import BankLogos from '../../components/BankLogos.astro';
 import '../../styles/PageContent.css';
 
 export async function getStaticPaths() {
@@ -114,5 +115,8 @@ const { lang } = Astro.props;
         </div>
       </div>
     </div>
+
+    <h3>{getText('webService.banks', lang)}</h3>
+    <BankLogos />
   </div>
 </Layout>
