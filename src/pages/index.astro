@@ -1,18 +1,4 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import FrontContent from '../components/FrontContent.astro';
-import References from '../components/References.astro';
-import '../styles/Hero.css';
-import type { Lang } from '../types';
-import { defaultLang } from '../store/translations';
-
-const lang = (Astro.url.searchParams.get('lang') as Lang) || defaultLang;
+import { defaultLanguage } from '../utils/languages';
 ---
-
-<Layout title="iSecure">
-  <Hero lang={lang} />
-  <FrontContent lang={lang} />
-  <hr />
-  <References />
-</Layout>
+<meta http-equiv="refresh" content={`0;url=/${defaultLanguage === 'fi' ? '' : defaultLanguage}`}>

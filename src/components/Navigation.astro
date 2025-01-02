@@ -19,7 +19,11 @@ const navItems = [
   { href: '#contact', text: getText('nav.contact', lang) }
 ].map(item => ({
   ...item,
-  href: item.href.startsWith('#') ? item.href : getLocalizedPathname(item.href, lang)
+  href: item.href.startsWith('#') 
+    ? item.href 
+    : item.href === '/' 
+      ? (lang === defaultLanguage ? '/' : `/${lang}`) 
+      : getLocalizedPathname(item.href, lang)
 }));
 ---
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm" role="navigation">
