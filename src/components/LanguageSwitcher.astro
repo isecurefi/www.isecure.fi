@@ -33,32 +33,38 @@ const languages: Record<Lang, string> = {
 </div>
 
 <script>
-  // Set initial active state based on current URL path
-  const currentPath = window.location.pathname;
-  
-  // Default to 'fi' for all paths except those explicitly starting with /en/ or /se/
-  let currentLang = 'fi';
-  
-  // Only change from Finnish if path explicitly starts with /en/ or /se/
-  if (currentPath.startsWith('/en/') || currentPath === '/en') {
-    currentLang = 'en';
-  } else if (currentPath.startsWith('/se/') || currentPath === '/se') {
-    currentLang = 'se';
-  }
-  
-  const links = document.querySelectorAll('.lang-link');
-  links.forEach(link => {
-    const href = link.getAttribute('href');
-    const linkLang = href === '/' ? 'fi' : href.split('/')[1] || 'fi';
+  function updateActiveState() {
+    const currentPath = window.location.pathname;
     
-    // Clear any existing active states first
-    link.classList.remove('active');
+    // Default to 'fi' for all paths except those explicitly starting with /en/ or /se/
+    let currentLang = 'fi';
     
-    // Only add active class if languages match exactly
-    if (currentLang === linkLang) {
-      link.classList.add('active');
+    // Only change from Finnish if path explicitly starts with /en/ or /se/
+    if (currentPath.startsWith('/en/') || currentPath === '/en') {
+      currentLang = 'en';
+    } else if (currentPath.startsWith('/se/') || currentPath === '/se') {
+      currentLang = 'se';
     }
-  });
+    
+    const links = document.querySelectorAll('.lang-link');
+    links.forEach(link => {
+      const href = link.getAttribute('href');
+      const linkLang = href === '/' ? 'fi' : href.split('/')[1] || 'fi';
+      
+      // Set active class based on current language
+      if (currentLang === linkLang) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
+  // Run once when the script loads
+  updateActiveState();
+
+  // Also update when the page content changes (for client-side navigation)
+  document.addEventListener('astro:page-load', updateActiveState);
 </script>
 
 <style>
