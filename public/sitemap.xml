@@ -96,4 +96,24 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <!-- Thank you pages (noindex) -->
+  <url>
+    <loc>https://www.isecure.fi/thankyou/index.html</loc>
+    <lastmod>2025-01-02</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://www.isecure.fi/en/thankyou/index.html</loc>
+    <lastmod>2025-01-02</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://www.isecure.fi/se/thankyou/index.html</loc>
+    <lastmod>2025-01-02</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.1</priority>
+  </url>
 </urlset>

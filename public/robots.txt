@@ -34,6 +34,11 @@ Disallow: /*.json$
 Disallow: /*.ts$
 Disallow: /*.js$
 
+# Block thank you pages from indexing
+Disallow: /thankyou/
+Disallow: /en/thankyou/
+Disallow: /se/thankyou/
+
 # Allow specific JSON files
 Allow: /wsapi_v2.json
 Allow: /site.webmanifest
