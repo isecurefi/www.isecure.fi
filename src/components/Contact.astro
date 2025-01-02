@@ -47,7 +47,6 @@ const { lang = "fi" } = Astro.props;
             minlength="2"
             maxlength="50"
             pattern="[\p{L}][\p{L} -]{1,48}[\p{L}]"
-            onblur="validateInput(this)"
           />
           <div class="invalid-feedback">{getText("contactForm.validation.nameRequired", lang)}</div>
         </div>
@@ -59,7 +58,6 @@ const { lang = "fi" } = Astro.props;
             aria-label={getText("contactForm.email", lang)}
             required
             pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-            onblur="validateInput(this)"
           />
           <div class="invalid-feedback">{getText("contactForm.validation.emailInvalid", lang)}</div>
         </div>
@@ -71,8 +69,7 @@ const { lang = "fi" } = Astro.props;
             aria-label={getText("contactForm.message", lang)}
             required
             minlength="10"
-            maxlength="1000"
-            onblur="validateInput(this)"></textarea>
+            maxlength="1000"></textarea>
           <div class="invalid-feedback">{getText("contactForm.validation.messageLength", lang)}</div>
         </div>
         <button class="btn btn-primary" id="sendButton" type="submit">
@@ -86,6 +83,46 @@ const { lang = "fi" } = Astro.props;
     </div>
   </div>
 </div>
+
+<script is:inline>
+  function validateInput(input) {
+    if (!input) {
+      return false;
+    }
+    input.classList.remove("is-invalid", "is-valid");
+
+    const value = input.value.trim();
+
+    // Don't show validation on empty fields until form submission
+    if (!value && !input.dataset.attempted) {
+      return false;
+    }
+
+    let isValid = input.checkValidity();
+
+    // Additional validation for message length
+    if (input.id === "message" && value.length < 10) {
+      isValid = false;
+    }
+
+    input.classList.add(isValid ? "is-valid" : "is-invalid");
+    return isValid;
+  }
+
+  // Add blur event listeners to all form fields
+  document.addEventListener('DOMContentLoaded', () => {
+    const formFields = ['name', 'email', 'message'];
+    formFields.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener('blur', () => {
+          element.dataset.attempted = 'true';
+          validateInput(element);
+        });
+      }
+    });
+  });
+</script>
 
 <script>
   interface AWSCredentials {
