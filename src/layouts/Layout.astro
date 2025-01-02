@@ -26,14 +26,50 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
     <!-- Meta Tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="ISECure - Pankkiyhteyskanava ja API-ratkaisut" />
-    <meta name="keywords" content="WS-Kanava, API, pankkiyhteys, integraatio" />
+    <meta name="description" content={
+      lang === 'en' 
+        ? "ISECure - Secure bank connection channel and API solutions for businesses. WS-Channel and integration services."
+        : lang === 'se'
+        ? "ISECure - Säker bankförbindelsekanal och API-lösningar för företag. WS-Kanal och integrationstjänster."
+        : "ISECure - Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. WS-Kanava ja integraatiopalvelut."
+    } />
+    <meta name="keywords" content="WS-Kanava, Web Service, API, pankkiyhteys, integraatio, SEPA, maksuliikenne, verkkopankki" />
     <meta name="author" content="ISECure Oy" />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={
+      lang === 'en'
+        ? "Secure bank connection channel and API solutions for businesses"
+        : lang === 'se'
+        ? "Säker bankförbindelsekanal och API-lösningar för företag"
+        : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille"
+    } />
+    <meta property="og:image" content="/images/isecure-og-image.png" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={Astro.url} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={
+      lang === 'en'
+        ? "Secure bank connection channel and API solutions for businesses"
+        : lang === 'se'
+        ? "Säker bankförbindelsekanal och API-lösningar för företag"
+        : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille"
+    } />
+    <meta name="twitter:image" content="/images/isecure-og-image.png" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     
-    <title>{title}</title>
+    <title>{title} | ISECure</title>
     
     <!-- Custom CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">

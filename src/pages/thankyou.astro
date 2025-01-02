@@ -1,7 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Kiitos | iSecure">
+<Layout 
+  title={
+    lang === 'en'
+      ? "Thank You - Message Sent Successfully"
+      : lang === 'se'
+      ? "Tack - Meddelandet har skickats"
+      : "Kiitos - Viesti lähetetty onnistuneesti"
+  }
+>
   <div class="container">
     <div class="row">
       <div class="col-md-12">

@@ -17,7 +17,16 @@ export async function getStaticPaths() {
 const { lang } = Astro.props;
 ---
 
-<Layout title="iSecure" lang={lang}>
+<Layout 
+  title={
+    lang === 'en' 
+      ? "Secure Bank Connection Channel & API Solutions"
+      : lang === 'se'
+      ? "Säker Bankförbindelsekanal & API-Lösningar"
+      : "Turvallinen Pankkiyhteyskanava & API-Ratkaisut"
+  } 
+  lang={lang}
+>
   <Hero lang={lang} />
   <FrontContent lang={lang} />
   <hr />
