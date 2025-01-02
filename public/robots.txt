@@ -13,14 +13,9 @@ Disallow: /temp/
 Disallow: /backup/
 
 # Block access to specific file types
-Disallow: /*.json$
-Disallow: /*.js$
-Disallow: /*.css$
 Disallow: /*.md$
 Disallow: /*.yml$
 Disallow: /*.yaml$
-Disallow: /*.xml$
-Disallow: /*.txt$
 Disallow: /*.log$
 Disallow: /*.config$
 Disallow: /*.env$
