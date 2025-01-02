@@ -1,30 +1,52 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import type { Lang } from '../types';
-import { getLanguageFromUrl } from '../utils/languages';
+import Layout from '../../layouts/Layout.astro';
+import { languages } from '../../utils/languages';
+import type { Lang } from '../../types';
 
-const lang = getLanguageFromUrl(Astro.url) as Lang;
----
-<Layout 
-  title={
-    lang === 'en'
-      ? "Thank You - Message Sent Successfully"
-      : lang === 'se'
-      ? "Tack - Meddelandet har skickats"
-      : "Kiitos - Viesti lähetetty onnistuneesti"
+export async function getStaticPaths() {
+  return languages.map(lang => ({
+    params: { lang },
+    props: { lang }
+  }));
+}
+
+const { lang } = Astro.props;
+
+const messages = {
+  title: {
+    en: "Thank You - Message Sent Successfully",
+    se: "Tack - Meddelandet har skickats",
+    fi: "Kiitos - Viesti lähetetty onnistuneesti"
+  },
+  heading: {
+    en: "Thank you for contacting us",
+    se: "Tack för att du kontaktade oss",
+    fi: "Kiitos yhteydenotosta"
+  },
+  message: {
+    en: "We will be in touch with you soon!",
+    se: "Vi kommer att kontakta dig snart!",
+    fi: "Olemme teihin yhteydessä!"
+  },
+  regards: {
+    en: "Best regards,",
+    se: "Med vänliga hälsningar,",
+    fi: "Ystävällisin terveisin,"
   }
->
+};
+---
+<Layout title={messages.title[lang]} lang={lang}>
   <div class="container">
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">Kiitos yhteydenotosta</h3>
+            <h3 class="panel-title">{messages.heading[lang]}</h3>
           </div>
           <div class="panel-body text-center">
-            <p>Olemme teihin yhteydessä!</p>
+            <p>{messages.message[lang]}</p>
             <br>
-            <p>Ystävällisin terveisin,<br>
+            <p>{messages.regards[lang]}<br>
             -&nbsp;Dan Forsberg</p>
             <br>
             <img src="/images/isecure-small-logo.png" alt="iSecure" style="max-width: 200px">

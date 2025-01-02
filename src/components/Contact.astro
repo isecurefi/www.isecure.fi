@@ -283,7 +283,7 @@ const { lang = "fi" } = Astro.props;
           }
           console.log(data);
           setTimeout(() => {
-            window.location.href = "/thankyou";
+            window.location.href = `/${lang}/thankyou`;
           }, 1500);
         } else {
           console.log(err, err.stack);
