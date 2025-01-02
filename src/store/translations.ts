@@ -1,6 +1,18 @@
 import type { Lang } from '../types';
 
 export const translations = {
+  frontContent: {
+    title: {
+      fi: 'Tarvitsetko ratkaisuja pankkiyhteyksien rakentamiseen?',
+      en: 'Do you need solutions for building bank connections?',
+      se: 'Behöver du lösningar för att bygga bankförbindelser?'
+    },
+    subtitle: {
+      fi: 'Tarjoamme ISECure WS-Kanava:aan perustuvia paketteja:',
+      en: 'We offer packages based on ISECure WS-Channel:',
+      se: 'Vi erbjuder paket baserade på ISECure WS-Kanal:'
+    }
+  },
   hero: {
     title1: {
       en: 'WS-Channel',

@@ -1,12 +1,20 @@
 ---
+import { getText } from '../store/translations';
+import type { Lang } from '../types';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'fi' } = Astro.props;
 ---
 <div class="container">
   <div class="row" style="margin-right:auto;margin-left:auto;">
   </div>
   <div class="content-section">
     <div class="section-header">
-      <h1>Tarvitsetko ratkaisuja pankkiyhteyksien rakentamiseen?</h1>
-      <p>Tarjoamme ISECure WS-Kanava:aan perustuvia paketteja:</p>
+      <h1>{getText('frontContent.title', lang)}</h1>
+      <p>{getText('frontContent.subtitle', lang)}</p>
     </div>
 
     <div class="row">

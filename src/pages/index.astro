@@ -12,7 +12,7 @@ const lang = (Astro.url.searchParams.get('lang') as Lang) || defaultLang;
 
 <Layout title="iSecure">
   <Hero lang={lang} />
-  <FrontContent />
+  <FrontContent lang={lang} />
   <hr />
   <References />
 </Layout>
