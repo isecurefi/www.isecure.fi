@@ -21,7 +21,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "vitest",
-    "lint": "eslint . --ext .js,.ts,.astro",
+    "lint": "eslint \"src/**/*.{js,ts,astro}\"",
     "format": "prettier --write ."
   },
   "repository": {
