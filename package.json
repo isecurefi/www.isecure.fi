@@ -31,7 +31,8 @@
     "build": "yarn astro build",
     "preview": "yarn astro preview",
     "lint": "yarn eslint \"src/**/*.{js,ts,astro}\"",
-    "format": "yarn prettier --write ."
+    "format": "yarn prettier --write .",
+    "deploy": "aws s3 cp --recursive dist/ s3://www.isecure.fi/"
   },
   "repository": {
     "type": "git",

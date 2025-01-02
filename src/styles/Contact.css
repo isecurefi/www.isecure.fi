@@ -47,7 +47,9 @@
   border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
   background-color: var(--input-background);
 }
 
@@ -142,7 +144,7 @@
   .contact-section {
     padding: 2rem 1rem;
   }
-  
+
   .contact-form {
     padding: 1.5rem;
   }

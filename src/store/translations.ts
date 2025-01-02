@@ -345,7 +345,9 @@ export function getStoredLang(): Lang {
     }
 
     try {
-      const stored = globalThis.window.localStorage.getItem("preferred-lang") as Lang;
+      const stored = globalThis.window.localStorage.getItem(
+        "preferred-lang",
+      ) as Lang;
       if (stored && ["fi", "en", "se"].includes(stored)) {
         return stored;
       }
@@ -372,7 +374,10 @@ export function setStoredLang(lang: Lang): void {
   }
 }
 
-export function getText(key: string, lang: Lang = getStoredLang()): string | Record<string, string> {
+export function getText(
+  key: string,
+  lang: Lang = getStoredLang(),
+): string | Record<string, string> {
   const keys = key.split(".");
   let result: unknown = translations;
   for (const k of keys) {

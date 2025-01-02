@@ -20,13 +20,13 @@ example, the following 1.x `SQS.sendMessage()` parameters:
 
 ```javascript
 var params = {
-  MessageBody: 'Some Message',
+  MessageBody: "Some Message",
   MessageAttributes: {
     attrName: {
-      DataType: 'Binary',
-      BinaryValue: new Buffer('example text').toString('base64')
-    }
-  }
+      DataType: "Binary",
+      BinaryValue: new Buffer("example text").toString("base64"),
+    },
+  },
 };
 ```
 
@@ -34,20 +34,20 @@ Can be rewritten as:
 
 ```javascript
 var params = {
-  MessageBody: 'Some Message',
+  MessageBody: "Some Message",
   MessageAttributes: {
     attrName: {
-      DataType: 'Binary',
-      BinaryValue: 'example text'
-    }
-  }
+      DataType: "Binary",
+      BinaryValue: "example text",
+    },
+  },
 };
 ```
 
 And the message will be read as:
 
 ```javascript
-sqs.receiveMessage(params, function(err, data) {
+sqs.receiveMessage(params, function (err, data) {
   // buf is <Buffer 65 78 61 6d 70 6c 65 20 74 65 78 74>
   var buf = data.Messages[0].MessageAttributes.attrName.BinaryValue;
   console.log(buf.toString()); // "example text"
@@ -67,7 +67,7 @@ To migrate your code, change:
 
 ```javascript
 svc.operation(params, function (err, data) {
-  console.log('Request ID:', data.RequestId);
+  console.log("Request ID:", data.RequestId);
 });
 ```
 
@@ -75,11 +75,11 @@ To the following:
 
 ```javascript
 svc.operation(params, function () {
-  console.log('Request ID:', this.requestId);
+  console.log("Request ID:", this.requestId);
 });
 ```
 
-## 3. Exposed Wrapper Elements 
+## 3. Exposed Wrapper Elements
 
 If you use {AWS.ElastiCache}, {AWS.RDS}, or {AWS.Redshift}, you must now access
 the response through the top-level output property in the response for certain

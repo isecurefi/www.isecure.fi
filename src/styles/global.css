@@ -22,8 +22,15 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   font-size: 16px;
   line-height: 1.6;
   color: var(--text-color);
@@ -107,7 +114,6 @@ body {
   gap: 1rem;
 }
 
-
 .soclogo {
   height: 30px;
   margin: 5px;
@@ -154,7 +160,7 @@ main {
   margin: 0;
   padding: 0;
   line-height: 1.3;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 

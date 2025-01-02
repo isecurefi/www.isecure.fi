@@ -7,7 +7,6 @@ and pull requests. Please read through this document before submitting any
 issues or pull requests to ensure we have all the necessary information to
 effectively respond to your bug report or contribution.
 
-
 ## Filing Bug Reports
 
 You can file bug reports against the SDK on the [GitHub issues][issues] page.
@@ -40,7 +39,6 @@ guidelines prior to filing a bug report.
    to help us diagnose the problem. Any relevant information should be provided
    as well, like whether this is a persistent issue, or if it only occurs
    some of the time.
-
 
 ## Submitting Pull Requests
 

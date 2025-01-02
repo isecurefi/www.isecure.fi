@@ -1,11 +1,11 @@
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
+import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: 'https://www.isecure.fi',
-  base: '/',
+  site: "https://www.isecure.fi",
+  base: "/",
   build: {
-    sourcemap: false
+    sourcemap: false,
   },
-  integrations: [sitemap()]
+  integrations: [sitemap()],
 });

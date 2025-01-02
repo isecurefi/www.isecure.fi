@@ -1,1 +1,1 @@
-export type Lang = 'fi' | 'en' | 'se';
+export type Lang = "fi" | "en" | "se";

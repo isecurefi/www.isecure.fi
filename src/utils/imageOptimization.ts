@@ -1,4 +1,4 @@
-import type { ImageMetadata } from 'astro';
+import type { ImageMetadata } from "astro";
 
 export interface OptimizedImageProps {
   src: string | ImageMetadata;
@@ -6,10 +6,10 @@ export interface OptimizedImageProps {
   width?: number;
   height?: number;
   class?: string;
-  loading?: 'lazy' | 'eager';
-  decoding?: 'async' | 'sync' | 'auto';
+  loading?: "lazy" | "eager";
+  decoding?: "async" | "sync" | "auto";
   sizes?: string;
-  fetchpriority?: 'high' | 'low' | 'auto';
+  fetchpriority?: "high" | "low" | "auto";
   quality?: number;
 }
 
@@ -17,7 +17,7 @@ export const defaultImageSizes = {
   sm: 640,
   md: 768,
   lg: 1024,
-  xl: 1280
+  xl: 1280,
 };
 
 export function getResponsiveSizes(baseSize: number): string {
