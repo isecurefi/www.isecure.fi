@@ -69,6 +69,70 @@ export const translations = {
       se: 'Ett och samma API-gränssnitt för din integration med alla banker. Skalar automatiskt enligt dina behov.'
     }
   },
+  contactForm: {
+    title: {
+      fi: 'Ota yhteyttä',
+      en: 'Contact Us',
+      se: 'Kontakta oss'
+    },
+    name: {
+      fi: 'Nimi',
+      en: 'Name',
+      se: 'Namn'
+    },
+    email: {
+      fi: 'Sähköposti',
+      en: 'Email',
+      se: 'E-post'
+    },
+    message: {
+      fi: 'Viesti',
+      en: 'Message',
+      se: 'Meddelande'
+    },
+    send: {
+      fi: 'LÄHETÄ',
+      en: 'SEND',
+      se: 'SKICKA'
+    },
+    validation: {
+      required: {
+        fi: 'Anna nimi, sähköposti ja viesti.',
+        en: 'Please provide name, email and message.',
+        se: 'Ange namn, e-post och meddelande.'
+      },
+      nameRequired: {
+        fi: 'Nimi on pakollinen ja voi sisältää vain kirjaimia',
+        en: 'Name is required and can only contain letters',
+        se: 'Namn krävs och kan bara innehålla bokstäver'
+      },
+      emailInvalid: {
+        fi: 'Anna kelvollinen sähköpostiosoite',
+        en: 'Please enter a valid email address',
+        se: 'Ange en giltig e-postadress'
+      },
+      messageLength: {
+        fi: 'Viestin tulee olla vähintään 10 merkkiä pitkä',
+        en: 'Message must be at least 10 characters long',
+        se: 'Meddelandet måste vara minst 10 tecken långt'
+      }
+    },
+    sending: {
+      fi: 'Lähetetään viestiä...',
+      en: 'Sending message...',
+      se: 'Skickar meddelande...'
+    },
+    success: {
+      fi: 'Viesti lähetetty onnistuneesti!',
+      en: 'Message sent successfully!',
+      se: 'Meddelandet har skickats!'
+    },
+    error: {
+      fi: 'Viestiä ei voitu lähettää. Yritä myöhemmin uudelleen.',
+      en: 'Message could not be sent. Please try again later.',
+      se: 'Meddelandet kunde inte skickas. Försök igen senare.'
+    }
+  },
   contact: {
     en: '',
     fi: `ISECure Oy on ohjelmistokehittäjä Dan Forsbergin perustama
