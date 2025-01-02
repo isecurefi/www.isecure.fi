@@ -60,6 +60,10 @@ body {
   z-index: 1020;
 }
 
+.w-100 {
+  width: 100%;
+}
+
 .footer2 {
   background-color: #f8f9fa;
   color: #495057;
