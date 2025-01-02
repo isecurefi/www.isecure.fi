@@ -18,5 +18,5 @@ export function getLocalizedPathname(pathname: string, lang: Lang): string {
   const cleanPath = pathname.replace(/^\/(fi|en|se)/, "");
 
   // Always include language prefix
-  return `/${lang}${cleanPath === "/" ? "" : cleanPath}`;
+  return `/${lang}${cleanPath === "/" ? "/index.html" : cleanPath + "/index.html"}`;
 }
