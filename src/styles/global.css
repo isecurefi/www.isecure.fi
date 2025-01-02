@@ -138,33 +138,32 @@ main {
 .quote-section {
   text-align: center;
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%);
-  margin: 3rem 0;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);
+  margin: 4rem auto;
+  max-width: 1000px;
   position: relative;
-  overflow: hidden;
-}
-
-.quote-section::before {
-  content: '"';
-  position: absolute;
-  top: 1rem;
-  left: 2rem;
-  font-size: 8rem;
-  color: rgba(255, 255, 255, 0.1);
-  font-family: Georgia, serif;
-  line-height: 1;
+  background: #ff8c00;
+  box-shadow: 0 15px 40px rgba(255, 140, 0, 0.2);
+  border-radius: 8px;
 }
 
 .customer-quote {
-  font-size: 2rem;
+  font-size: 3rem;
   color: white;
   font-weight: 600;
   font-style: italic;
   margin: 0;
   padding: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  line-height: 1.3;
+  font-family: 'Georgia', serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.customer-quote::before,
+.customer-quote::after {
+  content: '"';
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 5rem;
+  line-height: 0;
   position: relative;
-  z-index: 1;
+  vertical-align: middle;
 }
