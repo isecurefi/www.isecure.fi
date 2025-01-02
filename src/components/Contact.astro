@@ -84,6 +84,30 @@ import '../styles/Contact.css';
   </div>
 </div>
 
+<script is:inline>
+  function validateInput(input) {
+    input.classList.remove('is-invalid', 'is-valid');
+    
+    const value = input.value.trim();
+    
+    // Skip validation if empty (let required attribute handle it)
+    if (!value) {
+      input.classList.add('is-invalid');
+      return false;
+    }
+
+    let isValid = input.checkValidity();
+    
+    // Additional validation for message length
+    if (input.id === 'message' && value.length < 10) {
+      isValid = false;
+    }
+
+    input.classList.add(isValid ? 'is-valid' : 'is-invalid');
+    return isValid;
+  }
+</script>
+
 <script>
   interface AWSCredentials {
     IdentityPoolId: string;
