@@ -20,6 +20,7 @@ const languages: Record<Lang, string> = {
       href={`${Astro.url.pathname}?lang=${lang}`}
       class={`lang-link ${currentLang === lang ? 'active' : ''}`}
       aria-label={`Switch to ${label}`}
+      onclick={`localStorage.setItem('preferred-lang', '${lang}')`}
     >
       {label}
     </a>

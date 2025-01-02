@@ -120,7 +120,21 @@ export const translations = {
 
 export const defaultLang: Lang = 'fi';
 
-export function getText(key: string, lang: Lang = defaultLang): string {
+export function getStoredLang(): Lang {
+  if (typeof localStorage !== 'undefined') {
+    const stored = localStorage.getItem('preferred-lang') as Lang;
+    return stored || defaultLang;
+  }
+  return defaultLang;
+}
+
+export function setStoredLang(lang: Lang): void {
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('preferred-lang', lang);
+  }
+}
+
+export function getText(key: string, lang: Lang = getStoredLang()): string {
   const keys = key.split('.');
   let result = translations;
   for (const k of keys) {
