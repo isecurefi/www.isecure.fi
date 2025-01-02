@@ -2,11 +2,40 @@
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="WS-Kanava API | iSecure">
-  <div class="row">
-    <div class="col-lg-8">
-      <h1>WS-Kanava API</h1>
-      <p class="lead">Yhtenäinen API-rajapinta pankkipalveluihin</p>
-      <!-- Add API specific content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">ISECure WS-Kanava API</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <p>WS-Kanava SaaS palveluna - API</p>
+ 
+        <p>Oletko kehittämässä omaa palvelua tai tuotetta, jossa hyödynnät WS-kanavaa? Tarjoamme kilpailukykyiseen hintaan WS-Kanavan SaaS palveluna.</p>
+              
+        <p>Palvelumme käyttää mm. AWS:n API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch ja Lambda palveluita ja skaalautuu tarpeidesi mukaan.</p>
+
+        <ul>
+          <li>Yksi ja sama rajapinta kaikille pankeille tiedostojen lähettämiseen ja vastaanottamiseen, tunnusten- ja sertifikaattien hallintaan. Sertifikaattien automaattinen uudistaminen.</li>
+          <li>Integraattorikohtainen API -avain. Tunnukset saman API -avaimen sisällä voivat jakaa sertifikaatteja toisilleen.</li>
+          <li>Rekisteröityminen sisältää erilliset "admin", että "data" -tunnukset. Admin -tunnus vaatii kirjautumisessa salasanan lisäksi SMS koodin. "data" -tunnus vain salasanan. Admin -tunnuksella hallinnoidaan mm. PGP avaimia, sertifikaattien jakoa eri tunnusten välillä (optio), jne.</li>
+          <li>Aineiston lähetyksessä mahdollisuus vaatia PGP -allekirjoitetut aineistot (optio)</li>
+          <li>Erinomainen komentorivityökalu palvelun käyttöön ("wscli")</li>
+          <li>Sertifikaattien import ja export -toiminnot, ei "vendor lock":ia. Sertifikaattia vastaava salainen avain exportataan vain asiakkaan PGP avaimelle. Palvelussa salainen avain on kryptattu AWS:n KMS palvelulla.</li>
+          <li>Kirjautuminen käyttää julkisen avaimen RSA kryptausta ja challenge-response metodia. API ajetaan SSL:n yli, vaikkakin itse kirjautumisen tietoturva on siitä riippumaton (MitM). "admin" -tunnuksen kirjautuminen vaatii kertakäyttöisen SMS koodin (2FA).</li>
+          <li>Paranneltu <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK ja client</a> helppoa integroimista varten.</li>
+          <li><a href="https://github.com/isecurefi/wscli-php">WSCLI SDK ja client - GitHub repository</a></li>
+          <li><a href="https://isecure.fi/wsapi_v2.json">WSAPI OpenAPI API rajapintakuvaus JSON -muodossa</a></li>
+          <li><a href="https://isecure.fi/wsapi_v2/index.html">WSAPI v2 API Dokumentaatio</a></li>
+        </ul>
+
+        <p>Halutessasi autamme integroinnissa ja tarvittaessa asennamme teille työkalut ja hoidamme boardauksen - rekisteröimme sinut ja hoidamme sertifikaattien enrollauksen puolestasi.</p>
+      </div>
+      <div class="col-md-4 blue-text">
+        <a href="#contact" class="btn btn-primary">Kysy Lisää</a>
+      </div>
     </div>
   </div>
 </Layout>
