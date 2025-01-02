@@ -21,7 +21,7 @@ const { lang } = Astro.props;
         />
         <h1>{getText('hero.title1', lang)}</h1>
         <h3>{getText('hero.subtitle1', lang)}</h3>
-        <a href={`/ws-kanava?lang=${lang}`} class="btn btn-primary">WS-Kanava</a>
+        <a href={`/${lang}/ws-kanava`} class="btn btn-primary">WS-Kanava</a>
       </div>
     </div>
 
@@ -34,7 +34,7 @@ const { lang } = Astro.props;
         />
         <h1>{getText('hero.title2', lang)}</h1>
         <h3>{getText('hero.subtitle2', lang)}</h3>
-        <a href={`/ws-api?lang=${lang}`} class="btn btn-primary">WS-Kanava API</a>
+        <a href={`/${lang}/ws-api`} class="btn btn-primary">WS-Kanava API</a>
       </div>
     </div>
   </div>

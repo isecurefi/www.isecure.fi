@@ -23,6 +23,8 @@ const languages: Record<Lang, string> = {
       aria-label={`Switch to ${label}`}
       onclick={`
         localStorage.setItem('preferred-lang', '${lang}');
+        window.location.href = '${getLocalizedPathname(Astro.url.pathname, lang as Lang)}';
+        return false;
       `}
     >
       {label}
