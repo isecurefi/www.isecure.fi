@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Kiitos | iSecure">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Kiitos yhteydenotosta</h3>
+          </div>
+          <div class="panel-body text-center">
+            <p>Olemme teihin yhteydessä!</p>
+            <br>
+            <p>Ystävällisin terveisin,<br>
+            -&nbsp;Dan Forsberg</p>
+            <br>
+            <img src="/images/isecure-small-logo.png" alt="iSecure" style="max-width: 200px">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+.panel {
+  margin-top: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+}
+
+.panel-heading {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px 8px 0 0;
+}
+
+.panel-body {
+  padding: 2rem;
+}
+</style>

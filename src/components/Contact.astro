@@ -150,7 +150,7 @@ import '../styles/Contact.css';
       if (spinner) spinner.classList.add('d-none');
       if (buttonText) buttonText.style.display = 'inline';
 
-      if (!err) {
+      if (!err && result) {
         if (result) {
           result.className = 'success';
           result.innerHTML = "<b>Viesti lähetetty onnistuneesti!</b>";
