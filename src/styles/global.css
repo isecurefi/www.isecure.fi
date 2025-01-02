@@ -2,7 +2,14 @@
   --primary-color: #007bff;
   --secondary-color: #6c757d;
   --background-color: #ffffff;
+  --background-light: #f8f9fa;
   --text-color: #333333;
+  --border-color: #dee2e6;
+  --input-background: #f8f9fa;
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --success-background: #d4edda;
+  --error-background: #f8d7da;
 }
 
 * {

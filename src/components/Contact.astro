@@ -29,11 +29,44 @@ import '../styles/Contact.css';
     <div class="col-md-9 col-sm-9 col-xs-12">
       <p>Ota yhteyttä</p>
       <div class="contact-form">
-        <input type="text" id="name" placeholder="Nimi"><br>
-        <input type="text" id="email" placeholder="Sähköposti"><br>
-        <textarea id="message" rows="5" placeholder="Viesti"></textarea><br>
-        <button class="btn btn-primary" id="sendButton">LÄHETÄ</button>
-        <p id="result"></p>
+        <div class="form-group">
+          <input 
+            type="text" 
+            id="name" 
+            placeholder="Nimi"
+            aria-label="Nimi"
+            required
+          >
+        </div>
+        <div class="form-group">
+          <input 
+            type="email" 
+            id="email" 
+            placeholder="Sähköposti"
+            aria-label="Sähköposti"
+            required
+          >
+        </div>
+        <div class="form-group">
+          <textarea 
+            id="message" 
+            rows="5" 
+            placeholder="Viesti"
+            aria-label="Viesti"
+            required
+          ></textarea>
+        </div>
+        <button 
+          class="btn btn-primary" 
+          id="sendButton"
+          type="submit"
+        >
+          <span class="button-text">LÄHETÄ</span>
+          <div class="spinner-border spinner-border-sm d-none" role="status">
+            <span class="visually-hidden">Lähetetään...</span>
+          </div>
+        </button>
+        <div id="result" role="alert"></div>
       </div>
     </div>
   </div>
@@ -62,25 +95,53 @@ import '../styles/Contact.css';
     const email = (document.getElementById('email') as HTMLInputElement)?.value.trim();
     const result = document.getElementById('result');
 
+    const button = document.getElementById('sendButton');
+    const spinner = button?.querySelector('.spinner-border');
+    const buttonText = button?.querySelector('.button-text');
+
     if (!msg || !name || !email) {
-      if (result) result.innerHTML = "<b>Anna nimi, sähköposti ja viesti.</b>";
+      if (result) {
+        result.className = 'error';
+        result.innerHTML = "<b>Anna nimi, sähköposti ja viesti.</b>";
+      }
       return;
     }
 
+    // Disable button and show spinner
+    if (button) button.disabled = true;
+    if (spinner) spinner.classList.remove('d-none');
+    if (buttonText) buttonText.style.display = 'none';
+
     const sns = new AWS.SNS({params: {TopicArn: 'arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail'}});
-    if (result) result.innerHTML = "<b>Lähetetään viestiä..</b>";
+    if (result) {
+      result.className = '';
+      result.innerHTML = "<b>Lähetetään viestiä...</b>";
+    }
 
     sns.publish({
       Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
       Subject: `ISECure WS-Kanava contact: ${name} <${email}>`
     }, function(err: any, data: any) {
+      // Re-enable button and hide spinner
+      if (button) button.disabled = false;
+      if (spinner) spinner.classList.add('d-none');
+      if (buttonText) buttonText.style.display = 'inline';
+
       if (!err) {
-        if (result) result.innerHTML = "<b>Viesti lähetetty!</b>";
+        if (result) {
+          result.className = 'success';
+          result.innerHTML = "<b>Viesti lähetetty onnistuneesti!</b>";
+        }
         console.log(data);
-        window.location.href = '/thankyou';
+        setTimeout(() => {
+          window.location.href = '/thankyou';
+        }, 1500);
       } else {
         console.log(err, err.stack);
-        if (result) result.innerHTML = "<b>Viestiä ei voitu lähettää!</b>";
+        if (result) {
+          result.className = 'error';
+          result.innerHTML = "<b>Viestiä ei voitu lähettää. Yritä myöhemmin uudelleen.</b>";
+        }
       }
     });
   });
