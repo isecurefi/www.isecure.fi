@@ -17,37 +17,49 @@ const { lang } = Astro.props;
   <div class="hero-container container">
     <div class="hero-item">
       <div class="hero-content">
-        <img 
-          src="/images/isecure_header1_b.png" 
-          alt="WS-Kanava"
-          class="hero-image"
-          width="600"
-          height="400"
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-        />
-        <h1>{getText('hero.title1', lang)}</h1>
-        <h3>{getText('hero.subtitle1', lang)}</h3>
-        <a href={`/${lang}/ws-kanava`} class="btn btn-primary">WS-Kanava</a>
+        <div class="hero-image-container">
+          <img 
+            src="/images/isecure_header1_b.png" 
+            alt="WS-Kanava"
+            class="hero-image"
+            width="600"
+            height="400"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="hero-text">
+          <h1>{getText('hero.title1', lang)}</h1>
+          <h3>{getText('hero.subtitle1', lang)}</h3>
+        </div>
+        <div class="hero-button">
+          <a href={`/${lang}/ws-kanava`} class="btn btn-primary">WS-Kanava</a>
+        </div>
       </div>
     </div>
 
     <div class="hero-item">
       <div class="hero-content">
-        <img 
-          src="/images/kustom.png" 
-          alt="WS-Kanava API"
-          class="hero-image"
-          width="600"
-          height="400"
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-        />
-        <h1>{getText('hero.title2', lang)}</h1>
-        <h3>{getText('hero.subtitle2', lang)}</h3>
-        <a href={`/${lang}/ws-api`} class="btn btn-primary">WS-Kanava API</a>
+        <div class="hero-image-container">
+          <img 
+            src="/images/kustom.png" 
+            alt="WS-Kanava API"
+            class="hero-image"
+            width="600"
+            height="400"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="hero-text">
+          <h1>{getText('hero.title2', lang)}</h1>
+          <h3>{getText('hero.subtitle2', lang)}</h3>
+        </div>
+        <div class="hero-button">
+          <a href={`/${lang}/ws-api`} class="btn btn-primary">WS-Kanava API</a>
+        </div>
       </div>
     </div>
   </div>

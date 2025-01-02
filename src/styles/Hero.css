@@ -50,17 +50,48 @@
 
 .hero-content {
   width: 100%;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  height: 100%;
 }
 
-.hero-content h1 {
-  margin: 0.5rem 0;
+.hero-image-container {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image {
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.hero-text {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 120px;
+}
+
+.hero-text h1 {
+  margin: 0;
   color: var(--primary-color);
 }
 
-.hero-content h3 {
-  margin: 0.75rem 0 1rem;
+.hero-text h3 {
+  margin: 0.75rem 0 0;
   color: var(--secondary-color);
+}
+
+.hero-button {
+  padding: 1rem 0;
 }
 
 @media (max-width: 768px) {
