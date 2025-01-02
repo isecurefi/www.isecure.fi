@@ -141,6 +141,7 @@ const { lang = 'fi' } = Astro.props;
     SNS: new (params: { params: { TopicArn: string } }) => {
       publish: (params: SNSParams, callback: SNSCallback) => void;
     };
+    [key: string]: any;
   }
 
   declare global {
