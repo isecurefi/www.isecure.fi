@@ -1,6 +1,7 @@
 ---
 import { getText } from '../store/translations';
 import type { Lang } from '../types';
+import BankLogos from './BankLogos.astro';
 
 interface Props {
   lang?: Lang;
@@ -14,18 +15,7 @@ const { lang = 'fi' } = Astro.props;
     <p>{getText('webService.description', lang)}</p>
     <p>{getText('webService.security', lang)}</p>
     <p>{getText('webService.banks', lang)}</p>
-    <div class="bank-logos">
-    <img src="/images/bank_icons/aktia_logo.png" alt="Aktia" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/alandsbanken_logo.gif" alt="Ålandsbanken" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/handelsbanken_logo.gif" alt="Handelsbanken" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/nooa_logo.gif" alt="Nooa" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/nordea_logo.gif" alt="Nordea" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/oko_logo.gif" alt="OKO" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/pop_logo.png" alt="POP Pankki" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/sampo_logo.png" alt="Sampo" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/spankki_lahitapiola.png" alt="S-Pankki LähiTapiola" class="bank-icon" loading="lazy" decoding="async">
-    <img src="/images/bank_icons/SEBlogo.png" alt="SEB" class="bank-icon" loading="lazy" decoding="async">
-    </div>
+    <BankLogos />
   </div>
   <div class="row" style="margin-right:auto;margin-left:auto;">
   </div>
@@ -94,20 +84,6 @@ const { lang = 'fi' } = Astro.props;
     line-height: 1.6;
   }
 
-  .info-section .bank-logos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-
-  .info-section .bank-icon {
-    max-height: 40px;
-    width: auto;
-    object-fit: contain;
-  }
 
   .content-section {
     padding: 3rem 0;
