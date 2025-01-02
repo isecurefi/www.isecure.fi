@@ -31,12 +31,20 @@ body {
   padding: 5px 15px;
 }
 
-.navbar-inverse .navbar-nav > li > a {
-  color: #9d9d9d;
+.nav-item {
+  margin: 0 10px;
 }
 
-.navbar-inverse .navbar-nav > li > a:hover {
-  color: #fff;
+.nav-link {
+  color: #9d9d9d !important;
+  font-size: 16px;
+  padding: 15px 10px !important;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+  text-decoration: none;
 }
 
 .footer {

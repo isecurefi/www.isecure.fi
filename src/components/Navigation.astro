@@ -22,8 +22,8 @@ const navItems = [
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         {navItems.map(item => (
-          <li>
-            <a href={item.href}>{item.text}</a>
+          <li class="nav-item">
+            <a class="nav-link" href={item.href}>{item.text}</a>
           </li>
         ))}
       </ul>
