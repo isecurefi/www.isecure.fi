@@ -38,7 +38,7 @@ import '../styles/Contact.css';
             required
             minlength="2"
             maxlength="50"
-            pattern="[A-Za-z -]{2,50}"
+            pattern="[A-Za-z]([A-Za-z]| |-){1,48}[A-Za-z]"
           >
           <div class="invalid-feedback">Nimi on pakollinen ja voi sisältää vain kirjaimia</div>
         </div>
