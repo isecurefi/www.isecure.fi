@@ -36,7 +36,9 @@ const { lang } = Astro.props;
           </div>
         </div>
         <div class="hero-button">
-          <a href={`/${lang}/ws-kanava`} class="btn btn-primary">WS-Kanava</a>
+          <a href={`/${lang}/ws-kanava`} class="btn btn-primary">
+            {lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'}
+          </a>
         </div>
       </div>
     </div>

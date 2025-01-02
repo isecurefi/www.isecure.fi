@@ -77,7 +77,11 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
       {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        "name": "ISECure WS-Channel",
+        "name": "${
+          lang === 'en' ? 'ISECure WS-Channel' :
+          lang === 'se' ? 'ISECure WS-Kanal' :
+          'ISECure WS-Kanava'
+        }",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Cloud",
         "offers": {
