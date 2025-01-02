@@ -1,9 +1,17 @@
 ---
+import { getText } from '../store/translations';
+import type { Lang } from '../types';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'fi' } = Astro.props;
 ---
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h3>Referenssit</h3>
+      <h3>{getText('references.title', lang)}</h3>
       <div class="references">
         <img src="/images/references/fennoa.png" class="reference" alt="Fennoa">
         <img src="/images/references/briox.svg" class="reference" style="width:30%;" alt="Briox">

@@ -166,6 +166,35 @@ export const translations = {
       fi: 'Yhteystiedot',
       se: 'Kontakt'
     }
+  },
+  references: {
+    title: {
+      fi: 'Referenssit',
+      en: 'References',
+      se: 'Referenser'
+    }
+  },
+  webService: {
+    title: {
+      fi: 'Yrityksen pankkiyhteys eli Web Service',
+      en: 'Company Bank Connection - Web Service',
+      se: 'Företagets bankförbindelse - Web Service'
+    },
+    description: {
+      fi: 'Web Service -kanava on pankkien tarjoama yritysasiakkaille suunnattu pankkiyhteys, joka mahdollistaa pankkiaineistojen automaattisen lähetyksen ja noudon. Web Service -kanava on korvannut vanhan eräsiirtopalvelun (PATU). Web Service -kanava on standardoitu ja se perustuu kansainvälisiin XML-standardeihin.',
+      en: 'The Web Service channel is a bank connection offered by banks for corporate customers, enabling automatic transmission and retrieval of banking materials. The Web Service channel has replaced the old batch transfer service (PATU). The Web Service channel is standardized and based on international XML standards.',
+      se: 'Web Service-kanalen är en bankförbindelse som erbjuds av banker för företagskunder, vilket möjliggör automatisk överföring och hämtning av bankmaterial. Web Service-kanalen har ersatt den gamla batch-överföringstjänsten (PATU). Web Service-kanalen är standardiserad och baserad på internationella XML-standarder.'
+    },
+    security: {
+      fi: 'Web Service -kanava on tietoturvallinen ja luotettava tapa hoitaa yrityksen maksuliikenne. Yhteys pankkiin muodostetaan aina SSL-suojattuna ja aineistot allekirjoitetaan digitaalisesti PKI-varmenteella.',
+      en: 'The Web Service channel is a secure and reliable way to handle company payment traffic. The connection to the bank is always SSL-protected and materials are digitally signed with a PKI certificate.',
+      se: 'Web Service-kanalen är ett säkert och pålitligt sätt att hantera företagets betalningstrafik. Anslutningen till banken är alltid SSL-skyddad och material signeras digitalt med ett PKI-certifikat.'
+    },
+    banks: {
+      fi: 'Tuemme kaikkia Suomessa yleisimmin toimivia pankkeja:',
+      en: 'We support all commonly operating banks in Finland:',
+      se: 'Vi stöder alla vanligt förekommande banker i Finland:'
+    }
   }
 };
 
