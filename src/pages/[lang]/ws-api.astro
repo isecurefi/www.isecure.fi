@@ -94,7 +94,13 @@ const { lang } = Astro.props;
               <li>Kirjautuminen käyttää julkisen avaimen RSA kryptausta ja challenge-response metodia. API ajetaan SSL:n yli, vaikkakin itse kirjautumisen tietoturva on siitä riippumaton (MitM). "admin" -tunnuksen kirjautuminen vaatii kertakäyttöisen SMS koodin (2FA).</li>
             </>
           )}
-          <li>Paranneltu <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK ja client</a> helppoa integroimista varten.</li>
+          {lang === 'en' ? (
+            <li>Enhanced <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK and client</a> for easy integration.</li>
+          ) : lang === 'se' ? (
+            <li>Förbättrad <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK och klient</a> för enkel integration.</li>
+          ) : (
+            <li>Paranneltu <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK ja client</a> helppoa integroimista varten.</li>
+          )}
           <li><a href="https://github.com/isecurefi/wscli-php">WSCLI SDK ja client - GitHub repository</a></li>
           <li><a href="https://isecure.fi/wsapi_v2.json">{
             lang === 'en' ? 'WSAPI OpenAPI API description in JSON format' :
