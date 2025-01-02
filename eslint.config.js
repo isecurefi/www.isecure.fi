@@ -1,6 +1,8 @@
 import globals from 'globals';
 import js from '@eslint/js';
 import astroParser from 'astro-eslint-parser';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 
 export default [
   js.configs.recommended,
@@ -16,12 +18,27 @@ export default [
     },
   },
   {
+    files: ['**/*.{ts,tsx}'],
+    plugins: {
+      '@typescript-eslint': tsPlugin
+    },
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: './tsconfig.json'
+      }
+    },
+    rules: {
+      ...tsPlugin.configs.recommended.rules
+    }
+  },
+  {
     files: ['**/*.astro'],
     plugins: {},
     languageOptions: {
       parser: astroParser,
       parserOptions: {
-        parser: 'espree',
+        parser: tsParser,
         extraFileExtensions: ['.astro'],
         sourceType: 'module'
       },
