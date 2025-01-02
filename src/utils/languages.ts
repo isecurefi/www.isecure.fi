@@ -43,7 +43,7 @@ export function getLocalizedPathname(pathname: string, lang: Lang): string {
     // Remove /fi/ prefix for Finnish URLs and ensure index.html
     const cleanPath = pathname.replace(/^\/fi\//, "/");
     // Add index.html if it's a directory path
-    return cleanPath.endsWith('/') ? `${cleanPath}index.html` : cleanPath;
+    return cleanPath.endsWith("/") ? `${cleanPath}index.html` : cleanPath;
   }
 
   // Remove existing language prefix if present
