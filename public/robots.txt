@@ -1,12 +1,23 @@
 # Global rules
 User-agent: *
 Allow: /
+Allow: /index.html
+Allow: /ws-channel/
+Allow: /ws-api/
+Allow: /en/
+Allow: /se/
+Allow: /wsapi_v2/
+
+# Language specific paths
+Allow: /fi/*
+Allow: /en/*
+Allow: /se/*
 
 # Crawl-delay for better server performance
-Crawl-delay: 10
+Crawl-delay: 5
 
 # Block access to system files and private areas
-Disallow: /thankyou
+Disallow: /thankyou/
 Disallow: /admin/
 Disallow: /private/
 Disallow: /temp/
@@ -19,9 +30,16 @@ Disallow: /*.yaml$
 Disallow: /*.log$
 Disallow: /*.config$
 Disallow: /*.env$
+Disallow: /*.json$
+Disallow: /*.ts$
+Disallow: /*.js$
+
+# Allow specific JSON files
+Allow: /wsapi_v2.json
+Allow: /site.webmanifest
 
 # Canonical domain
 Host: https://www.isecure.fi
 
 # Sitemap location
-Sitemap: https://www.isecure.fi/sitemap-index.xml
+Sitemap: https://www.isecure.fi/sitemap.xml
