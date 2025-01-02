@@ -1,0 +1,54 @@
+<svg width="800" height="533" viewBox="0 0 800 533" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="533" fill="#f8f9fa"/>
+  
+  <!-- Server -->
+  <g transform="translate(400,266.5) scale(1.2)">
+    <!-- Server Cabinet -->
+    <rect x="-100" y="-120" width="200" height="240" rx="10" fill="#0d6efd" opacity="0.1" stroke="#0d6efd" stroke-width="3"/>
+    
+    <!-- Server Units -->
+    <g id="server-unit">
+      <rect x="-90" y="-100" width="180" height="40" rx="5" fill="#ffffff" stroke="#0d6efd" stroke-width="2"/>
+      <circle cx="-70" cy="-80" r="3" fill="#0d6efd"/>
+      <circle cx="-60" cy="-80" r="3" fill="#0d6efd"/>
+      <rect x="20" y="-90" width="60" height="20" rx="3" fill="#e9ecef"/>
+    </g>
+    
+    <!-- Duplicate server units -->
+    <use href="#server-unit" y="50"/>
+    <use href="#server-unit" y="100"/>
+    
+    <!-- SFTP Label -->
+    <text x="0" y="140" font-family="Arial" font-size="24" fill="#0d6efd" text-anchor="middle" font-weight="bold">SFTP Server</text>
+  </g>
+  
+  <!-- Arrows indicating file sync -->
+  <g stroke="#0d6efd" stroke-width="3" stroke-linecap="round">
+    <path d="M200,266 H320" marker-end="url(#arrowhead)" opacity="0.7"/>
+    <path d="M480,246 H600" marker-end="url(#arrowhead)" opacity="0.7"/>
+    <path d="M600,286 H480" marker-end="url(#arrowhead)" opacity="0.7"/>
+  </g>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0d6efd" opacity="0.7"/>
+    </marker>
+  </defs>
+  
+  <!-- File icons -->
+  <g transform="translate(150,246)">
+    <rect width="40" height="50" fill="#0d6efd" opacity="0.1" stroke="#0d6efd" stroke-width="2" rx="5"/>
+    <line x1="10" y1="15" x2="30" y2="15" stroke="#0d6efd" stroke-width="2"/>
+    <line x1="10" y1="25" x2="30" y2="25" stroke="#0d6efd" stroke-width="2"/>
+    <line x1="10" y1="35" x2="30" y2="35" stroke="#0d6efd" stroke-width="2"/>
+  </g>
+  
+  <g transform="translate(610,246)">
+    <rect width="40" height="50" fill="#0d6efd" opacity="0.1" stroke="#0d6efd" stroke-width="2" rx="5"/>
+    <line x1="10" y1="15" x2="30" y2="15" stroke="#0d6efd" stroke-width="2"/>
+    <line x1="10" y1="25" x2="30" y2="25" stroke="#0d6efd" stroke-width="2"/>
+    <line x1="10" y1="35" x2="30" y2="35" stroke="#0d6efd" stroke-width="2"/>
+  </g>
+</svg>
