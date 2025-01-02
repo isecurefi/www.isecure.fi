@@ -4,12 +4,8 @@
   "description": "- Original [README.md](https://github.com/IronSummitMedia/startbootstrap-modern-business/blob/gh-pages/README.md)",
   "type": "module",
   "dependencies": {
-    "@astrojs/sharp": "^1.0.0",
-    "@astrojs/react": "^3.0.3",
     "aws-sdk": "^2.1473.0",
     "bootstrap": "^5.3.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
