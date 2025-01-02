@@ -1,12 +1,11 @@
 import globals from 'globals';
 import js from '@eslint/js';
-import tsParser from '@typescript-eslint/parser';
 import astroParser from 'astro-eslint-parser';
 
 export default [
   js.configs.recommended,
   {
-    files: ['**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}'],
+    files: ['**/*.{js,mjs,cjs,jsx,mjsx}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -22,7 +21,6 @@ export default [
     languageOptions: {
       parser: astroParser,
       parserOptions: {
-        parser: tsParser,
         extraFileExtensions: ['.astro'],
       },
     },
