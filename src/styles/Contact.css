@@ -1,0 +1,38 @@
+.contact-section {
+  padding: 2rem 0;
+  margin-top: 2rem;
+}
+
+.facepalm {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.aws-certifications {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.awslogos {
+  height: 30px;
+  width: auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.contact-form textarea {
+  resize: vertical;
+}
+
+#result {
+  margin-top: 1rem;
+}

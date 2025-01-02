@@ -1,0 +1,78 @@
+---
+import '../styles/Contact.css';
+---
+
+<div class="container contact-section" id="contact">
+  <div class="row">
+    <div class="col-md-3 col-sm-3 col-xs-12">
+      <img src="/images/dforsber.png" class="facepalm" alt="Dan Forsberg"><br>
+      Founder Dan Forsberg, D.Sc.<br>
+      <i>dan.forsberg@isecure.fi</i><br>
+      <br>
+      <div class="aws-certifications">
+        <img src="/images/AWS_SAP.png" class="awslogos" alt="AWS SAP">
+        <img src="/images/AWS_DOP.png" class="awslogos" alt="AWS DOP">
+        <img src="/images/AWS_SS.png" class="awslogos" alt="AWS SS">
+        <img src="/images/AWS_BD.png" class="awslogos" alt="AWS BD">
+        <img src="/images/AWS_NS.png" class="awslogos" alt="AWS NS">
+        <img src="/images/AWS_DA.png" class="awslogos" alt="AWS DA">
+        <img src="/images/AWS_SAA.png" class="awslogos" alt="AWS SAA">
+        <img src="/images/AWS_SOA.png" class="awslogos" alt="AWS SOA">
+        <img src="/images/AWS_CP.png" class="awslogos" alt="AWS CP">
+      </div>
+      <br>
+      <br>
+      +358 40 483 5507 (Finland)<br>
+      <br>
+      Y-tunnus: 2296336-9<br><br>
+    </div>
+    <div class="col-md-9 col-sm-9 col-xs-12">
+      <p>Ota yhteyttä</p>
+      <div class="contact-form">
+        <input type="text" id="name" placeholder="Nimi"><br>
+        <input type="text" id="email" placeholder="Sähköposti"><br>
+        <textarea id="message" rows="5" placeholder="Viesti"></textarea><br>
+        <button class="btn btn-primary" id="sendButton">LÄHETÄ</button>
+        <p id="result"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  declare var AWS: any;
+  
+  AWS.config.region = 'eu-west-1';
+  AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c'
+  });
+
+  document.getElementById('sendButton')?.addEventListener('click', () => {
+    const msg = (document.getElementById('message') as HTMLTextAreaElement)?.value.trim();
+    const name = (document.getElementById('name') as HTMLInputElement)?.value.trim();
+    const email = (document.getElementById('email') as HTMLInputElement)?.value.trim();
+    const result = document.getElementById('result');
+
+    if (!msg || !name || !email) {
+      if (result) result.innerHTML = "<b>Anna nimi, sähköposti ja viesti.</b>";
+      return;
+    }
+
+    const sns = new AWS.SNS({params: {TopicArn: 'arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail'}});
+    if (result) result.innerHTML = "<b>Lähetetään viestiä..</b>";
+
+    sns.publish({
+      Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
+      Subject: `ISECure WS-Kanava contact: ${name} <${email}>`
+    }, function(err: any, data: any) {
+      if (!err) {
+        if (result) result.innerHTML = "<b>Viesti lähetetty!</b>";
+        console.log(data);
+        window.location.href = '/thankyou';
+      } else {
+        console.log(err, err.stack);
+        if (result) result.innerHTML = "<b>Viestiä ei voitu lähettää!</b>";
+      }
+    });
+  });
+</script>
