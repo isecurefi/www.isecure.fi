@@ -5,12 +5,15 @@
   --hero-background: #f8f9fa;
   --hero-border-radius: 8px;
 
-  display: flex;
-  flex-direction: column;
-  gap: var(--hero-gap);
   padding: var(--hero-padding);
   max-width: var(--hero-max-width);
   margin: 0 auto;
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--hero-gap);
 }
 
 .hero-item {
@@ -45,6 +48,10 @@
 }
 
 @media (max-width: 768px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+  }
+
   .hero-item {
     flex-direction: column;
     text-align: center;
