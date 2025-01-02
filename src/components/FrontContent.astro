@@ -86,7 +86,7 @@ const { lang = "fi" } = Astro.props;
               decoding="async"
             /><br /><br />
             <div style="text-align:center;">
-              <a href={`/${lang}/ws-api#sftp`} class="btn btn-primary">
+              <a href={lang === 'fi' ? '/ws-api/index.html#sftp' : `/${lang}/ws-api/index.html#sftp`} class="btn btn-primary">
                 {lang === "en" ? "READ MORE" : lang === "se" ? "LÄS MER" : "LUE LISÄÄ"}
               </a>
             </div>
