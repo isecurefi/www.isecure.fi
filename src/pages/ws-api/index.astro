@@ -7,12 +7,18 @@ import '../../styles/PageContent.css';
 const lang = "fi";
 ---
 <Layout 
-  title={`${getText('webService.wsChannel.api.title', lang)} | iSecure`} 
+  title={`WS-Kanava API | ${getText('webService.wsChannel.api.title', lang)} | iSecure`} 
   lang={lang}
   description={
-    "ISECure WS-Kanava API tarjoaa turvallisen ja skaalautuvan rajapinnan pankkiyhteyksien hallintaan. Tukee kaikkia suomalaisia pankkeja ja käyttää AWS:n pilvipalveluita."
+    "ISECure WS-Kanava API: Turvallinen ja skaalautuva REST API pankkiyhteyksien hallintaan. Tukee kaikkia suomalaisia pankkeja, AWS-pohjainen ratkaisu, OpenAPI-dokumentaatio."
   }
 >
+  <nav aria-label="breadcrumb" class="breadcrumb-nav">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Etusivu</a></li>
+      <li class="breadcrumb-item active" aria-current="page">WS-Kanava API</li>
+    </ol>
+  </nav>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
