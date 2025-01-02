@@ -36,7 +36,11 @@ import '../styles/Contact.css';
             placeholder="Nimi"
             aria-label="Nimi"
             required
+            minlength="2"
+            maxlength="50"
+            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\s-]+"
           >
+          <div class="invalid-feedback">Nimi on pakollinen ja voi sisältää vain kirjaimia</div>
         </div>
         <div class="form-group">
           <input 
@@ -45,7 +49,9 @@ import '../styles/Contact.css';
             placeholder="Sähköposti"
             aria-label="Sähköposti"
             required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           >
+          <div class="invalid-feedback">Anna kelvollinen sähköpostiosoite</div>
         </div>
         <div class="form-group">
           <textarea 
@@ -54,7 +60,10 @@ import '../styles/Contact.css';
             placeholder="Viesti"
             aria-label="Viesti"
             required
+            minlength="10"
+            maxlength="1000"
           ></textarea>
+          <div class="invalid-feedback">Viestin tulee olla vähintään 10 merkkiä pitkä</div>
         </div>
         <button 
           class="btn btn-primary" 
@@ -112,7 +121,67 @@ import '../styles/Contact.css';
     IdentityPoolId: 'eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c'
   });
 
+  function validateForm(): boolean {
+    const nameInput = document.getElementById('name') as HTMLInputElement;
+    const emailInput = document.getElementById('email') as HTMLInputElement;
+    const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+    
+    let isValid = true;
+
+    // Reset previous validation states
+    [nameInput, emailInput, messageInput].forEach(input => {
+      input.classList.remove('is-invalid');
+      input.classList.remove('is-valid');
+    });
+
+    // Name validation
+    if (!nameInput.value.trim() || !nameInput.checkValidity()) {
+      nameInput.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      nameInput.classList.add('is-valid');
+    }
+
+    // Email validation
+    if (!emailInput.value.trim() || !emailInput.checkValidity()) {
+      emailInput.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      emailInput.classList.add('is-valid');
+    }
+
+    // Message validation
+    if (!messageInput.value.trim() || messageInput.value.length < 10) {
+      messageInput.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      messageInput.classList.add('is-valid');
+    }
+
+    return isValid;
+  }
+
+  // Add real-time validation
+  ['name', 'email', 'message'].forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener('input', () => {
+        const input = element as HTMLInputElement | HTMLTextAreaElement;
+        if (input.checkValidity()) {
+          input.classList.remove('is-invalid');
+          input.classList.add('is-valid');
+        } else {
+          input.classList.remove('is-valid');
+          input.classList.add('is-invalid');
+        }
+      });
+    }
+  });
+
   document.getElementById('sendButton')?.addEventListener('click', () => {
+    if (!validateForm()) {
+      return;
+    }
     const msg = (document.getElementById('message') as HTMLTextAreaElement)?.value.trim();
     const name = (document.getElementById('name') as HTMLInputElement)?.value.trim();
     const email = (document.getElementById('email') as HTMLInputElement)?.value.trim();
