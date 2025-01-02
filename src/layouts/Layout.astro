@@ -66,7 +66,7 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
     
-    <link rel="canonical" href={Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.pathname} />
+    <link rel="canonical" href={Astro.site ? new globalThis.URL(Astro.url.pathname, Astro.site).toString() : Astro.url.pathname} />
     <title>{title} | ISECure - Professional Bank Integration Solutions</title>
 
     <!-- JSON-LD Structured Data -->

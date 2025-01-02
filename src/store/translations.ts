@@ -321,32 +321,32 @@ export const translations = {
 export const defaultLang: Lang = 'fi';
 
 export function getStoredLang(): Lang {
-  if (typeof window === 'undefined') {
+  if (typeof globalThis.window === 'undefined') {
     return defaultLang;
   }
   
   try {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(globalThis.window.location.search);
     const urlLang = urlParams.get('lang') as Lang;
     if (urlLang && ['fi', 'en', 'se'].includes(urlLang)) {
       try {
-        window.localStorage.setItem('preferred-lang', urlLang);
+        globalThis.window.localStorage.setItem('preferred-lang', urlLang);
       } catch (e) {
-        console.warn('Failed to set localStorage:', e);
+        globalThis.console.warn('Failed to set localStorage:', e);
       }
       return urlLang;
     }
     
     try {
-      const stored = window.localStorage.getItem('preferred-lang') as Lang;
+      const stored = globalThis.window.localStorage.getItem('preferred-lang') as Lang;
       if (stored && ['fi', 'en', 'se'].includes(stored)) {
         return stored;
       }
     } catch (e) {
-      console.warn('Failed to get localStorage:', e);
+      globalThis.console.warn('Failed to get localStorage:', e);
     }
   } catch (e) {
-    console.warn('Error accessing window:', e);
+    globalThis.console.warn('Error accessing window:', e);
   }
   
   return defaultLang;
@@ -356,11 +356,11 @@ export function setStoredLang(lang: Lang): void {
   if (!lang) {
     return;
   }
-  if (typeof window !== 'undefined') {
+  if (typeof globalThis.window !== 'undefined') {
     try {
-      window.localStorage.setItem('preferred-lang', lang);
+      globalThis.window.localStorage.setItem('preferred-lang', lang);
     } catch (e) {
-      console.warn('Failed to set localStorage:', e);
+      globalThis.console.warn('Failed to set localStorage:', e);
     }
   }
 }
