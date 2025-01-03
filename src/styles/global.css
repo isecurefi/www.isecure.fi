@@ -19,6 +19,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+html {
+  overflow: hidden;
+  height: 100%;
 }
 
 body {
@@ -36,8 +42,11 @@ body {
   color: var(--text-color);
   padding-top: 76px;
   position: relative;
-  min-height: 100vh;
+  height: 100%;
   margin: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
 }
 
 .main-content {
