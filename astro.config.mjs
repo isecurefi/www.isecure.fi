@@ -11,6 +11,7 @@ export default defineConfig({
   vite: {
     build: {
       cssCodeSplit: true,
+      sourcemap: false,
       rollupOptions: {
         output: {
           manualChunks: {
@@ -19,6 +20,9 @@ export default defineConfig({
           },
         },
       },
+    },
+    css: {
+      devSourcemap: false
     },
     ssr: {
       noExternal: ["bootstrap"],
