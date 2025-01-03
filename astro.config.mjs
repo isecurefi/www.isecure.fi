@@ -22,7 +22,7 @@ export default defineConfig({
       },
     },
     css: {
-      devSourcemap: process.env.NODE_ENV === 'development'
+      devSourcemap: process.env.NODE_ENV === "development",
     },
     ssr: {
       noExternal: ["bootstrap"],
