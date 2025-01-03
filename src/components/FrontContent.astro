@@ -136,6 +136,15 @@ const { lang = "fi" } = Astro.props;
       margin-bottom: 4rem;
     }
 
+    @media (max-width: 768px) {
+      .col-md-6 {
+        margin-bottom: 2rem;
+      }
+      .col-md-6:last-child {
+        margin-bottom: 0;
+      }
+    }
+
     .panel {
       height: 100%;
       display: flex;
