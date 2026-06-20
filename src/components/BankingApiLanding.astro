@@ -1,0 +1,1368 @@
+---
+import hljs from "highlight.js/lib/core";
+import typescript from "highlight.js/lib/languages/typescript";
+import type { Lang } from "../types";
+import BankLogos from "./BankLogos.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+hljs.registerLanguage("typescript", typescript);
+
+const tsCode = `import { WSChannel } from "isecure-ts-client";
+
+const data = new WSChannel({
+  Company: "Example Company",
+  Name: "Example User",
+  Email: "finance@example.com",
+  Phone: "+358401234567",
+  PublicKey: process.env.ISECURE_PUBLIC_KEY_PEM!,
+  BaseUrl: "https://ws-api.test.isecure.fi/v2",
+  Bank: "nordea",
+  Mode: "data",
+  Password: process.env.ISECURE_DATA_PASSWORD!,
+});
+
+const session = await data.login();
+if (session.status !== "authenticated") {
+  throw new Error(\`Login failed: \${session.status}\`);
+}
+
+const files = await data.listFiles({ 
+  FileType: "CAMT", 
+  Status: "NEW" 
+});
+
+const [statement] = files.FileDescriptors;
+const downloaded = await data.downloadFile(
+  statement.FileType,
+  statement.FileReference,
+);`;
+const highlightedTsCode = hljs.highlight(tsCode, {
+  language: "typescript",
+}).value;
+
+const content = {
+  fi: {
+    eyebrow: "Säästä kuukausien pankkikohtainen integraatiotyö",
+    title: "Pankkiyhteydet yhdellä API:lla",
+    lead: "ISECure tarjoaa yhden rajapinnan maksuaineistoille, tiliotteille ja varmenteille: sinä lähetät ja noudat, me hoidamme pankkiyhteyden, tilit, sertifikaatit ja tietoturvan.",
+    icp: "Suunniteltu ohjelmistoyrityksille: taloushallinnon, ERP:n, laskutuksen ja rahoituksen tuotteille, jotka tarvitsevat pankkiyhteyden.",
+    primaryCta: "Aloita testirajapinnalla",
+    secondaryCta: "Katso OpenAPI-dokumentaatio",
+    themeLabel: "Teema",
+    darkLabel: "Tumma",
+    lightLabel: "Vaalea",
+    proof: [
+      { value: "Satoja", label: "suomalaisia yrityksiä", text: "pankkiliikenne kulkee ISECuren kautta" },
+      { value: "10+ vuotta", label: "tuotannossa", text: "pankkiyhteyksiä, varmenteita ja aineistoliikennettä" },
+      { value: "Taloushallinto + ERP", label: "ohjelmistoalustoja", text: "käyttävät ISECurea tuotannon pankkiyhteyksiin" },
+    ],
+    quickstartEyebrow: "Käyttöönotto",
+    quickstartTitle: "Ensimmäinen testikutsu kolmessa vaiheessa",
+    quickstartLead:
+      "Testiympäristö on suunniteltu kehittäjän etenemistä varten: tarkista rajapinta, luo testitili ja tee ensimmäinen listaus tai lataus ennen tuotannon pankkisopimuksia.",
+    quickstart: [
+      {
+        title: "1. Avaa OpenAPI tai asenna SDK",
+        text: "Käytä OpenAPI-kuvausta suoraan tai aloita TypeScript-, Python- tai PHP-clientilla.",
+      },
+      {
+        title: "2. Luo testitili",
+        text: "SDK:n rekisteröinti testipäätepisteeseen luo tilin ja palauttaa integraattorin API-avaimen jatkokutsuja varten.",
+      },
+      {
+        title: "3. Tee ensimmäinen aineistokutsu",
+        text: "Kirjaudu data-tilillä ja kutsu esimerkiksi listFiles- tai downloadFile-operaatiota testiaineistoilla.",
+      },
+    ],
+    tsLabel: "TypeScript SDK",
+    whyEyebrow: "Integraatiomalli",
+    whyTitle: "Miksi tämä on helpompi kuin pankkikohtaiset integraatiot",
+    whyLead:
+      "Pankkiyhteys ei ole vain tiedoston lähettämistä. Tuotantokelpoinen integraatio vaatii varmenteet, pankkikohtaiset erot, auditoinnin, virhetilanteet ja turvallisen avainhallinnan.",
+    benefits: [
+      {
+        title: "Käyttöön ilman kuukausien pankki-integrointeja",
+        text: "Aloita testirajapinnalla, lähetä ja nouda pankkiaineistoja yhden mallin kautta ja lisää pankkeja ilman uutta integraatioprojektia.",
+      },
+      {
+        title: "Varmenteet ja avaimet pois tuotetiimiltä",
+        text: "ISECure hoitaa PKI-varmenteiden haun, uusinnat, import/export-toiminnot ja KMS-salatun säilytyksen PCI DSS -tason järjestelmässä.",
+      },
+      {
+        title: "Pienempi altistus ja compliance-pinta",
+        text: "Pankkiyhteys toimii erillisenä hosted-palveluna AWS:n PCI DSS -sertifioiduilla komponenteilla. Sovellustiimin ei tarvitse rakentaa omaa varmennevarastoa, pankkiyhteysvalvontaa tai korkean turvan rajapintaa.",
+      },
+      {
+        title: "SDK:t, OpenAPI ja PGP-turva",
+        text: "TypeScript-, Python- ja PHP-clientit nopeuttavat toteutusta. Aineistot voidaan vaatia PGP-allekirjoitettuina, ja asiakkaan avain voidaan viedä vain asiakkaan PGP-avaimelle.",
+      },
+    ],
+    architectureTitle: "Mitä integraatiossa tapahtuu",
+    architectureEyebrow: "Arkkitehtuuri",
+    architectureLead:
+      "Kehittäjä lähettää ja noutaa pankkiaineistoja API:n kautta. ISECure hoitaa pankkien WS-liikenteen, varmenteet, avainsäilytyksen ja operatiivisen valvonnan.",
+    flow: ["Sovellus", "TypeScript, Python tai PHP client", "ISECure WS-Kanava API", "Pankit ja WS-kanava"],
+    sftpOption: {
+      title: "Luotettava SFTP/S3-synkronointi",
+      text: "Tiedostopohjaisissa työnkuluissa pankkiaineistoja voidaan synkronoida SFTP:n tai S3:n kautta ilman suoraa REST API -integraatiota. Sama ISECure-yhteys hoitaa pankkien WS-liikenteen taustalla.",
+    },
+    infrastructureOption: {
+      title: "AWS API Gateway, WAF ja asiakaskohtaiset rajat",
+      text: "Rajapinta toimii serverless AWS -arkkitehtuurissa, API Gatewayn ja WAF:n takana. Asiakaskohtaiset käyttörajat suojaavat palvelua ruuhkapiikeiltä ja estävät muiden integraatioiden häiriöitä vaikuttamasta omaan käyttöön.",
+    },
+    sdkTitle: "Clientit eri integraatiopoluille",
+    sdkEyebrow: "SDK:t ja työkalut",
+    sdkLead:
+      "Nykyinen PHP SDK ja wscli ovat edelleen käytössä komentoriville ja olemassa oleviin integraatioihin. TypeScript- ja Python-clientit tuovat saman mallin moderneihin palveluihin.",
+    sdks: [
+      {
+        title: "TypeScript SDK",
+        status: "Saatavilla",
+        href: "https://github.com/dforsber/isecure-ts-client",
+        text: "Node.js- ja selainläheisiin palveluihin, joissa tarvitaan tyypitetty client, ennustettavat virhetyypit ja OpenAPI-malliin sopiva kehityskokemus.",
+      },
+      {
+        title: "Python SDK",
+        status: "Saatavilla",
+        text: "Taustaprosesseihin, taloushallinnon automaatioihin ja data-putkiin, joissa pankkiaineistojen lähetys ja nouto ajetaan ajastetusti.",
+      },
+      {
+        title: "PHP SDK ja wscli",
+        status: "Saatavilla",
+        href: "https://isecurefi.github.io/wscli-php/",
+        text: "Nykyinen PHP-client ja komentorivityökalu tukevat olemassa olevia integraatioita, testiajoja ja käyttöönottoa.",
+      },
+      {
+        title: "OpenAPI",
+        status: "Saatavilla",
+        href: "https://isecure.fi/wsapi_v2.json",
+        text: "Avoin rajapintakuvaus, API-dokumentaatio ja komentorivityökalu tukevat testausta, käyttöönottoa ja CI/CD-työnkulkuja.",
+      },
+    ],
+    banksTitle: "Tuetut pankit",
+    banksEyebrow: "Kattavuus",
+    banks:
+      "ISECure yhdistää samaan integraatiomalliin pankit kuten Nordea, OP, Danske Bank, S-Pankki/LähiTapiola ja Ålandsbanken sekä Samlink- ja Crosskey-yhteyksien kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSP:n. Pankkiaineistot kulkevat palvelun läpi ilman aineistotyyppikohtaista suodatusta tai prosessointia.",
+    faqTitle: "Usein kysyttyä",
+    faqEyebrow: "Kysymykset",
+    faqs: [
+      {
+        q: "Mitä testaukseen ja tuotantoon siirtymiseen tarvitaan?",
+        a: "Testauksen voi aloittaa testiympäristöllä, OpenAPI-kuvauksella ja SDK:lla. Tuotantoon tarvitaan pankin yritysasiakassopimus, pankin tunnukset ja varmenteet; ISECure hoitaa teknisen rajapinnan, varmenneprosessin ja käyttöönoton.",
+      },
+      {
+        q: "Mitä aineistotyyppejä tuetaan?",
+        a: "ISECure ei suodata tai prosessoi pankkiaineistoja aineistotyypin perusteella. Käytännössä sama malli tukee pankin sallimia aineistoja, kuten pain.001-maksuja, camt.053-tiliotteita ja muita pankkikohtaisia WS-kanavan tiedostotyyppejä.",
+      },
+      {
+        q: "Voiko SDK:ta käyttää ilman vendor lock-inia?",
+        a: "Kyllä. API tukee varmenteiden import/export-toimintoja, ja asiakkaan salainen avain voidaan viedä vain asiakkaan PGP-avaimelle.",
+      },
+      {
+        q: "Kuinka varmenteiden uusinta hoidetaan?",
+        a: "ISECure hoitaa PKI-varmenteiden elinkaaren, uusinnat ja KMS-salatun säilytyksen PCI DSS -tason järjestelmässä, jolloin tuotetiimin ei tarvitse rakentaa omaa varmennevarastoa.",
+      },
+      {
+        q: "Miten hinnoittelu määräytyy?",
+        a: "Hinnoittelu sovitaan integraation laajuuden, pankkien, käyttömäärien ja käyttöönoton mukaan. Testaus voidaan aloittaa ennen lopullista tuotantolaajuutta.",
+      },
+      {
+        q: "Missä data ja avaimet sijaitsevat?",
+        a: "Palvelu toimii AWS-ympäristössä PCI DSS -sertifioiduilla komponenteilla. Avaimet säilytetään KMS-salattuina, ja pankkiyhteys on erillinen hosted-palvelu asiakkaan ohjelmistotiimistä.",
+      },
+    ],
+    docsCta: "WSAPI v2 dokumentaatio",
+    openApiCta: "OpenAPI JSON",
+  },
+  en: {
+    eyebrow: "Save months of bank-by-bank integration work",
+    title: "Bank Integrations, One API",
+    lead: "ISECure gives you one interface for payment files, statements, and certificates: your product sends and retrieves, we handle the bank connection, accounts, certificates, and security.",
+    icp: "Built for software companies: accounting, ERP, invoicing, and finance products that need bank connectivity.",
+    primaryCta: "Start with the test API",
+    secondaryCta: "View OpenAPI docs",
+    themeLabel: "Theme",
+    darkLabel: "Dark",
+    lightLabel: "Light",
+    proof: [
+      { value: "Hundreds", label: "Finnish companies", text: "bank traffic runs through ISECure" },
+      { value: "10+ years", label: "in production", text: "bank connectivity, certificates, and file traffic" },
+      { value: "Accounting + ERP", label: "software platforms", text: "use ISECure for production bank connectivity" },
+    ],
+    quickstartEyebrow: "Get started",
+    quickstartTitle: "First test call in three steps",
+    quickstartLead:
+      "The test environment is built for developer evaluation: inspect the API, create a test account, and make the first list or download call before production bank agreements are finalized.",
+    quickstart: [
+      {
+        title: "1. Open the API or install an SDK",
+        text: "Use the OpenAPI description directly, or start with the TypeScript, Python, or PHP client.",
+      },
+      {
+        title: "2. Create a test account",
+        text: "SDK registration against the test endpoint creates the account and returns the integrator API key for later calls.",
+      },
+      {
+        title: "3. Make the first file call",
+        text: "Log in with the data account and call listFiles or downloadFile against test material.",
+      },
+    ],
+    tsLabel: "TypeScript SDK",
+    whyEyebrow: "Integration model",
+    whyTitle: "Why this is simpler than bank-by-bank integrations",
+    whyLead:
+      "Bank connectivity is more than uploading a file. A production-ready integration needs certificates, bank-specific behavior, audit trails, error handling, and secure key management.",
+    benefits: [
+      {
+        title: "Launch without months of bank-specific code",
+        text: "Start with the test API, send and retrieve bank files through one model, and add banks without another integration project.",
+      },
+      {
+        title: "Certificates and keys off the product team",
+        text: "ISECure handles PKI certificate enrollment, renewals, import/export, and KMS-encrypted storage in a PCI DSS level system.",
+      },
+      {
+        title: "Less exposure and compliance surface",
+        text: "The bank connection runs as a separate hosted service on AWS PCI DSS certified components. Your team does not have to build its own certificate vault, bank-connection monitoring, or high-security interface.",
+      },
+      {
+        title: "SDKs, OpenAPI, and PGP security",
+        text: "TypeScript, Python, and PHP clients speed up implementation. File material can require PGP signatures, and customer keys can be exported only to the customer's PGP key.",
+      },
+    ],
+    architectureTitle: "What happens in the integration",
+    architectureEyebrow: "Architecture",
+    architectureLead:
+      "Developers send and retrieve bank files through the API. ISECure handles bank WS traffic, certificates, key storage, and operational monitoring.",
+    flow: ["Application", "TypeScript, Python, or PHP client", "ISECure WS-Channel API", "Banks and WS-channel"],
+    sftpOption: {
+      title: "Reliable SFTP/S3 sync",
+      text: "For file-based workflows, bank files can be synchronized through SFTP or S3 without requiring a direct REST API integration. The same ISECure connection handles bank WS traffic underneath.",
+    },
+    infrastructureOption: {
+      title: "AWS API Gateway, WAF, and customer-specific limits",
+      text: "The API runs on a serverless AWS architecture behind API Gateway and WAF. Customer-specific rate limits protect the service from traffic spikes and keep other integrations from becoming noisy neighbours.",
+    },
+    sdkTitle: "Clients for different integration paths",
+    sdkEyebrow: "SDK coverage",
+    sdkLead:
+      "The current PHP SDK and wscli remain available for command-line workflows and existing integrations. The TypeScript and Python clients bring the same model to modern services.",
+    sdks: [
+      {
+        title: "TypeScript SDK",
+        status: "Available",
+        href: "https://github.com/dforsber/isecure-ts-client",
+        text: "For Node.js and browser-adjacent services that need a typed client, predictable error types, and an OpenAPI-aligned developer experience.",
+      },
+      {
+        title: "Python SDK",
+        status: "Available",
+        text: "For background jobs, finance automation, and data pipelines where bank files are submitted and retrieved on a schedule.",
+      },
+      {
+        title: "PHP SDK and wscli",
+        status: "Available",
+        href: "https://isecurefi.github.io/wscli-php/",
+        text: "The existing PHP client and command-line tool support current integrations, test runs, and onboarding workflows.",
+      },
+      {
+        title: "OpenAPI",
+        status: "Available",
+        href: "https://isecure.fi/wsapi_v2.json",
+        text: "The API description, documentation, and command-line tool support testing, onboarding, and CI/CD workflows.",
+      },
+    ],
+    banksTitle: "Supported banks",
+    banksEyebrow: "Coverage",
+    banks:
+      "ISECure connects the same integration model to banks such as Nordea, OP, Danske Bank, S-Bank/LähiTapiola, and Ålandsbanken, plus Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections. Bank files pass through the service without file-type-specific filtering or processing.",
+    faqTitle: "Frequently asked questions",
+    faqEyebrow: "FAQ",
+    faqs: [
+      {
+        q: "What do we need for testing and production?",
+        a: "You can start with the test environment, OpenAPI description, and SDKs. Production still requires the bank's corporate agreement, bank credentials, and certificates; ISECure handles the technical API, certificate process, and onboarding.",
+      },
+      {
+        q: "Which file types are supported?",
+        a: "ISECure does not filter or process bank files by file type. In practice, the same model supports the material allowed by the bank, including pain.001 payments, camt.053 statements, and other bank-specific WS-channel file types.",
+      },
+      {
+        q: "Can we use the SDK without vendor lock-in?",
+        a: "Yes. The API supports certificate import/export, and the customer's private key can be exported only to the customer's PGP key.",
+      },
+      {
+        q: "How is certificate renewal handled?",
+        a: "ISECure handles the PKI certificate lifecycle, renewals, and KMS-encrypted storage in a PCI DSS level system, so the product team does not have to build its own certificate vault.",
+      },
+      {
+        q: "How does pricing work?",
+        a: "Pricing depends on integration scope, banks, usage volume, and onboarding needs. Testing can start before the final production scope is agreed.",
+      },
+      {
+        q: "Where are data and keys hosted?",
+        a: "The service runs on AWS with PCI DSS certified components. Keys are stored with KMS encryption, and the bank connection runs as a separate hosted service from the customer software team.",
+      },
+    ],
+    docsCta: "WSAPI v2 documentation",
+    openApiCta: "OpenAPI JSON",
+  },
+  se: {
+    eyebrow: "Spara månader av bankvisa integrationsarbete",
+    title: "Bankintegrationer med ett API",
+    lead: "ISECure ger ett gränssnitt för betalningsfiler, kontoutdrag och certifikat: din produkt skickar och hämtar, vi hanterar bankförbindelsen, konton, certifikat och säkerhet.",
+    icp: "Byggt för mjukvarubolag: bokföring, ERP, fakturering och finansprodukter som behöver bankförbindelser.",
+    primaryCta: "Börja med test-API:t",
+    secondaryCta: "Visa OpenAPI-dokumentation",
+    themeLabel: "Tema",
+    darkLabel: "Mörk",
+    lightLabel: "Ljus",
+    proof: [
+      { value: "Hundratals", label: "finländska företag", text: "banktrafik går via ISECure" },
+      { value: "10+ år", label: "i produktion", text: "bankförbindelser, certifikat och filtrafik" },
+      { value: "Bokföring + ERP", label: "mjukvaruplattformar", text: "använder ISECure för bankförbindelser i produktion" },
+    ],
+    quickstartEyebrow: "Kom igång",
+    quickstartTitle: "Första testanropet i tre steg",
+    quickstartLead:
+      "Testmiljön är byggd för utvecklarutvärdering: kontrollera API:t, skapa ett testkonto och gör första listningen eller hämtningen före produktionsavtalen med banken är klara.",
+    quickstart: [
+      {
+        title: "1. Öppna API:t eller installera ett SDK",
+        text: "Använd OpenAPI-beskrivningen direkt eller börja med TypeScript-, Python- eller PHP-klienten.",
+      },
+      {
+        title: "2. Skapa ett testkonto",
+        text: "SDK-registrering mot testmiljön skapar kontot och returnerar integratörens API-nyckel för kommande anrop.",
+      },
+      {
+        title: "3. Gör första filanropet",
+        text: "Logga in med data-kontot och anropa listFiles eller downloadFile mot testmaterial.",
+      },
+    ],
+    tsLabel: "TypeScript SDK",
+    whyEyebrow: "Integrationsmodell",
+    whyTitle: "Varför detta är enklare än bankvisa integrationer",
+    whyLead:
+      "Bankförbindelser handlar inte bara om att skicka en fil. En produktionsklar integration kräver certifikat, bankvisa beteenden, revision, felhantering och säker nyckelhantering.",
+    benefits: [
+      {
+        title: "Lansera utan månader av bankkod",
+        text: "Börja med test-API:t, skicka och hämta bankfiler enligt en modell och lägg till banker utan ett nytt integrationsprojekt.",
+      },
+      {
+        title: "Certifikat och nycklar bort från produktteamet",
+        text: "ISECure hanterar PKI-certifikat, förnyelser, import/export och KMS-krypterad lagring i ett system på PCI DSS-nivå.",
+      },
+      {
+        title: "Mindre exponering och compliance-yta",
+        text: "Bankförbindelsen körs som en separat hosted-tjänst på AWS-komponenter certifierade för PCI DSS. Teamet behöver inte bygga ett eget certifikatvalv, bankövervakning eller ett högt skyddat gränssnitt.",
+      },
+      {
+        title: "SDK:er, OpenAPI och PGP-säkerhet",
+        text: "TypeScript-, Python- och PHP-klienter snabbar upp implementationen. Filmaterial kan kräva PGP-signaturer, och kundnycklar kan exporteras endast till kundens PGP-nyckel.",
+      },
+    ],
+    architectureTitle: "Vad som sker i integrationen",
+    architectureEyebrow: "Arkitektur",
+    architectureLead:
+      "Utvecklare skickar och hämtar bankfiler via API:t. ISECure hanterar bankernas WS-trafik, certifikat, nyckellagring och operativ övervakning.",
+    flow: ["Applikation", "TypeScript, Python eller PHP-klient", "ISECure WS-Kanal API", "Banker och WS-kanal"],
+    sftpOption: {
+      title: "Tillförlitlig SFTP/S3-synkronisering",
+      text: "För filbaserade arbetsflöden kan bankfiler synkroniseras via SFTP eller S3 utan direkt REST API-integration. Samma ISECure-förbindelse hanterar bankernas WS-trafik i bakgrunden.",
+    },
+    infrastructureOption: {
+      title: "AWS API Gateway, WAF och kundspecifika gränser",
+      text: "API:t körs på en serverless AWS-arkitektur bakom API Gateway och WAF. Kundspecifika användningsgränser skyddar tjänsten mot trafiktoppar och hindrar andra integrationer från att störa er användning.",
+    },
+    sdkTitle: "Klienter för olika integrationsvägar",
+    sdkEyebrow: "SDK:er och verktyg",
+    sdkLead:
+      "Nuvarande PHP SDK och wscli är fortfarande tillgängliga för kommandorad och befintliga integrationer. TypeScript- och Python-klienterna tar samma modell till moderna tjänster.",
+    sdks: [
+      {
+        title: "TypeScript SDK",
+        status: "Tillgänglig",
+        href: "https://github.com/dforsber/isecure-ts-client",
+        text: "För Node.js och browser-nära tjänster som behöver en typad klient, tydliga feltyper och en OpenAPI-anpassad utvecklarupplevelse.",
+      },
+      {
+        title: "Python SDK",
+        status: "Tillgänglig",
+        text: "För bakgrundsjobb, ekonomiautomation och datapipelines där bankfiler skickas och hämtas enligt schema.",
+      },
+      {
+        title: "PHP SDK och wscli",
+        status: "Tillgänglig",
+        href: "https://isecurefi.github.io/wscli-php/",
+        text: "Den befintliga PHP-klienten och kommandoradsverktyget stöder nuvarande integrationer, testkörningar och onboarding.",
+      },
+      {
+        title: "OpenAPI",
+        status: "Tillgänglig",
+        href: "https://isecure.fi/wsapi_v2.json",
+        text: "API-beskrivning, dokumentation och kommandoradsverktyg stöder testning, onboarding och CI/CD-arbetsflöden.",
+      },
+    ],
+    banksTitle: "Stödda banker",
+    banksEyebrow: "Täckning",
+    banks:
+      "ISECure kopplar samma integrationsmodell till banker som Nordea, OP, Danske Bank, S-Bank/LähiTapiola och Ålandsbanken samt Handelsbanken, Aktia, POP Banken, Sparbanken och OmaSP via Samlink- och Crosskey-förbindelser. Bankfiler passerar genom tjänsten utan filtypsspecifik filtrering eller bearbetning.",
+    faqTitle: "Vanliga frågor",
+    faqEyebrow: "FAQ",
+    faqs: [
+      {
+        q: "Vad behövs för testning och produktion?",
+        a: "Ni kan börja med testmiljön, OpenAPI-beskrivningen och SDK:erna. Produktion kräver fortfarande bankens företagsavtal, bankkonton och certifikat; ISECure hanterar det tekniska API:t, certifikatprocessen och onboardingen.",
+      },
+      {
+        q: "Vilka filtyper stöds?",
+        a: "ISECure filtrerar eller bearbetar inte bankfiler enligt filtyp. I praktiken stöder samma modell det material banken tillåter, inklusive pain.001-betalningar, camt.053-kontoutdrag och andra bankspecifika WS-kanalens filtyper.",
+      },
+      {
+        q: "Kan SDK:t användas utan leverantörslåsning?",
+        a: "Ja. API:t stöder import/export av certifikat, och kundens privata nyckel kan exporteras endast till kundens PGP-nyckel.",
+      },
+      {
+        q: "Hur hanteras förnyelse av certifikat?",
+        a: "ISECure hanterar PKI-certifikatens livscykel, förnyelser och KMS-krypterad lagring i ett system på PCI DSS-nivå, så produktteamet behöver inte bygga ett eget certifikatvalv.",
+      },
+      {
+        q: "Hur fungerar prissättningen?",
+        a: "Prissättning beror på integrationens omfattning, banker, användningsvolym och onboardingbehov. Testning kan börja innan den slutliga produktionsomfattningen är fastställd.",
+      },
+      {
+        q: "Var finns data och nycklar?",
+        a: "Tjänsten körs på AWS med PCI DSS-certifierade komponenter. Nycklar lagras med KMS-kryptering och bankförbindelsen körs som en separat hosted-tjänst från kundens mjukvaruteam.",
+      },
+    ],
+    docsCta: "WSAPI v2 dokumentation",
+    openApiCta: "OpenAPI JSON",
+  },
+};
+
+const t = content[lang];
+---
+
+<article class="banking-landing">
+  <section class="landing-hero" id="overview">
+    <div class="landing-inner hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1>{t.title}</h1>
+        <p class="lead">{t.lead}</p>
+        <p class="hero-icp">{t.icp}</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#quickstart">{t.primaryCta}</a>
+          <a class="button button-secondary" href="https://isecure.fi/wsapi_v2/index.html">{t.secondaryCta}</a>
+        </div>
+        <div class="proof-strip" aria-label="ISECure proof points">
+          {
+            t.proof.map((item) => (
+              <div class="proof-item">
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+                <p>{item.text}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="terminal-panel" aria-label={t.tsLabel}>
+        <section class="code-sample">
+          <h3>{t.tsLabel}</h3>
+          <pre><code class="hljs language-typescript" set:html={highlightedTsCode} /></pre>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-section quickstart-section" id="quickstart">
+    <div class="landing-inner section-heading">
+      <p class="eyebrow">{t.quickstartEyebrow}</p>
+      <h2>{t.quickstartTitle}</h2>
+      <p>{t.quickstartLead}</p>
+      <div class="doc-actions">
+        <a class="button button-primary" href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a>
+        <a class="button button-secondary" href="https://github.com/dforsber/isecure-ts-client" target="_blank" rel="noopener">
+          TypeScript SDK
+        </a>
+      </div>
+    </div>
+    <div class="landing-inner quickstart-grid">
+      {
+        t.quickstart.map((step) => (
+          <section class="quickstart-card">
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="landing-section" id="model">
+    <div class="landing-inner section-heading">
+      <p class="eyebrow">{t.whyEyebrow}</p>
+      <h2>{t.whyTitle}</h2>
+      <p>{t.whyLead}</p>
+    </div>
+    <div class="landing-inner benefit-grid">
+      {
+        t.benefits.map((benefit) => (
+          <section class="benefit-card">
+            <h3>{benefit.title}</h3>
+            <p>{benefit.text}</p>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="landing-section architecture-section" id="api">
+    <div class="landing-inner split-grid">
+      <div>
+        <p class="eyebrow">{t.architectureEyebrow}</p>
+        <h2>{t.architectureTitle}</h2>
+        <p>{t.architectureLead}</p>
+        <div class="doc-actions architecture-actions">
+          <a class="button button-primary" href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a>
+          <a class="button button-secondary" href="https://isecure.fi/wsapi_v2.json">{t.openApiCta}</a>
+        </div>
+      </div>
+      <div class="flow-panel" aria-label={t.architectureTitle}>
+        {
+          t.flow.map((step, index) => (
+            <>
+              <div class="flow-step">
+                <span>{index + 1}</span>
+                <strong>{step}</strong>
+              </div>
+              {index < t.flow.length - 1 && <div class="flow-line" aria-hidden="true" />}
+            </>
+          ))
+        }
+        <aside class="flow-callout">
+          <h3>{t.sftpOption.title}</h3>
+          <p>{t.sftpOption.text}</p>
+        </aside>
+        <aside class="flow-callout flow-callout-secondary">
+          <h3>{t.infrastructureOption.title}</h3>
+          <p>{t.infrastructureOption.text}</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-section sdk-section" id="sdks">
+    <div class="landing-inner section-heading">
+      <p class="eyebrow">{t.sdkEyebrow}</p>
+      <h2>{t.sdkTitle}</h2>
+      <p>{t.sdkLead}</p>
+    </div>
+    <div class="landing-inner sdk-grid">
+      {
+        t.sdks.map((sdk) => (
+          <section class="sdk-card">
+            <div>
+              <h3>
+                {sdk.href ? (
+                  <a href={sdk.href} target="_blank" rel="noopener">
+                    {sdk.title}
+                  </a>
+                ) : (
+                  sdk.title
+                )}
+              </h3>
+              <span>{sdk.status}</span>
+            </div>
+            <p>{sdk.text}</p>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="landing-section bank-section" id="banks">
+    <div class="landing-inner bank-panel">
+      <p class="eyebrow">{t.banksEyebrow}</p>
+      <h2>{t.banksTitle}</h2>
+      <p>{t.banks}</p>
+      <div class="bank-logo-panel">
+        <BankLogos />
+      </div>
+      <div class="doc-actions">
+        <a class="button button-primary" href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a>
+        <a class="button button-secondary" href="https://isecure.fi/wsapi_v2.json">{t.openApiCta}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-section faq-section" id="faq">
+    <div class="landing-inner">
+      <p class="eyebrow">{t.faqEyebrow}</p>
+      <h2>{t.faqTitle}</h2>
+      <div class="faq-grid">
+        {
+          t.faqs.map((faq) => (
+            <details>
+              <summary>{faq.q}</summary>
+              <p>{faq.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</article>
+
+<script is:inline>
+  (() => {
+    if (!document.body.classList.contains("banking-theme-page")) return;
+
+    const savedTheme = localStorage.getItem("isecure-banking-theme");
+    const initialTheme = savedTheme === "light" ? "light" : "dark";
+    const buttons = document.querySelectorAll("[data-theme-choice]");
+
+    function setTheme(theme) {
+      document.documentElement.dataset.isecureTheme = theme;
+      document.body.dataset.isecureTheme = theme;
+      buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", button.dataset.themeChoice === theme ? "true" : "false");
+      });
+      localStorage.setItem("isecure-banking-theme", theme);
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => setTheme(button.dataset.themeChoice));
+    });
+
+    setTheme(initialTheme);
+  })();
+</script>
+
+<style>
+  :global(html.banking-theme-root),
+  :global(body.banking-theme-page) {
+    --landing-ink: #eaf2f4;
+    --landing-muted: #9fb1bf;
+    --landing-line: rgba(255, 255, 255, 0.14);
+    --landing-soft: #0d1820;
+    --landing-accent: #4fd1c5;
+    --landing-accent-strong: #35b8ad;
+    --landing-primary-bg: #4fd1c5;
+    --landing-primary-hover: #35b8ad;
+    --landing-primary-ink: #061314;
+    --landing-blue: #8ab4ff;
+    --landing-bg: #071116;
+    --landing-card: #101c25;
+    --landing-card-strong: #142633;
+    --landing-hero-bg: radial-gradient(circle at 18% 12%, rgba(79, 209, 197, 0.2), transparent 34%),
+      linear-gradient(120deg, #071116 0%, #0c1825 54%, #071116 100%);
+    --landing-code-bg: #09131b;
+    --landing-code-ink: #d8f6f1;
+    --landing-code-muted: #a8b6c2;
+    --landing-code-line: rgba(255, 255, 255, 0.12);
+    --landing-code-head: rgba(255, 255, 255, 0.05);
+    --landing-code-keyword: #8ab4ff;
+    --landing-code-string: #8ee8c8;
+    --landing-code-title: #ffd166;
+    --landing-code-property: #c3e88d;
+    --landing-code-number: #ffb86c;
+    --landing-code-comment: #7a8794;
+  }
+
+  :global(html.banking-theme-root[data-isecure-theme="light"]),
+  :global(body.banking-theme-page[data-isecure-theme="light"]) {
+    --landing-ink: #12212f;
+    --landing-muted: #526173;
+    --landing-line: #dce5ea;
+    --landing-soft: #f4f8f9;
+    --landing-accent: #006f6a;
+    --landing-accent-strong: #005a56;
+    --landing-primary-bg: #b8eee7;
+    --landing-primary-hover: #9fe4dc;
+    --landing-primary-ink: #073936;
+    --landing-blue: #174ea6;
+    --landing-bg: #ffffff;
+    --landing-card: #ffffff;
+    --landing-card-strong: #f8fbfc;
+    --landing-hero-bg: linear-gradient(120deg, rgba(0, 111, 106, 0.12), rgba(23, 78, 166, 0.08)), #f8fbfc;
+    --landing-code-bg: #f8fbfc;
+    --landing-code-ink: #13212d;
+    --landing-code-muted: #64748b;
+    --landing-code-line: #dce5ea;
+    --landing-code-head: #edf4f6;
+    --landing-code-keyword: #174ea6;
+    --landing-code-string: #007a5a;
+    --landing-code-title: #9a5b00;
+    --landing-code-property: #006f6a;
+    --landing-code-number: #a33b00;
+    --landing-code-comment: #687789;
+  }
+
+  .banking-landing {
+    color: var(--landing-ink);
+    background: var(--landing-bg);
+  }
+
+  :global(html.banking-theme-root),
+  :global(body.banking-theme-page) {
+    background: var(--landing-bg);
+  }
+
+  :global(body.banking-theme-page .navbar) {
+    background: var(--landing-bg) !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+  }
+
+  :global(body.banking-theme-page .navbar .nav-link),
+  :global(body.banking-theme-page .navbar-brand),
+  :global(body.banking-theme-page .lang-link) {
+    color: var(--landing-ink);
+  }
+
+  :global(body.banking-theme-page .navbar-brand) {
+    align-items: center;
+    background: url("/images/isecure-small-logo.png") center calc(50% - 4px) / contain no-repeat;
+    display: inline-flex;
+    flex: 0 0 69px;
+    font-size: 0;
+    height: 26px;
+    line-height: 0;
+    margin: 0 0.75rem 0 0;
+    padding: 0 !important;
+    position: relative;
+    width: 69px;
+  }
+
+  :global(body.banking-theme-page .navbar-brand img) {
+    display: block;
+    height: 1px;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  :global(body.banking-theme-page .navbar .nav-link:hover),
+  :global(body.banking-theme-page .lang-link:hover) {
+    background: var(--landing-card);
+    color: var(--landing-accent);
+  }
+
+  :global(body.banking-theme-page .lang-link.active) {
+    background: var(--landing-primary-bg);
+    color: var(--landing-primary-ink);
+  }
+
+  :global(body.banking-theme-page .navbar-toggler) {
+    border-color: var(--landing-line);
+  }
+
+  :global(body.banking-theme-page .navbar-toggler-icon) {
+    filter: invert(1);
+  }
+
+  :global(body.banking-theme-page[data-isecure-theme="light"] .navbar-toggler-icon) {
+    filter: none;
+  }
+
+  :global(body.banking-theme-page .site-theme-toggle) {
+    align-items: center;
+    background: transparent;
+    border: 1px solid var(--landing-line);
+    border-radius: 999px;
+    display: inline-flex;
+    gap: 2px;
+    margin: 0 0.55rem 0 0;
+    padding: 2px;
+  }
+
+  :global(body.banking-theme-page .site-theme-toggle button) {
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    color: var(--landing-muted);
+    cursor: pointer;
+    display: inline-grid;
+    font-size: 1rem;
+    font-weight: 800;
+    height: 30px;
+    line-height: 1;
+    min-height: 30px;
+    padding: 0;
+    place-items: center;
+    width: 30px;
+  }
+
+  :global(body.banking-theme-page .site-theme-toggle button[aria-pressed="true"]) {
+    background: var(--landing-primary-bg);
+    color: var(--landing-primary-ink);
+  }
+
+  :global(body.banking-theme-page .contact-section) {
+    --contact-bg: var(--landing-card);
+    --contact-panel: var(--landing-soft);
+    --contact-panel-strong: var(--landing-card-strong);
+    --contact-ink: var(--landing-ink);
+    --contact-muted: var(--landing-muted);
+    --contact-line: var(--landing-line);
+    --contact-input: var(--landing-bg);
+    --contact-accent: var(--landing-primary-bg);
+    --contact-accent-ink: var(--landing-primary-ink);
+    --contact-badge-bg: rgba(255, 255, 255, 0.04);
+    background: var(--landing-card) !important;
+    border: 1px solid var(--landing-line);
+    color: var(--landing-ink) !important;
+    box-shadow: none;
+  }
+
+  :global(body.banking-theme-page .footer) {
+    background: var(--landing-card) !important;
+    border-top: 0;
+    color: var(--landing-muted);
+    box-shadow: none;
+  }
+
+  :global(body.banking-theme-page .footer strong),
+  :global(body.banking-theme-page .footer span),
+  :global(body.banking-theme-page .footer p) {
+    color: var(--landing-muted) !important;
+  }
+
+  :global(body.banking-theme-page .footer strong),
+  :global(body.banking-theme-page .footer a) {
+    color: var(--landing-ink) !important;
+  }
+
+  :global(body.banking-theme-page .footer-logo img) {
+    display: block;
+    height: auto;
+    max-width: 132px;
+    width: 100%;
+  }
+
+  .landing-inner {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+  }
+
+  .landing-hero {
+    background: var(--landing-hero-bg);
+    border-bottom: 0;
+    padding: 72px 0 54px;
+  }
+
+  .hero-grid,
+  .split-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(360px, 0.96fr);
+    gap: 44px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    color: var(--landing-accent);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+
+  .hero-copy > .eyebrow {
+    font-size: clamp(1rem, 1.5vw, 1.28rem);
+    line-height: 1.35;
+    margin-bottom: 16px;
+    max-width: 720px;
+    text-transform: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    overflow-wrap: anywhere;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(2.3rem, 4.4vw, 4.25rem);
+    line-height: 1.02;
+    margin: 0;
+    max-width: 760px;
+  }
+
+  .lead {
+    color: var(--landing-muted);
+    font-size: 1.16rem;
+    line-height: 1.72;
+    margin: 24px 0 0;
+    max-width: 740px;
+  }
+
+  .hero-icp {
+    background: rgba(79, 209, 197, 0.08);
+    border-left: 3px solid var(--landing-accent);
+    color: var(--landing-ink);
+    font-size: 1.02rem;
+    font-weight: 750;
+    line-height: 1.55;
+    margin: 22px 0 0;
+    max-width: 720px;
+    padding: 12px 16px;
+  }
+
+  .hero-actions,
+  .doc-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .button {
+    align-items: center;
+    border-radius: 6px;
+    display: inline-flex;
+    font-weight: 700;
+    min-height: 44px;
+    padding: 0 18px;
+    text-decoration: none;
+  }
+
+  .button-primary {
+    background: var(--landing-primary-bg);
+    color: var(--landing-primary-ink);
+  }
+
+  .button-primary:hover {
+    background: var(--landing-primary-hover);
+    color: var(--landing-primary-ink);
+  }
+
+  .button-secondary {
+    background: var(--landing-card);
+    border: 1px solid var(--landing-line);
+    color: var(--landing-ink);
+  }
+
+  .button-secondary:hover {
+    border-color: var(--landing-accent);
+    color: var(--landing-accent);
+  }
+
+  .proof-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 28px;
+    max-width: 720px;
+  }
+
+  .proof-item {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)), var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-left: 0;
+    min-height: 158px;
+    min-width: 0;
+    padding: 20px 18px;
+  }
+
+  .proof-item:first-child {
+    border-left: 1px solid var(--landing-line);
+    border-radius: 8px 0 0 8px;
+  }
+
+  .proof-item:last-child {
+    border-radius: 0 8px 8px 0;
+  }
+
+  .proof-item strong {
+    color: var(--landing-accent);
+    display: block;
+    font-size: clamp(1.18rem, 1.55vw, 1.55rem);
+    line-height: 1.2;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .proof-item span {
+    color: var(--landing-ink);
+    display: block;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-top: 6px;
+  }
+
+  .proof-item p {
+    color: var(--landing-muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 10px 0 0;
+  }
+
+  .terminal-panel {
+    background: var(--landing-code-bg);
+    border: 1px solid var(--landing-code-line);
+    border-radius: 8px;
+    box-shadow: 0 22px 70px rgba(16, 24, 32, 0.22);
+    color: var(--landing-code-ink);
+    overflow: hidden;
+  }
+
+  .code-sample {
+    min-width: 0;
+  }
+
+  .code-sample h3 {
+    background: var(--landing-code-head);
+    color: var(--landing-code-ink);
+    font-size: 0.86rem;
+    margin: 0;
+    padding: 12px 22px;
+  }
+
+  pre {
+    margin: 0;
+    overflow: visible;
+    padding: 22px;
+  }
+
+  code {
+    color: var(--landing-code-ink);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .code-sample :global(.hljs-keyword) {
+    color: var(--landing-code-keyword);
+    font-weight: 700;
+  }
+
+  .code-sample :global(.hljs-string) {
+    color: var(--landing-code-string);
+  }
+
+  .code-sample :global(.hljs-title),
+  .code-sample :global(.hljs-title.class_),
+  .code-sample :global(.hljs-title.function_) {
+    color: var(--landing-code-title);
+  }
+
+  .code-sample :global(.hljs-attr),
+  .code-sample :global(.hljs-property) {
+    color: var(--landing-code-property);
+  }
+
+  .code-sample :global(.hljs-number),
+  .code-sample :global(.hljs-literal) {
+    color: var(--landing-code-number);
+  }
+
+  .code-sample :global(.hljs-comment) {
+    color: var(--landing-code-comment);
+  }
+
+  .landing-section {
+    padding: 74px 0;
+    scroll-margin-top: 86px;
+  }
+
+  .landing-hero,
+  :global(#contact) {
+    scroll-margin-top: 86px;
+  }
+
+  .section-heading {
+    max-width: 780px;
+  }
+
+  .section-heading h2,
+  .split-grid h2,
+  .bank-panel h2,
+  .faq-section h2 {
+    font-size: clamp(1.9rem, 3vw, 3rem);
+    line-height: 1.08;
+    margin: 0;
+  }
+
+  .section-heading p,
+  .split-grid p,
+  .bank-panel p {
+    color: var(--landing-muted);
+    font-size: 1.06rem;
+    line-height: 1.75;
+    margin: 18px 0 0;
+  }
+
+  .benefit-grid,
+  .quickstart-grid,
+  .sdk-grid,
+  .faq-grid {
+    display: grid;
+    gap: 18px;
+    margin-top: 30px;
+  }
+
+  .quickstart-grid,
+  .benefit-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .benefit-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .quickstart-card,
+  .benefit-card,
+  .sdk-card,
+  details,
+  .bank-panel {
+    background: var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 8px;
+  }
+
+  .quickstart-card,
+  .benefit-card,
+  .sdk-card {
+    padding: 22px;
+  }
+
+  .quickstart-card h3,
+  .benefit-card h3,
+  .sdk-card h3 {
+    font-size: 1.08rem;
+    margin: 0 0 10px;
+  }
+
+  .sdk-card h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .sdk-card h3 a:hover {
+    color: var(--landing-accent);
+  }
+
+  .quickstart-card p,
+  .benefit-card p,
+  .sdk-card p {
+    color: var(--landing-muted);
+    margin: 0;
+  }
+
+  .quickstart-section {
+    background: var(--landing-bg);
+    border-bottom: 1px solid var(--landing-line);
+  }
+
+  .architecture-section {
+    background: var(--landing-soft);
+    border-bottom: 1px solid var(--landing-line);
+    border-top: 1px solid var(--landing-line);
+  }
+
+  .flow-panel {
+    background: var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 8px;
+    padding: 22px;
+  }
+
+  .architecture-actions {
+    margin-top: 24px;
+  }
+
+  .flow-step {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 14px;
+  }
+
+  .flow-step span {
+    align-items: center;
+    background: rgba(79, 209, 197, 0.12);
+    border: 1px solid rgba(79, 209, 197, 0.32);
+    border-radius: 999px;
+    color: var(--landing-accent);
+    display: inline-flex;
+    font-weight: 800;
+    height: 42px;
+    justify-content: center;
+    width: 42px;
+  }
+
+  .flow-line {
+    background: var(--landing-line);
+    height: 28px;
+    margin: 7px 0 7px 20px;
+    width: 2px;
+  }
+
+  .flow-callout {
+    background: rgba(79, 209, 197, 0.08);
+    border: 1px solid rgba(79, 209, 197, 0.24);
+    border-radius: 8px;
+    margin-top: 22px;
+    padding: 18px;
+  }
+
+  .flow-callout h3 {
+    font-size: 1rem;
+    margin: 0 0 8px;
+  }
+
+  .flow-callout p {
+    color: var(--landing-muted);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .sdk-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .sdk-card div {
+    align-items: start;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .sdk-card span {
+    background: rgba(138, 180, 255, 0.14);
+    border-radius: 999px;
+    color: var(--landing-blue);
+    flex: 0 0 auto;
+    font-size: 0.76rem;
+    font-weight: 800;
+    padding: 5px 9px;
+  }
+
+  .bank-section {
+    background: var(--landing-bg);
+  }
+
+  .bank-logo-panel {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--landing-line);
+    border-radius: 8px;
+    margin-top: 24px;
+    padding: 22px;
+  }
+
+  .bank-section :global(.bank-icon) {
+    max-height: 46px;
+  }
+
+  .bank-panel {
+    background: linear-gradient(135deg, rgba(79, 209, 197, 0.12), rgba(138, 180, 255, 0.1)), var(--landing-card);
+    padding: 36px;
+  }
+
+  .faq-section {
+    background: var(--landing-soft);
+    border-top: 1px solid var(--landing-line);
+  }
+
+  .faq-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  details {
+    padding: 18px 20px;
+  }
+
+  summary {
+    cursor: pointer;
+    font-weight: 800;
+  }
+
+  details p {
+    color: var(--landing-muted);
+    margin: 14px 0 0;
+  }
+
+  @media (max-width: 980px) {
+    .hero-grid,
+    .split-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .benefit-grid,
+    .quickstart-grid,
+    .sdk-grid,
+    .faq-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .landing-inner {
+      width: min(100% - 28px, 1180px);
+    }
+
+    .landing-hero,
+    .landing-section {
+      padding: 48px 0;
+    }
+
+    .proof-strip,
+    .quickstart-grid,
+    .benefit-grid,
+    .sdk-grid,
+    .faq-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .proof-item,
+    .proof-item:first-child,
+    .proof-item:last-child {
+      border: 1px solid var(--landing-line);
+      border-radius: 0;
+    }
+
+    .proof-item + .proof-item {
+      border-top: 0;
+    }
+
+    .proof-item:first-child {
+      border-radius: 8px 8px 0 0;
+    }
+
+    .proof-item:last-child {
+      border-radius: 0 0 8px 8px;
+    }
+
+    .terminal-panel {
+      border-radius: 6px;
+    }
+
+    pre {
+      padding: 18px;
+    }
+
+    code {
+      font-size: 0.78rem;
+    }
+
+    .bank-panel {
+      padding: 24px;
+    }
+  }
+</style>

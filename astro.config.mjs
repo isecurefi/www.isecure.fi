@@ -7,7 +7,15 @@ export default defineConfig({
   build: {
     sourcemap: false,
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) =>
+        !page.includes("/thankyou/") &&
+        !page.includes("/banking-api/") &&
+        !page.includes("/ws-api/") &&
+        !page.includes("/ws-channel/"),
+    }),
+  ],
   vite: {
     build: {
       cssCodeSplit: true,

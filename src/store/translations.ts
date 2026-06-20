@@ -91,9 +91,9 @@ export const translations = {
       se: "Meddelande",
     },
     send: {
-      fi: "LÄHETÄ",
-      en: "SEND",
-      se: "SKICKA",
+      fi: "Lähetä",
+      en: "Send",
+      se: "Skicka",
     },
     readMore: {
       fi: "LUE LISÄÄ",
@@ -247,6 +247,16 @@ export const translations = {
       fi: "API",
       se: "API",
     },
+    banks: {
+      en: "Banks",
+      fi: "Pankit",
+      se: "Banker",
+    },
+    sdk: {
+      en: "SDKs",
+      fi: "SDK:t",
+      se: "SDK:er",
+    },
     contact: {
       en: "Contact",
       fi: "Yhteystiedot",
@@ -295,9 +305,9 @@ export const translations = {
         se: "Med ISECures WS-kanal kan du automatiskt ladda till exempel ner maskinläsbara kontoutdrag och referensöverföringar.",
       },
       details: {
-        fi: "ISECuren WS-Kanava sisältää WebService-pankkiyhteysohjelmisto SDK:n usealle pankille: Nordea, DanskeBank, Osuuspankki, S-Pankki/LähiTapiola, Ålandsbanken, Samlink -pankit: Handelsbanken, Aktia, POP, Säästöpankki. Tuemme sekä APP- että PKI-puolta (mm. sertifikaatin haku PIN -koodilla ja uusinta). WS-kanava on ollut tuotannossa yli 10 vuotta ja on käytössä useilla asiakkailla.",
-        en: "ISECure's WS-Channel includes WebService banking software SDK for multiple banks: Nordea, DanskeBank, OP Bank, S-Bank/LähiTapiola, Ålandsbanken, Samlink banks: Handelsbanken, Aktia, POP, Savings Bank. We support both APP and PKI sides (including certificate retrieval with PIN code and renewal). The WS-channel has been in production for over 10 years and is used by multiple customers.",
-        se: "ISECures WS-Kanal inkluderar WebService bankprogramvaru-SDK för flera banker: Nordea, DanskeBank, OP Bank, S-Bank/LähiTapiola, Ålandsbanken, Samlink banker: Handelsbanken, Aktia, POP, Sparbanken. Vi stöder både APP- och PKI-sidor (inklusive certifikathämtning med PIN-kod och förnyelse). WS-kanalen har varit i produktion i över 10 år och används av flera kunder.",
+        fi: "ISECuren WS-Kanava sisältää WebService-pankkiyhteysohjelmisto SDK:n usealle pankille: Nordea, DanskeBank, Osuuspankki, S-Pankki/LähiTapiola, Ålandsbanken, Samlink/Crosskey -pankit: Handelsbanken, Aktia, POP, Säästöpankki, OmaSP. Tuemme sekä APP- että PKI-puolta (mm. sertifikaatin haku PIN -koodilla ja uusinta). WS-kanava on ollut tuotannossa yli 10 vuotta ja on käytössä useilla asiakkailla.",
+        en: "ISECure's WS-Channel includes WebService banking software SDK for multiple banks: Nordea, DanskeBank, OP Bank, S-Bank/LähiTapiola, Ålandsbanken, Samlink/Crosskey banks: Handelsbanken, Aktia, POP, Savings Bank, OmaSP. We support both APP and PKI sides (including certificate retrieval with PIN code and renewal). The WS-channel has been in production for over 10 years and is used by multiple customers.",
+        se: "ISECures WS-Kanal inkluderar WebService bankprogramvaru-SDK för flera banker: Nordea, DanskeBank, OP Bank, S-Bank/LähiTapiola, Ålandsbanken, Samlink/Crosskey banker: Handelsbanken, Aktia, POP, Sparbanken, OmaSP. Vi stöder både APP- och PKI-sidor (inklusive certifikathämtning med PIN-kod och förnyelse). WS-kanalen har varit i produktion i över 10 år och används av flera kunder.",
       },
       saas: {
         fi: "Voit ostaa WS-kanavan suoraan palveluna Hosting -paketilla (SaaS) valitsemillesi tai kaikille pankeille.",
@@ -306,9 +316,9 @@ export const translations = {
       },
       api: {
         title: {
-          fi: "WS-Kanava API - Turvalliset Pankkiintegraatioratkaisut | Pohjoismaiset Pankit",
-          en: "WS-Channel API - Secure Bank Integration Solutions | Nordic Banks",
-          se: "WS-Kanal API - Säkra Banktintegrationslösningar | Nordiska Banker",
+          fi: "WS-Kanava API - Turvalliset Pankkiintegraatioratkaisut | Suomalaiset Pankit",
+          en: "WS-Channel API - Secure Bank Integration Solutions | Finnish Banks",
+          se: "WS-Kanal API - Säkra Banktintegrationslösningar | Finländska Banker",
         },
       },
     },

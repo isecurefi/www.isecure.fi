@@ -1,74 +1,187 @@
 ---
-import '../styles/index.css';
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/Footer.astro';
-import Contact from '../components/Contact.astro';
+import "../styles/index.css";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
+import Contact from "../components/Contact.astro";
 
-import type { Lang } from '../types';
+import type { Lang } from "../types";
 export interface Props {
   title: string;
   lang?: Lang;
+  description?: string;
+  socialDescription?: string;
+  keywords?: string;
+  robots?: string;
+  structuredData?: Record<string, unknown>;
+  canonicalUrl?: string;
+  alternateLinks?: Array<{
+    hreflang: string;
+    href: string;
+  }>;
+  fullWidth?: boolean;
+  bodyClass?: string;
 }
 
-const { title } = Astro.props;
-import { defaultLanguage as defaultLang } from '../utils/languages';
-const [, pathLang] = Astro.url.pathname.split('/');
-const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as Lang : 
-  Astro.props.lang || defaultLang;
+const {
+  title,
+  fullWidth = false,
+  bodyClass = "",
+  alternateLinks = [],
+} = Astro.props;
+const htmlClass = bodyClass.includes("banking-theme-page")
+  ? "banking-theme-root"
+  : "";
+import { defaultLanguage as defaultLang } from "../utils/languages";
+const [, pathLang] = Astro.url.pathname.split("/");
+const lang =
+  pathLang && ["fi", "en", "se"].includes(pathLang)
+    ? (pathLang as Lang)
+    : Astro.props.lang || defaultLang;
+const htmlLang = lang === "se" ? "sv" : lang;
+const defaultPageDescription =
+  lang === "en"
+    ? "ISECure WS-Channel: Professional bank integration solution for Finnish banks. Secure, reliable Web Service channel for automated payment processing with Nordea, OP, Danske Bank and more."
+    : lang === "se"
+      ? "ISECure WS-Kanal: Professionell bankintegrationslösning för finländska banker. Säker, pålitlig Web Service-kanal för automatiserad betalningshantering med Nordea, OP, Danske Bank med flera."
+      : "ISECure WS-Kanava: Ammattimainen pankkiintegraatioratkaisu suomalaisille pankeille. Turvallinen ja luotettava Web Service -kanava automatisoituun maksuliikenteeseen Nordean, OP:n, Danske Bankin ja muiden kanssa.";
+const pageDescription = Astro.props.description || defaultPageDescription;
+const defaultKeywords =
+  "WS-Kanava, Web Service, API, pankkiyhteys, SEPA, maksuliikenne, verkkopankki, Nordea, OP, Danske Bank, bank integration, AWS, cloud services, secure banking, Finnish banks";
+const pageKeywords = Astro.props.keywords || defaultKeywords;
+const robots = Astro.props.robots || "index, follow";
+const defaultSocialDescription =
+  lang === "en"
+    ? "Secure bank connection channel and API solutions for businesses. Professional WS-Channel integration for Finnish banks."
+    : lang === "se"
+      ? "Säker bankförbindelsekanal och API-lösningar för företag. Professionell WS-Kanal integration för finländska banker."
+      : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. Ammattimainen WS-Kanava integraatio suomalaisille pankeille.";
+const socialDescription =
+  Astro.props.socialDescription || pageDescription || defaultSocialDescription;
+const applicationName =
+  lang === "en"
+    ? "ISECure WS-Channel"
+    : lang === "se"
+      ? "ISECure WS-Kanal"
+      : "ISECure WS-Kanava";
+const defaultStructuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://isecure.fi/#organization",
+      name: "ISECure Oy",
+      url: "https://isecure.fi",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://isecure.fi/images/isecure-small-logo.png",
+        width: 161,
+        height: 61,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "FI",
+        addressLocality: "Helsinki",
+        postalCode: "00100",
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+358404835507",
+        contactType: "sales",
+        email: "dan.forsberg@isecure.fi",
+        availableLanguage: ["Finnish", "English", "Swedish"],
+      },
+      sameAs: ["https://www.linkedin.com/company/isecure-oy"],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://isecure.fi/#website",
+      url: "https://isecure.fi",
+      name: "ISECure",
+      publisher: {
+        "@id": "https://isecure.fi/#organization",
+      },
+      inLanguage: lang === "en" ? "en-US" : lang === "se" ? "sv-SE" : "fi-FI",
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: applicationName,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Cloud",
+      offers: {
+        "@type": "Offer",
+        category: "Banking Integration Solutions",
+        priceCurrency: "EUR",
+        availability: "https://schema.org/InStock",
+      },
+      description: socialDescription,
+      provider: {
+        "@id": "https://isecure.fi/#organization",
+      },
+    },
+  ],
+};
+const structuredData = JSON.stringify(
+  Astro.props.structuredData || defaultStructuredData,
+);
+const siteUrl = Astro.site ?? new globalThis.URL("https://www.isecure.fi");
+const canonicalUrl =
+  Astro.props.canonicalUrl ??
+  new globalThis.URL(Astro.url.pathname, siteUrl).toString();
+const socialImageUrl = new globalThis.URL(
+  "/images/isecure-og-image.png",
+  siteUrl,
+).toString();
+const titleAlreadyBranded = /isecure/i.test(title);
+const fullTitle = titleAlreadyBranded
+  ? title
+  : bodyClass.includes("banking-theme-page")
+    ? `${title} | ISECure`
+    : `${title} | ISECure - Professional Bank Integration Solutions`;
 ---
 
-<!DOCTYPE html>
-<html lang={lang}>
+<!doctype html>
+<html lang={htmlLang} class={htmlClass}>
   <head>
     <!-- Essential Meta Tags -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="description" content={
-      lang === 'en' 
-        ? "ISECure WS-Channel: Professional bank integration solution for Nordic banks. Secure, reliable Web Service channel for automated payment processing with Nordea, OP, Danske Bank and more."
-        : lang === 'se'
-        ? "ISECure WS-Kanal: Professionell bankintegrationslösning för nordiska banker. Säker, pålitlig Web Service-kanal för automatiserad betalningshantering med Nordea, OP, Danske Bank med flera."
-        : "ISECure WS-Kanava: Ammattimainen pankkiintegraatioratkaisu pohjoismaisille pankeille. Turvallinen ja luotettava Web Service -kanava automatisoituun maksuliikenteeseen Nordean, OP:n, Danske Bankin ja muiden kanssa."
-    } />
-    <meta name="keywords" content="WS-Kanava, Web Service, API, pankkiyhteys, SEPA, maksuliikenne, verkkopankki, Nordea, OP, Danske Bank, bank integration, AWS, cloud services, secure banking, Nordic banks" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+    />
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content={pageKeywords} />
     <meta name="author" content="ISECure Oy" />
-    <meta name="robots" content="index, follow" />
-    <meta name="googlebot" content="index, follow" />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
     <meta name="theme-color" content="#0d6efd" />
     <meta name="format-detection" content="telephone=no" />
-    
+
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ISECure" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={
-      lang === 'en'
-        ? "Secure bank connection channel and API solutions for businesses. Professional WS-Channel integration for Nordic banks."
-        : lang === 'se'
-        ? "Säker bankförbindelsekanal och API-lösningar för företag. Professionell WS-Kanal integration för nordiska banker."
-        : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. Ammattimainen WS-Kanava integraatio pohjoismaisille pankeille."
-    } />
-    <meta property="og:image" content={new globalThis.URL('/images/isecure-og-image.png', Astro.url)} />
+    <meta property="og:description" content={socialDescription} />
+    <meta property="og:image" content={socialImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content={lang === 'en' ? 'en_US' : lang === 'se' ? 'sv_SE' : 'fi_FI'} />
-    
+    <meta
+      property="og:locale"
+      content={lang === "en" ? "en_US" : lang === "se" ? "sv_SE" : "fi_FI"}
+    />
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@ISECureOy" />
     <meta name="twitter:creator" content="@ISECureOy" />
-    <meta name="twitter:url" content={Astro.url} />
+    <meta name="twitter:url" content={canonicalUrl} />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={
-      lang === 'en'
-        ? "Secure bank connection channel and API solutions for businesses. Professional WS-Channel integration for Nordic banks."
-        : lang === 'se'
-        ? "Säker bankförbindelsekanal och API-lösningar för företag. Professionell WS-Kanal integration för nordiska banker."
-        : "Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. Ammattimainen WS-Kanava integraatio pohjoismaisille pankeille."
-    } />
-    <meta name="twitter:image" content={new globalThis.URL('/images/isecure-og-image.png', Astro.url)} />
-    <meta name="twitter:image:alt" content="ISECure - Professional Bank Integration Solutions" />
+    <meta name="twitter:description" content={socialDescription} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta
+      name="twitter:image:alt"
+      content="ISECure - Professional Bank Integration Solutions"
+    />
 
     <!-- Additional SEO -->
     <meta name="geo.region" content="FI" />
@@ -77,105 +190,51 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
     <meta name="ICBM" content="60.1699, 24.9384" />
     <meta name="application-name" content="ISECure" />
     <meta name="apple-mobile-web-app-title" content="ISECure" />
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    
-    <link rel="canonical" href={Astro.site ? new globalThis.URL(Astro.url.pathname, Astro.site).toString() : Astro.url.pathname} />
-    <title>{title} | ISECure - Professional Bank Integration Solutions</title>
+
+    <link rel="canonical" href={canonicalUrl} />
+    {
+      alternateLinks.map((link) => (
+        <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+      ))
+    }
+    <title>{fullTitle}</title>
 
     <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Organization",
-            "@id": "https://isecure.fi/#organization",
-            "name": "ISECure Oy",
-            "url": "https://isecure.fi",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://isecure.fi/images/isecure-small-logo.png",
-              "width": 200,
-              "height": 40
-            },
-            "address": {
-              "@type": "PostalAddress",
-              "addressCountry": "FI",
-              "addressLocality": "Helsinki",
-              "postalCode": "00100"
-            },
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": "+358404835507",
-              "contactType": "sales",
-              "email": "dan.forsberg@isecure.fi",
-              "availableLanguage": ["Finnish", "English", "Swedish"]
-            },
-            "sameAs": [
-              "https://www.linkedin.com/company/isecure-oy"
-            ]
-          },
-          {
-            "@type": "WebSite",
-            "@id": "https://isecure.fi/#website",
-            "url": "https://isecure.fi",
-            "name": "ISECure",
-            "publisher": {
-              "@id": "https://isecure.fi/#organization"
-            },
-            "inLanguage": "${lang === 'en' ? 'en-US' : lang === 'se' ? 'sv-SE' : 'fi-FI'}"
-          },
-          {
-            "@type": "SoftwareApplication",
-            "name": "${
-              lang === 'en' ? 'ISECure WS-Channel' :
-              lang === 'se' ? 'ISECure WS-Kanal' :
-              'ISECure WS-Kanava'
-            }",
-            "applicationCategory": "BusinessApplication",
-            "operatingSystem": "Cloud",
-            "offers": {
-              "@type": "Offer",
-              "category": "Banking Integration Solutions",
-              "priceCurrency": "EUR",
-              "availability": "https://schema.org/InStock"
-            },
-            "description": "${
-              lang === 'en' 
-                ? 'Secure bank connection channel and API solutions for businesses. Professional WS-Channel integration for Nordic banks.'
-                : lang === 'se'
-                ? 'Säker bankförbindelsekanal och API-lösningar för företag. Professionell WS-Kanal integration för nordiska banker.'
-                : 'Turvallinen pankkiyhteyskanava ja API-ratkaisut yrityksille. Ammattimainen WS-Kanava integraatio pohjoismaisille pankeille.'
-            }",
-            "provider": {
-              "@id": "https://isecure.fi/#organization"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.8",
-              "ratingCount": "156"
-            }
-          }
-        ]
-      }
-    </script>
-    
+    <script type="application/ld+json" set:html={structuredData} />
+
     <!-- Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
-    <link rel="dns-prefetch" href="https://www.google-analytics.com">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preconnect"
+      href="https://www.googletagmanager.com"
+      crossorigin
+    />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
     <!-- Preload critical assets -->
-    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" type="font/woff2" crossorigin fetchpriority="high">
-    <link rel="preload" as="image" href="/images/isecure-small-logo.png" fetchpriority="high">
-    
+    <link
+      rel="preload"
+      as="font"
+      href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/isecure-small-logo.png"
+      fetchpriority="high"
+    />
+
     <!-- Critical CSS -->
     <style is:inline>
       :root {
@@ -185,11 +244,17 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
         line-height: 1.6;
         color: var(--text-color);
         padding-top: 76px;
         margin: 0;
+      }
+
+      html.banking-theme-root,
+      body.banking-theme-page {
+        background: #071116;
       }
 
       .navbar {
@@ -201,44 +266,69 @@ const lang = (pathLang && ['fi', 'en', 'se'].includes(pathLang)) ? pathLang as L
         z-index: 1030;
       }
 
+      body.banking-theme-page .navbar {
+        background: #071116;
+        border-bottom: 0;
+      }
+
       .main-content {
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 20px;
       }
+
+      .main-content--wide {
+        max-width: none;
+        padding: 0;
+      }
     </style>
-    
+
     <!-- Preconnect to required origins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.googletagmanager.com">
-    <link rel="preconnect" href="https://www.google-analytics.com">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
     <!-- Optimize font loading -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&display=optional" 
-          media="print" onload="this.media='all'"
-          fetchpriority="low">
-    
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&display=optional"
+      media="print"
+      onload="this.media='all'"
+      fetchpriority="low"
+    />
+
     <!-- Analytics -->
     <script async is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-BJ6B7H7K8E');
-      gtag('config', 'AW-1025469048');
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-BJ6B7H7K8E");
+      gtag("config", "AW-1025469048");
     </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1025469048"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"
+    ></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=AW-1025469048"></script>
 
     <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
-            crossorigin="anonymous" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+      defer></script>
   </head>
-  <body>
+  <body class={bodyClass}>
     <Navigation lang={lang} />
-    <main class="main-content">
+    <main class:list={["main-content", { "main-content--wide": fullWidth }]}>
       <slot />
       <Contact lang={lang} />
     </main>

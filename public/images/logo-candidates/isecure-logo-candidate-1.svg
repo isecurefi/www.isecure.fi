@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 180" role="img" aria-labelledby="title desc">
+  <title id="title">ISECure logo candidate 1</title>
+  <desc id="desc">Wordmark with a secure channel shield icon.</desc>
+  <rect width="640" height="180" fill="#ffffff"/>
+  <g transform="translate(40 42)">
+    <rect x="0" y="12" width="78" height="78" rx="18" fill="#111827"/>
+    <path d="M18 51h42" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+    <path d="M39 30v42" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+    <path d="M68 12v78" stroke="#d71920" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="12" cy="12" r="8" fill="#44b549"/>
+  </g>
+  <text x="142" y="111" fill="#111827" font-family="Inter, Arial, Helvetica, sans-serif" font-size="70" font-weight="800" letter-spacing="-1">ISE</text>
+  <text x="265" y="111" fill="#d71920" font-family="Inter, Arial, Helvetica, sans-serif" font-size="70" font-weight="800" letter-spacing="-1">Cure</text>
+</svg>

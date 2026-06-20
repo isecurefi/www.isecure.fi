@@ -1,0 +1,88 @@
+---
+const candidates = [
+  ["isecure-logo-candidate-1.svg", "1. Secure channel shield"],
+  ["isecure-logo-candidate-2.svg", "2. API brackets and certificate point"],
+  ["isecure-logo-candidate-3.svg", "3. Bank rails and secure transfer"],
+  ["isecure-logo-candidate-4.svg", "4. Certificate shield"],
+  ["isecure-logo-candidate-5.svg", "5. Gateway monogram"],
+  ["isecure-logo-candidate-6.svg", "6. Solid bank rail mark"],
+  ["isecure-logo-candidate-7.svg", "7. Bank facade and secure channel"],
+  ["isecure-logo-candidate-8.svg", "8. Rail monogram and gateway"],
+  ["isecure-logo-candidate-9.svg", "9. Circular bank rail emblem"],
+  ["isecure-logo-candidate-10.svg", "10. Minimal heavy bank rails"],
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ISECure Logo Candidates</title>
+  </head>
+  <body>
+    <main>
+      <h1>ISECure Logo Candidates</h1>
+      <div class="grid">
+        {
+          candidates.map(([file, label]) => (
+            <figure>
+              <img src={`/images/logo-candidates/${file}`} alt={label} />
+              <figcaption>{label}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    background: #f3f6f8;
+    color: #17212b;
+    font-family:
+      Inter,
+      Arial,
+      Helvetica,
+      sans-serif;
+    margin: 0;
+    padding: 32px;
+  }
+
+  main {
+    margin: 0 auto;
+    max-width: 1100px;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin: 0 0 24px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  figure {
+    background: #ffffff;
+    border: 1px solid #d9e2e8;
+    border-radius: 8px;
+    margin: 0;
+    padding: 18px;
+  }
+
+  img {
+    display: block;
+    height: auto;
+    width: 100%;
+  }
+
+  figcaption {
+    color: #526173;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+</style>

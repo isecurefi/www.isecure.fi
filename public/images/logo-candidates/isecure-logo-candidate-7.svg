@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 180" role="img" aria-labelledby="title desc">
+  <title id="title">ISECure logo candidate 7</title>
+  <desc id="desc">Simplified bank facade with secure channel block.</desc>
+  <rect width="640" height="180" fill="#ffffff"/>
+  <g transform="translate(42 42)">
+    <rect x="0" y="38" width="112" height="98" rx="10" fill="#111827"/>
+    <path d="M0 38 56 8l56 30H0Z" fill="#17212b"/>
+    <rect x="20" y="62" width="16" height="50" rx="3" fill="#ffffff"/>
+    <rect x="48" y="62" width="16" height="50" rx="3" fill="#ffffff"/>
+    <rect x="76" y="62" width="16" height="50" rx="3" fill="#ffffff"/>
+    <rect x="124" y="54" width="42" height="66" rx="12" fill="#d71920"/>
+    <path d="M134 87h22" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="145" cy="40" r="9" fill="#44b549"/>
+  </g>
+  <text x="228" y="112" fill="#111827" font-family="Inter, Arial, Helvetica, sans-serif" font-size="72" font-weight="850" letter-spacing="-2">ISE</text>
+  <text x="352" y="112" fill="#d71920" font-family="Inter, Arial, Helvetica, sans-serif" font-size="72" font-weight="850" letter-spacing="-2">Cure</text>
+</svg>

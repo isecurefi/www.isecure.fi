@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 180" role="img" aria-labelledby="title desc">
+  <title id="title">ISECure logo candidate 6</title>
+  <desc id="desc">Solid bank rail mark with ISECure wordmark.</desc>
+  <rect width="640" height="180" fill="#ffffff"/>
+  <g transform="translate(42 42)">
+    <path d="M8 38 64 8l56 30v14H8V38Z" fill="#111827"/>
+    <rect x="18" y="62" width="20" height="54" rx="4" fill="#111827"/>
+    <rect x="54" y="62" width="20" height="54" rx="4" fill="#111827"/>
+    <rect x="90" y="62" width="20" height="54" rx="4" fill="#111827"/>
+    <rect x="8" y="124" width="112" height="14" rx="7" fill="#111827"/>
+    <rect x="128" y="38" width="14" height="100" rx="7" fill="#d71920"/>
+    <circle cx="136" cy="24" r="9" fill="#44b549"/>
+  </g>
+  <text x="210" y="112" fill="#111827" font-family="Inter, Arial, Helvetica, sans-serif" font-size="72" font-weight="850" letter-spacing="-2">ISE</text>
+  <text x="334" y="112" fill="#d71920" font-family="Inter, Arial, Helvetica, sans-serif" font-size="72" font-weight="850" letter-spacing="-2">Cure</text>
+</svg>

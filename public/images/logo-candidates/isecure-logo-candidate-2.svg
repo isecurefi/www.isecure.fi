@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 180" role="img" aria-labelledby="title desc">
+  <title id="title">ISECure logo candidate 2</title>
+  <desc id="desc">Wordmark with API bracket and certificate mark.</desc>
+  <rect width="640" height="180" fill="#ffffff"/>
+  <g transform="translate(38 48)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M52 0 14 40l38 40" stroke="#111827" stroke-width="12"/>
+    <path d="M88 0 126 40 88 80" stroke="#111827" stroke-width="12"/>
+    <path d="M52 40h36" stroke="#d71920" stroke-width="12"/>
+    <circle cx="70" cy="40" r="10" fill="#44b549" stroke="none"/>
+  </g>
+  <text x="198" y="110" fill="#111827" font-family="Inter, Arial, Helvetica, sans-serif" font-size="68" font-weight="800">ISE</text>
+  <text x="318" y="110" fill="#d71920" font-family="Inter, Arial, Helvetica, sans-serif" font-size="68" font-weight="800">Cure</text>
+</svg>

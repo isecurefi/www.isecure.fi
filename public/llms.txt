@@ -1,0 +1,42 @@
+# ISECure Banking API and SDKs
+
+ISECure provides a hosted banking integration API for Finnish corporate bank connections. It connects software products to banks through the corporate Web Services channel and removes bank-by-bank integration, certificate, and key-management work from product teams.
+
+Canonical pages:
+- Finnish: https://www.isecure.fi/
+- English: https://www.isecure.fi/en/
+- Swedish: https://www.isecure.fi/se/
+
+Primary product:
+- REST API for bank file upload, listing, and download.
+- OpenAPI documentation for implementation and testing.
+- Test API access for developer evaluation.
+- TypeScript SDK: https://github.com/dforsber/isecure-ts-client
+- Python SDK.
+- PHP SDK and wscli command-line tooling.
+- Reliable SFTP/S3 synchronization for file-based workflows that do not use direct REST API integration.
+
+Security and operations:
+- Hosted separately from the customer software team to reduce exposure and compliance scope.
+- PKI certificate enrollment, renewals, import/export, and storage are handled by ISECure.
+- Private key storage uses AWS KMS encryption in a PCI DSS level system.
+- File materials can require PGP signatures.
+- Bank traffic goes through a hardened interface for sensitive financial operations.
+- Used by Finnish accounting and ERP software products; bank traffic for hundreds of Finnish companies runs through ISECure.
+
+Supported bank connectivity:
+- Nordea.
+- OP.
+- Danske Bank.
+- S-Pankki/LähiTapiola.
+- Ålandsbanken.
+- Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections.
+
+Important implementation note:
+- ISECure does not filter or process bank file types as product-specific materials. Bank files pass through the service; bank agreements, credentials, and certificates are still required.
+
+Contact:
+- ISECure Oy
+- Helsinki, Finland
+- dan.forsberg@isecure.fi
+- +358404835507

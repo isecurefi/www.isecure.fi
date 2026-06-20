@@ -1,50 +1,10 @@
-# Global rules
 User-agent: *
 Allow: /
-Allow: /index.html
-Allow: /ws-channel/
-Allow: /ws-api/
-Allow: /en/
-Allow: /se/
-Allow: /wsapi_v2/
 
-# Language specific paths
-Allow: /fi/*
-Allow: /en/*
-Allow: /se/*
-
-# Crawl-delay for better server performance
-Crawl-delay: 5
-
-# Block access to system files and private areas
-Disallow: /thankyou/
+# Keep private paths out of the index.
 Disallow: /admin/
 Disallow: /private/
 Disallow: /temp/
 Disallow: /backup/
 
-# Block access to specific file types
-Disallow: /*.md$
-Disallow: /*.yml$
-Disallow: /*.yaml$
-Disallow: /*.log$
-Disallow: /*.config$
-Disallow: /*.env$
-Disallow: /*.json$
-Disallow: /*.ts$
-Disallow: /*.js$
-
-# Block thank you pages from indexing
-Disallow: /thankyou/
-Disallow: /en/thankyou/
-Disallow: /se/thankyou/
-
-# Allow specific JSON files
-Allow: /wsapi_v2.json
-Allow: /site.webmanifest
-
-# Canonical domain
-Host: https://www.isecure.fi
-
-# Sitemap location
-Sitemap: https://www.isecure.fi/sitemap.xml
+Sitemap: https://www.isecure.fi/sitemap-index.xml

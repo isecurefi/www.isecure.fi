@@ -1,129 +1,263 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { languages } from '../../utils/languages';
-import { getText } from '../../store/translations';
-import BankLogos from '../../components/BankLogos.astro';
+import Layout from "../../layouts/Layout.astro";
+import { languages } from "../../utils/languages";
+import { getText } from "../../store/translations";
+import BankLogos from "../../components/BankLogos.astro";
 
 export async function getStaticPaths() {
   // Only generate pages for non-Finnish languages since Finnish is at root
   return languages
-    .filter(lang => lang !== 'fi')
-    .map(lang => ({
+    .filter((lang) => lang !== "fi")
+    .map((lang) => ({
       params: { lang },
-      props: { lang }
+      props: { lang },
     }));
 }
 
 const { lang } = Astro.props;
+const landingCanonical =
+  lang === "en" ? "https://www.isecure.fi/en/" : "https://www.isecure.fi/se/";
 ---
-<Layout title={`${getText('webService.wsChannel.api.title', lang)} | iSecure`} lang={lang}>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "ISECure WS-Channel API",
-      "description": "Professional bank integration API solution for Nordic banks",
-      "category": "Financial Software",
-      "brand": {
-        "@type": "Brand",
-        "name": "ISECure"
-      },
-      "offers": {
-        "@type": "Offer",
-        "category": "Bank Integration API"
-      }
-    }
-  </script>
+
+<Layout
+  title={`${getText("webService.wsChannel.api.title", lang)} | iSecure`}
+  lang={lang}
+  robots="noindex, follow"
+  canonicalUrl={landingCanonical}
+>
   <div class="container page-container">
-    <h1 class="page-header">{
-      lang === 'en' ? 'ISECure WS-Channel API' :
-      lang === 'se' ? 'ISECure WS-Kanal API' :
-      'ISECure WS-Kanava API'
-    }</h1>
+    <h1 class="page-header">
+      {
+        lang === "en"
+          ? "ISECure WS-Channel API"
+          : lang === "se"
+            ? "ISECure WS-Kanal API"
+            : "ISECure WS-Kanava API"
+      }
+    </h1>
 
     <div class="content-section">
       <div class="main-content">
-        <h2 class="section-title">{
-          lang === 'en' ? 'WS-Channel SaaS service - API' :
-          lang === 'se' ? 'WS-Kanal som SaaS-tjänst - API' :
-          'WS-Kanava SaaS palveluna - API'
-        }</h2>
- 
+        <h2 class="section-title">
+          {
+            lang === "en"
+              ? "WS-Channel SaaS service - API"
+              : lang === "se"
+                ? "WS-Kanal som SaaS-tjänst - API"
+                : "WS-Kanava SaaS palveluna - API"
+          }
+        </h2>
+
         <div class="content-block">
-          <p>{
-            lang === 'en' ? 'Are you developing your own service or product that utilizes the WS-channel? We offer WS-Channel as a SaaS service at a competitive price.' :
-            lang === 'se' ? 'Utvecklar du en egen tjänst eller produkt som använder WS-kanalen? Vi erbjuder WS-Kanal som SaaS-tjänst till ett konkurrenskraftigt pris.' :
-            'Oletko kehittämässä omaa palvelua tai tuotetta, jossa hyödynnät WS-kanavaa? Tarjoamme kilpailukykyiseen hintaan WS-Kanavan SaaS palveluna.'
-          }</p>
-                
-          <p>{
-            lang === 'en' ? 'Our service uses AWS services including API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch and Lambda, and scales according to your needs.' :
-            lang === 'se' ? 'Vår tjänst använder AWS-tjänster som API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch och Lambda, och skalar enligt dina behov.' :
-            'Palvelumme käyttää mm. AWS:n API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch ja Lambda palveluita ja skaalautuu tarpeidesi mukaan.'
-          }</p>
+          <p>
+            {
+              lang === "en"
+                ? "Are you developing your own service or product that utilizes the WS-channel? We offer WS-Channel as a SaaS service at a competitive price."
+                : lang === "se"
+                  ? "Utvecklar du en egen tjänst eller produkt som använder WS-kanalen? Vi erbjuder WS-Kanal som SaaS-tjänst till ett konkurrenskraftigt pris."
+                  : "Oletko kehittämässä omaa palvelua tai tuotetta, jossa hyödynnät WS-kanavaa? Tarjoamme kilpailukykyiseen hintaan WS-Kanavan SaaS palveluna."
+            }
+          </p>
+
+          <p>
+            {
+              lang === "en"
+                ? "Our service uses AWS services including API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch and Lambda, and scales according to your needs."
+                : lang === "se"
+                  ? "Vår tjänst använder AWS-tjänster som API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch och Lambda, och skalar enligt dina behov."
+                  : "Palvelumme käyttää mm. AWS:n API Gateway, Dynamo DB, Cognito Your User Pool, KMS, IAM, CloudWatch ja Lambda palveluita ja skaalautuu tarpeidesi mukaan."
+            }
+          </p>
 
           <ul>
-          {lang === 'en' ? (
-            <>
-              <li>One and the same interface for all banks for sending and receiving files, managing credentials and certificates. Automatic certificate renewal.</li>
-              <li>Integrator-specific API key. Credentials within the same API key can share certificates with each other.</li>
-              <li>Registration includes separate "admin" and "data" credentials. Admin credential requires SMS code in addition to password for login. "Data" credential only requires password. Admin credential is used to manage PGP keys, certificate sharing between different credentials (optional), etc.</li>
-              <li>Option to require PGP-signed materials in file transmission</li>
-              <li>Excellent command-line tool for using the service ("wscli")</li>
-              <li>Certificate import and export functions, no vendor lock-in. The secret key corresponding to the certificate is exported only to the customer's PGP key. In the service, the secret key is encrypted with AWS KMS service.</li>
-              <li>Login uses public key RSA encryption and challenge-response method. API runs over SSL, although the login security itself is independent of it (MitM). "Admin" credential login requires a one-time SMS code (2FA).</li>
-            </>
-          ) : lang === 'se' ? (
-            <>
-              <li>Ett och samma gränssnitt för alla banker för att skicka och ta emot filer, hantera autentiseringsuppgifter och certifikat. Automatisk certifikatförnyelse.</li>
-              <li>Integratorspecifik API-nyckel. Autentiseringsuppgifter inom samma API-nyckel kan dela certifikat med varandra.</li>
-              <li>Registreringen inkluderar separata "admin"- och "data"-autentiseringsuppgifter. Admin-autentisering kräver SMS-kod utöver lösenord för inloggning. "Data"-autentisering kräver endast lösenord. Admin-autentisering används för att hantera PGP-nycklar, certifikatdelning mellan olika autentiseringsuppgifter (valfritt), etc.</li>
-              <li>Möjlighet att kräva PGP-signerat material vid filöverföring</li>
-              <li>Utmärkt kommandoradsverktyg för att använda tjänsten ("wscli")</li>
-              <li>Funktioner för import och export av certifikat, ingen leverantörslåsning. Den hemliga nyckeln som motsvarar certifikatet exporteras endast till kundens PGP-nyckel. I tjänsten är den hemliga nyckeln krypterad med AWS KMS-tjänsten.</li>
-              <li>Inloggningen använder publik nyckel RSA-kryptering och challenge-response-metod. API körs över SSL, även om inloggningssäkerheten i sig är oberoende av det (MitM). "Admin"-inloggning kräver en engångs-SMS-kod (2FA).</li>
-            </>
-          ) : (
-            <>
-              <li>Yksi ja sama rajapinta kaikille pankeille tiedostojen lähettämiseen ja vastaanottamiseen, tunnusten- ja sertifikaattien hallintaan. Sertifikaattien automaattinen uudistaminen.</li>
-              <li>Integraattorikohtainen API -avain. Tunnukset saman API -avaimen sisällä voivat jakaa sertifikaatteja toisilleen.</li>
-              <li>Rekisteröityminen sisältää erilliset "admin", että "data" -tunnukset. Admin -tunnus vaatii kirjautumisessa salasanan lisäksi SMS koodin. "data" -tunnus vain salasanan. Admin -tunnuksella hallinnoidaan mm. PGP avaimia, sertifikaattien jakoa eri tunnusten välillä (optio), jne.</li>
-              <li>Aineiston lähetyksessä mahdollisuus vaatia PGP -allekirjoitetut aineistot (optio)</li>
-              <li>Erinomainen komentorivityökalu palvelun käyttöön ("wscli")</li>
-              <li>Sertifikaattien import ja export -toiminnot, ei "vendor lock":ia. Sertifikaattia vastaava salainen avain exportataan vain asiakkaan PGP avaimelle. Palvelussa salainen avain on kryptattu AWS:n KMS palvelulla.</li>
-              <li>Kirjautuminen käyttää julkisen avaimen RSA kryptausta ja challenge-response metodia. API ajetaan SSL:n yli, vaikkakin itse kirjautumisen tietoturva on siitä riippumaton (MitM). "admin" -tunnuksen kirjautuminen vaatii kertakäyttöisen SMS koodin (2FA).</li>
-            </>
-          )}
-          {lang === 'en' ? (
-            <li>Enhanced <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK and client</a> for easy integration.</li>
-          ) : lang === 'se' ? (
-            <li>Förbättrad <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK och klient</a> för enkel integration.</li>
-          ) : (
-            <li>Paranneltu <a href="https://isecurefi.github.io/wscli-php/">WSCLI PHP SDK ja client</a> helppoa integroimista varten.</li>
-          )}
-          <li><a href="https://github.com/isecurefi/wscli-php">WSCLI SDK ja client - GitHub repository</a></li>
-          <li><a href="https://isecure.fi/wsapi_v2.json">{
-            lang === 'en' ? 'WSAPI OpenAPI API description in JSON format' :
-            lang === 'se' ? 'WSAPI OpenAPI API-beskrivning i JSON-format' :
-            'WSAPI OpenAPI API rajapintakuvaus JSON -muodossa'
-          }</a></li>
-          <li><a href="https://isecure.fi/wsapi_v2/index.html">{
-            lang === 'en' ? 'WSAPI v2 API Documentation' :
-            lang === 'se' ? 'WSAPI v2 API Dokumentation' :
-            'WSAPI v2 API Dokumentaatio'
-          }</a></li>
+            {
+              lang === "en" ? (
+                <>
+                  <li>
+                    One and the same interface for all banks for sending and
+                    receiving files, managing credentials and certificates.
+                    Automatic certificate renewal.
+                  </li>
+                  <li>
+                    Integrator-specific API key. Credentials within the same API
+                    key can share certificates with each other.
+                  </li>
+                  <li>
+                    Registration includes separate "admin" and "data"
+                    credentials. Admin credential requires SMS code in addition
+                    to password for login. "Data" credential only requires
+                    password. Admin credential is used to manage PGP keys,
+                    certificate sharing between different credentials
+                    (optional), etc.
+                  </li>
+                  <li>
+                    Option to require PGP-signed materials in file transmission
+                  </li>
+                  <li>
+                    Excellent command-line tool for using the service ("wscli")
+                  </li>
+                  <li>
+                    Certificate import and export functions, no vendor lock-in.
+                    The secret key corresponding to the certificate is exported
+                    only to the customer's PGP key. In the service, the secret
+                    key is encrypted with AWS KMS service.
+                  </li>
+                  <li>
+                    Login uses public key RSA encryption and challenge-response
+                    method. API runs over SSL, although the login security
+                    itself is independent of it (MitM). "Admin" credential login
+                    requires a one-time SMS code (2FA).
+                  </li>
+                </>
+              ) : lang === "se" ? (
+                <>
+                  <li>
+                    Ett och samma gränssnitt för alla banker för att skicka och
+                    ta emot filer, hantera autentiseringsuppgifter och
+                    certifikat. Automatisk certifikatförnyelse.
+                  </li>
+                  <li>
+                    Integratorspecifik API-nyckel. Autentiseringsuppgifter inom
+                    samma API-nyckel kan dela certifikat med varandra.
+                  </li>
+                  <li>
+                    Registreringen inkluderar separata "admin"- och
+                    "data"-autentiseringsuppgifter. Admin-autentisering kräver
+                    SMS-kod utöver lösenord för inloggning. "Data"-autentisering
+                    kräver endast lösenord. Admin-autentisering används för att
+                    hantera PGP-nycklar, certifikatdelning mellan olika
+                    autentiseringsuppgifter (valfritt), etc.
+                  </li>
+                  <li>
+                    Möjlighet att kräva PGP-signerat material vid filöverföring
+                  </li>
+                  <li>
+                    Utmärkt kommandoradsverktyg för att använda tjänsten
+                    ("wscli")
+                  </li>
+                  <li>
+                    Funktioner för import och export av certifikat, ingen
+                    leverantörslåsning. Den hemliga nyckeln som motsvarar
+                    certifikatet exporteras endast till kundens PGP-nyckel. I
+                    tjänsten är den hemliga nyckeln krypterad med AWS
+                    KMS-tjänsten.
+                  </li>
+                  <li>
+                    Inloggningen använder publik nyckel RSA-kryptering och
+                    challenge-response-metod. API körs över SSL, även om
+                    inloggningssäkerheten i sig är oberoende av det (MitM).
+                    "Admin"-inloggning kräver en engångs-SMS-kod (2FA).
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    Yksi ja sama rajapinta kaikille pankeille tiedostojen
+                    lähettämiseen ja vastaanottamiseen, tunnusten- ja
+                    sertifikaattien hallintaan. Sertifikaattien automaattinen
+                    uudistaminen.
+                  </li>
+                  <li>
+                    Integraattorikohtainen API -avain. Tunnukset saman API
+                    -avaimen sisällä voivat jakaa sertifikaatteja toisilleen.
+                  </li>
+                  <li>
+                    Rekisteröityminen sisältää erilliset "admin", että "data"
+                    -tunnukset. Admin -tunnus vaatii kirjautumisessa salasanan
+                    lisäksi SMS koodin. "data" -tunnus vain salasanan. Admin
+                    -tunnuksella hallinnoidaan mm. PGP avaimia, sertifikaattien
+                    jakoa eri tunnusten välillä (optio), jne.
+                  </li>
+                  <li>
+                    Aineiston lähetyksessä mahdollisuus vaatia PGP
+                    -allekirjoitetut aineistot (optio)
+                  </li>
+                  <li>
+                    Erinomainen komentorivityökalu palvelun käyttöön ("wscli")
+                  </li>
+                  <li>
+                    Sertifikaattien import ja export -toiminnot, ei "vendor
+                    lock":ia. Sertifikaattia vastaava salainen avain exportataan
+                    vain asiakkaan PGP avaimelle. Palvelussa salainen avain on
+                    kryptattu AWS:n KMS palvelulla.
+                  </li>
+                  <li>
+                    Kirjautuminen käyttää julkisen avaimen RSA kryptausta ja
+                    challenge-response metodia. API ajetaan SSL:n yli, vaikkakin
+                    itse kirjautumisen tietoturva on siitä riippumaton (MitM).
+                    "admin" -tunnuksen kirjautuminen vaatii kertakäyttöisen SMS
+                    koodin (2FA).
+                  </li>
+                </>
+              )
+            }
+            {
+              lang === "en" ? (
+                <li>
+                  Enhanced{" "}
+                  <a href="https://isecurefi.github.io/wscli-php/">
+                    WSCLI PHP SDK and client
+                  </a>{" "}
+                  for easy integration.
+                </li>
+              ) : lang === "se" ? (
+                <li>
+                  Förbättrad{" "}
+                  <a href="https://isecurefi.github.io/wscli-php/">
+                    WSCLI PHP SDK och klient
+                  </a>{" "}
+                  för enkel integration.
+                </li>
+              ) : (
+                <li>
+                  Paranneltu{" "}
+                  <a href="https://isecurefi.github.io/wscli-php/">
+                    WSCLI PHP SDK ja client
+                  </a>{" "}
+                  helppoa integroimista varten.
+                </li>
+              )
+            }
+            <li>
+              <a href="https://github.com/isecurefi/wscli-php"
+                >WSCLI SDK ja client - GitHub repository</a>
+            </li>
+            <li>
+              <a href="https://isecure.fi/wsapi_v2.json"
+                >{
+                  lang === "en"
+                    ? "WSAPI OpenAPI API description in JSON format"
+                    : lang === "se"
+                      ? "WSAPI OpenAPI API-beskrivning i JSON-format"
+                      : "WSAPI OpenAPI API rajapintakuvaus JSON -muodossa"
+                }</a>
+            </li>
+            <li>
+              <a href="https://isecure.fi/wsapi_v2/index.html"
+                >{
+                  lang === "en"
+                    ? "WSAPI v2 API Documentation"
+                    : lang === "se"
+                      ? "WSAPI v2 API Dokumentation"
+                      : "WSAPI v2 API Dokumentaatio"
+                }</a>
+            </li>
           </ul>
 
-          <p>{
-          lang === 'en' ? 'If you wish, we can help with integration and if needed, install the tools and handle the onboarding - we will register you and handle the certificate enrollment on your behalf.' :
-          lang === 'se' ? 'Om du vill kan vi hjälpa till med integrationen och vid behov installera verktygen och hantera onboarding - vi registrerar dig och hanterar certifikatregistreringen åt dig.' :
-          'Halutessasi autamme integroinnissa ja tarvittaessa asennamme teille työkalut ja hoidamme boardauksen - rekisteröimme sinut ja hoidamme sertifikaattien enrollauksen puolestasi.'
-          }</p>
+          <p>
+            {
+              lang === "en"
+                ? "If you wish, we can help with integration and if needed, install the tools and handle the onboarding - we will register you and handle the certificate enrollment on your behalf."
+                : lang === "se"
+                  ? "Om du vill kan vi hjälpa till med integrationen och vid behov installera verktygen och hantera onboarding - vi registrerar dig och hanterar certifikatregistreringen åt dig."
+                  : "Halutessasi autamme integroinnissa ja tarvittaessa asennamme teille työkalut ja hoidamme boardauksen - rekisteröimme sinut ja hoidamme sertifikaattien enrollauksen puolestasi."
+            }
+          </p>
         </div>
       </div>
     </div>
 
-    <h3>{getText('webService.banks', lang)}</h3>
+    <h3>{getText("webService.banks", lang)}</h3>
     <BankLogos />
   </div>
 </Layout>

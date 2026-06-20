@@ -1,45 +1,86 @@
 ---
-import { getText } from '../store/translations';
-import type { Lang } from '../types';
-import LanguageSwitcher from './LanguageSwitcher.astro';
-import { getLocalizedPathname } from '../utils/languages';
+import { getText } from "../store/translations";
+import type { Lang } from "../types";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
+const themeLabels = {
+  fi: { label: "Teema", dark: "Tumma teema", light: "Vaalea teema" },
+  en: { label: "Theme", dark: "Dark theme", light: "Light theme" },
+  se: { label: "Tema", dark: "Mörkt tema", light: "Ljust tema" },
+};
 
+const landingBase = lang === "fi" ? "/" : `/${lang}/`;
 const navItems = [
-  { href: '/index.html', text: getText('nav.home', lang) },
-  { href: lang === 'fi' ? '/ws-channel/index.html' : `/${lang}/ws-channel/index.html`, text: getText('nav.wsChannel', lang) },
-  { href: '/ws-api/index.html', text: getText('nav.api', lang) },
-  { href: '#contact', text: getText('nav.contact', lang) }
-].map(item => ({
-  ...item,
-  href: item.href.startsWith('#') 
-    ? item.href 
-    : lang === 'fi' 
-      ? item.href
-      : getLocalizedPathname(item.href, lang)
-}));
+  { href: landingBase, text: getText("nav.home", lang) },
+  { href: `${landingBase}#api`, text: getText("nav.api", lang) },
+  { href: `${landingBase}#sdks`, text: getText("nav.sdk", lang) },
+  { href: `${landingBase}#banks`, text: getText("nav.banks", lang) },
+  { href: `${landingBase}#contact`, text: getText("nav.contact", lang) },
+];
 ---
-<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm" role="navigation">
+
+<nav
+  class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm"
+  role="navigation"
+>
   <div class="container">
-    <a class="navbar-brand" href="/">
-      <img src="/images/isecure-small-logo.png" style="height:40px" alt="iSecure">
+    <a class="navbar-brand" href={landingBase}>
+      <img
+        src="/images/isecure-small-logo.png"
+        width="161"
+        height="61"
+        alt="iSecure"
+        decoding="async"
+      />
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="nav navbar-nav navbar-right me-auto">
-        {navItems.map(item => (
-          <li class="nav-item">
-            <a class="nav-link" href={item.href}>{item.text}</a>
-          </li>
-        ))}
+        {
+          navItems.map((item) => (
+            <li class="nav-item">
+              <a class="nav-link" href={item.href}>
+                {item.text}
+              </a>
+            </li>
+          ))
+        }
       </ul>
+      <div class="site-theme-toggle" aria-label={themeLabels[lang].label}>
+        <button
+          type="button"
+          data-theme-choice="dark"
+          aria-pressed="true"
+          aria-label={themeLabels[lang].dark}
+          title={themeLabels[lang].dark}
+        >
+          <span aria-hidden="true">☾</span>
+        </button>
+        <button
+          type="button"
+          data-theme-choice="light"
+          aria-pressed="false"
+          aria-label={themeLabels[lang].light}
+          title={themeLabels[lang].light}
+        >
+          <span aria-hidden="true">☼</span>
+        </button>
+      </div>
       <LanguageSwitcher currentLang={lang} />
     </div>
   </div>

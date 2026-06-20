@@ -1,0 +1,259 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { Lang } from "../types";
+import BankingApiLanding from "./BankingApiLanding.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const meta = {
+  fi: {
+    title: "Pankki API ja SDK:t",
+    description:
+      "ISECure Banking API ja SDK:t yhdistävät ohjelmistotuotteesi suomalaisiin pankkeihin WS-kanavan kautta. REST API, OpenAPI, TypeScript SDK, Python SDK ja PHP SDK pankkiaineistoille.",
+    keywords:
+      "pankki API, banking API, TypeScript SDK, Python SDK, PHP SDK, WS-Kanava API, pankki-integraatio, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
+    breadcrumb: "Pankki API ja SDK:t",
+    faqSdk:
+      "ISECure sisältää PHP SDK:n, TypeScript SDK:n, Python SDK:n ja wscli-työkalun REST API:n rinnalle.",
+    faqTest:
+      "Voit aloittaa testirajapinnalla ja OpenAPI-dokumentaatiolla. Tuotantokäyttöön tarvitaan pankin yritysasiakassopimus, tunnukset ja varmenteet.",
+  },
+  en: {
+    title: "Banking API and SDKs",
+    description:
+      "ISECure Banking API and SDKs connect your software product to Finnish banks through the WS-channel. REST API, OpenAPI, TypeScript SDK, Python SDK, and PHP SDK for bank files.",
+    keywords:
+      "banking API, TypeScript SDK, Python SDK, PHP SDK, WS-Channel API, bank integration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
+    breadcrumb: "Banking API and SDKs",
+    faqSdk:
+      "ISECure includes PHP SDK, TypeScript SDK, Python SDK, and wscli tooling alongside the REST API.",
+    faqTest:
+      "You can start with the test API and OpenAPI documentation. Production use still requires the bank's corporate agreement, credentials, and certificates.",
+  },
+  se: {
+    title: "Bank API och SDK:er",
+    description:
+      "ISECure Banking API och SDK:er kopplar din mjukvaruprodukt till finländska banker via WS-kanalen. REST API, OpenAPI, TypeScript SDK, Python SDK och PHP SDK för bankfiler.",
+    keywords:
+      "bank API, TypeScript SDK, Python SDK, PHP SDK, WS-Kanal API, bankintegration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
+    breadcrumb: "Bank API och SDK:er",
+    faqSdk:
+      "ISECure innehåller PHP SDK, TypeScript SDK, Python SDK och wscli-verktyg bredvid REST API:t.",
+    faqTest:
+      "Ni kan börja med test-API:t och OpenAPI-dokumentationen. Produktion kräver fortfarande bankens företagsavtal, konton och certifikat.",
+  },
+};
+
+const pageMeta = meta[lang];
+const structuredFaqs = {
+  fi: [
+    {
+      q: "Mitä ISECuren testaukseen ja tuotantoon siirtymiseen tarvitaan?",
+      a: "Testauksen voi aloittaa testiympäristöllä, OpenAPI-kuvauksella ja SDK:lla. Tuotantoon tarvitaan pankin yritysasiakassopimus, pankin tunnukset ja varmenteet; ISECure hoitaa teknisen rajapinnan, varmenneprosessin ja käyttöönoton.",
+    },
+    {
+      q: "Mitä pankkiaineistojen tiedostotyyppejä ISECure tukee?",
+      a: "ISECure ei suodata tai prosessoi pankkiaineistoja aineistotyypin perusteella. Sama malli tukee pankin sallimia aineistoja, kuten pain.001-maksuja, camt.053-tiliotteita ja muita pankkikohtaisia WS-kanavan tiedostotyyppejä.",
+    },
+    {
+      q: "Sisältääkö ISECure TypeScript-, Python- ja PHP-clientit?",
+      a: "ISECure sisältää PHP SDK:n, TypeScript SDK:n, Python SDK:n ja wscli-työkalun REST API:n rinnalle.",
+    },
+    {
+      q: "Kuinka ISECure hoitaa varmenteiden uusinnan?",
+      a: "ISECure hoitaa PKI-varmenteiden elinkaaren, uusinnat ja KMS-salatun säilytyksen PCI DSS -tason järjestelmässä.",
+    },
+    {
+      q: "Missä ISECuren data ja avaimet sijaitsevat?",
+      a: "Palvelu toimii AWS-ympäristössä PCI DSS -sertifioiduilla komponenteilla. Avaimet säilytetään KMS-salattuina, ja pankkiyhteys toimii erillisenä hosted-palveluna asiakkaan ohjelmistotiimistä.",
+    },
+  ],
+  en: [
+    {
+      q: "What do we need for ISECure testing and production?",
+      a: "You can start with the test environment, OpenAPI description, and SDKs. Production still requires the bank's corporate agreement, bank credentials, and certificates; ISECure handles the technical API, certificate process, and onboarding.",
+    },
+    {
+      q: "Which bank file types does ISECure support?",
+      a: "ISECure does not filter or process bank files by file type. The same model supports material allowed by the bank, including pain.001 payments, camt.053 statements, and other bank-specific WS-channel file types.",
+    },
+    {
+      q: "Does ISECure include TypeScript, Python, and PHP clients?",
+      a: "ISECure includes PHP SDK, TypeScript SDK, Python SDK, and wscli tooling alongside the REST API.",
+    },
+    {
+      q: "How does ISECure handle certificate renewal?",
+      a: "ISECure handles the PKI certificate lifecycle, renewals, and KMS-encrypted storage in a PCI DSS level system.",
+    },
+    {
+      q: "Where are ISECure data and keys hosted?",
+      a: "The service runs on AWS with PCI DSS certified components. Keys are stored with KMS encryption, and the bank connection runs as a separate hosted service from the customer software team.",
+    },
+  ],
+  se: [
+    {
+      q: "Vad behövs för ISECure-testning och produktion?",
+      a: "Ni kan börja med testmiljön, OpenAPI-beskrivningen och SDK:erna. Produktion kräver fortfarande bankens företagsavtal, bankkonton och certifikat; ISECure hanterar det tekniska API:t, certifikatprocessen och onboardingen.",
+    },
+    {
+      q: "Vilka bankfiltyper stöder ISECure?",
+      a: "ISECure filtrerar eller bearbetar inte bankfiler enligt filtyp. Samma modell stöder det material banken tillåter, inklusive pain.001-betalningar, camt.053-kontoutdrag och andra bankspecifika WS-kanalens filtyper.",
+    },
+    {
+      q: "Innehåller ISECure TypeScript-, Python- och PHP-klienter?",
+      a: "ISECure innehåller PHP SDK, TypeScript SDK, Python SDK och wscli-verktyg bredvid REST API:t.",
+    },
+    {
+      q: "Hur hanterar ISECure certifikatförnyelser?",
+      a: "ISECure hanterar PKI-certifikatens livscykel, förnyelser och KMS-krypterad lagring i ett system på PCI DSS-nivå.",
+    },
+    {
+      q: "Var finns ISECures data och nycklar?",
+      a: "Tjänsten körs på AWS med PCI DSS-certifierade komponenter. Nycklar lagras med KMS-kryptering och bankförbindelsen körs som en separat hosted-tjänst från kundens mjukvaruteam.",
+    },
+  ],
+}[lang];
+const canonicalByLang = {
+  fi: "https://www.isecure.fi/",
+  en: "https://www.isecure.fi/en/",
+  se: "https://www.isecure.fi/se/",
+};
+const alternateLinks = [
+  { hreflang: "fi", href: canonicalByLang.fi },
+  { hreflang: "en", href: canonicalByLang.en },
+  { hreflang: "sv", href: canonicalByLang.se },
+  { hreflang: "x-default", href: canonicalByLang.fi },
+];
+const pageUrl = canonicalByLang[lang];
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.isecure.fi/#organization",
+      name: "ISECure Oy",
+      url: "https://www.isecure.fi",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.isecure.fi/images/isecure-small-logo.png",
+        width: 161,
+        height: 61,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "FI",
+        addressLocality: "Helsinki",
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: "dan.forsberg@isecure.fi",
+        telephone: "+358404835507",
+        availableLanguage: ["Finnish", "English", "Swedish"],
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.isecure.fi/#website",
+      url: "https://www.isecure.fi",
+      name: "ISECure",
+      publisher: {
+        "@id": "https://www.isecure.fi/#organization",
+      },
+      inLanguage: lang === "fi" ? "fi-FI" : lang === "en" ? "en-US" : "sv-SE",
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${pageUrl}#webpage`,
+      url: pageUrl,
+      name: pageMeta.title,
+      description: pageMeta.description,
+      inLanguage: lang === "fi" ? "fi-FI" : lang === "en" ? "en-US" : "sv-SE",
+      isPartOf: {
+        "@id": "https://www.isecure.fi/#website",
+      },
+      about: {
+        "@id": "https://www.isecure.fi/#banking-api",
+      },
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.isecure.fi/#banking-api",
+      name: "ISECure Banking API and SDKs",
+      url: pageUrl,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Cloud",
+      description: pageMeta.description,
+      provider: {
+        "@id": "https://www.isecure.fi/#organization",
+      },
+      featureList: [
+        "REST API for bank files",
+        "Test API access for developer evaluation",
+        "TypeScript SDK",
+        "Python SDK",
+        "PHP SDK",
+        "OpenAPI documentation",
+        "PKI certificate lifecycle management",
+        "AWS KMS encrypted private key storage",
+        "PCI DSS level system",
+        "PGP-signed file material support",
+        "Hosted separation from customer software teams",
+        "Optional SFTP and S3 bank file synchronization",
+      ],
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "EUR",
+        category: "Bank integration API",
+        availability: "https://schema.org/InStock",
+      },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: structuredFaqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.a,
+          },
+        })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "ISECure",
+          item: "https://www.isecure.fi/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: pageMeta.breadcrumb,
+          item: pageUrl,
+        },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title={pageMeta.title}
+  lang={lang}
+  description={pageMeta.description}
+  keywords={pageMeta.keywords}
+  structuredData={structuredData}
+  canonicalUrl={pageUrl}
+  alternateLinks={alternateLinks}
+  bodyClass="banking-theme-page"
+  fullWidth
+>
+  <BankingApiLanding lang={lang} />
+</Layout>

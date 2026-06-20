@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 180" role="img" aria-labelledby="title desc">
+  <title id="title">ISECure logo candidate 4</title>
+  <desc id="desc">Compact certificate seal wordmark.</desc>
+  <rect width="640" height="180" fill="#ffffff"/>
+  <g transform="translate(42 35)">
+    <path d="M58 0 108 28v36c0 32-20 55-50 66C28 119 8 96 8 64V28L58 0Z" fill="#111827"/>
+    <path d="M40 64 54 78 82 48" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M108 28v38c0 26-12 46-32 58" fill="none" stroke="#d71920" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="28" cy="18" r="8" fill="#44b549"/>
+  </g>
+  <text x="190" y="111" fill="#111827" font-family="Inter, Arial, Helvetica, sans-serif" font-size="70" font-weight="800">ISE</text>
+  <text x="312" y="111" fill="#d71920" font-family="Inter, Arial, Helvetica, sans-serif" font-size="70" font-weight="800">Cure</text>
+</svg>

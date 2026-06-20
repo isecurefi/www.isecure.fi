@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 180" role="img" aria-labelledby="title desc">
+  <title id="title">ISECure logo candidate 5</title>
+  <desc id="desc">Modern gateway monogram with ISECure wordmark.</desc>
+  <rect width="640" height="180" fill="#ffffff"/>
+  <g transform="translate(42 40)" fill="none" stroke-linecap="round">
+    <path d="M8 16h78c24 0 36 14 36 34s-12 34-36 34H8" stroke="#111827" stroke-width="14"/>
+    <path d="M42 50h82" stroke="#d71920" stroke-width="14"/>
+    <path d="M8 84h72" stroke="#111827" stroke-width="14"/>
+    <circle cx="16" cy="16" r="8" fill="#44b549" stroke="none"/>
+  </g>
+  <text x="190" y="111" fill="#111827" font-family="Inter, Arial, Helvetica, sans-serif" font-size="70" font-weight="800" letter-spacing="-1">ISE</text>
+  <text x="312" y="111" fill="#d71920" font-family="Inter, Arial, Helvetica, sans-serif" font-size="70" font-weight="800" letter-spacing="-1">Cure</text>
+</svg>

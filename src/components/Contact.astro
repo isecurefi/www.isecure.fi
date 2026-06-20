@@ -8,121 +8,186 @@ interface Props {
 }
 
 const { lang = "fi" } = Astro.props;
+const copy = {
+  fi: {
+    profileLabel: "Yhteyshenkilö",
+    direct: "Suora yhteys",
+    lead: "Kerro lyhyesti pankkiyhteys-, API- tai tietoturvatarpeesta. Vastaamme henkilökohtaisesti.",
+    founder: "Perustaja",
+    location: "Helsinki, Suomi",
+    businessId: "Y-tunnus",
+    certifications: "AWS-sertifioitu asiantuntijuus",
+    formEyebrow: "Viestisi",
+    formTitle: "Miten voimme auttaa?",
+    namePlaceholder: "Etunimi ja sukunimi",
+    emailPlaceholder: "nimi@yritys.fi",
+    messagePlaceholder:
+      "Kerro tavoitteesta, aikataulusta ja tarvittavista pankkiyhteyksistä.",
+  },
+  en: {
+    profileLabel: "Contact person",
+    direct: "Direct contact",
+    lead: "Tell us briefly about your bank connectivity, API, or security need. We respond personally.",
+    founder: "Founder",
+    location: "Helsinki, Finland",
+    businessId: "Business ID",
+    certifications: "AWS-certified expertise",
+    formEyebrow: "Your message",
+    formTitle: "How can we help?",
+    namePlaceholder: "First and last name",
+    emailPlaceholder: "name@company.com",
+    messagePlaceholder:
+      "Describe the goal, timeline, and bank connections you need.",
+  },
+  se: {
+    profileLabel: "Kontaktperson",
+    direct: "Direkt kontakt",
+    lead: "Berätta kort om behovet inom bankförbindelser, API eller säkerhet. Vi svarar personligen.",
+    founder: "Grundare",
+    location: "Helsingfors, Finland",
+    businessId: "FO-nummer",
+    certifications: "AWS-certifierad expertis",
+    formEyebrow: "Ditt meddelande",
+    formTitle: "Hur kan vi hjälpa?",
+    namePlaceholder: "För- och efternamn",
+    emailPlaceholder: "namn@foretag.fi",
+    messagePlaceholder:
+      "Beskriv målet, tidtabellen och bankförbindelserna ni behöver.",
+  },
+}[lang];
 ---
 
-<div class="container contact-section" id="contact">
-  <div class="row">
-    <div class="col-md-3 col-sm-3 col-xs-12">
-      <img src="/images/dforsber.png" class="facepalm" alt="Dan Forsberg" /><br />
-      Founder Dan Forsberg, D.Sc.<br />
-      dan.forsberg@isecure.fi<br />
-      <br />
-      <div class="aws-certifications">
-        <img src="/images/AWS_SAP.png" class="awslogos" alt="AWS SAP" />
-        <img src="/images/AWS_DOP.png" class="awslogos" alt="AWS DOP" />
-        <img src="/images/AWS_SS.png" class="awslogos" alt="AWS SS" />
-        <img src="/images/AWS_BD.png" class="awslogos" alt="AWS BD" />
-        <img src="/images/AWS_NS.png" class="awslogos" alt="AWS NS" />
-        <img src="/images/AWS_DA.png" class="awslogos" alt="AWS DA" />
-        <img src="/images/AWS_SAA.png" class="awslogos" alt="AWS SAA" />
-        <img src="/images/AWS_SOA.png" class="awslogos" alt="AWS SOA" />
-        <img src="/images/AWS_CP.png" class="awslogos" alt="AWS CP" />
+<section
+  class="container contact-section"
+  id="contact"
+  aria-labelledby="contact-title"
+>
+  <div class="contact-layout">
+    <aside class="contact-profile" aria-label={copy.profileLabel}>
+      <div class="contact-person">
+        <img src="/images/dforsber.png" class="facepalm" alt="Dan Forsberg" />
+        <div>
+          <p class="contact-kicker">{copy.direct}</p>
+          <h2 id="contact-title">{getText("contactForm.title", lang)}</h2>
+          <p class="contact-lead">{copy.lead}</p>
+        </div>
       </div>
-      <br />
-      <br />
-      +358 40 483 5507 (Helsinki/Finland)<br />
-      <br />
-      FI22963369<br /><br />
-    </div>
-    <div class="col-md-9 col-sm-9 col-xs-12">
-      <p>{getText("contactForm.title", lang)}</p>
-      <div class="contact-form">
-        <div class="form-group">
-          <input
-            type="text"
-            id="name"
-            placeholder={getText("contactForm.name", lang)}
-            aria-label={getText("contactForm.name", lang)}
-            required
-            minlength="2"
-            maxlength="50"
-            pattern="[\p{L}][\p{L} -]{1,48}[\p{L}]"
-          />
-          <div class="invalid-feedback">{getText("contactForm.validation.nameRequired", lang)}</div>
+
+      <dl class="contact-details">
+        <div>
+          <dt>{copy.founder}</dt>
+          <dd>Dan Forsberg, D.Sc.</dd>
         </div>
-        <div class="form-group">
-          <input
-            type="email"
-            id="email"
-            placeholder={getText("contactForm.email", lang)}
-            aria-label={getText("contactForm.email", lang)}
-            required
-            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-          />
-          <div class="invalid-feedback">{getText("contactForm.validation.emailInvalid", lang)}</div>
+        <div>
+          <dt>Email</dt>
+          <dd>
+            <a href="mailto:dan.forsberg@isecure.fi">dan.forsberg@isecure.fi</a>
+          </dd>
         </div>
+        <div>
+          <dt>Phone</dt>
+          <dd><a href="tel:+358404835507">+358 40 483 5507</a></dd>
+        </div>
+        <div>
+          <dt>{copy.location}</dt>
+          <dd>{copy.businessId} FI22963369</dd>
+        </div>
+      </dl>
+
+      <div class="aws-certifications" aria-label={copy.certifications}>
+        <span>{copy.certifications}</span>
+        <div class="aws-certification-grid">
+          <img src="/images/AWS_SAP.png" class="awslogos" alt="AWS SAP" />
+          <img src="/images/AWS_DOP.png" class="awslogos" alt="AWS DOP" />
+          <img src="/images/AWS_SS.png" class="awslogos" alt="AWS SS" />
+          <img src="/images/AWS_BD.png" class="awslogos" alt="AWS BD" />
+          <img src="/images/AWS_NS.png" class="awslogos" alt="AWS NS" />
+          <img src="/images/AWS_DA.png" class="awslogos" alt="AWS DA" />
+          <img src="/images/AWS_SAA.png" class="awslogos" alt="AWS SAA" />
+          <img src="/images/AWS_SOA.png" class="awslogos" alt="AWS SOA" />
+          <img src="/images/AWS_CP.png" class="awslogos" alt="AWS CP" />
+        </div>
+      </div>
+    </aside>
+
+    <div class="contact-panel">
+      <div class="contact-panel-heading">
+        <p class="contact-kicker">{copy.formEyebrow}</p>
+        <h3>{copy.formTitle}</h3>
+      </div>
+
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="contact-field-grid">
+          <div class="form-group">
+            <label for="name">{getText("contactForm.name", lang)}</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder={copy.namePlaceholder}
+              aria-describedby="name-feedback"
+              autocomplete="name"
+              required
+              minlength="2"
+              maxlength="50"
+            />
+            <div class="invalid-feedback" id="name-feedback">
+              {getText("contactForm.validation.nameRequired", lang)}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">{getText("contactForm.email", lang)}</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder={copy.emailPlaceholder}
+              aria-describedby="email-feedback"
+              autocomplete="email"
+              required
+            />
+            <div class="invalid-feedback" id="email-feedback">
+              {getText("contactForm.validation.emailInvalid", lang)}
+            </div>
+          </div>
+        </div>
+
         <div class="form-group">
+          <label for="message">{getText("contactForm.message", lang)}</label>
           <textarea
             id="message"
-            rows="5"
-            placeholder={getText("contactForm.message", lang)}
-            aria-label={getText("contactForm.message", lang)}
+            name="message"
+            rows="6"
+            placeholder={copy.messagePlaceholder}
+            aria-describedby="message-feedback"
             required
             minlength="10"
             maxlength="1000"></textarea>
-          <div class="invalid-feedback">{getText("contactForm.validation.messageLength", lang)}</div>
-        </div>
-        <button class="btn btn-primary" id="sendButton" type="submit">
-          <span class="button-text">{getText("contactForm.send", lang)}</span>
-          <div class="spinner-border spinner-border-sm d-none" role="status">
-            <span class="visually-hidden">{getText("contactForm.sending", lang)}</span>
+          <div class="invalid-feedback" id="message-feedback">
+            {getText("contactForm.validation.messageLength", lang)}
           </div>
-        </button>
-        <div id="result" role="alert"></div>
-      </div>
+        </div>
+
+        <div class="contact-actions">
+          <button
+            class="btn btn-primary contact-submit"
+            id="sendButton"
+            type="submit"
+          >
+            <span class="button-text">{getText("contactForm.send", lang)}</span>
+            <div class="spinner-border spinner-border-sm d-none" role="status">
+              <span class="visually-hidden"
+                >{getText("contactForm.sending", lang)}</span
+              >
+            </div>
+          </button>
+          <div id="result" role="status" aria-live="polite"></div>
+        </div>
+      </form>
     </div>
   </div>
-</div>
-
-<script is:inline>
-  function validateInput(input) {
-    if (!input) {
-      return false;
-    }
-    input.classList.remove("is-invalid", "is-valid");
-
-    const value = input.value.trim();
-
-    // Don't show validation on empty fields until form submission
-    if (!value && !input.dataset.attempted) {
-      return false;
-    }
-
-    let isValid = input.checkValidity();
-
-    // Additional validation for message length
-    if (input.id === "message" && value.length < 10) {
-      isValid = false;
-    }
-
-    input.classList.add(isValid ? "is-valid" : "is-invalid");
-    return isValid;
-  }
-
-  // Add blur event listeners to all form fields
-  document.addEventListener("DOMContentLoaded", () => {
-    const formFields = ["name", "email", "message"];
-    formFields.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) {
-        element.addEventListener("blur", () => {
-          element.dataset.attempted = "true";
-          validateInput(element);
-        });
-      }
-    });
-  });
-</script>
+</section>
 
 <script>
   import { getText } from "../store/translations";
@@ -130,42 +195,14 @@ const { lang = "fi" } = Astro.props;
 
   // Get the current language from the URL
   const pathSegments = window.location.pathname.split("/");
-  const lang = pathSegments[1] && ["fi", "en", "se"].includes(pathSegments[1]) ? (pathSegments[1] as Lang) : "fi";
+  const lang =
+    pathSegments[1] && ["fi", "en", "se"].includes(pathSegments[1])
+      ? (pathSegments[1] as Lang)
+      : "fi";
 
-  interface AWSCredentials {
-    IdentityPoolId: string;
-  }
-
-  interface SNSParams {
-    Message: string;
-    Subject: string;
-  }
-
-  interface SNSCallback {
-    (err: Error | null, data?: Record<string, unknown>): void;
-  }
-
-  interface AWSConfig {
-    region: string;
-    credentials: AWSCredentials;
-  }
-
-  interface AWSConstructors {
-    config: AWSConfig;
-    CognitoIdentityCredentials: new (params: { IdentityPoolId: string }) => AWSCredentials;
-    SNS: new (params: { params: { TopicArn: string } }) => {
-      publish: (params: SNSParams, callback: SNSCallback) => void;
-    };
-    [key: string]: any;
-  }
-
-  declare global {
-    interface Window {
-      AWS: AWSConstructors;
-    }
-  }
-
-  function validateInput(input: HTMLInputElement | HTMLTextAreaElement): boolean {
+  function validateInput(
+    input: HTMLInputElement | HTMLTextAreaElement,
+  ): boolean {
     if (!input) {
       return false;
     }
@@ -179,6 +216,10 @@ const { lang = "fi" } = Astro.props;
     }
 
     let isValid = input.checkValidity();
+
+    if (input.id === "name") {
+      isValid = /^[\p{L}][\p{L} .'-]{0,48}\p{L}$/u.test(value);
+    }
 
     // Additional validation for message length
     if (input.id === "message" && value.length < 10) {
@@ -213,7 +254,11 @@ const { lang = "fi" } = Astro.props;
   });
 
   function validateForm(): boolean {
-    if (!document.getElementById("name") || !document.getElementById("email") || !document.getElementById("message")) {
+    if (
+      !document.getElementById("name") ||
+      !document.getElementById("email") ||
+      !document.getElementById("message")
+    ) {
       return false;
     }
     const inputs = [
@@ -222,7 +267,12 @@ const { lang = "fi" } = Astro.props;
       document.getElementById("message") as HTMLTextAreaElement,
     ];
 
-    return inputs.every((input) => validateInput(input));
+    return inputs
+      .map((input) => {
+        input.dataset.attempted = "true";
+        return validateInput(input);
+      })
+      .every(Boolean);
   }
 
   // Clear validation state on input
@@ -231,69 +281,91 @@ const { lang = "fi" } = Astro.props;
     if (element) {
       element.addEventListener("input", () => {
         element.classList.remove("is-invalid", "is-valid");
+        const result = document.getElementById("result");
+        if (result) {
+          result.className = "";
+          result.textContent = "";
+        }
       });
     }
   });
 
-  document.getElementById("sendButton")?.addEventListener("click", async () => {
-    if (!validateForm()) {
-      return;
-    }
-    const msg = (document.getElementById("message") as HTMLTextAreaElement)?.value.trim();
-    const name = (document.getElementById("name") as HTMLInputElement)?.value.trim();
-    const email = (document.getElementById("email") as HTMLInputElement)?.value.trim();
-    const result = document.getElementById("result");
+  document
+    .getElementById("contactForm")
+    ?.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-    const button = document.getElementById("sendButton");
-    const spinner = button?.querySelector(".spinner-border");
-    const buttonText = button?.querySelector(".button-text");
-
-    if (!msg || !name || !email) {
-      if (result) {
-        result.className = "error";
-        result.innerHTML = `<b>${getText("contactForm.validation.required", lang as Lang)}</b>`;
+      if (!validateForm()) {
+        return;
       }
-      return;
-    }
+      const msg = (
+        document.getElementById("message") as HTMLTextAreaElement
+      )?.value.trim();
+      const name = (
+        document.getElementById("name") as HTMLInputElement
+      )?.value.trim();
+      const email = (
+        document.getElementById("email") as HTMLInputElement
+      )?.value.trim();
+      const result = document.getElementById("result");
 
-    // Disable button and show spinner
-    if (button) button.disabled = true;
-    if (spinner) spinner.classList.remove("d-none");
-    if (buttonText) buttonText.style.display = "none";
+      const button = document.getElementById("sendButton");
+      const spinner = button?.querySelector(".spinner-border");
+      const buttonText = button?.querySelector(".button-text");
 
-    if (result) {
-      result.className = "";
-      result.innerHTML = `<b>${getText("contactForm.sending", lang as Lang)}</b>`;
-    }
+      if (!msg || !name || !email) {
+        if (result) {
+          result.className = "error";
+          result.textContent = getText(
+            "contactForm.validation.required",
+            lang as Lang,
+          );
+        }
+        return;
+      }
 
-    try {
-      const command = new PublishCommand({
-        Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
-        Subject: `ISECure ${lang === "en" ? "WS-Channel" : lang === "se" ? "WS-Kanal" : "WS-Kanava"} contact: ${name} <${email}>`,
-        TopicArn: "arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail",
-      });
-
-      const data = await snsClient.send(command);
+      // Disable button and show spinner
+      if (button) button.disabled = true;
+      if (spinner) spinner.classList.remove("d-none");
+      if (buttonText) buttonText.style.display = "none";
 
       if (result) {
-        result.className = "success";
-        result.innerHTML = `<b>${getText("contactForm.success", lang as Lang)}</b>`;
+        result.className = "";
+        result.textContent = getText("contactForm.sending", lang as Lang);
       }
-      console.log("Message sent successfully:", data);
-      setTimeout(() => {
-        window.location.href = lang === "fi" ? "/thankyou/index.html" : `/${lang}/thankyou/index.html`;
-      }, 1500);
-    } catch (err) {
-      console.error("Error sending message:", err);
-      if (result) {
-        result.className = "error";
-        result.innerHTML = `<b>${getText("contactForm.error", lang as Lang)}</b>`;
+
+      try {
+        const command = new PublishCommand({
+          Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
+          Subject: `ISECure ${lang === "en" ? "WS-Channel" : lang === "se" ? "WS-Kanal" : "WS-Kanava"} contact: ${name} <${email}>`,
+          TopicArn:
+            "arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail",
+        });
+
+        const data = await snsClient.send(command);
+
+        if (result) {
+          result.className = "success";
+          result.textContent = getText("contactForm.success", lang as Lang);
+        }
+        console.log("Message sent successfully:", data);
+        setTimeout(() => {
+          window.location.href =
+            lang === "fi"
+              ? "/thankyou/index.html"
+              : `/${lang}/thankyou/index.html`;
+        }, 1500);
+      } catch (err) {
+        console.error("Error sending message:", err);
+        if (result) {
+          result.className = "error";
+          result.textContent = getText("contactForm.error", lang as Lang);
+        }
+      } finally {
+        // Re-enable button and hide spinner
+        if (button) button.disabled = false;
+        if (spinner) spinner.classList.add("d-none");
+        if (buttonText) buttonText.style.display = "inline";
       }
-    } finally {
-      // Re-enable button and hide spinner
-      if (button) button.disabled = false;
-      if (spinner) spinner.classList.add("d-none");
-      if (buttonText) buttonText.style.display = "inline";
-    }
-  });
+    });
 </script>

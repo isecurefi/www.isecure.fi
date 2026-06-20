@@ -49,16 +49,77 @@ body {
   overscroll-behavior: none;
 }
 
+html.banking-theme-root {
+  background: #071116;
+  height: auto;
+  overflow: auto;
+}
+
+html.banking-theme-root[data-isecure-theme="light"] {
+  background: #ffffff;
+}
+
+html.banking-theme-root body.banking-theme-page {
+  background: #071116;
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+  overscroll-behavior: auto;
+}
+
+html.banking-theme-root body.banking-theme-page[data-isecure-theme="light"] {
+  background: #ffffff;
+}
+
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
+.main-content--wide {
+  max-width: none;
+  padding: 0;
+}
+
 .navbar {
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
   z-index: 1030;
+}
+
+.site-theme-toggle {
+  display: none;
+}
+
+html.banking-theme-root body.banking-theme-page .navbar {
+  background: var(--landing-bg) !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+html.banking-theme-root body.banking-theme-page .contact-section {
+  --contact-bg: var(--landing-card);
+  --contact-panel: var(--landing-soft);
+  --contact-panel-strong: var(--landing-card-strong);
+  --contact-ink: var(--landing-ink);
+  --contact-muted: var(--landing-muted);
+  --contact-line: var(--landing-line);
+  --contact-input: var(--landing-bg);
+  --contact-accent: var(--landing-primary-bg);
+  --contact-accent-ink: var(--landing-primary-ink);
+  --contact-badge-bg: rgba(255, 255, 255, 0.04);
+  background: var(--landing-card) !important;
+  border: 1px solid var(--landing-line);
+  box-shadow: none;
+  color: var(--landing-ink) !important;
+}
+
+html.banking-theme-root body.banking-theme-page .footer {
+  background: var(--landing-card) !important;
+  border-top: 0;
+  box-shadow: none;
+  color: var(--landing-muted);
 }
 
 .footer {

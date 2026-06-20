@@ -1,26 +1,37 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getText } from '../store/translations';
-import BankLogos from '../components/BankLogos.astro';
+import Layout from "../layouts/Layout.astro";
+import { getText } from "../store/translations";
+import BankLogos from "../components/BankLogos.astro";
 
 const lang = "fi";
+const landingCanonical = "https://www.isecure.fi/";
 ---
-<Layout title={`${getText('webService.wsChannel.title', lang)} | ISECure`} lang={lang}>
+
+<Layout
+  title={`${getText("webService.wsChannel.title", lang)} | ISECure`}
+  lang={lang}
+  robots="noindex, follow"
+  canonicalUrl={landingCanonical}
+>
   <div class="container page-container">
-    <h1 class="page-header">{getText('webService.wsChannel.title', lang)}</h1>
+    <h1 class="page-header">{getText("webService.wsChannel.title", lang)}</h1>
 
     <div class="content-section">
       <div class="main-content">
-        <h2 class="section-title">{getText('webService.wsChannel.subtitle', lang)}</h2>
+        <h2 class="section-title">
+          {getText("webService.wsChannel.subtitle", lang)}
+        </h2>
         <div class="content-block">
-          <p>{getText('webService.wsChannel.description', lang)}</p>
-          <p class="highlight-text"><i>"{getText('webService.wsChannel.quote', lang)}"</i></p>
-          <p>{getText('webService.wsChannel.details', lang)}</p>
+          <p>{getText("webService.wsChannel.description", lang)}</p>
+          <p class="highlight-text">
+            <i>"{getText("webService.wsChannel.quote", lang)}"</i>
+          </p>
+          <p>{getText("webService.wsChannel.details", lang)}</p>
         </div>
       </div>
     </div>
 
-    <h3>{getText('webService.banks', lang)}</h3>
+    <h3>{getText("webService.banks", lang)}</h3>
     <BankLogos />
   </div>
 </Layout>
