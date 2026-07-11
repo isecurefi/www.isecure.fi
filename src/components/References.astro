@@ -1,56 +1,157 @@
 ---
-import { getText } from '../store/translations';
-import type { Lang } from '../types';
+import { getText } from "../store/translations";
+import type { Lang } from "../types";
 
 interface Props {
   lang?: Lang;
 }
 
-const { lang = 'fi' } = Astro.props;
+const { lang = "fi" } = Astro.props;
+
+const references = [
+  { name: "Fennoa", logo: "/images/references/fennoa.png" },
+  { name: "Briox", logo: "/images/references/briox.svg" },
+  { name: "Graphia", logo: "/images/references/graphia-logo.jpg" },
+  { name: "Hostingpalvelu", logo: "/images/references/hostingpalvelu.png" },
+  { name: "Secureaction", logo: "/images/references/secureaction.png" },
+  { name: "Joutsen Rahoitus", logo: "/images/references/joutsen-rahoitus.png" },
+  { name: "Talokeskus", logo: "/images/references/talokeskus.jpg" },
+  { name: "acFakta", logo: "/images/references/acFakta.png" },
+];
 ---
+
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h3>{getText('references.title', lang)}</h3>
-      <div class="references">
-        <img 
-          src="/images/references/fennoa.png" 
-          class="reference" 
-          alt="Fennoa"
-          loading="lazy"
-          width="150"
-          height="60"
-          decoding="async"
-        >
-        <img src="/images/references/briox.svg" class="reference" style="width:30%;" alt="Briox">
-        <img src="/images/references/graphia-logo.jpg" class="reference" alt="Graphia">
-        <img src="/images/references/hostingpalvelu.png" class="reference" alt="Hostingpalvelu">
-        <img src="/images/references/secureaction.png" class="reference" alt="Secureaction">
-        <img src="/images/references/joutsen-rahoitus.png" class="reference" alt="Joutsen Rahoitus">
-        <img src="/images/references/talokeskus.jpg" class="reference" alt="Talokeskus">
-        <img src="/images/references/acFakta.png" class="reference" alt="acFakta">
+      <h2>{getText("references.title", lang)}</h2>
+      <div class="references" aria-label={getText("references.title", lang)}>
+        <div class="reference-track">
+          {
+            [false, true].map((duplicate) => (
+              <div
+                class="reference-set"
+                aria-hidden={duplicate ? "true" : undefined}
+              >
+                {references.map((reference) => (
+                  <div class="reference-tile">
+                    <img
+                      src={reference.logo}
+                      class="reference"
+                      alt={duplicate ? "" : reference.name}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                ))}
+              </div>
+            ))
+          }
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <style>
-.references {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 3rem;
-  padding: 4rem 2rem;
-  background: var(--background-light);
-  border-radius: 12px;
-  margin: 3rem 0;
-  box-shadow: var(--card-shadow);
-}
+  h2 {
+    font-size: clamp(1.55rem, 2.5vw, 2.35rem);
+    line-height: 1.15;
+    margin: 0 auto;
+    max-width: 850px;
+    text-align: center;
+  }
 
-.reference {
-  max-height: 60px;
-  width: auto;
-  object-fit: contain;
-}
+  .references {
+    overflow: hidden;
+    padding: 2rem 0;
+    background: var(--background-light);
+    border-radius: 12px;
+    margin: 2rem 0 0;
+    box-shadow: var(--card-shadow);
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 5%,
+      #000 95%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 5%,
+      #000 95%,
+      transparent
+    );
+  }
+
+  .reference-track {
+    animation: reference-flow 34s linear infinite;
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .reference-set {
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 3rem;
+    padding-right: 3rem;
+  }
+
+  .reference-tile {
+    align-items: center;
+    background: #fff;
+    border: 1px solid #dce5ea;
+    border-radius: 6px;
+    display: flex;
+    flex: 0 0 auto;
+    height: 76px;
+    justify-content: center;
+    min-width: 160px;
+    padding: 10px 18px;
+  }
+
+  .reference {
+    max-height: 52px;
+    max-width: 180px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .references:hover .reference-track,
+  .references:focus-within .reference-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes reference-flow {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .references {
+      -webkit-mask-image: none;
+      mask-image: none;
+      overflow: visible;
+      padding: 2rem;
+    }
+
+    .reference-track {
+      animation: none;
+      width: 100%;
+    }
+
+    .reference-set {
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-right: 0;
+      width: 100%;
+    }
+
+    .reference-set[aria-hidden="true"] {
+      display: none;
+    }
+  }
 </style>

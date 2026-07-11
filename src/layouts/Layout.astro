@@ -140,7 +140,11 @@ const fullTitle = titleAlreadyBranded
 ---
 
 <!doctype html>
-<html lang={htmlLang} class={htmlClass}>
+<html
+  lang={htmlLang}
+  class={htmlClass}
+  data-isecure-theme={htmlClass ? "light" : undefined}
+>
   <head>
     <!-- Essential Meta Tags -->
     <meta charset="UTF-8" />
@@ -326,7 +330,10 @@ const fullTitle = titleAlreadyBranded
       crossorigin="anonymous"
       defer></script>
   </head>
-  <body class={bodyClass}>
+  <body
+    class={bodyClass}
+    data-isecure-theme={htmlClass ? "light" : undefined}
+  >
     <Navigation lang={lang} />
     <main class:list={["main-content", { "main-content--wide": fullWidth }]}>
       <slot />

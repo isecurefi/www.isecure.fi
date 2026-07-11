@@ -270,9 +270,9 @@ export const translations = {
   },
   references: {
     title: {
-      fi: "Joitain referenssejä",
-      en: "Some References",
-      se: "Några referenser",
+      fi: "Yli 10 vuotta luotettavia pankkiyhteyksiä suomalaisille ohjelmistoille",
+      en: "Over 10 years of reliable bank connectivity for Finnish software",
+      se: "Över 10 år av tillförlitliga bankförbindelser för finländska programvaror",
     },
   },
   quote: {

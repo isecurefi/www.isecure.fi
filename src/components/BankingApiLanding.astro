@@ -48,7 +48,7 @@ const highlightedTsCode = hljs.highlight(tsCode, {
 const content = {
   fi: {
     eyebrow: "Säästä kuukausien pankkikohtainen integraatiotyö",
-    title: "Kaikki Pankit yhden API:n takana",
+    title: "Kaikki pankit yhden API:n takana",
     lead: "ISECure tarjoaa rajapinnan maksuaineistoille, tiliotteille ja varmenteille: sinä lähetät ja noudat, me hoidamme pankkiyhteyden, tilit, sertifikaatit ja tietoturvan.",
     icp: "Suunniteltu ohjelmistoyrityksille: taloushallinnon, ERP:n, laskutuksen ja rahoituksen tuotteille, jotka tarvitsevat pankkiyhteydet.",
     primaryCta: "Aloita testirajapinnalla",
@@ -99,7 +99,7 @@ const content = {
       },
       {
         title: "Varmenteet ja avaimet pois tuotetiimiltä",
-        text: "ISECure hoitaa PKI-varmenteiden haun, uusinnat, import/export-toiminnot ja KMS-salatun säilytyksen PCI DSS -tason järjestelmässä.",
+        text: "ISECure hoitaa PKI-varmenteiden haun, uusinnat, import/export-toiminnot ja KMS-salatun säilytyksen AWS:n PCI DSS -sertifioiduilla komponenteilla.",
       },
       {
         title: "Riskittömämpi ja helpompi vaihtoehto",
@@ -583,6 +583,12 @@ const t = content[lang];
     </div>
   </section>
 
+  <section class="landing-section references-section" id="references">
+    <div class="landing-inner">
+      <References lang={lang} />
+    </div>
+  </section>
+
   <section class="landing-section quickstart-section" id="quickstart">
     <div class="landing-inner section-heading">
       <p class="eyebrow">{t.quickstartEyebrow}</p>
@@ -609,6 +615,17 @@ const t = content[lang];
           </section>
         ))
       }
+    </div>
+  </section>
+
+  <section class="landing-section bank-section" id="banks">
+    <div class="landing-inner bank-panel">
+      <p class="eyebrow">{t.banksEyebrow}</p>
+      <h2>{t.banksTitle}</h2>
+      <p>{t.banks}</p>
+      <div class="bank-logo-panel">
+        <BankLogos />
+      </div>
     </div>
   </section>
 
@@ -694,27 +711,6 @@ const t = content[lang];
     </div>
   </section>
 
-  <section class="landing-section bank-section" id="banks">
-    <div class="landing-inner bank-panel">
-      <p class="eyebrow">{t.banksEyebrow}</p>
-      <h2>{t.banksTitle}</h2>
-      <p>{t.banks}</p>
-      <div class="bank-logo-panel">
-        <BankLogos />
-      </div>
-      <div class="doc-actions">
-        <a class="button button-primary" href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a>
-        <a class="button button-secondary" href="https://isecure.fi/wsapi_v2.json">{t.openApiCta}</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="landing-section references-section" id="references">
-    <div class="landing-inner">
-      <References lang={lang} />
-    </div>
-  </section>
-
   <section class="landing-section pricing-section" id="pricing">
     <div class="landing-inner section-heading">
       <p class="eyebrow">{t.pricingEyebrow}</p>
@@ -774,7 +770,7 @@ const t = content[lang];
     if (!document.body.classList.contains("banking-theme-page")) return;
 
     const savedTheme = localStorage.getItem("isecure-banking-theme");
-    const initialTheme = savedTheme === "light" ? "light" : "dark";
+    const initialTheme = savedTheme === "dark" ? "dark" : "light";
     const buttons = document.querySelectorAll("[data-theme-choice]");
 
     function setTheme(theme) {
@@ -1314,6 +1310,12 @@ const t = content[lang];
   .quickstart-section {
     background: var(--landing-bg);
     border-bottom: 1px solid var(--landing-line);
+  }
+
+  .references-section {
+    background: var(--landing-soft);
+    border-bottom: 1px solid var(--landing-line);
+    padding: 52px 0;
   }
 
   .architecture-section {
