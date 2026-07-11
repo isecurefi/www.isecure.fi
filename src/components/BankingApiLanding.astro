@@ -161,6 +161,7 @@ const content = {
     pricingLead: "Kiinteä perusmaksu ja pankkitilikohtaiset lisenssit. Ei transaktio- eikä volyymimaksuja.",
     pricingFromLabel: "Alkaen",
     pricingFrom: "38 € / kk",
+    pricingFromNote: "Sisältää perusmaksun ja 10 pankkitililisenssiä.",
     pricingAnalogy: "Pankkiyhteydet laajakaistaliittymän hinnalla.",
     pricingIncluded: [
       "Testiympäristö ja SDK:t ilman maksua",
@@ -322,6 +323,7 @@ const content = {
     pricingLead: "A fixed base fee plus per-bank-account licenses. No transaction or volume fees.",
     pricingFromLabel: "From",
     pricingFrom: "38 € / month",
+    pricingFromNote: "Includes the base fee and 10 bank account licenses.",
     pricingAnalogy: "Bank connectivity for the price of a broadband line.",
     pricingIncluded: [
       "Free test environment and SDKs",
@@ -487,6 +489,7 @@ const content = {
     pricingLead: "Fast grundavgift och licenser per bankkonto. Inga transaktions- eller volymavgifter.",
     pricingFromLabel: "Från",
     pricingFrom: "38 € / mån",
+    pricingFromNote: "Inkluderar grundavgiften och 10 bankkontolicenser.",
     pricingAnalogy: "Bankförbindelser till priset av en bredbandsanslutning.",
     pricingIncluded: [
       "Testmiljö och SDK:er utan avgift",
@@ -722,6 +725,7 @@ const t = content[lang];
       <div class="pricing-main">
         <p class="pricing-from-label">{t.pricingFromLabel}</p>
         <p class="pricing-price">{t.pricingFrom}</p>
+        <p class="pricing-from-note">{t.pricingFromNote}</p>
         <p class="pricing-analogy">{t.pricingAnalogy}</p>
         <ul class="pricing-included">{t.pricingIncluded.map((item) => <li>{item}</li>)}</ul>
         <div class="doc-actions">
@@ -1449,6 +1453,12 @@ const t = content[lang];
     font-weight: 800;
     line-height: 1.05;
     margin: 6px 0 0;
+  }
+
+  .pricing-from-note {
+    color: var(--landing-muted);
+    font-weight: 700;
+    margin: 8px 0 0;
   }
 
   .pricing-analogy {

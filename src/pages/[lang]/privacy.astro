@@ -1,0 +1,17 @@
+---
+import PrivacyPage from "../../components/PrivacyPage.astro";
+import { languages } from "../../utils/languages";
+
+export async function getStaticPaths() {
+  return languages
+    .filter((lang) => lang !== "fi")
+    .map((lang) => ({
+      params: { lang },
+      props: { lang },
+    }));
+}
+
+const { lang } = Astro.props;
+---
+
+<PrivacyPage lang={lang} />

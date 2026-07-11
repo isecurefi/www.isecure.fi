@@ -1,15 +1,55 @@
 ---
+import type { Lang } from "../types";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "fi" } = Astro.props;
 const currentYear = new Date().getFullYear();
+const base = lang === "fi" ? "/" : `/${lang}/`;
+
+const t = {
+  fi: {
+    product: "Tuote",
+    docs: "Dokumentaatio",
+    sdks: "SDK:t",
+    pricing: "Hinnat",
+    company: "Yritys",
+    about: "Tietoa meistä",
+    privacy: "Tietosuojaseloste",
+    salesPhone: "myynti",
+  },
+  en: {
+    product: "Product",
+    docs: "Documentation",
+    sdks: "SDKs",
+    pricing: "Pricing",
+    company: "Company",
+    about: "About us",
+    privacy: "Privacy policy",
+    salesPhone: "sales",
+  },
+  se: {
+    product: "Produkt",
+    docs: "Dokumentation",
+    sdks: "SDK:er",
+    pricing: "Priser",
+    company: "Företag",
+    about: "Om oss",
+    privacy: "Integritetspolicy",
+    salesPhone: "försäljning",
+  },
+}[lang];
 ---
 
 <footer>
   <div class="footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-left">
-          <p style="padding:5px;margin:0px;color:#a0a0a0;">Copyright &copy; ISECure Oy {currentYear}</p>
+      <div class="footer-cols">
+        <div class="footer-col footer-company-info">
           <div class="footer-logo">
-            <a href="/">
+            <a href={base}>
               <img
                 src="/images/isecure-small-logo.png"
                 width="161"
@@ -20,23 +60,108 @@ const currentYear = new Date().getFullYear();
               />
             </a>
           </div>
+          <p>
+            <strong>ISECure Oy</strong><br />
+            Helsinki, Finland<br />
+            Y-tunnus FI22963369<br />
+            <a href="mailto:info@isecure.fi">info@isecure.fi</a><br />
+            <a href="tel:+358404835507">+358 40 483 5507</a> ({t.salesPhone})
+          </p>
         </div>
-        <div class="footer-right">
-          <div class="contact-info">
-            <p>
-              <strong style="color:#fff">Founder Dan Forsberg, D.Sc.</strong><br />
-              <span style="color:#4dabf7">dan.forsberg@isecure.fi</span><br />
-              <span style="color:#dee2e6">+358 40 483 5507 (Finland)</span><br />
-              <span style="color:#dee2e6">Helsinki, Finland (FI22963369)</span>
-            </p>
-            <div class="social-links">
-              <a href="https://www.linkedin.com/in/danforsberg/">
-                <img src="/images/linkedin.png" class="soclogo" alt="LinkedIn" />
-              </a>
-            </div>
-          </div>
+        <div class="footer-col">
+          <p class="footer-col-title">{t.product}</p>
+          <ul>
+            <li><a href="https://isecure.fi/wsapi_v2/index.html">{t.docs}</a></li>
+            <li><a href="https://isecure.fi/wsapi_v2.json">OpenAPI</a></li>
+            <li><a href={`${base}#sdks`}>{t.sdks}</a></li>
+            <li><a href={`${base}#pricing`}>{t.pricing}</a></li>
+            <li><a href="https://github.com/isecurefi">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <p class="footer-col-title">{t.company}</p>
+          <ul>
+            <li><a href={`${base}about/`}>{t.about}</a></li>
+            <li><a href={`${base}privacy/`}>{t.privacy}</a></li>
+            <li>
+              <a href="https://www.linkedin.com/company/1026241">LinkedIn</a>
+            </li>
+          </ul>
         </div>
       </div>
+      <p class="footer-copyright">Copyright &copy; ISECure Oy {currentYear}</p>
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-cols {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 1rem 0 0.5rem;
+  }
+
+  .footer-col p,
+  .footer-copyright {
+    color: #a0a0a0;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .footer-col-title {
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer-col li {
+    line-height: 1.9;
+  }
+
+  .footer-col a {
+    color: #dee2e6;
+    text-decoration: none;
+  }
+
+  .footer-col a:hover {
+    color: #4dabf7;
+  }
+
+  .footer-company-info strong {
+    color: #fff;
+  }
+
+  .footer-logo {
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-logo img {
+    display: block;
+    height: auto;
+    max-width: 132px;
+    width: 100%;
+  }
+
+  .footer-copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.85rem;
+    margin-top: 1.25rem;
+    padding: 1rem 0;
+  }
+
+  @media (max-width: 720px) {
+    .footer-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

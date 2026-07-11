@@ -1,0 +1,136 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const content = {
+  fi: {
+    title: "Tietosuojaseloste",
+    description: "ISECure Oy:n tietosuojaseloste: mitä tietoja keräämme, miksi ja mitkä ovat oikeutesi.",
+    updated: "Päivitetty 11.7.2026",
+    sections: [
+      {
+        h: "Rekisterinpitäjä",
+        p: "ISECure Oy (Y-tunnus FI22963369), Helsinki. Yhteydenotot tietosuoja-asioissa: info@isecure.fi.",
+      },
+      {
+        h: "Mitä tietoja keräämme",
+        p: "Yhteydenottolomakkeella keräämme nimen, sähköpostiosoitteen, yrityksen nimen, aiheen ja viestin. Lomakkeen tiedot välitetään meille sähköpostina AWS:n (EU-alue) kautta, eikä niitä tallenneta verkkosivuston omaan tietokantaan. Sivusto käyttää Google Analytics- ja Google Ads -tageja kävijämäärien ja mainoskonversioiden mittaamiseen; ne voivat asettaa evästeitä. Sivuston teemavalinta tallennetaan vain selaimesi paikalliseen muistiin.",
+      },
+      {
+        h: "Käsittelyn tarkoitus ja peruste",
+        p: "Tietoja käytetään yhteydenottoihin vastaamiseen, myyntiin ja tekniseen tukeen. Käsittelyn perusteena on oikeutettu etu ja sopimusta edeltävät toimet.",
+      },
+      {
+        h: "Tietojen säilytys ja vastaanottajat",
+        p: "Tietoja säilytetään niin kauan kuin yhteydenoton käsittely tai asiakassuhde edellyttää. Käsittelijöinä toimivat AWS (EU-alue) ja Google (sähköposti ja analytiikka). Emme myy tietoja kolmansille osapuolille.",
+      },
+      {
+        h: "Oikeutesi",
+        p: "Sinulla on oikeus tarkastaa, oikaista ja poistaa tietosi sekä vastustaa käsittelyä ottamalla yhteyttä osoitteeseen info@isecure.fi. Sinulla on myös oikeus tehdä valitus tietosuojavaltuutetun toimistolle.",
+      },
+    ],
+  },
+  en: {
+    title: "Privacy Policy",
+    description: "ISECure Oy privacy policy: what data we collect, why, and what your rights are.",
+    updated: "Updated July 11, 2026",
+    sections: [
+      {
+        h: "Controller",
+        p: "ISECure Oy (Business ID FI22963369), Helsinki, Finland. Privacy contact: info@isecure.fi.",
+      },
+      {
+        h: "What data we collect",
+        p: "Through the contact form we collect your name, email address, company name, topic, and message. Form submissions are delivered to us as email via AWS (EU region) and are not stored in a website database. The site uses Google Analytics and Google Ads tags to measure site usage and ad conversions; these may set cookies. Your theme preference is stored only in your browser's local storage.",
+      },
+      {
+        h: "Purpose and legal basis",
+        p: "Data is used to respond to inquiries, for sales, and for technical support. Processing is based on legitimate interest and pre-contractual measures.",
+      },
+      {
+        h: "Retention and recipients",
+        p: "Data is kept as long as handling the inquiry or the customer relationship requires. Processors are AWS (EU region) and Google (email and analytics). We do not sell data to third parties.",
+      },
+      {
+        h: "Your rights",
+        p: "You have the right to access, rectify, and erase your data, and to object to processing, by contacting info@isecure.fi. You also have the right to lodge a complaint with the Finnish Data Protection Ombudsman.",
+      },
+    ],
+  },
+  se: {
+    title: "Integritetspolicy",
+    description: "ISECure Oy:s integritetspolicy: vilka uppgifter vi samlar in, varför och vilka rättigheter du har.",
+    updated: "Uppdaterad 11.7.2026",
+    sections: [
+      {
+        h: "Personuppgiftsansvarig",
+        p: "ISECure Oy (FO-nummer FI22963369), Helsingfors, Finland. Kontakt i integritetsfrågor: info@isecure.fi.",
+      },
+      {
+        h: "Vilka uppgifter vi samlar in",
+        p: "Via kontaktformuläret samlar vi in namn, e-postadress, företagets namn, ämne och meddelande. Formuläruppgifterna levereras till oss som e-post via AWS (EU-region) och lagras inte i någon databas på webbplatsen. Webbplatsen använder Google Analytics- och Google Ads-taggar för att mäta användning och annonskonverteringar; dessa kan sätta cookies. Ditt temaval sparas endast i webbläsarens lokala lagring.",
+      },
+      {
+        h: "Syfte och rättslig grund",
+        p: "Uppgifterna används för att besvara förfrågningar, för försäljning och för teknisk support. Behandlingen grundar sig på berättigat intresse och åtgärder före avtal.",
+      },
+      {
+        h: "Lagring och mottagare",
+        p: "Uppgifterna sparas så länge hanteringen av förfrågan eller kundrelationen kräver. Personuppgiftsbiträden är AWS (EU-region) och Google (e-post och analys). Vi säljer inte uppgifter till tredje part.",
+      },
+      {
+        h: "Dina rättigheter",
+        p: "Du har rätt att få tillgång till, rätta och radera dina uppgifter samt invända mot behandlingen genom att kontakta info@isecure.fi. Du har också rätt att lämna in klagomål till dataombudsmannens byrå i Finland.",
+      },
+    ],
+  },
+};
+
+const t = content[lang];
+---
+
+<Layout title={t.title} lang={lang} description={t.description}>
+  <article class="legal-page container">
+    <h1>{t.title}</h1>
+    <p class="legal-updated">{t.updated}</p>
+    {
+      t.sections.map((section) => (
+        <section>
+          <h2>{section.h}</h2>
+          <p>{section.p}</p>
+        </section>
+      ))
+    }
+  </article>
+</Layout>
+
+<style>
+  .legal-page {
+    margin: 3rem auto;
+    max-width: 760px;
+  }
+
+  .legal-page h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-updated {
+    color: var(--text-muted, #6c757d);
+    margin-bottom: 2rem;
+  }
+
+  .legal-page h2 {
+    font-size: 1.25rem;
+    margin: 1.75rem 0 0.5rem;
+  }
+
+  .legal-page p {
+    line-height: 1.7;
+  }
+</style>

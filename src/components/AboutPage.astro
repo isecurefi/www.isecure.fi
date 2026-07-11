@@ -1,0 +1,165 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const content = {
+  fi: {
+    title: "Tietoa meistä",
+    description:
+      "ISECure Oy on helsinkiläinen ohjelmistoyritys, jonka pankkiyhteyspalvelu on ollut tuotannossa yli 10 vuotta ja välittää satojen suomalaisten yritysten pankkiliikennettä.",
+    intro:
+      "ISECure Oy on helsinkiläinen ohjelmistoyritys, joka tarjoaa pankkiyhteydet yhtenä rajapintana ohjelmistoyrityksille. Palvelumme on ollut tuotannossa yli 10 vuotta, ja sen kautta kulkee satojen suomalaisten yritysten pankkiliikenne.",
+    facts: [
+      "Yli 10 vuotta tuotannossa: WS-kanavan pankkiyhteydet, varmenteet ja aineistoliikenne",
+      "Satojen suomalaisten yritysten pankkiliikenne kulkee palvelun kautta",
+      "Palvelu toimii AWS:ssä PCI DSS -sertifioiduilla komponenteilla",
+      "Avoimet SDK:t ja OpenAPI-kuvaus — kehitys näkyy GitHubissa",
+    ],
+    founderTitle: "Perustaja",
+    founderText:
+      "ISECuren perustaja Dan Forsberg (tekniikan tohtori, D.Sc.) on rakentanut pankkiyhteys- ja tietoturvaratkaisuja yli vuosikymmenen. Dan vastaa henkilökohtaisesti asiakkaiden käyttöönotoista — saat saman asiantuntijan, joka on rakentanut palvelun.",
+    certsTitle: "AWS-sertifioitu asiantuntijuus",
+    githubCta: "ISECure GitHubissa",
+  },
+  en: {
+    title: "About us",
+    description:
+      "ISECure Oy is a Helsinki-based software company whose bank connectivity service has run in production for over 10 years, carrying bank traffic for hundreds of Finnish companies.",
+    intro:
+      "ISECure Oy is a Helsinki-based software company providing bank connectivity as a single API for software companies. Our service has been in production for over 10 years and carries the bank traffic of hundreds of Finnish companies.",
+    facts: [
+      "10+ years in production: WS-channel bank connectivity, certificates, and file traffic",
+      "Bank traffic of hundreds of Finnish companies runs through the service",
+      "Runs on AWS with PCI DSS certified components",
+      "Open SDKs and an OpenAPI description — development is visible on GitHub",
+    ],
+    founderTitle: "Founder",
+    founderText:
+      "ISECure's founder Dan Forsberg (D.Sc. in technology) has built bank connectivity and security solutions for over a decade. Dan personally handles customer onboarding — you work with the same expert who built the service.",
+    certsTitle: "AWS-certified expertise",
+    githubCta: "ISECure on GitHub",
+  },
+  se: {
+    title: "Om oss",
+    description:
+      "ISECure Oy är ett Helsingforsbaserat mjukvaruföretag vars bankförbindelsetjänst har varit i produktion i över 10 år och förmedlar banktrafik för hundratals finländska företag.",
+    intro:
+      "ISECure Oy är ett Helsingforsbaserat mjukvaruföretag som erbjuder bankförbindelser som ett enda API för mjukvarubolag. Vår tjänst har varit i produktion i över 10 år och förmedlar banktrafiken för hundratals finländska företag.",
+    facts: [
+      "Över 10 år i produktion: WS-kanalens bankförbindelser, certifikat och filtrafik",
+      "Banktrafik för hundratals finländska företag går genom tjänsten",
+      "Körs på AWS med PCI DSS-certifierade komponenter",
+      "Öppna SDK:er och OpenAPI-beskrivning — utvecklingen syns på GitHub",
+    ],
+    founderTitle: "Grundare",
+    founderText:
+      "ISECures grundare Dan Forsberg (teknologie doktor, D.Sc.) har byggt bankförbindelse- och säkerhetslösningar i över ett decennium. Dan sköter personligen kundernas onboarding — du arbetar med samma expert som byggt tjänsten.",
+    certsTitle: "AWS-certifierad expertis",
+    githubCta: "ISECure på GitHub",
+  },
+};
+
+const t = content[lang];
+const awsCerts = ["SAP", "DOP", "SS", "BD", "NS", "DA", "SAA", "SOA", "CP"];
+---
+
+<Layout title={t.title} lang={lang} description={t.description}>
+  <article class="about-page container">
+    <h1>{t.title}</h1>
+    <p class="about-intro">{t.intro}</p>
+
+    <ul class="about-facts">
+      {t.facts.map((fact) => <li>{fact}</li>)}
+    </ul>
+
+    <section class="about-founder">
+      <img src="/images/dforsber.png" class="about-portrait" alt="Dan Forsberg" loading="lazy" />
+      <div>
+        <h2>{t.founderTitle}</h2>
+        <p><strong>Dan Forsberg, D.Sc.</strong></p>
+        <p>{t.founderText}</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>{t.certsTitle}</h2>
+      <div class="about-certs">
+        {
+          awsCerts.map((cert) => (
+            <img src={`/images/AWS_${cert}.png`} alt={`AWS ${cert} certification`} loading="lazy" />
+          ))
+        }
+      </div>
+    </section>
+
+    <p>
+      <a href="https://github.com/isecurefi">{t.githubCta}</a>
+    </p>
+  </article>
+</Layout>
+
+<style>
+  .about-page {
+    margin: 3rem auto;
+    max-width: 760px;
+  }
+
+  .about-intro {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .about-facts {
+    line-height: 2;
+    margin: 1.5rem 0;
+    padding-left: 1.25rem;
+  }
+
+  .about-page h2 {
+    font-size: 1.25rem;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .about-page p {
+    line-height: 1.7;
+  }
+
+  .about-founder {
+    align-items: start;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 120px minmax(0, 1fr);
+    margin: 2rem 0;
+  }
+
+  .about-portrait {
+    border-radius: 8px;
+    height: auto;
+    width: 100%;
+  }
+
+  .about-certs {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .about-certs img {
+    height: auto;
+    max-height: 56px;
+    width: auto;
+  }
+
+  @media (max-width: 520px) {
+    .about-founder {
+      grid-template-columns: 88px minmax(0, 1fr);
+    }
+  }
+</style>

@@ -10,49 +10,79 @@ interface Props {
 const { lang = "fi" } = Astro.props;
 const copy = {
   fi: {
-    profileLabel: "Yhteyshenkilö",
-    direct: "Suora yhteys",
-    lead: "Kerro lyhyesti pankkiyhteys-, API- tai tietoturvatarpeesta. Vastaamme henkilökohtaisesti.",
-    founder: "Perustaja",
+    email: "myynti@isecure.fi",
+    supportEmail: "tuki@isecure.fi",
+    profileLabel: "Yhteystiedot",
+    direct: "Ota yhteyttä",
+    title: "Myynti ja käyttöönotto",
+    lead: "Saat vastauksen yhden arkipäivän kuluessa — suoraan tiimiltä.",
+    contactPersonLabel: "Yhteyshenkilösi",
+    salesLabel: "Myynti",
+    phoneLabel: "Puhelin (myynti)",
+    supportLabel: "Tekninen tuki",
+    supportNote: "vastaus arkisin 24 h",
     location: "Helsinki, Suomi",
     businessId: "Y-tunnus",
-    certifications: "AWS-sertifioitu asiantuntijuus",
     formEyebrow: "Viestisi",
     formTitle: "Miten voimme auttaa?",
     namePlaceholder: "Etunimi ja sukunimi",
     emailPlaceholder: "nimi@yritys.fi",
+    companyLabel: "Yritys",
+    companyPlaceholder: "Yrityksen nimi",
+    topicLabel: "Aihe",
+    topics: ["Myynti", "Tekninen kysymys", "Tuki"],
     messagePlaceholder:
-      "Kerro tavoitteesta, aikataulusta ja tarvittavista pankkiyhteyksistä.",
+      "Mitkä pankit ja kuinka monta pankkitiliä? Millä teknologialla integroitte (esim. TypeScript, Python, PHP)?",
   },
   en: {
-    profileLabel: "Contact person",
-    direct: "Direct contact",
-    lead: "Tell us briefly about your bank connectivity, API, or security need. We respond personally.",
-    founder: "Founder",
+    email: "sales@isecure.fi",
+    supportEmail: "support@isecure.fi",
+    profileLabel: "Contact details",
+    direct: "Contact us",
+    title: "Sales & onboarding",
+    lead: "You'll get a reply within one business day — directly from the team.",
+    contactPersonLabel: "Your contact person",
+    salesLabel: "Sales",
+    phoneLabel: "Phone (sales)",
+    supportLabel: "Technical support",
+    supportNote: "weekday response within 24 h",
     location: "Helsinki, Finland",
     businessId: "Business ID",
-    certifications: "AWS-certified expertise",
     formEyebrow: "Your message",
     formTitle: "How can we help?",
     namePlaceholder: "First and last name",
     emailPlaceholder: "name@company.com",
+    companyLabel: "Company",
+    companyPlaceholder: "Company name",
+    topicLabel: "Topic",
+    topics: ["Sales", "Technical question", "Support"],
     messagePlaceholder:
-      "Describe the goal, timeline, and bank connections you need.",
+      "Which banks and how many bank accounts? What technology are you integrating with (e.g. TypeScript, Python, PHP)?",
   },
   se: {
-    profileLabel: "Kontaktperson",
-    direct: "Direkt kontakt",
-    lead: "Berätta kort om behovet inom bankförbindelser, API eller säkerhet. Vi svarar personligen.",
-    founder: "Grundare",
+    email: "sales@isecure.fi",
+    supportEmail: "support@isecure.fi",
+    profileLabel: "Kontaktuppgifter",
+    direct: "Kontakta oss",
+    title: "Försäljning och onboarding",
+    lead: "Du får svar inom en arbetsdag — direkt från teamet.",
+    contactPersonLabel: "Din kontaktperson",
+    salesLabel: "Försäljning",
+    phoneLabel: "Telefon (försäljning)",
+    supportLabel: "Teknisk support",
+    supportNote: "svar vardagar inom 24 h",
     location: "Helsingfors, Finland",
     businessId: "FO-nummer",
-    certifications: "AWS-certifierad expertis",
     formEyebrow: "Ditt meddelande",
     formTitle: "Hur kan vi hjälpa?",
     namePlaceholder: "För- och efternamn",
     emailPlaceholder: "namn@foretag.fi",
+    companyLabel: "Företag",
+    companyPlaceholder: "Företagets namn",
+    topicLabel: "Ämne",
+    topics: ["Försäljning", "Teknisk fråga", "Support"],
     messagePlaceholder:
-      "Beskriv målet, tidtabellen och bankförbindelserna ni behöver.",
+      "Vilka banker och hur många bankkonton? Vilken teknik integrerar ni med (t.ex. TypeScript, Python, PHP)?",
   },
 }[lang];
 ---
@@ -64,50 +94,40 @@ const copy = {
 >
   <div class="contact-layout">
     <aside class="contact-profile" aria-label={copy.profileLabel}>
+      <p class="contact-kicker">{copy.direct}</p>
+      <h2 id="contact-title">{copy.title}</h2>
+      <p class="contact-lead">{copy.lead}</p>
+
       <div class="contact-person">
         <img src="/images/dforsber.png" class="facepalm" alt="Dan Forsberg" />
         <div>
-          <p class="contact-kicker">{copy.direct}</p>
-          <h2 id="contact-title">{getText("contactForm.title", lang)}</h2>
-          <p class="contact-lead">{copy.lead}</p>
+          <p class="contact-kicker">{copy.contactPersonLabel}</p>
+          <p class="contact-person-name">Dan Forsberg</p>
         </div>
       </div>
 
       <dl class="contact-details">
         <div>
-          <dt>{copy.founder}</dt>
-          <dd>Dan Forsberg, D.Sc.</dd>
-        </div>
-        <div>
-          <dt>Email</dt>
+          <dt>{copy.salesLabel}</dt>
           <dd>
-            <a href="mailto:dan.forsberg@isecure.fi">dan.forsberg@isecure.fi</a>
+            <a href={`mailto:${copy.email}`}>{copy.email}</a>
           </dd>
         </div>
         <div>
-          <dt>Phone</dt>
+          <dt>{copy.phoneLabel}</dt>
           <dd><a href="tel:+358404835507">+358 40 483 5507</a></dd>
+        </div>
+        <div>
+          <dt>{copy.supportLabel}</dt>
+          <dd>
+            <a href={`mailto:${copy.supportEmail}`}>{copy.supportEmail}</a> · {copy.supportNote}
+          </dd>
         </div>
         <div>
           <dt>{copy.location}</dt>
           <dd>{copy.businessId} FI22963369</dd>
         </div>
       </dl>
-
-      <div class="aws-certifications" aria-label={copy.certifications}>
-        <span>{copy.certifications}</span>
-        <div class="aws-certification-grid">
-          <img src="/images/AWS_SAP.png" class="awslogos" alt="AWS SAP" />
-          <img src="/images/AWS_DOP.png" class="awslogos" alt="AWS DOP" />
-          <img src="/images/AWS_SS.png" class="awslogos" alt="AWS SS" />
-          <img src="/images/AWS_BD.png" class="awslogos" alt="AWS BD" />
-          <img src="/images/AWS_NS.png" class="awslogos" alt="AWS NS" />
-          <img src="/images/AWS_DA.png" class="awslogos" alt="AWS DA" />
-          <img src="/images/AWS_SAA.png" class="awslogos" alt="AWS SAA" />
-          <img src="/images/AWS_SOA.png" class="awslogos" alt="AWS SOA" />
-          <img src="/images/AWS_CP.png" class="awslogos" alt="AWS CP" />
-        </div>
-      </div>
     </aside>
 
     <div class="contact-panel">
@@ -150,6 +170,25 @@ const copy = {
             <div class="invalid-feedback" id="email-feedback">
               {getText("contactForm.validation.emailInvalid", lang)}
             </div>
+          </div>
+
+          <div class="form-group">
+            <label for="company">{copy.companyLabel}</label>
+            <input
+              type="text"
+              id="company"
+              name="company"
+              placeholder={copy.companyPlaceholder}
+              autocomplete="organization"
+              maxlength="80"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="topic">{copy.topicLabel}</label>
+            <select id="topic" name="topic">
+              {copy.topics.map((topic) => <option value={topic}>{topic}</option>)}
+            </select>
           </div>
         </div>
 
@@ -307,6 +346,11 @@ const copy = {
       const email = (
         document.getElementById("email") as HTMLInputElement
       )?.value.trim();
+      const company = (
+        document.getElementById("company") as HTMLInputElement
+      )?.value.trim();
+      const topic = (document.getElementById("topic") as HTMLSelectElement)
+        ?.value;
       const result = document.getElementById("result");
 
       const button = document.getElementById("sendButton");
@@ -336,8 +380,8 @@ const copy = {
 
       try {
         const command = new PublishCommand({
-          Message: `From: ${name} <${email}>\nMessage:\n${msg}`,
-          Subject: `ISECure ${lang === "en" ? "WS-Channel" : lang === "se" ? "WS-Kanal" : "WS-Kanava"} contact: ${name} <${email}>`,
+          Message: `From: ${name} <${email}>\nCompany: ${company || "-"}\nTopic: ${topic || "-"}\nMessage:\n${msg}`,
+          Subject: `ISECure contact [${topic || "-"}]: ${name} <${email}>`,
           TopicArn:
             "arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail",
         });

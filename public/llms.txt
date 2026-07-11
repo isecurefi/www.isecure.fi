@@ -38,5 +38,6 @@ Important implementation note:
 Contact:
 - ISECure Oy
 - Helsinki, Finland
-- dan.forsberg@isecure.fi
+- sales@isecure.fi (sales)
+- support@isecure.fi (technical support)
 - +358404835507
