@@ -91,7 +91,7 @@ const content = {
     whyEyebrow: "Integraatiomalli",
     whyTitle: "Miksi tämä on helpompi kuin pankkikohtaiset integraatiot",
     whyLead:
-      "Pankkiyhteys ei ole vain tiedoston lähettämistä. Tuotantokelpoinen integraatio vaatii varmenteet, pankkikohtaiset erot, auditoinnin, virhetilanteet ja turvallisen avainhallinnan.",
+      "Pankkiyhteys ei ole vain tiedoston lähettämistä. Tuotantokelpoinen integraatio vaatii varmenteet, pankkikohtaiset erot, auditoinnin, tilinhallinnan, oikeudet, virhetilanteet ja turvallisen avainhallinnan.",
     benefits: [
       {
         title: "Käyttöön ilman kuukausien pankki-integrointeja",
@@ -102,7 +102,7 @@ const content = {
         text: "ISECure hoitaa PKI-varmenteiden haun, uusinnat, import/export-toiminnot ja KMS-salatun säilytyksen PCI DSS -tason järjestelmässä.",
       },
       {
-        title: "Pienempi altistus ja compliance-pinta",
+        title: "Riskittömämpi ja helpompi vaihtoehto",
         text: "Pankkiyhteys toimii erillisenä hosted-palveluna AWS:n PCI DSS -sertifioiduilla komponenteilla. Sovellustiimin ei tarvitse rakentaa omaa varmennevarastoa, pankkiyhteysvalvontaa tai korkean turvan rajapintaa.",
       },
       {
@@ -110,13 +110,13 @@ const content = {
         text: "TypeScript-, Python- ja PHP-clientit nopeuttavat toteutusta. Aineistot voidaan vaatia PGP-allekirjoitettuina, ja asiakkaan avain voidaan viedä vain asiakkaan PGP-avaimelle.",
       },
     ],
-    architectureTitle: "Mitä integraatiossa tapahtuu",
+    architectureTitle: "Miten integraatio toimii",
     architectureEyebrow: "Arkkitehtuuri",
     architectureLead:
       "Kehittäjä lähettää ja noutaa pankkiaineistoja API:n kautta. ISECure hoitaa pankkien WS-liikenteen, varmenteet, avainsäilytyksen ja operatiivisen valvonnan.",
     flow: ["Sovellus", "TypeScript, Python tai PHP client", "ISECure WS-Kanava API", "Pankit ja WS-kanava"],
     sftpOption: {
-      title: "Luotettava SFTP/S3-synkronointi",
+      title: "Vaihtoehtoisesti: Luotettava SFTP/S3-synkronointi",
       text: "Tiedostopohjaisissa työnkuluissa pankkiaineistoja voidaan synkronoida SFTP:n tai S3:n kautta ilman suoraa REST API -integraatiota. Sama ISECure-yhteys hoitaa pankkien WS-liikenteen taustalla.",
     },
     infrastructureOption: {
@@ -252,7 +252,7 @@ const content = {
     whyEyebrow: "Integration model",
     whyTitle: "Why this is simpler than bank-by-bank integrations",
     whyLead:
-      "Bank connectivity is more than uploading a file. A production-ready integration needs certificates, bank-specific behavior, audit trails, error handling, and secure key management.",
+      "Bank connectivity is more than uploading a file. A production-ready integration needs certificates, bank-specific behavior, account management, permissions, audit trails, error handling, and secure key management.",
     benefits: [
       {
         title: "Launch without months of bank-specific code",
@@ -650,13 +650,13 @@ const t = content[lang];
             </>
           ))
         }
-        <aside class="flow-callout">
-          <h3>{t.sftpOption.title}</h3>
-          <p>{t.sftpOption.text}</p>
-        </aside>
         <aside class="flow-callout flow-callout-secondary">
           <h3>{t.infrastructureOption.title}</h3>
           <p>{t.infrastructureOption.text}</p>
+        </aside>
+        <aside class="flow-callout">
+          <h3>{t.sftpOption.title}</h3>
+          <p>{t.sftpOption.text}</p>
         </aside>
       </div>
     </div>
