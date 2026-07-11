@@ -91,7 +91,7 @@ const content = {
     whyEyebrow: "Integraatiomalli",
     whyTitle: "Miksi tämä on helpompi kuin pankkikohtaiset integraatiot",
     whyLead:
-      "Pankkiyhteys ei ole vain tiedoston lähettämistä. Tuotantokelpoinen integraatio vaatii varmenteet, pankkikohtaiset erot, auditoinnin, tilinhallinnan, oikeudet, virhetilanteet ja turvallisen avainhallinnan.",
+      "Pankkiyhteys ei ole vain tiedoston lähettämistä. Tuotantokelpoinen integraatio vaatii varmenteet, pankkikohtaiset erot, auditoinnin, tilinhallinnan, oikeudet, virhetilanteet ja turvallisen avaintenhallinnan.",
     benefits: [
       {
         title: "Käyttöön ilman kuukausien pankki-integrointeja",
@@ -122,6 +122,13 @@ const content = {
     infrastructureOption: {
       title: "AWS API Gateway, WAF ja asiakaskohtaiset rajat",
       text: "Rajapinta toimii serverless AWS -arkkitehtuurissa, API Gatewayn ja WAF:n takana. Asiakaskohtaiset käyttörajat suojaavat palvelua ruuhkapiikeiltä ja estävät muiden integraatioiden häiriöitä vaikuttamasta omaan käyttöön.",
+    },
+    managementApp: {
+      eyebrow: "Kehitteillä",
+      title: "Pankkiyhteyksien hallinta työpöydältä ja mobiilista",
+      text: "Kehitämme integraattoreille hallintasovellusta, jolla ylläpitäjät voivat hallita asiakastilejä, tarkastella tapahtumalokeja ja seurata varmenteiden voimassaoloa macOS-, Windows-, iOS- ja Android-laitteilla.",
+      cta: "Kiinnostuitko pilottikäytöstä?",
+      platformsLabel: "Suunnitellut alustat",
     },
     sdkTitle: "Clientit eri integraatiopoluille",
     sdkEyebrow: "SDK:t ja työkalut",
@@ -175,7 +182,7 @@ const content = {
       {
         value: "2 € / tili / kk",
         label: "Pankkitililisenssi",
-        text: "Vähintään 10 lisenssiä.",
+        text: "Lisenssit myydään 10 tilin paketeissa.",
       },
       {
         value: "200 €",
@@ -183,8 +190,8 @@ const content = {
         text: "Kertaluonteinen maksu uuden asiakkaan tuotantokäyttöönotosta.",
       },
     ],
-    pricingExample: "Esimerkki: 25 pankkitiliä = 18 € + 50 € = 68 €/kk.",
-    pricingNote: "Vuosilaskutus · Vähintään 10 tililisenssiä · Hintoihin lisätään ALV",
+    pricingExample: "Esimerkki: 20 pankkitiliä = 18 € + 40 € = 58 €/kk.",
+    pricingNote: "Vuosilaskutus · Tililisenssit 10 lisenssin paketeissa · Hintoihin lisätään ALV",
     faqTitle: "Usein kysyttyä",
     faqEyebrow: "Kysymykset",
     faqs: [
@@ -206,7 +213,7 @@ const content = {
       },
       {
         q: "Miten hinnoittelu määräytyy?",
-        a: "Perusmaksu on 18 €/kk ja pankkitililisenssi 2 €/tili/kk, vähintään 10 lisenssiä. Uuden asiakkaan tuotantokäyttöönotto on kertaluonteinen 200 €. Laskutus vuosittain, ja hintoihin lisätään arvonlisävero.",
+        a: "Perusmaksu on 18 €/kk ja pankkitililisenssi 2 €/tili/kk. Lisenssit myydään 10 tilin paketeissa. Uuden asiakkaan tuotantokäyttöönotto on kertaluonteinen 200 €. Laskutus vuosittain, ja hintoihin lisätään arvonlisävero.",
       },
       {
         q: "Missä data ja avaimet sijaitsevat?",
@@ -285,6 +292,13 @@ const content = {
       title: "AWS API Gateway, WAF, and customer-specific limits",
       text: "The API runs on a serverless AWS architecture behind API Gateway and WAF. Customer-specific rate limits protect the service from traffic spikes and keep other integrations from becoming noisy neighbours.",
     },
+    managementApp: {
+      eyebrow: "In development",
+      title: "Manage bank connectivity from desktop and mobile",
+      text: "We are developing a management application for integrators, enabling administrators to manage customer accounts, inspect activity logs, and monitor certificate lifetimes on macOS, Windows, iOS, and Android devices.",
+      cta: "Interested in joining the pilot?",
+      platformsLabel: "Planned platforms",
+    },
     sdkTitle: "Clients for different integration paths",
     sdkEyebrow: "SDK coverage",
     sdkLead:
@@ -337,7 +351,7 @@ const content = {
       {
         value: "2 € / account / month",
         label: "Bank account license",
-        text: "Minimum of 10 licenses.",
+        text: "Licenses are sold in packages of 10 accounts.",
       },
       {
         value: "200 €",
@@ -345,8 +359,8 @@ const content = {
         text: "One-time fee for new customer production onboarding.",
       },
     ],
-    pricingExample: "Example: 25 bank accounts = 18 € + 50 € = 68 €/month.",
-    pricingNote: "Annual billing · Minimum 10 account licenses · VAT added on top",
+    pricingExample: "Example: 20 bank accounts = 18 € + 40 € = 58 €/month.",
+    pricingNote: "Annual billing · Account licenses in packages of 10 · VAT added on top",
     faqTitle: "Frequently asked questions",
     faqEyebrow: "FAQ",
     faqs: [
@@ -368,7 +382,7 @@ const content = {
       },
       {
         q: "How does pricing work?",
-        a: "The base fee is 18 €/month and bank account licenses are 2 €/account/month, with a minimum of 10 licenses. New customer production onboarding is a one-time 200 €. Billing is annual, and VAT is added on top.",
+        a: "The base fee is 18 €/month and bank account licenses are 2 €/account/month. Licenses are sold in packages of 10 accounts. New customer production onboarding is a one-time 200 €. Billing is annual, and VAT is added on top.",
       },
       {
         q: "Where are data and keys hosted?",
@@ -451,6 +465,13 @@ const content = {
       title: "AWS API Gateway, WAF och kundspecifika gränser",
       text: "API:t körs på en serverless AWS-arkitektur bakom API Gateway och WAF. Kundspecifika användningsgränser skyddar tjänsten mot trafiktoppar och hindrar andra integrationer från att störa er användning.",
     },
+    managementApp: {
+      eyebrow: "Under utveckling",
+      title: "Hantera bankförbindelser från dator och mobil",
+      text: "Vi utvecklar en hanteringsapplikation för integratörer där administratörer kan hantera kundkonton, granska aktivitetsloggar och följa certifikatens giltighet på macOS-, Windows-, iOS- och Android-enheter.",
+      cta: "Intresserad av att delta i piloten?",
+      platformsLabel: "Planerade plattformar",
+    },
     sdkTitle: "Klienter för olika integrationsvägar",
     sdkEyebrow: "SDK:er och verktyg",
     sdkLead:
@@ -503,7 +524,7 @@ const content = {
       {
         value: "2 € / konto / mån",
         label: "Bankkontolicens",
-        text: "Minst 10 licenser.",
+        text: "Licenserna säljs i paket om 10 konton.",
       },
       {
         value: "200 €",
@@ -511,8 +532,8 @@ const content = {
         text: "Engångsavgift för nya kunders produktionsonboarding.",
       },
     ],
-    pricingExample: "Exempel: 25 bankkonton = 18 € + 50 € = 68 €/mån.",
-    pricingNote: "Årsfakturering · Minst 10 kontolicenser · Moms tillkommer",
+    pricingExample: "Exempel: 20 bankkonton = 18 € + 40 € = 58 €/mån.",
+    pricingNote: "Årsfakturering · Kontolicenser i paket om 10 · Moms tillkommer",
     faqTitle: "Vanliga frågor",
     faqEyebrow: "FAQ",
     faqs: [
@@ -534,7 +555,7 @@ const content = {
       },
       {
         q: "Hur fungerar prissättningen?",
-        a: "Grundavgiften är 18 €/mån och bankkontolicenser 2 €/konto/mån, minst 10 licenser. Produktionsonboarding för nya kunder är en engångsavgift på 200 €. Fakturering sker årsvis och moms tillkommer.",
+        a: "Grundavgiften är 18 €/mån och bankkontolicenser kostar 2 €/konto/mån. Licenserna säljs i paket om 10 konton. Produktionsonboarding för nya kunder är en engångsavgift på 200 €. Fakturering sker årsvis och moms tillkommer.",
       },
       {
         q: "Var finns data och nycklar?",
@@ -678,6 +699,22 @@ const t = content[lang];
           <h3>{t.sftpOption.title}</h3>
           <p>{t.sftpOption.text}</p>
         </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-section management-app-section" id="management-app">
+    <div class="landing-inner management-app-panel">
+      <div>
+        <p class="eyebrow">{t.managementApp.eyebrow}</p>
+        <h2>{t.managementApp.title}</h2>
+        <p>{t.managementApp.text}</p>
+      </div>
+      <div class="management-app-meta">
+        <div class="platform-list" aria-label={t.managementApp.platformsLabel}>
+          {["macOS", "Windows", "iOS", "Android"].map((platform) => <span>{platform}</span>)}
+        </div>
+        <a class="button button-primary" href="#contact">{t.managementApp.cta}</a>
       </div>
     </div>
   </section>
@@ -1335,6 +1372,60 @@ const t = content[lang];
     margin-top: 24px;
   }
 
+  .management-app-section {
+    background: var(--landing-bg);
+    padding: 52px 0;
+  }
+
+  .management-app-panel {
+    align-items: center;
+    background: linear-gradient(135deg, rgba(79, 209, 197, 0.12), rgba(138, 180, 255, 0.1)), var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 8px;
+    display: grid;
+    gap: 36px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 32px;
+  }
+
+  .management-app-panel h2 {
+    font-size: clamp(1.65rem, 2.7vw, 2.5rem);
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .management-app-panel > div:first-child > p:last-child {
+    color: var(--landing-muted);
+    font-size: 1.02rem;
+    line-height: 1.7;
+    margin: 16px 0 0;
+    max-width: 760px;
+  }
+
+  .management-app-meta {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .platform-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .platform-list span {
+    background: var(--landing-soft);
+    border: 1px solid var(--landing-line);
+    border-radius: 999px;
+    color: var(--landing-ink);
+    font-size: 0.82rem;
+    font-weight: 800;
+    padding: 6px 10px;
+  }
+
   .flow-step {
     align-items: center;
     display: grid;
@@ -1584,6 +1675,19 @@ const t = content[lang];
 
     .pricing-panel {
       padding: 24px;
+    }
+
+    .management-app-panel {
+      grid-template-columns: 1fr;
+      padding: 24px;
+    }
+
+    .management-app-meta {
+      align-items: flex-start;
+    }
+
+    .platform-list {
+      justify-content: flex-start;
     }
 
     .proof-item,
