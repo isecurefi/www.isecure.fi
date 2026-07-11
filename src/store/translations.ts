@@ -257,6 +257,11 @@ export const translations = {
       fi: "SDK:t",
       se: "SDK:er",
     },
+    pricing: {
+      en: "Pricing",
+      fi: "Hinnat",
+      se: "Priser",
+    },
     contact: {
       en: "Contact",
       fi: "Yhteystiedot",

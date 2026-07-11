@@ -68,6 +68,10 @@ const structuredFaqs = {
       a: "ISECure hoitaa PKI-varmenteiden elinkaaren, uusinnat ja KMS-salatun säilytyksen PCI DSS -tason järjestelmässä.",
     },
     {
+      q: "Miten ISECuren hinnoittelu määräytyy?",
+      a: "Perusmaksu on 18 €/kk ja pankkitililisenssi 2 €/tili/kk, vähintään 10 lisenssiä. Uuden asiakkaan tuotantokäyttöönotto on kertaluonteinen 200 €. Laskutus vuosittain, ja hintoihin lisätään arvonlisävero.",
+    },
+    {
       q: "Missä ISECuren data ja avaimet sijaitsevat?",
       a: "Palvelu toimii AWS-ympäristössä PCI DSS -sertifioiduilla komponenteilla. Avaimet säilytetään KMS-salattuina, ja pankkiyhteys toimii erillisenä hosted-palveluna asiakkaan ohjelmistotiimistä.",
     },
@@ -90,6 +94,10 @@ const structuredFaqs = {
       a: "ISECure handles the PKI certificate lifecycle, renewals, and KMS-encrypted storage in a PCI DSS level system.",
     },
     {
+      q: "How does ISECure pricing work?",
+      a: "The base fee is 18 €/month and bank account licenses are 2 €/account/month, with a minimum of 10 licenses. New customer production onboarding is a one-time 200 €. Billing is annual, and VAT is added on top.",
+    },
+    {
       q: "Where are ISECure data and keys hosted?",
       a: "The service runs on AWS with PCI DSS certified components. Keys are stored with KMS encryption, and the bank connection runs as a separate hosted service from the customer software team.",
     },
@@ -110,6 +118,10 @@ const structuredFaqs = {
     {
       q: "Hur hanterar ISECure certifikatförnyelser?",
       a: "ISECure hanterar PKI-certifikatens livscykel, förnyelser och KMS-krypterad lagring i ett system på PCI DSS-nivå.",
+    },
+    {
+      q: "Hur fungerar ISECures prissättning?",
+      a: "Grundavgiften är 18 €/mån och bankkontolicenser 2 €/konto/mån, minst 10 licenser. Produktionsonboarding för nya kunder är en engångsavgift på 200 €. Fakturering sker årsvis och moms tillkommer.",
     },
     {
       q: "Var finns ISECures data och nycklar?",
@@ -210,6 +222,31 @@ const structuredData = {
         priceCurrency: "EUR",
         category: "Bank integration API",
         availability: "https://schema.org/InStock",
+        priceSpecification: [
+          {
+            "@type": "UnitPriceSpecification",
+            name: "Base fee",
+            price: 18,
+            priceCurrency: "EUR",
+            unitText: "month",
+            valueAddedTaxIncluded: false,
+          },
+          {
+            "@type": "UnitPriceSpecification",
+            name: "Bank account license (minimum 10)",
+            price: 2,
+            priceCurrency: "EUR",
+            unitText: "bank account per month",
+            valueAddedTaxIncluded: false,
+          },
+          {
+            "@type": "UnitPriceSpecification",
+            name: "Production onboarding (one-time)",
+            price: 200,
+            priceCurrency: "EUR",
+            valueAddedTaxIncluded: false,
+          },
+        ],
       },
     },
     {

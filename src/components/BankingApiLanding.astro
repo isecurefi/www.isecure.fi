@@ -3,6 +3,7 @@ import hljs from "highlight.js/lib/core";
 import typescript from "highlight.js/lib/languages/typescript";
 import type { Lang } from "../types";
 import BankLogos from "./BankLogos.astro";
+import References from "./References.astro";
 
 interface Props {
   lang: Lang;
@@ -47,18 +48,26 @@ const highlightedTsCode = hljs.highlight(tsCode, {
 const content = {
   fi: {
     eyebrow: "Säästä kuukausien pankkikohtainen integraatiotyö",
-    title: "Pankkiyhteydet yhdellä API:lla",
-    lead: "ISECure tarjoaa yhden rajapinnan maksuaineistoille, tiliotteille ja varmenteille: sinä lähetät ja noudat, me hoidamme pankkiyhteyden, tilit, sertifikaatit ja tietoturvan.",
-    icp: "Suunniteltu ohjelmistoyrityksille: taloushallinnon, ERP:n, laskutuksen ja rahoituksen tuotteille, jotka tarvitsevat pankkiyhteyden.",
+    title: "Kaikki Pankit yhden API:n takana",
+    lead: "ISECure tarjoaa rajapinnan maksuaineistoille, tiliotteille ja varmenteille: sinä lähetät ja noudat, me hoidamme pankkiyhteyden, tilit, sertifikaatit ja tietoturvan.",
+    icp: "Suunniteltu ohjelmistoyrityksille: taloushallinnon, ERP:n, laskutuksen ja rahoituksen tuotteille, jotka tarvitsevat pankkiyhteydet.",
     primaryCta: "Aloita testirajapinnalla",
     secondaryCta: "Katso OpenAPI-dokumentaatio",
     themeLabel: "Teema",
     darkLabel: "Tumma",
     lightLabel: "Vaalea",
     proof: [
-      { value: "Satoja", label: "suomalaisia yrityksiä", text: "pankkiliikenne kulkee ISECuren kautta" },
-      { value: "10+ vuotta", label: "tuotannossa", text: "pankkiyhteyksiä, varmenteita ja aineistoliikennettä" },
-      { value: "Taloushallinto + ERP", label: "ohjelmistoalustoja", text: "käyttävät ISECurea tuotannon pankkiyhteyksiin" },
+      { value: "Satojen", label: "suomalaisten yritysten", text: "pankkiliikenne kulkee ISECuren kautta" },
+      {
+        value: "10+ vuotta",
+        label: "luotettavasti tuotannossa",
+        text: "pankkiyhteyksiä, varmenteita ja aineistoliikennettä",
+      },
+      {
+        value: "Taloushallinto + ERP",
+        label: "ohjelmistot",
+        text: "käyttävät ISECurea pankkiyhteyksiin",
+      },
     ],
     quickstartEyebrow: "Käyttöönotto",
     quickstartTitle: "Ensimmäinen testikutsu kolmessa vaiheessa",
@@ -122,7 +131,7 @@ const content = {
       {
         title: "TypeScript SDK",
         status: "Saatavilla",
-        href: "https://github.com/dforsber/isecure-ts-client",
+        href: "https://github.com/isecurefi/isecure-ts-client",
         text: "Node.js- ja selainläheisiin palveluihin, joissa tarvitaan tyypitetty client, ennustettavat virhetyypit ja OpenAPI-malliin sopiva kehityskokemus.",
       },
       {
@@ -147,6 +156,34 @@ const content = {
     banksEyebrow: "Kattavuus",
     banks:
       "ISECure yhdistää samaan integraatiomalliin pankit kuten Nordea, OP, Danske Bank, S-Pankki/LähiTapiola ja Ålandsbanken sekä Samlink- ja Crosskey-yhteyksien kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSP:n. Pankkiaineistot kulkevat palvelun läpi ilman aineistotyyppikohtaista suodatusta tai prosessointia.",
+    pricingEyebrow: "Hinnoittelu",
+    pricingTitle: "Yksinkertainen hinnoittelu",
+    pricingLead: "Kiinteä perusmaksu ja pankkitilikohtaiset lisenssit. Ei transaktio- eikä volyymimaksuja.",
+    pricingFromLabel: "Alkaen",
+    pricingFrom: "38 € / kk",
+    pricingAnalogy: "Pankkiyhteydet laajakaistaliittymän hinnalla.",
+    pricingIncluded: [
+      "Testiympäristö ja SDK:t ilman maksua",
+      "Kaikki tuetut pankit samaan hintaan",
+      "Varmenteiden elinkaari ja uusinnat",
+      "Ei transaktio- tai volyymimaksuja",
+    ],
+    pricingContactCta: "Ota yhteyttä",
+    pricing: [
+      { value: "18 € / kk", label: "Perusmaksu", text: "Palvelun kiinteä kuukausimaksu." },
+      {
+        value: "2 € / tili / kk",
+        label: "Pankkitililisenssi",
+        text: "Vähintään 10 lisenssiä.",
+      },
+      {
+        value: "200 €",
+        label: "Tuotantokäyttöönotto",
+        text: "Kertaluonteinen maksu uuden asiakkaan tuotantokäyttöönotosta.",
+      },
+    ],
+    pricingExample: "Esimerkki: 25 pankkitiliä = 18 € + 50 € = 68 €/kk.",
+    pricingNote: "Vuosilaskutus · Vähintään 10 tililisenssiä · Hintoihin lisätään ALV",
     faqTitle: "Usein kysyttyä",
     faqEyebrow: "Kysymykset",
     faqs: [
@@ -168,7 +205,7 @@ const content = {
       },
       {
         q: "Miten hinnoittelu määräytyy?",
-        a: "Hinnoittelu sovitaan integraation laajuuden, pankkien, käyttömäärien ja käyttöönoton mukaan. Testaus voidaan aloittaa ennen lopullista tuotantolaajuutta.",
+        a: "Perusmaksu on 18 €/kk ja pankkitililisenssi 2 €/tili/kk, vähintään 10 lisenssiä. Uuden asiakkaan tuotantokäyttöönotto on kertaluonteinen 200 €. Laskutus vuosittain, ja hintoihin lisätään arvonlisävero.",
       },
       {
         q: "Missä data ja avaimet sijaitsevat?",
@@ -180,7 +217,7 @@ const content = {
   },
   en: {
     eyebrow: "Save months of bank-by-bank integration work",
-    title: "Bank Integrations, One API",
+    title: "All banks behind the same API",
     lead: "ISECure gives you one interface for payment files, statements, and certificates: your product sends and retrieves, we handle the bank connection, accounts, certificates, and security.",
     icp: "Built for software companies: accounting, ERP, invoicing, and finance products that need bank connectivity.",
     primaryCta: "Start with the test API",
@@ -255,7 +292,7 @@ const content = {
       {
         title: "TypeScript SDK",
         status: "Available",
-        href: "https://github.com/dforsber/isecure-ts-client",
+        href: "https://github.com/isecurefi/isecure-ts-client",
         text: "For Node.js and browser-adjacent services that need a typed client, predictable error types, and an OpenAPI-aligned developer experience.",
       },
       {
@@ -280,6 +317,34 @@ const content = {
     banksEyebrow: "Coverage",
     banks:
       "ISECure connects the same integration model to banks such as Nordea, OP, Danske Bank, S-Bank/LähiTapiola, and Ålandsbanken, plus Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections. Bank files pass through the service without file-type-specific filtering or processing.",
+    pricingEyebrow: "Pricing",
+    pricingTitle: "Simple pricing",
+    pricingLead: "A fixed base fee plus per-bank-account licenses. No transaction or volume fees.",
+    pricingFromLabel: "From",
+    pricingFrom: "38 € / month",
+    pricingAnalogy: "Bank connectivity for the price of a broadband line.",
+    pricingIncluded: [
+      "Free test environment and SDKs",
+      "All supported banks at the same price",
+      "Certificate lifecycle and renewals included",
+      "No transaction or volume fees",
+    ],
+    pricingContactCta: "Contact us",
+    pricing: [
+      { value: "18 € / month", label: "Base fee", text: "Fixed monthly fee for the service." },
+      {
+        value: "2 € / account / month",
+        label: "Bank account license",
+        text: "Minimum of 10 licenses.",
+      },
+      {
+        value: "200 €",
+        label: "Production onboarding",
+        text: "One-time fee for new customer production onboarding.",
+      },
+    ],
+    pricingExample: "Example: 25 bank accounts = 18 € + 50 € = 68 €/month.",
+    pricingNote: "Annual billing · Minimum 10 account licenses · VAT added on top",
     faqTitle: "Frequently asked questions",
     faqEyebrow: "FAQ",
     faqs: [
@@ -301,7 +366,7 @@ const content = {
       },
       {
         q: "How does pricing work?",
-        a: "Pricing depends on integration scope, banks, usage volume, and onboarding needs. Testing can start before the final production scope is agreed.",
+        a: "The base fee is 18 €/month and bank account licenses are 2 €/account/month, with a minimum of 10 licenses. New customer production onboarding is a one-time 200 €. Billing is annual, and VAT is added on top.",
       },
       {
         q: "Where are data and keys hosted?",
@@ -324,7 +389,11 @@ const content = {
     proof: [
       { value: "Hundratals", label: "finländska företag", text: "banktrafik går via ISECure" },
       { value: "10+ år", label: "i produktion", text: "bankförbindelser, certifikat och filtrafik" },
-      { value: "Bokföring + ERP", label: "mjukvaruplattformar", text: "använder ISECure för bankförbindelser i produktion" },
+      {
+        value: "Bokföring + ERP",
+        label: "mjukvaruplattformar",
+        text: "använder ISECure för bankförbindelser i produktion",
+      },
     ],
     quickstartEyebrow: "Kom igång",
     quickstartTitle: "Första testanropet i tre steg",
@@ -388,7 +457,7 @@ const content = {
       {
         title: "TypeScript SDK",
         status: "Tillgänglig",
-        href: "https://github.com/dforsber/isecure-ts-client",
+        href: "https://github.com/isecurefi/isecure-ts-client",
         text: "För Node.js och browser-nära tjänster som behöver en typad klient, tydliga feltyper och en OpenAPI-anpassad utvecklarupplevelse.",
       },
       {
@@ -413,6 +482,34 @@ const content = {
     banksEyebrow: "Täckning",
     banks:
       "ISECure kopplar samma integrationsmodell till banker som Nordea, OP, Danske Bank, S-Bank/LähiTapiola och Ålandsbanken samt Handelsbanken, Aktia, POP Banken, Sparbanken och OmaSP via Samlink- och Crosskey-förbindelser. Bankfiler passerar genom tjänsten utan filtypsspecifik filtrering eller bearbetning.",
+    pricingEyebrow: "Prissättning",
+    pricingTitle: "Enkel prissättning",
+    pricingLead: "Fast grundavgift och licenser per bankkonto. Inga transaktions- eller volymavgifter.",
+    pricingFromLabel: "Från",
+    pricingFrom: "38 € / mån",
+    pricingAnalogy: "Bankförbindelser till priset av en bredbandsanslutning.",
+    pricingIncluded: [
+      "Testmiljö och SDK:er utan avgift",
+      "Alla stödda banker till samma pris",
+      "Certifikatens livscykel och förnyelser ingår",
+      "Inga transaktions- eller volymavgifter",
+    ],
+    pricingContactCta: "Kontakta oss",
+    pricing: [
+      { value: "18 € / mån", label: "Grundavgift", text: "Fast månadsavgift för tjänsten." },
+      {
+        value: "2 € / konto / mån",
+        label: "Bankkontolicens",
+        text: "Minst 10 licenser.",
+      },
+      {
+        value: "200 €",
+        label: "Produktionsonboarding",
+        text: "Engångsavgift för nya kunders produktionsonboarding.",
+      },
+    ],
+    pricingExample: "Exempel: 25 bankkonton = 18 € + 50 € = 68 €/mån.",
+    pricingNote: "Årsfakturering · Minst 10 kontolicenser · Moms tillkommer",
     faqTitle: "Vanliga frågor",
     faqEyebrow: "FAQ",
     faqs: [
@@ -434,7 +531,7 @@ const content = {
       },
       {
         q: "Hur fungerar prissättningen?",
-        a: "Prissättning beror på integrationens omfattning, banker, användningsvolym och onboardingbehov. Testning kan börja innan den slutliga produktionsomfattningen är fastställd.",
+        a: "Grundavgiften är 18 €/mån och bankkontolicenser 2 €/konto/mån, minst 10 licenser. Produktionsonboarding för nya kunder är en engångsavgift på 200 €. Fakturering sker årsvis och moms tillkommer.",
       },
       {
         q: "Var finns data och nycklar?",
@@ -490,7 +587,12 @@ const t = content[lang];
       <p>{t.quickstartLead}</p>
       <div class="doc-actions">
         <a class="button button-primary" href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a>
-        <a class="button button-secondary" href="https://github.com/dforsber/isecure-ts-client" target="_blank" rel="noopener">
+        <a
+          class="button button-secondary"
+          href="https://github.com/isecurefi/isecure-ts-client"
+          target="_blank"
+          rel="noopener"
+        >
           TypeScript SDK
         </a>
       </div>
@@ -600,6 +702,47 @@ const t = content[lang];
       <div class="doc-actions">
         <a class="button button-primary" href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a>
         <a class="button button-secondary" href="https://isecure.fi/wsapi_v2.json">{t.openApiCta}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-section references-section" id="references">
+    <div class="landing-inner">
+      <References lang={lang} />
+    </div>
+  </section>
+
+  <section class="landing-section pricing-section" id="pricing">
+    <div class="landing-inner section-heading">
+      <p class="eyebrow">{t.pricingEyebrow}</p>
+      <h2>{t.pricingTitle}</h2>
+      <p>{t.pricingLead}</p>
+    </div>
+    <div class="landing-inner pricing-panel">
+      <div class="pricing-main">
+        <p class="pricing-from-label">{t.pricingFromLabel}</p>
+        <p class="pricing-price">{t.pricingFrom}</p>
+        <p class="pricing-analogy">{t.pricingAnalogy}</p>
+        <ul class="pricing-included">{t.pricingIncluded.map((item) => <li>{item}</li>)}</ul>
+        <div class="doc-actions">
+          <a class="button button-primary" href="#quickstart">{t.primaryCta}</a>
+          <a class="button button-secondary" href="#contact">{t.pricingContactCta}</a>
+        </div>
+      </div>
+      <div class="pricing-breakdown">
+        {
+          t.pricing.map((item) => (
+            <div class="pricing-row">
+              <div>
+                <strong>{item.label}</strong>
+                <p>{item.text}</p>
+              </div>
+              <span>{item.value}</span>
+            </div>
+          ))
+        }
+        <p class="pricing-example">{t.pricingExample}</p>
+        <p class="pricing-note">{t.pricingNote}</p>
       </div>
     </div>
   </section>
@@ -1275,6 +1418,99 @@ const t = content[lang];
     padding: 36px;
   }
 
+  .pricing-section {
+    background: var(--landing-soft);
+    border-top: 1px solid var(--landing-line);
+  }
+
+  .pricing-panel {
+    background: linear-gradient(135deg, rgba(79, 209, 197, 0.12), rgba(138, 180, 255, 0.1)), var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 8px;
+    display: grid;
+    gap: 40px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    margin-top: 30px;
+    padding: 36px;
+  }
+
+  .pricing-from-label {
+    color: var(--landing-muted);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .pricing-price {
+    color: var(--landing-accent);
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin: 6px 0 0;
+  }
+
+  .pricing-analogy {
+    color: var(--landing-ink);
+    font-size: 1.06rem;
+    font-weight: 750;
+    margin: 12px 0 0;
+  }
+
+  .pricing-included {
+    color: var(--landing-muted);
+    line-height: 1.8;
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+  }
+
+  .pricing-included li::before {
+    color: var(--landing-accent);
+    content: "\2713\00a0\00a0";
+    font-weight: 800;
+  }
+
+  .pricing-row {
+    border-bottom: 1px solid var(--landing-line);
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    padding: 14px 0;
+  }
+
+  .pricing-row:first-child {
+    padding-top: 0;
+  }
+
+  .pricing-row strong {
+    display: block;
+  }
+
+  .pricing-row p {
+    color: var(--landing-muted);
+    font-size: 0.92rem;
+    margin: 4px 0 0;
+  }
+
+  .pricing-row span {
+    color: var(--landing-accent);
+    flex: 0 0 auto;
+    font-weight: 800;
+  }
+
+  .pricing-example {
+    color: var(--landing-muted);
+    margin: 16px 0 0;
+  }
+
+  .pricing-note {
+    color: var(--landing-muted);
+    font-size: 0.88rem;
+    margin: 10px 0 0;
+  }
+
   .faq-section {
     background: var(--landing-soft);
     border-top: 1px solid var(--landing-line);
@@ -1310,6 +1546,10 @@ const t = content[lang];
     .faq-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .pricing-panel {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 640px) {
@@ -1328,6 +1568,10 @@ const t = content[lang];
     .sdk-grid,
     .faq-grid {
       grid-template-columns: 1fr;
+    }
+
+    .pricing-panel {
+      padding: 24px;
     }
 
     .proof-item,
