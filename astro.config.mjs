@@ -13,7 +13,8 @@ export default defineConfig({
         !page.includes("/thankyou/") &&
         !page.includes("/banking-api/") &&
         !page.includes("/ws-api/") &&
-        !page.includes("/ws-channel/"),
+        !page.includes("/ws-channel/") &&
+        !page.includes("/images/logo-candidates/"),
     }),
   ],
   vite: {

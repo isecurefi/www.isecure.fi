@@ -1,43 +1,36 @@
-# ISECure Banking API and SDKs
+# ISECure Banking API
 
-ISECure provides a hosted banking integration API for Finnish corporate bank connections. It connects software products to banks through the corporate Web Services channel and removes bank-by-bank integration, certificate, and key-management work from product teams.
+> ISECure provides a hosted banking-integration API for Finnish corporate bank connections. It connects software products to banks through the corporate Web Services channel and removes bank-by-bank integration, certificate, and key-management work from product teams.
 
-Canonical pages:
-- Finnish: https://www.isecure.fi/
-- English: https://www.isecure.fi/en/
-- Swedish: https://www.isecure.fi/se/
+ISECure Oy (Helsinki, Finland) is used by Finnish accounting and ERP software products; bank traffic for hundreds of Finnish companies runs through the service. The product offers a REST API for bank file upload, listing, and download, with OpenAPI documentation and test API access for developer evaluation, plus reliable SFTP/S3 synchronization for file-based workflows that do not use direct REST integration.
 
-Primary product:
-- REST API for bank file upload, listing, and download.
-- OpenAPI documentation for implementation and testing.
-- Test API access for developer evaluation.
-- TypeScript SDK: https://github.com/dforsber/isecure-ts-client
-- Python SDK.
-- PHP SDK and wscli command-line tooling.
-- Reliable SFTP/S3 synchronization for file-based workflows that do not use direct REST API integration.
+Security and operations: private key storage uses AWS KMS encryption in a PCI DSS level system, and the service is hosted separately from the customer software team to reduce exposure and compliance scope. PKI certificate enrollment, renewals, and import/export/storage are handled by ISECure, file materials can require PGP signatures, and bank traffic goes through a hardened interface for sensitive financial operations.
 
-Security and operations:
-- Hosted separately from the customer software team to reduce exposure and compliance scope.
-- PKI certificate enrollment, renewals, import/export, and storage are handled by ISECure.
-- Private key storage uses AWS KMS encryption in a PCI DSS level system.
-- File materials can require PGP signatures.
-- Bank traffic goes through a hardened interface for sensitive financial operations.
-- Used by Finnish accounting and ERP software products; bank traffic for hundreds of Finnish companies runs through ISECure.
+Supported bank connectivity: Nordea, OP, Danske Bank, S-Pankki/LähiTapiola, and Ålandsbanken directly; Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections.
 
-Supported bank connectivity:
-- Nordea.
-- OP.
-- Danske Bank.
-- S-Pankki/LähiTapiola.
-- Ålandsbanken.
-- Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections.
+Implementation note: ISECure does not filter or process bank file types as product-specific materials. Bank files pass through the service; bank agreements, credentials, and certificates are still required.
 
-Important implementation note:
-- ISECure does not filter or process bank file types as product-specific materials. Bank files pass through the service; bank agreements, credentials, and certificates are still required.
+## Pages
 
-Contact:
-- ISECure Oy
-- Helsinki, Finland
-- sales@isecure.fi (sales)
-- support@isecure.fi (technical support)
-- +358404835507
+- [Home (Finnish)](https://www.isecure.fi/): product overview, supported banks, pricing, and FAQ
+- [Home (English)](https://www.isecure.fi/en/): English-language product overview
+- [Home (Swedish)](https://www.isecure.fi/se/): Swedish-language product overview
+- [About](https://www.isecure.fi/about/): company information
+
+## SDKs and tooling
+
+- [TypeScript SDK](https://github.com/dforsber/isecure-ts-client): official TypeScript client library
+
+Python and PHP SDKs and the `wscli` command-line tool are also available.
+
+## Contact
+
+- [Sales](mailto:sales@isecure.fi): sales enquiries
+- [Technical support](mailto:support@isecure.fi): implementation and support
+- [Phone](tel:+358404835507): +358 40 483 5507
+
+## Optional
+
+- [Privacy policy (Finnish)](https://www.isecure.fi/privacy/)
+- [Privacy policy (English)](https://www.isecure.fi/en/privacy/)
+- [Privacy policy (Swedish)](https://www.isecure.fi/se/privacy/)

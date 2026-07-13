@@ -45,5 +45,12 @@ css/*.css
 *.html
 package-lock.json
 
+# Search Console pull: raw data dump + service-account key (never commit the key)
+.gsc-data/
+gsc-key*.json
+
+# Local tooling workspace
+.design-sync/
+
 # Development tools
 .aider*
