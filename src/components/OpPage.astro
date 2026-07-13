@@ -1,0 +1,125 @@
+---
+import GuidePage from "./GuidePage.astro";
+import type { Lang } from "../types";
+
+const { lang } = Astro.props;
+
+const content = {
+  fi: {
+    title: "OP-pankkiyhteys ja maksuliikenne ohjelmistoon | ISECure",
+    description:
+      "Yhdistä ohjelmistosi OP:n yritysten maksuliikenteeseen yhdellä rajapinnalla. ISECure hoitaa Web Services -yhteyden, varmenteet, tiliotteet (camt.053) ja maksut (pain.001).",
+    h1: "OP-pankkiyhteys ohjelmistoon",
+    intro:
+      "ISECure tuo OP:n yritysten maksuliikenteen ohjelmistotuotteeseesi yhtenä rajapintana. Hoidamme Web Services -yhteyden, varmenteet ja aineistoliikenteen, jotta voit keskittyä omaan tuotteeseesi.",
+    sections: [
+      {
+        h2: "OP:n maksuliikenne ohjelmistolle",
+        paras: [
+          "OP tarjoaa yritysasiakkaille aineistoliikenteen Web Services -kanavan kautta: konekieliset tiliotteet, saapuvat viitemaksut ja SEPA-maksatuksen. Yhteys perustuu PKI-varmenteisiin ja allekirjoitettuun sanomaliikenteeseen.",
+          "ISECuren kautta ohjelmistosi saa nämä palvelut yhdellä REST-rajapinnalla, ilman OP-kohtaisen integraation rakentamista tai varmenteiden ylläpitoa.",
+        ],
+        list: [
+          "Konekielinen tiliote camt.053-muodossa",
+          "SEPA-maksatus pain.001 ja maksupalaute pain.002",
+          "Saapuvat viitemaksut ja aineistojen nouto",
+          "Varmenteiden haku, uusinta ja säilytys ISECuren hoitamana",
+        ],
+      },
+      {
+        h2: "Yksi integraatio, kaikki pankit",
+        paras: [
+          "Sama ISECure-rajapinta kattaa OP:n lisäksi Nordean, Danske Bankin, S-Pankin, Ålandsbankenin sekä Samlinkin ja Crosskeyn kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSp:n. Kun integroit kerran, saat kaikki suomalaiset pankit.",
+          "Yksityiset avaimet säilytetään AWS KMS -salauksella PCI DSS -tason ympäristössä, erillään asiakkaan ohjelmistotiimistä.",
+        ],
+      },
+      {
+        h2: "Näin pääset alkuun",
+        paras: [
+          "Tarvitset OP:n kanssa Web Services -sopimuksen ja siihen liittyvät palvelut. ISECure antaa testirajapinnan kehitystä varten ja ohjaa varmenteiden käyttöönotossa; tuotantoon siirrytään samalla rajapinnalla.",
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "OP bank connectivity and payments for software | ISECure",
+    description:
+      "Connect your software to OP corporate payments through one API. ISECure handles the Web Services connection, certificates, statements (camt.053), and payments (pain.001).",
+    h1: "OP bank connectivity for software",
+    intro:
+      "ISECure brings OP corporate payments into your software product as a single API. We handle the Web Services connection, certificates, and file traffic so you can focus on your own product.",
+    sections: [
+      {
+        h2: "OP corporate payments for software",
+        paras: [
+          "OP offers corporate file traffic through the Web Services channel: machine-readable statements, incoming reference payments, and SEPA payment initiation. The connection is based on PKI certificates and signed messaging.",
+          "Through ISECure your software gets these services via one REST API, without building an OP-specific integration or maintaining certificates.",
+        ],
+        list: [
+          "Machine-readable statements in camt.053 format",
+          "SEPA payments with pain.001 and payment feedback with pain.002",
+          "Incoming reference payments and file retrieval",
+          "Certificate enrollment, renewal, and storage handled by ISECure",
+        ],
+      },
+      {
+        h2: "One integration, every bank",
+        paras: [
+          "The same ISECure API covers, besides OP, also Nordea, Danske Bank, S-Pankki, Ålandsbanken, and — via Samlink and Crosskey — Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP. Integrate once and you get every Finnish bank.",
+          "Private keys are stored with AWS KMS encryption in a PCI DSS level environment, separate from your software team.",
+        ],
+      },
+      {
+        h2: "How to get started",
+        paras: [
+          "You need a Web Services agreement with OP and its related services. ISECure provides a test API for development and guides certificate enrollment; moving to production uses the same interface.",
+        ],
+      },
+    ],
+  },
+  se: {
+    title: "OP-bankförbindelse och betalningar för programvara | ISECure",
+    description:
+      "Anslut din programvara till OP:s företagsbetalningar via ett API. ISECure sköter Web Services-anslutningen, certifikat, kontoutdrag (camt.053) och betalningar (pain.001).",
+    h1: "OP-bankförbindelse för programvara",
+    intro:
+      "ISECure för in OP:s företagsbetalningar i din programvaruprodukt som ett enda API. Vi sköter Web Services-anslutningen, certifikaten och filtrafiken så att du kan fokusera på din egen produkt.",
+    sections: [
+      {
+        h2: "OP:s företagsbetalningar för programvara",
+        paras: [
+          "OP erbjuder företagens filtrafik via Web Services-kanalen: maskinläsbara kontoutdrag, inkommande referensbetalningar och SEPA-betalningar. Anslutningen bygger på PKI-certifikat och signerad meddelandetrafik.",
+          "Via ISECure får din programvara dessa tjänster via ett REST-API, utan att bygga en OP-specifik integration eller underhålla certifikat.",
+        ],
+        list: [
+          "Maskinläsbart kontoutdrag i camt.053-format",
+          "SEPA-betalningar med pain.001 och betalningsrespons med pain.002",
+          "Inkommande referensbetalningar och filhämtning",
+          "Certifikathantering och lagring skött av ISECure",
+        ],
+      },
+      {
+        h2: "En integration, alla banker",
+        paras: [
+          "Samma ISECure-API täcker förutom OP även Nordea, Danske Bank, S-Pankki, Ålandsbanken och — via Samlink och Crosskey — Handelsbanken, Aktia, POP Bank, Sparbanken och OmaSp. Integrera en gång och du får alla finländska banker.",
+          "Privata nycklar lagras med AWS KMS-kryptering i en PCI DSS-miljö, åtskilt från ditt programvaruteam.",
+        ],
+      },
+      {
+        h2: "Så kommer du igång",
+        paras: [
+          "Du behöver ett Web Services-avtal med OP och tillhörande tjänster. ISECure tillhandahåller ett test-API för utveckling och vägleder certifikatinföringen; övergången till produktion sker via samma gränssnitt.",
+        ],
+      },
+    ],
+  },
+} satisfies Record<Lang, unknown>;
+
+const related = [
+  { slug: "nordea", fi: "Nordea-pankkiyhteys", en: "Nordea bank connectivity", se: "Nordea-bankförbindelse" },
+  { slug: "web-services", fi: "Web Services -kanava", en: "Web Services channel", se: "Web Services-kanalen" },
+  { slug: "pankkiyhteys", fi: "Pankkiyhteys: rakenna itse vai osta", en: "Bank connectivity: build vs buy", se: "Bankförbindelse: bygga eller köpa" },
+];
+---
+
+<GuidePage lang={lang} slug="op" content={content} related={related} />

@@ -1,0 +1,126 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { Lang } from "../types";
+
+// Shared presentational component for keyword-targeted content pages.
+// Each topic passes its trilingual `content` and a `related` cross-link list;
+// this renders consistent, indexable markup with hreflang alternates.
+interface Section {
+  h2: string;
+  paras: string[];
+  list?: string[];
+}
+interface LangContent {
+  title: string;
+  description: string;
+  h1: string;
+  intro: string;
+  sections: Section[];
+}
+interface Related {
+  slug: string;
+  fi: string;
+  en: string;
+  se: string;
+}
+interface Props {
+  lang: Lang;
+  slug: string;
+  content: Record<Lang, LangContent>;
+  related?: Related[];
+}
+
+const { lang, slug, content, related = [] } = Astro.props;
+const t = content[lang];
+const origin = "https://www.isecure.fi";
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}/${slug}/` },
+  { hreflang: "en", href: `${origin}/en/${slug}/` },
+  { hreflang: "sv", href: `${origin}/se/${slug}/` },
+  { hreflang: "x-default", href: `${origin}/${slug}/` },
+];
+const relatedTitle = { fi: "Lue myös", en: "See also", se: "Läs även" }[lang];
+const relatedHref = (s: string) => (lang === "fi" ? `/${s}/` : `/${lang}/${s}/`);
+---
+
+<Layout
+  title={t.title}
+  lang={lang}
+  description={t.description}
+  alternateLinks={alternateLinks}
+>
+  <article class="guide-page container">
+    <h1>{t.h1}</h1>
+    <p class="guide-lead">{t.intro}</p>
+
+    {
+      t.sections.map((s) => (
+        <section>
+          <h2>{s.h2}</h2>
+          {s.paras.map((p) => (
+            <p>{p}</p>
+          ))}
+          {s.list && (
+            <ul>
+              {s.list.map((li) => (
+                <li>{li}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+
+    {
+      related.length > 0 && (
+        <aside class="guide-related">
+          <h2>{relatedTitle}</h2>
+          <ul>
+            {related.map((r) => (
+              <li>
+                <a href={relatedHref(r.slug)}>{r[lang]}</a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )
+    }
+  </article>
+</Layout>
+
+<style>
+  .guide-page {
+    margin: 3rem auto;
+    max-width: 760px;
+  }
+
+  .guide-lead {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .guide-page h2 {
+    font-size: 1.3rem;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .guide-page p {
+    line-height: 1.75;
+  }
+
+  .guide-page ul {
+    line-height: 1.9;
+    padding-left: 1.25rem;
+  }
+
+  .guide-related {
+    border-top: 1px solid #dee2e6;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+  }
+
+  .guide-related a {
+    color: #0d6efd;
+  }
+</style>

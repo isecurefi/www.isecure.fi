@@ -1,0 +1,125 @@
+---
+import GuidePage from "./GuidePage.astro";
+import type { Lang } from "../types";
+
+const { lang } = Astro.props;
+
+const content = {
+  fi: {
+    title: "Pankkiyhteys ohjelmistoon: rakenna itse vai osta | ISECure",
+    description:
+      "Kannattaako pankkiyhteys rakentaa itse vai ostaa palveluna? Vertailu ohjelmistoyrityksille: WS-kanava, varmenteet, ylläpito ja kustannukset — ja miten ISECure kattaa kaikki pankit yhdellä rajapinnalla.",
+    h1: "Pankkiyhteys ohjelmistoon: rakenna itse vai osta",
+    intro:
+      "Kun ohjelmistotuotteesi tarvitsee suomalaiset pankkiyhteydet, edessä on valinta: rakentaa integraatio itse jokaiseen pankkiin vai ostaa se yhtenä palveluna. Tämä sivu vertailee vaihtoehtoja ohjelmistoyrityksen näkökulmasta.",
+    sections: [
+      {
+        h2: "Mitä itse rakentaminen vaatii",
+        paras: [
+          "Oma toteutus tarkoittaa Web Services -yhteyden rakentamista jokaiseen pankkiin erikseen: varmennehakemukset, avainten hallinta, sanomien allekirjoitus ja pankkikohtaisten erojen käsittely. Lisäksi varmenteet vanhenevat ja pankkien rajapinnat muuttuvat, joten ylläpito on jatkuvaa.",
+          "Tämä sitoo kehitysresursseja pois omasta tuotteesta ja kasvattaa tietoturva- ja compliance-vastuuta, kun yksityisiä avaimia ja pankkiliikennettä käsitellään itse.",
+        ],
+        list: [
+          "Integraatio ja varmenteet pankki kerrallaan",
+          "Avainten säilytys ja compliance-vastuu omalla vastuulla",
+          "Jatkuva ylläpito rajapintojen ja varmenteiden muuttuessa",
+          "Kehitysaika pois omasta ydintuotteesta",
+        ],
+      },
+      {
+        h2: "Mitä ostaminen palveluna tarkoittaa",
+        paras: [
+          "ISECure tarjoaa kaikki suomalaiset pankkiyhteydet yhtenä REST-rajapintana. Hoidamme varmenteet, avainten hallinnan ja pankkikohtaiset erot, ja yksityiset avaimet säilytetään AWS KMS -salauksella PCI DSS -tason ympäristössä erillään ohjelmistotiimistäsi.",
+          "Yhdellä integraatiolla katat Nordean, OP:n, Danske Bankin, S-Pankin, Ålandsbankenin sekä Samlinkin ja Crosskeyn kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSp:n. Käytössäsi ovat TypeScript-, Python- ja PHP-SDK:t sekä OpenAPI-kuvaus.",
+        ],
+      },
+      {
+        h2: "Milloin kumpikin kannattaa",
+        paras: [
+          "Oma toteutus voi olla perusteltu, jos tarvitset vain yhden pankin ja sinulla on resurssit ylläpitää sitä pitkään. Jos taas tuotteesi tarvitsee useita pankkeja, nopean käyttöönoton ja pienemmän compliance-taakan, palveluna ostaminen on yleensä nopeampi ja edullisempi tie tuotantoon.",
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "Bank connectivity for software: build vs buy | ISECure",
+    description:
+      "Should you build Finnish bank connectivity yourself or buy it as a service? A comparison for software vendors: WS channel, certificates, maintenance, and cost — and how ISECure covers every bank with one API.",
+    h1: "Bank connectivity for software: build vs buy",
+    intro:
+      "When your software product needs Finnish bank connectivity, you face a choice: build the integration to each bank yourself, or buy it as a single service. This page compares the options from a software vendor's perspective.",
+    sections: [
+      {
+        h2: "What building it yourself requires",
+        paras: [
+          "An in-house build means constructing a Web Services connection to each bank separately: certificate applications, key management, message signing, and handling bank-specific differences. Certificates also expire and bank interfaces change, so maintenance is continuous.",
+          "This ties up development resources away from your own product and increases your security and compliance responsibility, since you handle private keys and bank traffic yourself.",
+        ],
+        list: [
+          "Integration and certificates one bank at a time",
+          "Key storage and compliance responsibility on you",
+          "Continuous maintenance as interfaces and certificates change",
+          "Development time away from your core product",
+        ],
+      },
+      {
+        h2: "What buying it as a service means",
+        paras: [
+          "ISECure offers all Finnish bank connections as a single REST API. We handle certificates, key management, and the bank-specific differences, and private keys are stored with AWS KMS encryption in a PCI DSS level environment, separate from your software team.",
+          "One integration covers Nordea, OP, Danske Bank, S-Pankki, Ålandsbanken, and — via Samlink and Crosskey — Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP. You get TypeScript, Python, and PHP SDKs plus an OpenAPI description.",
+        ],
+      },
+      {
+        h2: "When each makes sense",
+        paras: [
+          "Building it yourself can be justified if you need only one bank and have the resources to maintain it long term. If your product needs several banks, fast onboarding, and a lighter compliance burden, buying it as a service is usually a faster and cheaper path to production.",
+        ],
+      },
+    ],
+  },
+  se: {
+    title: "Bankförbindelse för programvara: bygga eller köpa | ISECure",
+    description:
+      "Ska du bygga finländsk bankförbindelse själv eller köpa den som tjänst? En jämförelse för mjukvarubolag: WS-kanal, certifikat, underhåll och kostnad — och hur ISECure täcker alla banker med ett API.",
+    h1: "Bankförbindelse för programvara: bygga eller köpa",
+    intro:
+      "När din programvaruprodukt behöver finländska bankförbindelser står du inför ett val: bygga integrationen till varje bank själv, eller köpa den som en enda tjänst. Den här sidan jämför alternativen ur ett mjukvarubolags perspektiv.",
+    sections: [
+      {
+        h2: "Vad det kräver att bygga själv",
+        paras: [
+          "En egen lösning innebär att bygga en Web Services-anslutning till varje bank separat: certifikatansökningar, nyckelhantering, meddelandesignering och hantering av bankspecifika skillnader. Certifikat går dessutom ut och bankernas gränssnitt ändras, så underhållet är kontinuerligt.",
+          "Detta binder utvecklingsresurser bort från din egen produkt och ökar ditt säkerhets- och compliance-ansvar, eftersom du hanterar privata nycklar och banktrafik själv.",
+        ],
+        list: [
+          "Integration och certifikat en bank i taget",
+          "Nyckellagring och compliance-ansvar på dig",
+          "Kontinuerligt underhåll när gränssnitt och certifikat ändras",
+          "Utvecklingstid bort från din kärnprodukt",
+        ],
+      },
+      {
+        h2: "Vad det innebär att köpa som tjänst",
+        paras: [
+          "ISECure erbjuder alla finländska bankförbindelser som ett enda REST-API. Vi sköter certifikat, nyckelhantering och de bankspecifika skillnaderna, och privata nycklar lagras med AWS KMS-kryptering i en PCI DSS-miljö, åtskilt från ditt programvaruteam.",
+          "En integration täcker Nordea, OP, Danske Bank, S-Pankki, Ålandsbanken och — via Samlink och Crosskey — Handelsbanken, Aktia, POP Bank, Sparbanken och OmaSp. Du får SDK:er för TypeScript, Python och PHP samt en OpenAPI-beskrivning.",
+        ],
+      },
+      {
+        h2: "När vardera lönar sig",
+        paras: [
+          "Att bygga själv kan vara motiverat om du behöver endast en bank och har resurser att underhålla den på lång sikt. Om din produkt behöver flera banker, snabb driftsättning och en lättare compliance-börda är att köpa som tjänst oftast en snabbare och billigare väg till produktion.",
+        ],
+      },
+    ],
+  },
+} satisfies Record<Lang, unknown>;
+
+const related = [
+  { slug: "web-services", fi: "Web Services -kanava", en: "Web Services channel", se: "Web Services-kanalen" },
+  { slug: "nordea", fi: "Nordea-pankkiyhteys", en: "Nordea bank connectivity", se: "Nordea-bankförbindelse" },
+  { slug: "op", fi: "OP-pankkiyhteys", en: "OP bank connectivity", se: "OP-bankförbindelse" },
+];
+---
+
+<GuidePage lang={lang} slug="pankkiyhteys" content={content} related={related} />

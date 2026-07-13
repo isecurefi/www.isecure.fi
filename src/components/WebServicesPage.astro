@@ -1,0 +1,125 @@
+---
+import GuidePage from "./GuidePage.astro";
+import type { Lang } from "../types";
+
+const { lang } = Astro.props;
+
+const content = {
+  fi: {
+    title: "Web Services -kanava: mikä se on ja miten integroida | ISECure",
+    description:
+      "Web Services -kanava (WS) on suomalaisten pankkien yritysasiakkaiden aineistoliikenteen rajapinta. Näin se toimii, mitä varmenteita se vaatii ja miten integroit sen ohjelmistoon.",
+    h1: "Web Services -kanava (WS): mikä se on ja miten se integroidaan",
+    intro:
+      "Web Services -kanava on suomalaisten pankkien standardi yritysasiakkaiden aineistoliikenteelle: tiliotteiden noutamiselle ja maksuaineistojen lähettämiselle. Tässä oppaassa käymme läpi, miten se toimii ja mitä integrointi vaatii.",
+    sections: [
+      {
+        h2: "Mikä Web Services -kanava on",
+        paras: [
+          "WS-kanava on pankkien tarjoama SOAP-pohjainen rajapinta, jonka kautta yrityksen ohjelmisto noutaa konekielisiä tiliotteita ja lähettää maksuaineistoja. Se korvaa vanhemmat eräsiirtomenetelmät ja on käytössä kaikilla suurilla suomalaisilla pankeilla.",
+          "Sanomaliikenne on allekirjoitettua ja salattua, ja se perustuu pankin myöntämiin PKI-varmenteisiin. Aineistot ovat pääosin ISO 20022 -muotoisia: tiliote camt.053, maksut pain.001 ja maksupalaute pain.002.",
+        ],
+      },
+      {
+        h2: "Mitä integrointi vaatii",
+        paras: [
+          "WS-yhteyden käyttöönotto edellyttää Web Services -sopimusta pankin kanssa sekä varmennehakemusta. Ohjelmiston on osattava muodostaa ja allekirjoittaa WS-sanomat, hallita avaimia ja varmenteiden uusintaa sekä käsitellä ISO 20022 -aineistoja.",
+          "Tämä on merkittävä toteutustyö pankkia kohden — ja se on toistettava jokaiselle pankille erikseen, koska yhteyksissä on pankkikohtaisia eroja.",
+        ],
+        list: [
+          "Web Services -sopimus ja varmenteet pankin kanssa",
+          "WS-sanomien muodostus, allekirjoitus ja salaus",
+          "Avainten ja varmenteiden elinkaaren hallinta",
+          "ISO 20022 -aineistojen (camt.053, pain.001/002) käsittely",
+        ],
+      },
+      {
+        h2: "Miten ISECure yksinkertaistaa tämän",
+        paras: [
+          "ISECure tarjoaa WS-kanavan yhtenä REST-rajapintana. Hoidamme sanomien allekirjoituksen, varmenteet ja avainten hallinnan sekä pankkikohtaiset erot, joten ohjelmistosi tekee vain yksinkertaisia REST-kutsuja. Yhdellä integraatiolla katat kaikki suomalaiset pankit.",
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "The Web Services channel: what it is and how to integrate | ISECure",
+    description:
+      "The Web Services (WS) channel is the file-traffic interface for Finnish banks' corporate customers. How it works, what certificates it needs, and how to integrate it into software.",
+    h1: "The Web Services (WS) channel: what it is and how to integrate it",
+    intro:
+      "The Web Services channel is the Finnish banks' standard for corporate file traffic: retrieving statements and sending payment files. This guide covers how it works and what integrating it requires.",
+    sections: [
+      {
+        h2: "What the Web Services channel is",
+        paras: [
+          "The WS channel is a SOAP-based interface offered by banks, through which a company's software retrieves machine-readable statements and sends payment files. It replaces older batch-transfer methods and is used by all major Finnish banks.",
+          "The messaging is signed and encrypted, based on PKI certificates issued by the bank. The files are mostly in ISO 20022 format: statements as camt.053, payments as pain.001, and payment feedback as pain.002.",
+        ],
+      },
+      {
+        h2: "What integration requires",
+        paras: [
+          "Adopting a WS connection requires a Web Services agreement with the bank and a certificate application. The software must build and sign WS messages, manage keys and certificate renewal, and process ISO 20022 files.",
+          "This is a significant implementation effort per bank — and it must be repeated for each bank, because there are bank-specific differences in the connections.",
+        ],
+        list: [
+          "Web Services agreement and certificates with the bank",
+          "Building, signing, and encrypting WS messages",
+          "Managing the lifecycle of keys and certificates",
+          "Processing ISO 20022 files (camt.053, pain.001/002)",
+        ],
+      },
+      {
+        h2: "How ISECure simplifies this",
+        paras: [
+          "ISECure offers the WS channel as a single REST API. We handle message signing, certificates, key management, and the bank-specific differences, so your software only makes simple REST calls. One integration covers every Finnish bank.",
+        ],
+      },
+    ],
+  },
+  se: {
+    title: "Web Services-kanalen: vad den är och hur man integrerar | ISECure",
+    description:
+      "Web Services-kanalen (WS) är gränssnittet för filtrafik för finländska bankers företagskunder. Hur den fungerar, vilka certifikat den kräver och hur du integrerar den i programvara.",
+    h1: "Web Services-kanalen (WS): vad den är och hur den integreras",
+    intro:
+      "Web Services-kanalen är de finländska bankernas standard för företagens filtrafik: att hämta kontoutdrag och skicka betalningsfiler. Den här guiden går igenom hur den fungerar och vad en integration kräver.",
+    sections: [
+      {
+        h2: "Vad Web Services-kanalen är",
+        paras: [
+          "WS-kanalen är ett SOAP-baserat gränssnitt som bankerna erbjuder, genom vilket ett företags programvara hämtar maskinläsbara kontoutdrag och skickar betalningsfiler. Den ersätter äldre batchöverföringsmetoder och används av alla stora finländska banker.",
+          "Meddelandetrafiken är signerad och krypterad, baserad på PKI-certifikat utfärdade av banken. Filerna är mestadels i ISO 20022-format: kontoutdrag som camt.053, betalningar som pain.001 och betalningsrespons som pain.002.",
+        ],
+      },
+      {
+        h2: "Vad integrationen kräver",
+        paras: [
+          "Att ta i bruk en WS-anslutning kräver ett Web Services-avtal med banken och en certifikatansökan. Programvaran måste bygga och signera WS-meddelanden, hantera nycklar och certifikatförnyelse samt bearbeta ISO 20022-filer.",
+          "Detta är ett betydande implementeringsarbete per bank — och det måste upprepas för varje bank, eftersom det finns bankspecifika skillnader i anslutningarna.",
+        ],
+        list: [
+          "Web Services-avtal och certifikat med banken",
+          "Bygga, signera och kryptera WS-meddelanden",
+          "Hantera livscykeln för nycklar och certifikat",
+          "Bearbeta ISO 20022-filer (camt.053, pain.001/002)",
+        ],
+      },
+      {
+        h2: "Hur ISECure förenklar detta",
+        paras: [
+          "ISECure erbjuder WS-kanalen som ett enda REST-API. Vi sköter meddelandesignering, certifikat, nyckelhantering och de bankspecifika skillnaderna, så din programvara gör endast enkla REST-anrop. En integration täcker alla finländska banker.",
+        ],
+      },
+    ],
+  },
+} satisfies Record<Lang, unknown>;
+
+const related = [
+  { slug: "tiliote", fi: "Konekielinen tiliote (camt.053)", en: "Machine-readable statements (camt.053)", se: "Maskinläsbart kontoutdrag (camt.053)" },
+  { slug: "nordea", fi: "Nordea-pankkiyhteys", en: "Nordea bank connectivity", se: "Nordea-bankförbindelse" },
+  { slug: "pankkiyhteys", fi: "Pankkiyhteys: rakenna itse vai osta", en: "Bank connectivity: build vs buy", se: "Bankförbindelse: bygga eller köpa" },
+];
+---
+
+<GuidePage lang={lang} slug="web-services" content={content} related={related} />

@@ -19,6 +19,14 @@ const t = {
     about: "Tietoa meistä",
     privacy: "Tietosuojaseloste",
     salesPhone: "myynti",
+    solutions: "Ratkaisut",
+    guides: [
+      { slug: "pankkiyhteys", label: "Pankkiyhteys: rakenna vai osta" },
+      { slug: "web-services", label: "Web Services -kanava" },
+      { slug: "tiliote", label: "Konekielinen tiliote (camt.053)" },
+      { slug: "nordea", label: "Nordea-pankkiyhteys" },
+      { slug: "op", label: "OP-pankkiyhteys" },
+    ],
   },
   en: {
     product: "Product",
@@ -29,6 +37,14 @@ const t = {
     about: "About us",
     privacy: "Privacy policy",
     salesPhone: "sales",
+    solutions: "Solutions",
+    guides: [
+      { slug: "pankkiyhteys", label: "Bank connectivity: build vs buy" },
+      { slug: "web-services", label: "Web Services channel" },
+      { slug: "tiliote", label: "Bank statements (camt.053)" },
+      { slug: "nordea", label: "Nordea connectivity" },
+      { slug: "op", label: "OP connectivity" },
+    ],
   },
   se: {
     product: "Produkt",
@@ -39,6 +55,14 @@ const t = {
     about: "Om oss",
     privacy: "Integritetspolicy",
     salesPhone: "försäljning",
+    solutions: "Lösningar",
+    guides: [
+      { slug: "pankkiyhteys", label: "Bankförbindelse: bygga eller köpa" },
+      { slug: "web-services", label: "Web Services-kanalen" },
+      { slug: "tiliote", label: "Kontoutdrag (camt.053)" },
+      { slug: "nordea", label: "Nordea-förbindelse" },
+      { slug: "op", label: "OP-förbindelse" },
+    ],
   },
 }[lang];
 ---
@@ -88,6 +112,18 @@ const t = {
             </li>
           </ul>
         </div>
+        <div class="footer-col">
+          <p class="footer-col-title">{t.solutions}</p>
+          <ul>
+            {
+              t.guides.map((g) => (
+                <li>
+                  <a href={`${base}${g.slug}/`}>{g.label}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
       <p class="footer-copyright">Copyright &copy; ISECure Oy {currentYear}</p>
     </div>
@@ -98,8 +134,14 @@ const t = {
   .footer-cols {
     display: grid;
     gap: 2rem;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     padding: 1rem 0 0.5rem;
+  }
+
+  @media (max-width: 960px) and (min-width: 721px) {
+    .footer-cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .footer-col p,

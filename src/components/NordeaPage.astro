@@ -1,0 +1,125 @@
+---
+import GuidePage from "./GuidePage.astro";
+import type { Lang } from "../types";
+
+const { lang } = Astro.props;
+
+const content = {
+  fi: {
+    title: "Nordea-pankkiyhteys ohjelmistoon | ISECure",
+    description:
+      "Yhdistä ohjelmistosi Nordean yritysten Web Services -kanavaan yhdellä rajapinnalla. ISECure hoitaa varmenteet, avaimet ja aineistoliikenteen — tiliotteet (camt.053) ja maksut (pain.001).",
+    h1: "Nordea-pankkiyhteys ohjelmistoon",
+    intro:
+      "ISECure yhdistää ohjelmistotuotteesi Nordean yritysten Web Services -kanavaan yhtenä rajapintana. Sinun ei tarvitse rakentaa pankkikohtaista integraatiota tai hallita varmenteita ja avaimia — hoidamme sen puolestasi.",
+    sections: [
+      {
+        h2: "Mitä Nordean Web Services -yhteys sisältää",
+        paras: [
+          "Nordea käyttää yritysasiakkaiden aineistoliikenteessä Web Services -kanavaa (WS), jonka kautta ohjelmistot noutavat tiliotteet ja lähettävät maksuaineistot turvallisesti. Yhteys perustuu PKI-varmenteisiin ja allekirjoitettuun sanomaliikenteeseen.",
+          "ISECuren kautta saat käyttöösi konekielisen tiliotteen (camt.053), saapuvien viitemaksujen tiedot ja SEPA-maksatuksen (pain.001) ilman, että ohjelmistosi tarvitsee toteuttaa Nordean WS-rajapintaa suoraan.",
+        ],
+        list: [
+          "Konekielinen tiliote camt.053-muodossa",
+          "SEPA-maksatus pain.001, maksupalaute pain.002",
+          "Saapuvat viitemaksut ja aineistojen nouto",
+          "Varmenteiden haku, uusinta ja säilytys ISECuren hoitamana",
+        ],
+      },
+      {
+        h2: "Miksi ISECure Nordea-yhteyteen",
+        paras: [
+          "Nordean WS-yhteyden käyttöönotto vaatii varmennehakemuksen, avainten hallinnan ja sanomien allekirjoituksen. ISECure hoitaa tämän kokonaisuuden ja tarjoaa yhden REST-rajapinnan sekä TypeScript-, Python- ja PHP-SDK:t.",
+          "Yksityiset avaimet säilytetään AWS KMS -salauksella PCI DSS -tason ympäristössä, erillään asiakkaan ohjelmistotiimistä. Sama yhteys kattaa muutkin suomalaiset pankit, joten yhdellä integraatiolla saat kaikki pankit.",
+        ],
+      },
+      {
+        h2: "Näin pääset alkuun",
+        paras: [
+          "Tarvitset Nordean kanssa Web Services -sopimuksen ja siihen liittyvät palvelut. ISECure ohjaa varmenteiden käyttöönotossa ja antaa testirajapinnan kehitystä varten. Tuotantoon siirtyminen tapahtuu samalla rajapinnalla.",
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "Nordea bank connectivity for software | ISECure",
+    description:
+      "Connect your software to Nordea's corporate Web Services channel through one API. ISECure handles certificates, keys, and file traffic — statements (camt.053) and payments (pain.001).",
+    h1: "Nordea bank connectivity for software",
+    intro:
+      "ISECure connects your software product to Nordea's corporate Web Services channel as a single API. You don't build a bank-specific integration or manage certificates and keys — we handle it for you.",
+    sections: [
+      {
+        h2: "What Nordea's Web Services connection covers",
+        paras: [
+          "Nordea uses the Web Services (WS) channel for corporate file traffic, through which software retrieves statements and sends payment files securely. The connection is based on PKI certificates and signed messaging.",
+          "Through ISECure you get machine-readable statements (camt.053), incoming reference payment data, and SEPA payment initiation (pain.001) without your software implementing Nordea's WS interface directly.",
+        ],
+        list: [
+          "Machine-readable statements in camt.053 format",
+          "SEPA payments with pain.001, payment feedback with pain.002",
+          "Incoming reference payments and file retrieval",
+          "Certificate enrollment, renewal, and storage handled by ISECure",
+        ],
+      },
+      {
+        h2: "Why ISECure for the Nordea connection",
+        paras: [
+          "Setting up Nordea's WS connection requires a certificate application, key management, and message signing. ISECure handles the whole thing and offers one REST API plus TypeScript, Python, and PHP SDKs.",
+          "Private keys are stored with AWS KMS encryption in a PCI DSS level environment, separate from your software team. The same connection covers the other Finnish banks too, so one integration gives you every bank.",
+        ],
+      },
+      {
+        h2: "How to get started",
+        paras: [
+          "You need a Web Services agreement with Nordea and its related services. ISECure guides certificate enrollment and provides a test API for development. Moving to production uses the same interface.",
+        ],
+      },
+    ],
+  },
+  se: {
+    title: "Nordea-bankförbindelse för programvara | ISECure",
+    description:
+      "Anslut din programvara till Nordeas Web Services-kanal för företag via ett API. ISECure sköter certifikat, nycklar och filtrafik — kontoutdrag (camt.053) och betalningar (pain.001).",
+    h1: "Nordea-bankförbindelse för programvara",
+    intro:
+      "ISECure ansluter din programvaruprodukt till Nordeas Web Services-kanal för företag som ett enda API. Du bygger ingen bankspecifik integration och hanterar inga certifikat eller nycklar — vi sköter det åt dig.",
+    sections: [
+      {
+        h2: "Vad Nordeas Web Services-anslutning omfattar",
+        paras: [
+          "Nordea använder Web Services-kanalen (WS) för företagens filtrafik, genom vilken programvara hämtar kontoutdrag och skickar betalningsfiler säkert. Anslutningen bygger på PKI-certifikat och signerad meddelandetrafik.",
+          "Via ISECure får du maskinläsbara kontoutdrag (camt.053), inkommande referensbetalningar och SEPA-betalningar (pain.001) utan att din programvara implementerar Nordeas WS-gränssnitt direkt.",
+        ],
+        list: [
+          "Maskinläsbart kontoutdrag i camt.053-format",
+          "SEPA-betalningar med pain.001, betalningsrespons med pain.002",
+          "Inkommande referensbetalningar och filhämtning",
+          "Certifikathantering och lagring skött av ISECure",
+        ],
+      },
+      {
+        h2: "Varför ISECure för Nordea-anslutningen",
+        paras: [
+          "Att ta i bruk Nordeas WS-anslutning kräver certifikatansökan, nyckelhantering och meddelandesignering. ISECure sköter helheten och erbjuder ett REST-API samt SDK:er för TypeScript, Python och PHP.",
+          "Privata nycklar lagras med AWS KMS-kryptering i en PCI DSS-miljö, åtskilt från ditt programvaruteam. Samma anslutning täcker även de övriga finländska bankerna, så en integration ger dig alla banker.",
+        ],
+      },
+      {
+        h2: "Så kommer du igång",
+        paras: [
+          "Du behöver ett Web Services-avtal med Nordea och tillhörande tjänster. ISECure vägleder certifikatinföringen och tillhandahåller ett test-API för utveckling. Övergången till produktion sker via samma gränssnitt.",
+        ],
+      },
+    ],
+  },
+} satisfies Record<Lang, unknown>;
+
+const related = [
+  { slug: "op", fi: "OP-pankkiyhteys", en: "OP bank connectivity", se: "OP-bankförbindelse" },
+  { slug: "web-services", fi: "Web Services -kanava", en: "Web Services channel", se: "Web Services-kanalen" },
+  { slug: "pankkiyhteys", fi: "Pankkiyhteys: rakenna itse vai osta", en: "Bank connectivity: build vs buy", se: "Bankförbindelse: bygga eller köpa" },
+];
+---
+
+<GuidePage lang={lang} slug="nordea" content={content} related={related} />

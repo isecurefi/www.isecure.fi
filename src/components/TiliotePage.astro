@@ -1,0 +1,122 @@
+---
+import GuidePage from "./GuidePage.astro";
+import type { Lang } from "../types";
+
+const { lang } = Astro.props;
+
+const content = {
+  fi: {
+    title: "Konekielinen tiliote (camt.053) ohjelmistoon | ISECure",
+    description:
+      "Konekielinen tiliote eli camt.053 tuo pankkitapahtumat suoraan ohjelmistoon. Näin nouto toimii Web Services -kanavan kautta ja miten ISECure hoitaa sen yhdellä rajapinnalla.",
+    h1: "Konekielinen tiliote (camt.053) ohjelmistoon",
+    intro:
+      "Konekielinen tiliote tuo pankkitilin tapahtumat rakenteisessa muodossa suoraan taloushallinnon tai ERP-ohjelmistoon, jolloin täsmäytys ja kirjaukset voidaan automatisoida. Nykyään tiliote noudetaan camt.053-muodossa Web Services -kanavan kautta.",
+    sections: [
+      {
+        h2: "Mikä camt.053 on",
+        paras: [
+          "camt.053 on ISO 20022 -standardin mukainen konekielinen tiliote, joka on korvannut vanhan kotimaisen TITO-muodon (konekielinen tiliote). Se sisältää tilin saldot ja yksittäiset tapahtumat rakenteisessa XML-muodossa, mukaan lukien viitetiedot saapuville maksuille.",
+          "Rakenteinen muoto mahdollistaa automaattisen täsmäytyksen: ohjelmisto voi kohdistaa saapuvat viitemaksut myyntilaskuihin ilman manuaalista työtä.",
+        ],
+      },
+      {
+        h2: "Miten tiliote noudetaan",
+        paras: [
+          "Tiliote noudetaan pankin Web Services -kanavan kautta allekirjoitetulla sanomalla. Nouto vaatii voimassa olevat varmenteet ja Web Services -sopimuksen pankin kanssa. Saapuvat viitemaksut voidaan noutaa vastaavasti erillisenä aineistona.",
+        ],
+        list: [
+          "camt.053 tiliote saldoineen ja tapahtumineen",
+          "Saapuvien viitemaksujen kohdistustiedot",
+          "Nouto Web Services -kanavan kautta, varmenteilla allekirjoitettuna",
+          "Automaattinen täsmäytys myyntireskontraan",
+        ],
+      },
+      {
+        h2: "Tiliotteet ISECuren kautta",
+        paras: [
+          "ISECure noutaa camt.053-tiliotteet kaikilta tukemiltamme suomalaisilta pankeilta yhdellä REST-rajapinnalla. Hoidamme varmenteet ja allekirjoitukset, joten ohjelmistosi saa tiliotteet valmiina yhdestä paikasta — samalla integraatiolla kaikista pankeista.",
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "Machine-readable bank statements (camt.053) for software | ISECure",
+    description:
+      "The machine-readable statement, camt.053, brings bank transactions straight into software. How retrieval works over the Web Services channel and how ISECure handles it through one API.",
+    h1: "Machine-readable bank statements (camt.053) for software",
+    intro:
+      "A machine-readable statement brings a bank account's transactions in structured form straight into accounting or ERP software, so reconciliation and bookings can be automated. Today the statement is retrieved in camt.053 format over the Web Services channel.",
+    sections: [
+      {
+        h2: "What camt.053 is",
+        paras: [
+          "camt.053 is the ISO 20022 machine-readable statement that has replaced the old domestic TITO format. It contains account balances and individual transactions in structured XML, including reference data for incoming payments.",
+          "The structured format enables automatic reconciliation: software can match incoming reference payments to sales invoices with no manual work.",
+        ],
+      },
+      {
+        h2: "How the statement is retrieved",
+        paras: [
+          "The statement is retrieved over the bank's Web Services channel with a signed message. Retrieval requires valid certificates and a Web Services agreement with the bank. Incoming reference payments can be retrieved similarly as a separate file.",
+        ],
+        list: [
+          "camt.053 statement with balances and transactions",
+          "Matching data for incoming reference payments",
+          "Retrieval over the Web Services channel, signed with certificates",
+          "Automatic reconciliation to accounts receivable",
+        ],
+      },
+      {
+        h2: "Statements through ISECure",
+        paras: [
+          "ISECure retrieves camt.053 statements from all the Finnish banks we support through one REST API. We handle the certificates and signing, so your software gets statements ready from one place — from every bank with the same integration.",
+        ],
+      },
+    ],
+  },
+  se: {
+    title: "Maskinläsbart kontoutdrag (camt.053) för programvara | ISECure",
+    description:
+      "Det maskinläsbara kontoutdraget, camt.053, för in banktransaktioner direkt i programvara. Så fungerar hämtningen via Web Services-kanalen och hur ISECure sköter det via ett API.",
+    h1: "Maskinläsbart kontoutdrag (camt.053) för programvara",
+    intro:
+      "Ett maskinläsbart kontoutdrag för in ett bankkontos transaktioner i strukturerad form direkt i ekonomi- eller ERP-programvara, så att avstämning och bokföring kan automatiseras. I dag hämtas kontoutdraget i camt.053-format via Web Services-kanalen.",
+    sections: [
+      {
+        h2: "Vad camt.053 är",
+        paras: [
+          "camt.053 är det maskinläsbara kontoutdraget enligt ISO 20022 som har ersatt det gamla inhemska TITO-formatet. Det innehåller kontosaldon och enskilda transaktioner i strukturerad XML, inklusive referensuppgifter för inkommande betalningar.",
+          "Det strukturerade formatet möjliggör automatisk avstämning: programvaran kan matcha inkommande referensbetalningar mot försäljningsfakturor utan manuellt arbete.",
+        ],
+      },
+      {
+        h2: "Hur kontoutdraget hämtas",
+        paras: [
+          "Kontoutdraget hämtas via bankens Web Services-kanal med ett signerat meddelande. Hämtningen kräver giltiga certifikat och ett Web Services-avtal med banken. Inkommande referensbetalningar kan hämtas på motsvarande sätt som en separat fil.",
+        ],
+        list: [
+          "camt.053-kontoutdrag med saldon och transaktioner",
+          "Matchningsuppgifter för inkommande referensbetalningar",
+          "Hämtning via Web Services-kanalen, signerad med certifikat",
+          "Automatisk avstämning mot kundreskontra",
+        ],
+      },
+      {
+        h2: "Kontoutdrag via ISECure",
+        paras: [
+          "ISECure hämtar camt.053-kontoutdrag från alla finländska banker vi stöder via ett REST-API. Vi sköter certifikaten och signeringen, så din programvara får kontoutdragen färdiga från ett ställe — från alla banker med samma integration.",
+        ],
+      },
+    ],
+  },
+} satisfies Record<Lang, unknown>;
+
+const related = [
+  { slug: "web-services", fi: "Web Services -kanava", en: "Web Services channel", se: "Web Services-kanalen" },
+  { slug: "pankkiyhteys", fi: "Pankkiyhteys: rakenna itse vai osta", en: "Bank connectivity: build vs buy", se: "Bankförbindelse: bygga eller köpa" },
+  { slug: "nordea", fi: "Nordea-pankkiyhteys", en: "Nordea bank connectivity", se: "Nordea-bankförbindelse" },
+];
+---
+
+<GuidePage lang={lang} slug="tiliote" content={content} related={related} />
