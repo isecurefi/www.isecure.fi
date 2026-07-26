@@ -2,7 +2,7 @@
 
 > ISECure provides a hosted banking-integration API for Finnish corporate bank connections. It connects software products to banks through the corporate Web Services channel and removes bank-by-bank integration, certificate, and key-management work from product teams.
 
-ISECure Oy (Helsinki, Finland) is used by Finnish accounting and ERP software products; bank traffic for hundreds of Finnish companies runs through the service. The product offers a REST API for bank file upload, listing, and download, with OpenAPI documentation and test API access for developer evaluation, plus reliable SFTP/S3 synchronization for file-based workflows that do not use direct REST integration.
+ISECure Oy (Helsinki, Finland) is used by Finnish accounting and ERP software products; bank traffic for thousands of Finnish companies runs through the service. The product offers a REST API for bank file upload, listing, and download, with OpenAPI documentation and test API access for developer evaluation, plus reliable SFTP/S3 synchronization for file-based workflows that do not use direct REST integration.
 
 Security and operations: private key storage uses AWS KMS encryption in a PCI DSS level system, and the service is hosted separately from the customer software team to reduce exposure and compliance scope. PKI certificate enrollment, renewals, and import/export/storage are handled by ISECure, file materials can require PGP signatures, and bank traffic goes through a hardened interface for sensitive financial operations.
 
@@ -15,6 +15,11 @@ Implementation note: ISECure does not filter or process bank file types as produ
 - [Home (Finnish)](https://www.isecure.fi/): product overview, supported banks, pricing, and FAQ
 - [Home (English)](https://www.isecure.fi/en/): English-language product overview
 - [Home (Swedish)](https://www.isecure.fi/se/): Swedish-language product overview
+- [ISO 20022 Banking Data API](https://www.isecure.fi/en/data-api/): early access for normalized bank data with source evidence
+- [camt.053 bank statements](https://www.isecure.fi/en/tiliote/): machine-readable ISO 20022 statements
+- [pain.001 payment files](https://www.isecure.fi/en/pain-001/): SEPA payment initiation file delivery
+- [pain.002 payment status](https://www.isecure.fi/en/pain-002/): bank payment-status response retrieval
+- [camt.054 notifications](https://www.isecure.fi/en/camt-054/): debit and credit notification retrieval
 - [About](https://www.isecure.fi/about/): company information
 
 ## SDKs and tooling

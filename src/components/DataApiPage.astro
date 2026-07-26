@@ -5,7 +5,7 @@ import type { Lang } from "../types";
 // Early-access waitlist landing page for the "Bank Data & Evidence API" (working name).
 // Factually conservative: early access, no universal bank/ISO coverage claims, no
 // real-time claims, no auto-bookkeeping. File Exchange API remains unchanged.
-// Form is ready to POST to a backend via data-endpoint; no endpoint is invented here.
+// Leads use the same AWS SNS delivery path as the main website contact form.
 
 const { lang } = Astro.props;
 
@@ -43,19 +43,20 @@ const jsonExample = `{
 
 const content = {
   fi: {
-    title: "Bank Data & Evidence API (early access) | ISECure",
+    title: "ISO 20022 -pankkidata API camt.053-tiliotteille | ISECure",
     description:
-      "Yksi API normalisoidulle yritysten pankkidatalle — evidenssi jokaisesta arvosta takaisin alkuperäiseen pankkiaineistoon. Aikainen pääsy taloushallinnon, ERP:n ja maksuintegraatioiden tekijöille.",
+      "Normalisoi camt.053-tiliotteet ja tuettu ISO 20022 -pankkidata REST/JSON-resursseiksi, joissa jokainen arvo linkittyy lähdeaineistoon. Pyydä aikaista pääsyä.",
     hero: {
-      eyebrow: "Aikainen pääsy · työnimi",
-      h1: "Yksi API normalisoidulle pankkidatalle — evidenssi alkuperäiseen pankkiaineistoon",
-      sub: "ISECuren File Exchange API hoitaa jo pankkiyhteydet, varmenteet ja tiedostosiirrot. Uusi rajapinta ratkaisee seuraavan ongelman: se muuttaa valtuutetut pankkiaineistot kehittäjäystävällisiksi resursseiksi ja säilyttää tarkan yhteyden lähdeaineistoon.",
+      eyebrow: "ISO 20022 Banking Data API · aikainen pääsy",
+      h1: "camt.053 ja muu tuettu ISO 20022 -pankkidata yhdeksi API:ksi",
+      sub: "ISECuren File Exchange API hoitaa jo pankkiyhteydet, varmenteet ja tiedostosiirrot. Uusi rajapinta normalisoi valtuutetut camt.053-tiliotteet ja muun tuetun ISO 20022 -sisällön kehittäjäystävällisiksi resursseiksi säilyttäen tarkan yhteyden lähdeaineistoon.",
       cta: "Pyydä aikaista pääsyä",
       reassure: "Nykyinen File Exchange API säilyy ennallaan.",
     },
     pain: {
       eyebrow: "Ongelma integraattorille",
-      title: "Tiedostoyhteys on ratkaistu — mutta jokainen pankkitiedosto on yhä oma sisältöprojekti",
+      title:
+        "Tiedostoyhteys on ratkaistu — mutta jokainen pankkitiedosto on yhä oma sisältöprojekti",
       paras: [
         "Kun aineistot liikkuvat, työ ei ole ohi. Jokaisesta pankkitiedostosta tulee räätälöity integraatio: ISO 20022 -sisällön jäsentäminen, pankkikohtaiset profiilit, statukset ja poikkeukset — kaikki tulkittava itse.",
         "Tämä sitoo kehittäjäaikaa ja tuottaa hauraita, pankkikohtaisia toteutuksia, jotka pitää ylläpitää ja auditoida erikseen.",
@@ -65,7 +66,11 @@ const content = {
       eyebrow: "Miten se toimii",
       title: "Pankkitiedosto → normalisoitu data → sovelluksesi",
       lead: "Rajapinta muuntaa tuetun ISO 20022 -sisällön normalisoiduiksi liiketoimintaresursseiksi ja liittää jokaiseen arvoon evidenssin: linkin takaisin lähdetiedostoon ja ISO 20022 -kenttään.",
-      nodes: ["Pankkitiedosto (esim. camt.053)", "Normalisoitu data + evidenssi", "Sovelluksesi"],
+      nodes: [
+        "Pankkitiedosto (esim. camt.053)",
+        "Normalisoitu data + evidenssi",
+        "Sovelluksesi",
+      ],
     },
     outputs: {
       eyebrow: "Mitä saat ulos",
@@ -78,25 +83,74 @@ const content = {
         "Tapahtumat/webhookit, kun uutta pankkidataa on käsitelty",
         "TypeScript-integraatiopinta",
       ],
-      jsonCaption: "Havainnollistava vastaus (provisorinen). Kentät ja muodot voivat muuttua aikaisen pääsyn aikana.",
+      jsonCaption:
+        "Havainnollistava vastaus (provisorinen). Kentät ja muodot voivat muuttua aikaisen pääsyn aikana.",
+    },
+    messages: {
+      eyebrow: "ISO 20022 -aineistot",
+      title: "Tiedostoliikenne on jo käytössä",
+      lead: "Nykyinen File Exchange API siirtää pankin ja sopimuksen sallimat aineistot muuttamatta niiden sisältöä. Uusi Banking Data API lisää tuetuille aineistoille normalisoinnin ja evidenssin.",
+      items: [
+        {
+          slug: "tiliote",
+          label: "camt.053-tiliote",
+          text: "Päivän tiliote, saldot ja kirjatut tapahtumat.",
+        },
+        {
+          slug: "pain-001",
+          label: "pain.001-maksuaineisto",
+          text: "SEPA-maksutoimeksianto pankin Web Services -kanavaan.",
+        },
+        {
+          slug: "pain-002",
+          label: "pain.002-maksupalaute",
+          text: "Maksuaineiston vastaanotto- ja käsittelystatus.",
+        },
+        {
+          slug: "camt-054",
+          label: "camt.054-tapahtumailmoitus",
+          text: "Pankin tarjoamat veloitus- ja hyvitysilmoitukset.",
+        },
+      ],
     },
     why: {
       eyebrow: "Miksi ISECure",
       title: "Rakennettu tuotannossa olevan pankkiyhteyden päälle",
       items: [
-        { t: "Tuotannossa oleva yhteys", d: "Sama File Exchange API välittää jo satojen suomalaisten yritysten pankkiliikennettä SEPA Web Services -kanavan kautta." },
-        { t: "Varmenteiden elinkaari", d: "PKI-varmenteiden haku, automaattinen uusinta ja hallinta on jo hoidettu — ei erillistä varmennevarastoa." },
-        { t: "Turvallinen aineistokäsittely", d: "Aineistot käsitellään AWS:n PCI DSS -tason komponenteilla, erillään asiakkaan tuotetiimistä." },
-        { t: "Evidenssin säilytys", d: "Normalisointi ei hävitä alkuperää: jokainen arvo on jäljitettävissä lähdetiedostoon ja -kenttään auditointia varten." },
+        {
+          t: "Tuotannossa oleva yhteys",
+          d: "Sama File Exchange API välittää jo tuhansien suomalaisten yritysten pankkiliikennettä SEPA Web Services -kanavan kautta.",
+        },
+        {
+          t: "Varmenteiden elinkaari",
+          d: "PKI-varmenteiden haku, automaattinen uusinta ja hallinta on jo hoidettu — ei erillistä varmennevarastoa.",
+        },
+        {
+          t: "Turvallinen aineistokäsittely",
+          d: "Aineistot käsitellään AWS:n PCI DSS -tason komponenteilla, erillään asiakkaan tuotetiimistä.",
+        },
+        {
+          t: "Evidenssin säilytys",
+          d: "Normalisointi ei hävitä alkuperää: jokainen arvo on jäljitettävissä lähdetiedostoon ja -kenttään auditointia varten.",
+        },
       ],
     },
     workflow: {
       eyebrow: "Työnkulku",
       title: "Kolme askelta",
       steps: [
-        { t: "Vastaanota tiedostot", d: "Nykyisen File Exchange API:n kautta — pankkiyhteys, varmenteet ja siirto kuten ennenkin." },
-        { t: "Validoi ja normalisoi", d: "Tuettu ISO 20022 -sisältö jäsennetään ja normalisoidaan liiketoimintaresursseiksi." },
-        { t: "Käytä dataa ja evidenssiä", d: "Kuluta resurssit ja niiden evidenssi uuden API:n kautta sovelluksessasi." },
+        {
+          t: "Vastaanota tiedostot",
+          d: "Nykyisen File Exchange API:n kautta — pankkiyhteys, varmenteet ja siirto kuten ennenkin.",
+        },
+        {
+          t: "Validoi ja normalisoi",
+          d: "Tuettu ISO 20022 -sisältö jäsennetään ja normalisoidaan liiketoimintaresursseiksi.",
+        },
+        {
+          t: "Käytä dataa ja evidenssiä",
+          d: "Kuluta resurssit ja niiden evidenssi uuden API:n kautta sovelluksessasi.",
+        },
       ],
     },
     early: {
@@ -118,12 +172,30 @@ const content = {
       eyebrow: "UKK",
       title: "Usein kysyttyä",
       items: [
-        { q: "Korvaako tämä pankkisopimukset?", a: "Ei. Tarvitset edelleen omat pankkisopimuksesi ja -valtuutuksesi. Käsittely edellyttää asiakkaan valtuutusta ja asianmukaista sopimus- ja GDPR-perustetta." },
-        { q: "Toimiiko tämä nykyisen File Exchange API:n kanssa?", a: "Kyllä. File Exchange API säilyy ennallaan. Uusi rajapinta on sen rinnalla ja käsittelee jo vastaanotettuja, valtuutettuja aineistoja." },
-        { q: "Mitä pankkeja ja viestejä tuetaan?", a: "Tuki on rajattua aikaisen pääsyn aikana emmekä lupaa kattavaa pankki- tai ISO 20022 -tukea. Kerro kiinnostavat pankit ja viestit, niin priorisoimme niitä." },
-        { q: "Onko tämä reaaliaikaista?", a: "Ei. Taustapalvelut ovat tiedostopohjaisia, joten data on saatavilla kun aineisto on vastaanotettu ja käsitelty — ei jatkuvana reaaliaikaisena virtana." },
-        { q: "Kuka omistaa datan?", a: "Data on asiakkaan. Käsittelemme sitä asiakkaan valtuutuksella ja sopimus-/GDPR-perusteella; emme käytä sitä muuhun." },
-        { q: "Tekeekö tämä kirjanpidon?", a: "Ei. Emme tee automaattista kirjanpitoa, tiliöintiä emmekä tapahtumien luokittelua. Tuotamme normalisoidun datan ja evidenssin — kirjaukset teet omassa sovelluksessasi." },
+        {
+          q: "Korvaako tämä pankkisopimukset?",
+          a: "Ei. Tarvitset edelleen omat pankkisopimuksesi ja -valtuutuksesi. Käsittely edellyttää asiakkaan valtuutusta ja asianmukaista sopimus- ja GDPR-perustetta.",
+        },
+        {
+          q: "Toimiiko tämä nykyisen File Exchange API:n kanssa?",
+          a: "Kyllä. File Exchange API säilyy ennallaan. Uusi rajapinta on sen rinnalla ja käsittelee jo vastaanotettuja, valtuutettuja aineistoja.",
+        },
+        {
+          q: "Mitä pankkeja ja viestejä tuetaan?",
+          a: "Tuki on rajattua aikaisen pääsyn aikana emmekä lupaa kattavaa pankki- tai ISO 20022 -tukea. Kerro kiinnostavat pankit ja viestit, niin priorisoimme niitä.",
+        },
+        {
+          q: "Onko tämä reaaliaikaista?",
+          a: "Ei. Taustapalvelut ovat tiedostopohjaisia, joten data on saatavilla kun aineisto on vastaanotettu ja käsitelty — ei jatkuvana reaaliaikaisena virtana.",
+        },
+        {
+          q: "Kuka omistaa datan?",
+          a: "Data on asiakkaan. Käsittelemme sitä asiakkaan valtuutuksella ja sopimus-/GDPR-perusteella; emme käytä sitä muuhun.",
+        },
+        {
+          q: "Tekeekö tämä kirjanpidon?",
+          a: "Ei. Emme tee automaattista kirjanpitoa, tiliöintiä emmekä tapahtumien luokittelua. Tuotamme normalisoidun datan ja evidenssin — kirjaukset teet omassa sovelluksessasi.",
+        },
       ],
     },
     form: {
@@ -140,25 +212,26 @@ const content = {
       sending: "Lähetetään…",
       success: "Kiitos — otamme yhteyttä.",
       error: "Lähetys ei onnistunut. Yritä uudelleen tai lähetä sähköpostia.",
-      noendpoint: "Lomaketta ei ole vielä kytketty taustapalveluun. Lähetä sähköpostia osoitteeseen sales@isecure.fi.",
-      privacy: "Käytämme tietojasi vain aikaisen pääsyn yhteydenottoon. Emme jaa niitä kolmansille. Katso tietosuojaseloste.",
+      privacy:
+        "Käytämme tietojasi vain aikaisen pääsyn yhteydenottoon. Emme jaa niitä kolmansille. Katso tietosuojaseloste.",
       fallback: "Tai lähetä sähköpostia:",
     },
   },
   en: {
-    title: "Bank Data & Evidence API (early access) | ISECure",
+    title: "ISO 20022 Banking Data API for camt.053 Statements | ISECure",
     description:
-      "One API for normalized corporate banking data — with evidence back to the original bank file. Early access for accounting, ERP, treasury, and payment-integration providers.",
+      "Normalize camt.053 statements and supported ISO 20022 bank data into REST/JSON resources with evidence back to every source value. Request early access.",
     hero: {
-      eyebrow: "Early access · working name",
-      h1: "One API for normalized corporate banking data — with evidence back to the original bank file",
-      sub: "ISECure's File Exchange API already handles bank connectivity, certificates, and secure file transfer. This adjacent API solves the next problem: it turns authorized bank files into developer-friendly business resources while preserving exact source lineage.",
+      eyebrow: "ISO 20022 Banking Data API · early access",
+      h1: "Turn camt.053 and supported ISO 20022 bank data into one API",
+      sub: "ISECure's File Exchange API already handles bank connectivity, certificates, and secure file transfer. This adjacent API normalizes authorized camt.053 statements and other supported ISO 20022 content into developer-friendly resources while preserving exact source lineage.",
       cta: "Request early access",
       reassure: "The existing File Exchange API remains unchanged.",
     },
     pain: {
       eyebrow: "The integrator's pain",
-      title: "File connectivity is solved — but every bank file still becomes a custom content integration",
+      title:
+        "File connectivity is solved — but every bank file still becomes a custom content integration",
       paras: [
         "Once files move, the work isn't over. Every bank file turns into a custom integration: parsing ISO 20022 content, bank-specific profiles, statuses, and exceptions — all interpreted by you.",
         "That ties up developer time and produces brittle, per-bank implementations you have to maintain and audit separately.",
@@ -168,7 +241,11 @@ const content = {
       eyebrow: "How it works",
       title: "Bank file → normalized data → your application",
       lead: "The API converts supported ISO 20022 content into normalized business resources and attaches evidence to every value: a link back to its source file and ISO 20022 field.",
-      nodes: ["Bank file (e.g. camt.053)", "Normalized data + evidence", "Your application"],
+      nodes: [
+        "Bank file (e.g. camt.053)",
+        "Normalized data + evidence",
+        "Your application",
+      ],
     },
     outputs: {
       eyebrow: "What you get",
@@ -181,25 +258,74 @@ const content = {
         "Events/webhooks when new bank data has been processed",
         "TypeScript integration surface",
       ],
-      jsonCaption: "Illustrative response (provisional). Fields and formats may change during early access.",
+      jsonCaption:
+        "Illustrative response (provisional). Fields and formats may change during early access.",
+    },
+    messages: {
+      eyebrow: "ISO 20022 messages",
+      title: "File delivery already works in production",
+      lead: "The existing File Exchange API transports files allowed by the bank and customer agreement without changing their content. The new Banking Data API adds normalization and evidence for supported files.",
+      items: [
+        {
+          slug: "tiliote",
+          label: "camt.053 bank statements",
+          text: "End-of-day statements, balances, and booked entries.",
+        },
+        {
+          slug: "pain-001",
+          label: "pain.001 payment files",
+          text: "SEPA payment initiation over the bank's Web Services channel.",
+        },
+        {
+          slug: "pain-002",
+          label: "pain.002 payment status",
+          text: "Reception and processing status for payment files.",
+        },
+        {
+          slug: "camt-054",
+          label: "camt.054 notifications",
+          text: "Debit and credit notifications when provided by the bank.",
+        },
+      ],
     },
     why: {
       eyebrow: "Why ISECure",
       title: "Built on existing production connectivity",
       items: [
-        { t: "Production connectivity", d: "The same File Exchange API already carries bank traffic for hundreds of Finnish companies over SEPA Web Services." },
-        { t: "Certificate lifecycle", d: "PKI certificate enrollment, automatic renewal, and management are already handled — no separate certificate store." },
-        { t: "Secure file handling", d: "Files are processed on AWS PCI DSS level components, separate from your product team." },
-        { t: "Evidence preservation", d: "Normalization doesn't discard origin: every value is traceable to its source file and field for audit." },
+        {
+          t: "Production connectivity",
+          d: "The same File Exchange API already carries bank traffic for thousands of Finnish companies over SEPA Web Services.",
+        },
+        {
+          t: "Certificate lifecycle",
+          d: "PKI certificate enrollment, automatic renewal, and management are already handled — no separate certificate store.",
+        },
+        {
+          t: "Secure file handling",
+          d: "Files are processed on AWS PCI DSS level components, separate from your product team.",
+        },
+        {
+          t: "Evidence preservation",
+          d: "Normalization doesn't discard origin: every value is traceable to its source file and field for audit.",
+        },
       ],
     },
     workflow: {
       eyebrow: "Workflow",
       title: "Three steps",
       steps: [
-        { t: "Receive files", d: "Through the existing File Exchange API — connectivity, certificates, and transfer as before." },
-        { t: "Validate and normalize", d: "Supported ISO 20022 content is parsed and normalized into business resources." },
-        { t: "Consume data and evidence", d: "Consume the resources and their evidence through the new API in your application." },
+        {
+          t: "Receive files",
+          d: "Through the existing File Exchange API — connectivity, certificates, and transfer as before.",
+        },
+        {
+          t: "Validate and normalize",
+          d: "Supported ISO 20022 content is parsed and normalized into business resources.",
+        },
+        {
+          t: "Consume data and evidence",
+          d: "Consume the resources and their evidence through the new API in your application.",
+        },
       ],
     },
     early: {
@@ -221,12 +347,30 @@ const content = {
       eyebrow: "FAQ",
       title: "Frequently asked",
       items: [
-        { q: "Does this replace bank agreements?", a: "No. You still need your own bank agreements and authorizations. Processing requires the customer's authorization and an appropriate contractual and GDPR basis." },
-        { q: "Does it work with the existing File Exchange API?", a: "Yes. The File Exchange API remains unchanged. The new API sits alongside it and processes files you've already received under authorization." },
-        { q: "Which banks and messages are supported?", a: "Support is limited during early access, and we don't claim universal bank or ISO 20022 coverage. Tell us the banks and messages you care about and we'll prioritize them." },
-        { q: "Is this real-time?", a: "No. The underlying services are file-driven, so data is available once a file has been received and processed — not as a continuous real-time stream." },
-        { q: "Who owns the data?", a: "The data is the customer's. We process it under the customer's authorization and a contractual/GDPR basis; we don't use it for anything else." },
-        { q: "Does this do bookkeeping?", a: "No. We don't do automatic bookkeeping, accounting entries, or transaction categorization. We provide normalized data and evidence — you make the bookings in your own application." },
+        {
+          q: "Does this replace bank agreements?",
+          a: "No. You still need your own bank agreements and authorizations. Processing requires the customer's authorization and an appropriate contractual and GDPR basis.",
+        },
+        {
+          q: "Does it work with the existing File Exchange API?",
+          a: "Yes. The File Exchange API remains unchanged. The new API sits alongside it and processes files you've already received under authorization.",
+        },
+        {
+          q: "Which banks and messages are supported?",
+          a: "Support is limited during early access, and we don't claim universal bank or ISO 20022 coverage. Tell us the banks and messages you care about and we'll prioritize them.",
+        },
+        {
+          q: "Is this real-time?",
+          a: "No. The underlying services are file-driven, so data is available once a file has been received and processed — not as a continuous real-time stream.",
+        },
+        {
+          q: "Who owns the data?",
+          a: "The data is the customer's. We process it under the customer's authorization and a contractual/GDPR basis; we don't use it for anything else.",
+        },
+        {
+          q: "Does this do bookkeeping?",
+          a: "No. We don't do automatic bookkeeping, accounting entries, or transaction categorization. We provide normalized data and evidence — you make the bookings in your own application.",
+        },
       ],
     },
     form: {
@@ -243,25 +387,26 @@ const content = {
       sending: "Sending…",
       success: "Thanks — we'll be in touch.",
       error: "Couldn't send. Please try again or email us.",
-      noendpoint: "This form isn't connected to a backend yet. Please email sales@isecure.fi.",
-      privacy: "We use your details only to contact you about early access. We don't share them with third parties. See our privacy policy.",
+      privacy:
+        "We use your details only to contact you about early access. We don't share them with third parties. See our privacy policy.",
       fallback: "Or email us:",
     },
   },
   se: {
-    title: "Bank Data & Evidence API (early access) | ISECure",
+    title: "ISO 20022-bankdata-API för camt.053-kontoutdrag | ISECure",
     description:
-      "Ett API för normaliserad företagsbankdata — med evidens tillbaka till den ursprungliga bankfilen. Tidig tillgång för ekonomi-, ERP-, treasury- och betalningsintegratörer.",
+      "Normalisera camt.053-kontoutdrag och stött ISO 20022-bankdata till REST/JSON-resurser med evidens tillbaka till varje källvärde. Begär tidig tillgång.",
     hero: {
-      eyebrow: "Tidig tillgång · arbetsnamn",
-      h1: "Ett API för normaliserad företagsbankdata — med evidens tillbaka till den ursprungliga bankfilen",
-      sub: "ISECures File Exchange API sköter redan bankanslutning, certifikat och säker filöverföring. Det nya API:et löser nästa problem: det gör auktoriserade bankfiler till utvecklarvänliga resurser och bevarar exakt källhärkomst.",
+      eyebrow: "ISO 20022 Banking Data API · tidig tillgång",
+      h1: "Gör camt.053 och stött ISO 20022-bankdata till ett API",
+      sub: "ISECures File Exchange API sköter redan bankanslutning, certifikat och säker filöverföring. Det nya API:et normaliserar auktoriserade camt.053-kontoutdrag och annat stött ISO 20022-innehåll till utvecklarvänliga resurser och bevarar exakt källhärkomst.",
       cta: "Begär tidig tillgång",
       reassure: "Det nuvarande File Exchange API:et förblir oförändrat.",
     },
     pain: {
       eyebrow: "Integratörens problem",
-      title: "Filanslutningen är löst — men varje bankfil blir fortfarande en egen innehållsintegration",
+      title:
+        "Filanslutningen är löst — men varje bankfil blir fortfarande en egen innehållsintegration",
       paras: [
         "När filerna rör sig är arbetet inte klart. Varje bankfil blir en skräddarsydd integration: tolka ISO 20022-innehåll, bankspecifika profiler, statusar och undantag — allt tolkat av dig.",
         "Det binder utvecklartid och ger sköra, bankspecifika lösningar som måste underhållas och revideras separat.",
@@ -271,7 +416,11 @@ const content = {
       eyebrow: "Så fungerar det",
       title: "Bankfil → normaliserad data → din applikation",
       lead: "API:et konverterar stött ISO 20022-innehåll till normaliserade affärsresurser och kopplar evidens till varje värde: en länk tillbaka till källfilen och ISO 20022-fältet.",
-      nodes: ["Bankfil (t.ex. camt.053)", "Normaliserad data + evidens", "Din applikation"],
+      nodes: [
+        "Bankfil (t.ex. camt.053)",
+        "Normaliserad data + evidens",
+        "Din applikation",
+      ],
     },
     outputs: {
       eyebrow: "Vad du får",
@@ -284,25 +433,74 @@ const content = {
         "Händelser/webhooks när ny bankdata har bearbetats",
         "TypeScript-integrationsyta",
       ],
-      jsonCaption: "Illustrativt svar (preliminärt). Fält och format kan ändras under tidig tillgång.",
+      jsonCaption:
+        "Illustrativt svar (preliminärt). Fält och format kan ändras under tidig tillgång.",
+    },
+    messages: {
+      eyebrow: "ISO 20022-meddelanden",
+      title: "Filöverföringen fungerar redan i produktion",
+      lead: "Det befintliga File Exchange API:et transporterar filer som banken och kundavtalet tillåter utan att ändra innehållet. Det nya Banking Data API:et lägger till normalisering och evidens för stödda filer.",
+      items: [
+        {
+          slug: "tiliote",
+          label: "camt.053-kontoutdrag",
+          text: "Dagliga kontoutdrag, saldon och bokförda poster.",
+        },
+        {
+          slug: "pain-001",
+          label: "pain.001-betalningsfiler",
+          text: "SEPA-betalningsinitiering via bankens Web Services-kanal.",
+        },
+        {
+          slug: "pain-002",
+          label: "pain.002-betalningsstatus",
+          text: "Mottagnings- och behandlingsstatus för betalningsfiler.",
+        },
+        {
+          slug: "camt-054",
+          label: "camt.054-aviseringar",
+          text: "Debet- och kreditaviseringar när banken erbjuder dem.",
+        },
+      ],
     },
     why: {
       eyebrow: "Varför ISECure",
       title: "Byggt på befintlig produktionsanslutning",
       items: [
-        { t: "Produktionsanslutning", d: "Samma File Exchange API förmedlar redan banktrafik för hundratals finländska företag via SEPA Web Services." },
-        { t: "Certifikatlivscykel", d: "PKI-certifikatinföring, automatisk förnyelse och hantering är redan skött — inget separat certifikatlager." },
-        { t: "Säker filhantering", d: "Filer bearbetas på AWS PCI DSS-komponenter, åtskilt från ditt produktteam." },
-        { t: "Bevarad evidens", d: "Normalisering kastar inte bort ursprunget: varje värde är spårbart till sin källfil och sitt fält för revision." },
+        {
+          t: "Produktionsanslutning",
+          d: "Samma File Exchange API förmedlar redan banktrafik för tusentals finländska företag via SEPA Web Services.",
+        },
+        {
+          t: "Certifikatlivscykel",
+          d: "PKI-certifikatinföring, automatisk förnyelse och hantering är redan skött — inget separat certifikatlager.",
+        },
+        {
+          t: "Säker filhantering",
+          d: "Filer bearbetas på AWS PCI DSS-komponenter, åtskilt från ditt produktteam.",
+        },
+        {
+          t: "Bevarad evidens",
+          d: "Normalisering kastar inte bort ursprunget: varje värde är spårbart till sin källfil och sitt fält för revision.",
+        },
       ],
     },
     workflow: {
       eyebrow: "Arbetsflöde",
       title: "Tre steg",
       steps: [
-        { t: "Ta emot filer", d: "Via det befintliga File Exchange API:et — anslutning, certifikat och överföring som förut." },
-        { t: "Validera och normalisera", d: "Stött ISO 20022-innehåll tolkas och normaliseras till affärsresurser." },
-        { t: "Använd data och evidens", d: "Konsumera resurserna och deras evidens via det nya API:et i din applikation." },
+        {
+          t: "Ta emot filer",
+          d: "Via det befintliga File Exchange API:et — anslutning, certifikat och överföring som förut.",
+        },
+        {
+          t: "Validera och normalisera",
+          d: "Stött ISO 20022-innehåll tolkas och normaliseras till affärsresurser.",
+        },
+        {
+          t: "Använd data och evidens",
+          d: "Konsumera resurserna och deras evidens via det nya API:et i din applikation.",
+        },
       ],
     },
     early: {
@@ -324,12 +522,30 @@ const content = {
       eyebrow: "FAQ",
       title: "Vanliga frågor",
       items: [
-        { q: "Ersätter detta bankavtal?", a: "Nej. Du behöver fortfarande egna bankavtal och auktoriseringar. Bearbetning kräver kundens auktorisering och en lämplig avtals- och GDPR-grund." },
-        { q: "Fungerar det med befintliga File Exchange API?", a: "Ja. File Exchange API:et förblir oförändrat. Det nya API:et ligger bredvid och bearbetar filer du redan tagit emot med auktorisering." },
-        { q: "Vilka banker och meddelanden stöds?", a: "Stödet är begränsat under tidig tillgång och vi lovar inte universellt bank- eller ISO 20022-stöd. Berätta vilka banker och meddelanden du bryr dig om så prioriterar vi dem." },
-        { q: "Är detta realtid?", a: "Nej. De underliggande tjänsterna är fildrivna, så data är tillgänglig när en fil har tagits emot och bearbetats — inte som en kontinuerlig realtidsström." },
-        { q: "Vem äger datan?", a: "Datan är kundens. Vi bearbetar den med kundens auktorisering och en avtals-/GDPR-grund; vi använder den inte till något annat." },
-        { q: "Gör detta bokföring?", a: "Nej. Vi gör ingen automatisk bokföring, kontering eller transaktionskategorisering. Vi tillhandahåller normaliserad data och evidens — du gör bokningarna i din egen applikation." },
+        {
+          q: "Ersätter detta bankavtal?",
+          a: "Nej. Du behöver fortfarande egna bankavtal och auktoriseringar. Bearbetning kräver kundens auktorisering och en lämplig avtals- och GDPR-grund.",
+        },
+        {
+          q: "Fungerar det med befintliga File Exchange API?",
+          a: "Ja. File Exchange API:et förblir oförändrat. Det nya API:et ligger bredvid och bearbetar filer du redan tagit emot med auktorisering.",
+        },
+        {
+          q: "Vilka banker och meddelanden stöds?",
+          a: "Stödet är begränsat under tidig tillgång och vi lovar inte universellt bank- eller ISO 20022-stöd. Berätta vilka banker och meddelanden du bryr dig om så prioriterar vi dem.",
+        },
+        {
+          q: "Är detta realtid?",
+          a: "Nej. De underliggande tjänsterna är fildrivna, så data är tillgänglig när en fil har tagits emot och bearbetats — inte som en kontinuerlig realtidsström.",
+        },
+        {
+          q: "Vem äger datan?",
+          a: "Datan är kundens. Vi bearbetar den med kundens auktorisering och en avtals-/GDPR-grund; vi använder den inte till något annat.",
+        },
+        {
+          q: "Gör detta bokföring?",
+          a: "Nej. Vi gör ingen automatisk bokföring, kontering eller transaktionskategorisering. Vi tillhandahåller normaliserad data och evidens — du gör bokningarna i din egen applikation.",
+        },
       ],
     },
     form: {
@@ -346,8 +562,8 @@ const content = {
       sending: "Skickar…",
       success: "Tack — vi hör av oss.",
       error: "Kunde inte skicka. Försök igen eller mejla oss.",
-      noendpoint: "Formuläret är inte kopplat till en backend ännu. Mejla sales@isecure.fi.",
-      privacy: "Vi använder dina uppgifter endast för att kontakta dig om tidig tillgång. Vi delar dem inte med tredje part. Se vår integritetspolicy.",
+      privacy:
+        "Vi använder dina uppgifter endast för att kontakta dig om tidig tillgång. Vi delar dem inte med tredje part. Se vår integritetspolicy.",
       fallback: "Eller mejla oss:",
     },
   },
@@ -417,6 +633,29 @@ const privacyHref = lang === "fi" ? "/privacy/" : `/${lang}/privacy/`;
           <pre tabindex="0" aria-label="JSON"><code>{jsonExample}</code></pre>
           <figcaption>{t.outputs.jsonCaption}</figcaption>
         </figure>
+      </div>
+    </section>
+
+    <section class="bda-section" aria-labelledby="bda-messages">
+      <div class="bda-inner">
+        <p class="bda-eyebrow">{t.messages.eyebrow}</p>
+        <h2 id="bda-messages">{t.messages.title}</h2>
+        <p class="bda-lead">{t.messages.lead}</p>
+        <div class="bda-grid">
+          {
+            t.messages.items.map((item) => (
+              <a
+                class="bda-card bda-message-card"
+                href={
+                  lang === "fi" ? `/${item.slug}/` : `/${lang}/${item.slug}/`
+                }
+              >
+                <h3>{item.label}</h3>
+                <p>{item.text}</p>
+              </a>
+            ))
+          }
+        </div>
       </div>
     </section>
 
@@ -490,7 +729,11 @@ const privacyHref = lang === "fi" ? "/privacy/" : `/${lang}/privacy/`;
       </div>
     </section>
 
-    <section class="bda-section bda-waitlist-section" id="waitlist" aria-labelledby="bda-form">
+    <section
+      class="bda-section bda-waitlist-section"
+      id="waitlist"
+      aria-labelledby="bda-form"
+    >
       <div class="bda-inner bda-form-wrap">
         <p class="bda-eyebrow">{t.form.eyebrow}</p>
         <h2 id="bda-form">{t.form.title}</h2>
@@ -500,40 +743,106 @@ const privacyHref = lang === "fi" ? "/privacy/" : `/${lang}/privacy/`;
           id="bda-waitlist-form"
           class="bda-form"
           method="post"
-          data-endpoint=""
+          data-language={lang}
           data-sending={t.form.sending}
           data-success={t.form.success}
           data-error={t.form.error}
-          data-noendpoint={t.form.noendpoint}
           novalidate
         >
           <div class="bda-field">
-            <label for="wl-email">{t.form.email} <span class="bda-req" aria-hidden="true">*</span></label>
-            <input id="wl-email" name="email" type="email" autocomplete="email" required />
+            <label for="wl-email"
+              >{t.form.email}
+              <span class="bda-req" aria-hidden="true">*</span></label
+            >
+            <input
+              id="wl-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength="120"
+              required
+            />
           </div>
           <div class="bda-field">
-            <label for="wl-company">{t.form.company} <span class="bda-req" aria-hidden="true">*</span></label>
-            <input id="wl-company" name="company" type="text" autocomplete="organization" required />
+            <label for="wl-company"
+              >{t.form.company}
+              <span class="bda-req" aria-hidden="true">*</span></label
+            >
+            <input
+              id="wl-company"
+              name="company"
+              type="text"
+              autocomplete="organization"
+              maxlength="100"
+              required
+            />
           </div>
           <div class="bda-field">
-            <label for="wl-role">{t.form.role} <span class="bda-opt">({t.form.optional})</span></label>
-            <input id="wl-role" name="role" type="text" autocomplete="organization-title" />
+            <label for="wl-role"
+              >{t.form.role}
+              <span class="bda-opt">({t.form.optional})</span></label
+            >
+            <input
+              id="wl-role"
+              name="role"
+              type="text"
+              autocomplete="organization-title"
+              maxlength="100"
+            />
           </div>
           <div class="bda-field">
-            <label for="wl-problem">{t.form.problem} <span class="bda-opt">({t.form.optional})</span></label>
-            <textarea id="wl-problem" name="problem" rows="3"></textarea>
+            <label for="wl-problem"
+              >{t.form.problem}
+              <span class="bda-opt">({t.form.optional})</span></label
+            >
+            <textarea id="wl-problem" name="problem" rows="3" maxlength="1000"
+            ></textarea>
           </div>
           <div class="bda-field">
-            <label for="wl-interest">{t.form.interest} <span class="bda-opt">({t.form.optional})</span></label>
-            <input id="wl-interest" name="interest" type="text" />
+            <label for="wl-interest"
+              >{t.form.interest}
+              <span class="bda-opt">({t.form.optional})</span></label
+            >
+            <input
+              id="wl-interest"
+              name="interest"
+              type="text"
+              maxlength="250"
+            />
+          </div>
+          <div class="bda-hp" aria-hidden="true">
+            <label for="wl-website">Website</label>
+            <input
+              id="wl-website"
+              name="website"
+              type="text"
+              autocomplete="off"
+              tabindex="-1"
+            />
           </div>
           <p class="bda-privacy" id="wl-privacy">
             {t.form.privacy.replace(/\s*[^.]*$/, "")}
-            <a href={privacyHref}>{lang === "fi" ? "tietosuojaseloste" : lang === "se" ? "integritetspolicy" : "privacy policy"}</a>.
+            <a href={privacyHref}
+              >{
+                lang === "fi"
+                  ? "tietosuojaseloste"
+                  : lang === "se"
+                    ? "integritetspolicy"
+                    : "privacy policy"
+              }</a
+            >.
           </p>
-          <button type="submit" class="bda-btn" aria-describedby="wl-privacy">{t.form.submit}</button>
-          <p class="bda-status" data-status role="status" aria-live="polite"></p>
-          <p class="bda-fallback">{t.form.fallback} <a href="mailto:sales@isecure.fi?subject=Bank%20Data%20%26%20Evidence%20API%20early%20access">sales@isecure.fi</a></p>
+          <button type="submit" class="bda-btn" aria-describedby="wl-privacy"
+            >{t.form.submit}</button
+          >
+          <p class="bda-status" data-status role="status" aria-live="polite">
+          </p>
+          <p class="bda-fallback">
+            {t.form.fallback}
+            <a
+              href="mailto:sales@isecure.fi?subject=Bank%20Data%20%26%20Evidence%20API%20early%20access"
+              >sales@isecure.fi</a>
+          </p>
         </form>
       </div>
     </section>
@@ -624,8 +933,11 @@ const privacyHref = lang === "fi" ? "/privacy/" : `/${lang}/privacy/`;
 
   /* Hero */
   .bda-hero {
-    background:
-      radial-gradient(circle at 15% 10%, rgba(79, 209, 197, 0.16), transparent 38%),
+    background: radial-gradient(
+        circle at 15% 10%,
+        rgba(79, 209, 197, 0.16),
+        transparent 38%
+      ),
       var(--landing-bg);
     border-top: 0;
     padding: 3.5rem 0 3rem;
@@ -771,6 +1083,17 @@ const privacyHref = lang === "fi" ? "/privacy/" : `/${lang}/privacy/`;
     line-height: 1.6;
     margin: 0;
   }
+  .bda-message-card {
+    color: inherit;
+    text-decoration: none;
+  }
+  .bda-message-card:hover {
+    border-color: var(--landing-accent);
+  }
+  .bda-message-card:focus-visible {
+    outline: 3px solid var(--landing-blue);
+    outline-offset: 2px;
+  }
 
   /* Steps */
   .bda-steps {
@@ -904,6 +1227,13 @@ const privacyHref = lang === "fi" ? "/privacy/" : `/${lang}/privacy/`;
   .bda-privacy a {
     color: var(--landing-accent);
   }
+  .bda-hp {
+    height: 0;
+    left: -10000px;
+    overflow: hidden;
+    position: absolute;
+    width: 0;
+  }
 
   @media (max-width: 760px) {
     .bda-outputs,
@@ -920,39 +1250,79 @@ const privacyHref = lang === "fi" ? "/privacy/" : `/${lang}/privacy/`;
   }
 
   @media print {
-    .bda-hero { background: none; }
+    .bda-hero {
+      background: none;
+    }
     .bda-waitlist-section,
-    .bda-hero-actions { display: none; }
-    .bda { color: #000; background: #fff; }
-    .bda-sub, .bda-lead, .bda-muted, .bda-card p, .bda-steps p { color: #222; }
+    .bda-hero-actions {
+      display: none;
+    }
+    .bda {
+      color: #000;
+      background: #fff;
+    }
+    .bda-sub,
+    .bda-lead,
+    .bda-muted,
+    .bda-card p,
+    .bda-steps p {
+      color: #222;
+    }
   }
 </style>
 
 <script>
-  const form = document.getElementById("bda-waitlist-form") as HTMLFormElement | null;
+  import type { Lang } from "../types";
+  import { trackLead } from "../utils/analytics";
+  import { submitWebsiteLead } from "../utils/leadDelivery";
+
+  const form = document.getElementById(
+    "bda-waitlist-form",
+  ) as HTMLFormElement | null;
   if (form) {
     const status = form.querySelector("[data-status]") as HTMLElement;
-    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const btn = form.querySelector(
+      'button[type="submit"]',
+    ) as HTMLButtonElement;
     const label = btn.textContent || "";
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!form.reportValidity()) return;
-      const endpoint = form.dataset.endpoint;
       status.textContent = "";
-      if (!endpoint) {
-        status.textContent = form.dataset.noendpoint || "";
+
+      const fields = new FormData(form);
+      if (String(fields.get("website") || "")) {
+        form.reset();
+        status.textContent = form.dataset.success || "";
         return;
       }
+
+      const email = String(fields.get("email") || "").trim();
+      const company = String(fields.get("company") || "").trim();
+      const role = String(fields.get("role") || "").trim();
+      const problem = String(fields.get("problem") || "").trim();
+      const interest = String(fields.get("interest") || "").trim();
+      const language = (form.dataset.language || "fi") as Lang;
+
       btn.disabled = true;
       btn.textContent = form.dataset.sending || label;
       try {
-        const body = JSON.stringify(Object.fromEntries(new FormData(form) as any));
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body,
+        await submitWebsiteLead({
+          subject: `ISECure Data API early access: ${company}`,
+          message: [
+            `Work email: ${email}`,
+            `Company: ${company}`,
+            `Role: ${role || "-"}`,
+            `Language: ${language}`,
+            `Banks or ISO 20022 messages: ${interest || "-"}`,
+            `Current integration problem:\n${problem || "-"}`,
+          ].join("\n"),
         });
-        if (!res.ok) throw new Error();
+        trackLead({
+          formName: "data_api_early_access",
+          leadType: "early_access",
+          language,
+        });
         form.reset();
         status.textContent = form.dataset.success || "";
       } catch {

@@ -1,0 +1,14 @@
+---
+import Iso20022MessagePage from "../../components/Iso20022MessagePage.astro";
+import { languages } from "../../utils/languages";
+
+export async function getStaticPaths() {
+  return languages
+    .filter((lang) => lang !== "fi")
+    .map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props;
+---
+
+<Iso20022MessagePage lang={lang} messageType="camt-054" />

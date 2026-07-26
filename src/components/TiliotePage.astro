@@ -6,10 +6,10 @@ const { lang } = Astro.props;
 
 const content = {
   fi: {
-    title: "Konekielinen tiliote (camt.053) ohjelmistoon | ISECure",
+    title: "camt.053 API: konekielinen tiliote ohjelmistoon | ISECure",
     description:
-      "Konekielinen tiliote eli camt.053 tuo pankkitapahtumat suoraan ohjelmistoon. Näin nouto toimii Web Services -kanavan kautta ja miten ISECure hoitaa sen yhdellä rajapinnalla.",
-    h1: "Konekielinen tiliote (camt.053) ohjelmistoon",
+      "camt.053 API tuo konekielisen ISO 20022 -tiliotteen ohjelmistoon yhdestä rajapinnasta. Lue camt053-sisällöstä, versioista, noudosta ja täsmäytyksestä.",
+    h1: "camt.053 API: konekielinen tiliote ohjelmistoon",
     intro:
       "Konekielinen tiliote tuo pankkitilin tapahtumat rakenteisessa muodossa suoraan taloushallinnon tai ERP-ohjelmistoon, jolloin täsmäytys ja kirjaukset voidaan automatisoida. Nykyään tiliote noudetaan camt.053-muodossa Web Services -kanavan kautta.",
     sections: [
@@ -18,6 +18,12 @@ const content = {
         paras: [
           "camt.053 on ISO 20022 -standardin mukainen konekielinen tiliote, joka on korvannut vanhan kotimaisen TITO-muodon (konekielinen tiliote). Se sisältää tilin saldot ja yksittäiset tapahtumat rakenteisessa XML-muodossa, mukaan lukien viitetiedot saapuville maksuille.",
           "Rakenteinen muoto mahdollistaa automaattisen täsmäytyksen: ohjelmisto voi kohdistaa saapuvat viitemaksut myyntilaskuihin ilman manuaalista työtä.",
+        ],
+      },
+      {
+        h2: "camt.053, camt053 vai camt 053?",
+        paras: [
+          "Kirjoitusasut camt.053, camt053 ja camt 053 tarkoittavat samaa ISO 20022 Bank-to-Customer Statement -sanomaperhettä. Pankit ilmoittavat lisäksi skeemaversion, kuten camt.053.001.08. Ohjelmiston on tunnistettava pankin toimittama versio ja sen pankkikohtainen soveltamisohje.",
         ],
       },
       {
@@ -41,10 +47,10 @@ const content = {
     ],
   },
   en: {
-    title: "Machine-readable bank statements (camt.053) for software | ISECure",
+    title: "camt.053 API for Machine-Readable Bank Statements | ISECure",
     description:
-      "The machine-readable statement, camt.053, brings bank transactions straight into software. How retrieval works over the Web Services channel and how ISECure handles it through one API.",
-    h1: "Machine-readable bank statements (camt.053) for software",
+      "A camt.053 API delivers ISO 20022 bank statements to software through one integration. Learn about camt053 content, versions, retrieval, and reconciliation.",
+    h1: "camt.053 API for machine-readable bank statements",
     intro:
       "A machine-readable statement brings a bank account's transactions in structured form straight into accounting or ERP software, so reconciliation and bookings can be automated. Today the statement is retrieved in camt.053 format over the Web Services channel.",
     sections: [
@@ -53,6 +59,12 @@ const content = {
         paras: [
           "camt.053 is the ISO 20022 machine-readable statement that has replaced the old domestic TITO format. It contains account balances and individual transactions in structured XML, including reference data for incoming payments.",
           "The structured format enables automatic reconciliation: software can match incoming reference payments to sales invoices with no manual work.",
+        ],
+      },
+      {
+        h2: "camt.053, camt053, or camt 053?",
+        paras: [
+          "The spellings camt.053, camt053, and camt 053 refer to the same ISO 20022 Bank-to-Customer Statement message family. Banks also identify a schema version, such as camt.053.001.08. Your software must recognize the version delivered by the bank and its bank-specific implementation guidelines.",
         ],
       },
       {
@@ -76,10 +88,10 @@ const content = {
     ],
   },
   se: {
-    title: "Maskinläsbart kontoutdrag (camt.053) för programvara | ISECure",
+    title: "camt.053-API för maskinläsbara kontoutdrag | ISECure",
     description:
-      "Det maskinläsbara kontoutdraget, camt.053, för in banktransaktioner direkt i programvara. Så fungerar hämtningen via Web Services-kanalen och hur ISECure sköter det via ett API.",
-    h1: "Maskinläsbart kontoutdrag (camt.053) för programvara",
+      "Ett camt.053-API levererar ISO 20022-kontoutdrag till programvara via en integration. Läs om camt053-innehåll, versioner, hämtning och avstämning.",
+    h1: "camt.053-API för maskinläsbara kontoutdrag",
     intro:
       "Ett maskinläsbart kontoutdrag för in ett bankkontos transaktioner i strukturerad form direkt i ekonomi- eller ERP-programvara, så att avstämning och bokföring kan automatiseras. I dag hämtas kontoutdraget i camt.053-format via Web Services-kanalen.",
     sections: [
@@ -88,6 +100,12 @@ const content = {
         paras: [
           "camt.053 är det maskinläsbara kontoutdraget enligt ISO 20022 som har ersatt det gamla inhemska TITO-formatet. Det innehåller kontosaldon och enskilda transaktioner i strukturerad XML, inklusive referensuppgifter för inkommande betalningar.",
           "Det strukturerade formatet möjliggör automatisk avstämning: programvaran kan matcha inkommande referensbetalningar mot försäljningsfakturor utan manuellt arbete.",
+        ],
+      },
+      {
+        h2: "camt.053, camt053 eller camt 053?",
+        paras: [
+          "Skrivsätten camt.053, camt053 och camt 053 avser samma ISO 20022 Bank-to-Customer Statement-meddelandefamilj. Banker anger också en schemaversion, till exempel camt.053.001.08. Programvaran måste känna igen bankens version och bankspecifika tillämpningsanvisningar.",
         ],
       },
       {
@@ -113,9 +131,36 @@ const content = {
 } satisfies Record<Lang, unknown>;
 
 const related = [
-  { slug: "web-services", fi: "Web Services -kanava", en: "Web Services channel", se: "Web Services-kanalen" },
-  { slug: "pankkiyhteys", fi: "Pankkiyhteys: rakenna itse vai osta", en: "Bank connectivity: build vs buy", se: "Bankförbindelse: bygga eller köpa" },
-  { slug: "nordea", fi: "Nordea-pankkiyhteys", en: "Nordea bank connectivity", se: "Nordea-bankförbindelse" },
+  {
+    slug: "data-api",
+    fi: "ISO 20022 -pankkidata API",
+    en: "ISO 20022 Banking Data API",
+    se: "ISO 20022-bankdata-API",
+  },
+  {
+    slug: "camt-054",
+    fi: "camt.054-tapahtumailmoitukset",
+    en: "camt.054 debit and credit notifications",
+    se: "camt.054 debet- och kreditaviseringar",
+  },
+  {
+    slug: "web-services",
+    fi: "Web Services -kanava",
+    en: "Web Services channel",
+    se: "Web Services-kanalen",
+  },
+  {
+    slug: "pankkiyhteys",
+    fi: "Pankkiyhteys: rakenna itse vai osta",
+    en: "Bank connectivity: build vs buy",
+    se: "Bankförbindelse: bygga eller köpa",
+  },
+  {
+    slug: "nordea",
+    fi: "Nordea-pankkiyhteys",
+    en: "Nordea bank connectivity",
+    se: "Nordea-bankförbindelse",
+  },
 ];
 ---
 

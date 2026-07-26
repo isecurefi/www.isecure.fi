@@ -120,7 +120,9 @@ const copy = {
         <div>
           <dt>{copy.supportLabel}</dt>
           <dd>
-            <a href={`mailto:${copy.supportEmail}`}>{copy.supportEmail}</a> · {copy.supportNote}
+            <a href={`mailto:${copy.supportEmail}`}>{copy.supportEmail}</a> · {
+              copy.supportNote
+            }
           </dd>
         </div>
         <div>
@@ -187,7 +189,11 @@ const copy = {
           <div class="form-group">
             <label for="topic">{copy.topicLabel}</label>
             <select id="topic" name="topic">
-              {copy.topics.map((topic) => <option value={topic}>{topic}</option>)}
+              {
+                copy.topics.map((topic) => (
+                  <option value={topic}>{topic}</option>
+                ))
+              }
             </select>
           </div>
         </div>
@@ -231,6 +237,8 @@ const copy = {
 <script>
   import { getText } from "../store/translations";
   import type { Lang } from "../types";
+  import { trackLead } from "../utils/analytics";
+  import { submitWebsiteLead } from "../utils/leadDelivery";
 
   // Get the current language from the URL
   const pathSegments = window.location.pathname.split("/");
@@ -278,18 +286,6 @@ const copy = {
         validateInput(element as HTMLInputElement | HTMLTextAreaElement);
       });
     }
-  });
-
-  import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
-  import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
-
-  // Initialize SNS client
-  const snsClient = new SNSClient({
-    region: "eu-west-1",
-    credentials: fromCognitoIdentityPool({
-      clientConfig: { region: "eu-west-1" },
-      identityPoolId: "eu-west-1:350ec7b8-c08e-4bc6-a52f-fad9f2b1ae5c",
-    }),
   });
 
   function validateForm(): boolean {
@@ -379,20 +375,21 @@ const copy = {
       }
 
       try {
-        const command = new PublishCommand({
-          Message: `From: ${name} <${email}>\nCompany: ${company || "-"}\nTopic: ${topic || "-"}\nMessage:\n${msg}`,
-          Subject: `ISECure contact [${topic || "-"}]: ${name} <${email}>`,
-          TopicArn:
-            "arn:aws:sns:eu-west-1:589434896614:ISECureWebsiteSnsToEmail",
+        await submitWebsiteLead({
+          message: `From: ${name} <${email}>\nCompany: ${company || "-"}\nTopic: ${topic || "-"}\nMessage:\n${msg}`,
+          subject: `ISECure contact [${topic || "-"}]: ${name} <${email}>`,
         });
-
-        const data = await snsClient.send(command);
 
         if (result) {
           result.className = "success";
           result.textContent = getText("contactForm.success", lang as Lang);
         }
-        console.log("Message sent successfully:", data);
+        trackLead({
+          formName: "contact_form",
+          leadType: "contact",
+          language: lang,
+          topic: topic || undefined,
+        });
         setTimeout(() => {
           window.location.href =
             lang === "fi"

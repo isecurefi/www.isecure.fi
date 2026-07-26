@@ -6,10 +6,10 @@ const { lang } = Astro.props;
 
 const content = {
   fi: {
-    title: "Web Services -kanava: mikä se on ja miten integroida | ISECure",
+    title: "WS-kanava API suomalaisiin pankkeihin | ISECure",
     description:
-      "Web Services -kanava (WS) on suomalaisten pankkien yritysasiakkaiden aineistoliikenteen rajapinta. Näin se toimii, mitä varmenteita se vaatii ja miten integroit sen ohjelmistoon.",
-    h1: "Web Services -kanava (WS): mikä se on ja miten se integroidaan",
+      "WS-kanava API yhdistää ohjelmistosi suomalaisten pankkien yritysaineistoihin. ISECure hoitaa Web Services -yhteydet, varmenteet ja pankkikohtaiset erot.",
+    h1: "WS-kanava API: yksi integraatio suomalaisiin pankkeihin",
     intro:
       "Web Services -kanava on suomalaisten pankkien standardi yritysasiakkaiden aineistoliikenteelle: tiliotteiden noutamiselle ja maksuaineistojen lähettämiselle. Tässä oppaassa käymme läpi, miten se toimii ja mitä integrointi vaatii.",
     sections: [
@@ -42,10 +42,10 @@ const content = {
     ],
   },
   en: {
-    title: "The Web Services channel: what it is and how to integrate | ISECure",
+    title: "Finnish Bank Web Services API | ISECure",
     description:
-      "The Web Services (WS) channel is the file-traffic interface for Finnish banks' corporate customers. How it works, what certificates it needs, and how to integrate it into software.",
-    h1: "The Web Services (WS) channel: what it is and how to integrate it",
+      "Connect software to Finnish corporate banking through one Web Services API. ISECure handles bank connections, certificates, signing, and bank-specific differences.",
+    h1: "Finnish bank Web Services through one API",
     intro:
       "The Web Services channel is the Finnish banks' standard for corporate file traffic: retrieving statements and sending payment files. This guide covers how it works and what integrating it requires.",
     sections: [
@@ -78,10 +78,10 @@ const content = {
     ],
   },
   se: {
-    title: "Web Services-kanalen: vad den är och hur man integrerar | ISECure",
+    title: "WS-kanal API för finländska banker | ISECure",
     description:
-      "Web Services-kanalen (WS) är gränssnittet för filtrafik för finländska bankers företagskunder. Hur den fungerar, vilka certifikat den kräver och hur du integrerar den i programvara.",
-    h1: "Web Services-kanalen (WS): vad den är och hur den integreras",
+      "Anslut programvara till finländsk företagsbank via ett WS-kanal API. ISECure sköter bankanslutningar, certifikat, signering och bankspecifika skillnader.",
+    h1: "WS-kanal API: en integration till finländska banker",
     intro:
       "Web Services-kanalen är de finländska bankernas standard för företagens filtrafik: att hämta kontoutdrag och skicka betalningsfiler. Den här guiden går igenom hur den fungerar och vad en integration kräver.",
     sections: [
@@ -116,10 +116,48 @@ const content = {
 } satisfies Record<Lang, unknown>;
 
 const related = [
-  { slug: "tiliote", fi: "Konekielinen tiliote (camt.053)", en: "Machine-readable statements (camt.053)", se: "Maskinläsbart kontoutdrag (camt.053)" },
-  { slug: "nordea", fi: "Nordea-pankkiyhteys", en: "Nordea bank connectivity", se: "Nordea-bankförbindelse" },
-  { slug: "pankkiyhteys", fi: "Pankkiyhteys: rakenna itse vai osta", en: "Bank connectivity: build vs buy", se: "Bankförbindelse: bygga eller köpa" },
+  {
+    slug: "tiliote",
+    fi: "Konekielinen tiliote (camt.053)",
+    en: "Machine-readable statements (camt.053)",
+    se: "Maskinläsbart kontoutdrag (camt.053)",
+  },
+  {
+    slug: "pain-001",
+    fi: "SEPA-maksuaineisto (pain.001)",
+    en: "SEPA payment files (pain.001)",
+    se: "SEPA-betalningsfiler (pain.001)",
+  },
+  {
+    slug: "pain-002",
+    fi: "Maksupalaute (pain.002)",
+    en: "Payment status (pain.002)",
+    se: "Betalningsstatus (pain.002)",
+  },
+  {
+    slug: "camt-054",
+    fi: "Tapahtumailmoitukset (camt.054)",
+    en: "Debit and credit notifications (camt.054)",
+    se: "Debet- och kreditaviseringar (camt.054)",
+  },
+  {
+    slug: "nordea",
+    fi: "Nordea-pankkiyhteys",
+    en: "Nordea bank connectivity",
+    se: "Nordea-bankförbindelse",
+  },
+  {
+    slug: "pankkiyhteys",
+    fi: "Pankkiyhteys: rakenna itse vai osta",
+    en: "Bank connectivity: build vs buy",
+    se: "Bankförbindelse: bygga eller köpa",
+  },
 ];
 ---
 
-<GuidePage lang={lang} slug="web-services" content={content} related={related} />
+<GuidePage
+  lang={lang}
+  slug="web-services"
+  content={content}
+  related={related}
+/>

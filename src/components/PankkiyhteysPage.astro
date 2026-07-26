@@ -6,12 +6,12 @@ const { lang } = Astro.props;
 
 const content = {
   fi: {
-    title: "Pankkiyhteys ohjelmistoon: rakenna itse vai osta | ISECure",
+    title: "Pankkiyhteysohjelma ja API suomalaisiin pankkeihin | ISECure",
     description:
-      "Kannattaako pankkiyhteys rakentaa itse vai ostaa palveluna? Vertailu ohjelmistoyrityksille: WS-kanava, varmenteet, ylläpito ja kustannukset — ja miten ISECure kattaa kaikki pankit yhdellä rajapinnalla.",
-    h1: "Pankkiyhteys ohjelmistoon: rakenna itse vai osta",
+      "Pankkiyhteysohjelma yhdistää ERP- tai taloushallintotuotteesi suomalaisiin pankkeihin yhdellä API:lla. Vertaa itse rakentamista ja palveluna ostamista.",
+    h1: "Pankkiyhteysohjelma: kaikki suomalaiset pankit yhdellä API:lla",
     intro:
-      "Kun ohjelmistotuotteesi tarvitsee suomalaiset pankkiyhteydet, edessä on valinta: rakentaa integraatio itse jokaiseen pankkiin vai ostaa se yhtenä palveluna. Tämä sivu vertailee vaihtoehtoja ohjelmistoyrityksen näkökulmasta.",
+      "Kun ERP-, taloushallinto- tai rahoitustuotteesi tarvitsee suomalaiset pankkiyhteydet, edessä on valinta: rakentaa pankkiyhteysohjelma itse jokaiseen pankkiin vai käyttää yhtä valmista API-palvelua. Tämä sivu vertailee vaihtoehtoja ohjelmistoyrityksen näkökulmasta.",
     sections: [
       {
         h2: "Mitä itse rakentaminen vaatii",
@@ -42,10 +42,10 @@ const content = {
     ],
   },
   en: {
-    title: "Bank connectivity for software: build vs buy | ISECure",
+    title: "Secure Bank Integration API for Software | ISECure",
     description:
-      "Should you build Finnish bank connectivity yourself or buy it as a service? A comparison for software vendors: WS channel, certificates, maintenance, and cost — and how ISECure covers every bank with one API.",
-    h1: "Bank connectivity for software: build vs buy",
+      "A secure bank integration API connects accounting, ERP, and treasury software to Finnish banks. Compare building bank connectivity with using one managed API.",
+    h1: "Secure bank integration for software through one API",
     intro:
       "When your software product needs Finnish bank connectivity, you face a choice: build the integration to each bank yourself, or buy it as a single service. This page compares the options from a software vendor's perspective.",
     sections: [
@@ -78,10 +78,10 @@ const content = {
     ],
   },
   se: {
-    title: "Bankförbindelse för programvara: bygga eller köpa | ISECure",
+    title: "Bankkonto-API för programvara och finländska banker | ISECure",
     description:
-      "Ska du bygga finländsk bankförbindelse själv eller köpa den som tjänst? En jämförelse för mjukvarubolag: WS-kanal, certifikat, underhåll och kostnad — och hur ISECure täcker alla banker med ett API.",
-    h1: "Bankförbindelse för programvara: bygga eller köpa",
+      "Ett bankkonto-API ansluter ekonomi-, ERP- och treasuryprogram till finländska banker. Jämför egen bankintegration med ett hanterat API.",
+    h1: "Bankkonto-API för programvara och finländska banker",
     intro:
       "När din programvaruprodukt behöver finländska bankförbindelser står du inför ett val: bygga integrationen till varje bank själv, eller köpa den som en enda tjänst. Den här sidan jämför alternativen ur ett mjukvarubolags perspektiv.",
     sections: [
@@ -116,10 +116,42 @@ const content = {
 } satisfies Record<Lang, unknown>;
 
 const related = [
-  { slug: "web-services", fi: "Web Services -kanava", en: "Web Services channel", se: "Web Services-kanalen" },
-  { slug: "nordea", fi: "Nordea-pankkiyhteys", en: "Nordea bank connectivity", se: "Nordea-bankförbindelse" },
-  { slug: "op", fi: "OP-pankkiyhteys", en: "OP bank connectivity", se: "OP-bankförbindelse" },
+  {
+    slug: "web-services",
+    fi: "Web Services -kanava",
+    en: "Web Services channel",
+    se: "Web Services-kanalen",
+  },
+  {
+    slug: "data-api",
+    fi: "ISO 20022 -pankkidata API",
+    en: "ISO 20022 Banking Data API",
+    se: "ISO 20022-bankdata-API",
+  },
+  {
+    slug: "pain-001",
+    fi: "SEPA-maksuaineisto (pain.001)",
+    en: "SEPA payment files (pain.001)",
+    se: "SEPA-betalningsfiler (pain.001)",
+  },
+  {
+    slug: "nordea",
+    fi: "Nordea-pankkiyhteys",
+    en: "Nordea bank connectivity",
+    se: "Nordea-bankförbindelse",
+  },
+  {
+    slug: "op",
+    fi: "OP-pankkiyhteys",
+    en: "OP bank connectivity",
+    se: "OP-bankförbindelse",
+  },
 ];
 ---
 
-<GuidePage lang={lang} slug="pankkiyhteys" content={content} related={related} />
+<GuidePage
+  lang={lang}
+  slug="pankkiyhteys"
+  content={content}
+  related={related}
+/>

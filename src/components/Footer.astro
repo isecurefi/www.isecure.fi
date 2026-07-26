@@ -25,6 +25,9 @@ const t = {
       { slug: "pankkiyhteys", label: "Pankkiyhteys: rakenna vai osta" },
       { slug: "web-services", label: "Web Services -kanava" },
       { slug: "tiliote", label: "Konekielinen tiliote (camt.053)" },
+      { slug: "pain-001", label: "SEPA-maksut (pain.001)" },
+      { slug: "pain-002", label: "Maksupalaute (pain.002)" },
+      { slug: "camt-054", label: "Tapahtumailmoitukset (camt.054)" },
       { slug: "nordea", label: "Nordea-pankkiyhteys" },
       { slug: "op", label: "OP-pankkiyhteys" },
     ],
@@ -44,6 +47,9 @@ const t = {
       { slug: "pankkiyhteys", label: "Bank connectivity: build vs buy" },
       { slug: "web-services", label: "Web Services channel" },
       { slug: "tiliote", label: "Bank statements (camt.053)" },
+      { slug: "pain-001", label: "SEPA payments (pain.001)" },
+      { slug: "pain-002", label: "Payment status (pain.002)" },
+      { slug: "camt-054", label: "Debit/credit notifications (camt.054)" },
       { slug: "nordea", label: "Nordea connectivity" },
       { slug: "op", label: "OP connectivity" },
     ],
@@ -63,6 +69,9 @@ const t = {
       { slug: "pankkiyhteys", label: "Bankförbindelse: bygga eller köpa" },
       { slug: "web-services", label: "Web Services-kanalen" },
       { slug: "tiliote", label: "Kontoutdrag (camt.053)" },
+      { slug: "pain-001", label: "SEPA-betalningar (pain.001)" },
+      { slug: "pain-002", label: "Betalningsstatus (pain.002)" },
+      { slug: "camt-054", label: "Debet/kreditaviseringar (camt.054)" },
       { slug: "nordea", label: "Nordea-förbindelse" },
       { slug: "op", label: "OP-förbindelse" },
     ],
@@ -98,7 +107,9 @@ const t = {
         <div class="footer-col">
           <p class="footer-col-title">{t.product}</p>
           <ul>
-            <li><a href="https://isecure.fi/wsapi_v2/index.html">{t.docs}</a></li>
+            <li>
+              <a href="https://isecure.fi/wsapi_v2/index.html">{t.docs}</a>
+            </li>
             <li><a href="https://isecure.fi/wsapi_v2.json">OpenAPI</a></li>
             <li><a href={`${base}#sdks`}>{t.sdks}</a></li>
             <li><a href={`${base}#pricing`}>{t.pricing}</a></li>

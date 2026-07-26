@@ -1,0 +1,455 @@
+---
+import GuidePage from "./GuidePage.astro";
+import type { Lang } from "../types";
+
+type MessageType = "pain-001" | "pain-002" | "camt-054";
+
+interface Props {
+  lang: Lang;
+  messageType: MessageType;
+}
+
+const { lang, messageType } = Astro.props;
+
+const content = {
+  "pain-001": {
+    fi: {
+      title: "pain.001 API: SEPA-maksuaineisto pankkiin | ISECure",
+      description:
+        "Lähetä ISO 20022 pain.001 -maksuaineistot ohjelmistosta suomalaisiin pankkeihin yhdellä API:lla. ISECure hoitaa WS-kanavan, varmenteet ja siirron.",
+      h1: "pain.001 API SEPA-maksuaineistojen lähettämiseen",
+      intro:
+        "pain.001 on ISO 20022 Customer Credit Transfer Initiation -sanoma, jolla ERP-, taloushallinto- tai palkkajärjestelmä välittää SEPA-maksutoimeksiannot pankille. ISECuren File Exchange API siirtää aineiston pankin Web Services -kanavaan samalla integraatiolla kaikille tukemillemme pankeille.",
+      sections: [
+        {
+          h2: "Mitä pain.001 sisältää",
+          paras: [
+            "pain.001-aineisto ryhmittelee maksajan tililtä lähtevät tilisiirrot maksueriksi. Se sisältää maksajan, saajan, summan, valuutan, eräpäivän ja viite- tai viestitiedot pankin ja käytetyn skeemaversion edellyttämässä muodossa.",
+            "Pankit julkaisevat omat soveltamisohjeensa ja hyväksymänsä versiot. Maksuaineiston muodostava ohjelmisto vastaa siitä, että XML noudattaa pankin sopimusta ja ohjetta.",
+          ],
+        },
+        {
+          h2: "Näin pain.001 kulkee ISECuren kautta",
+          paras: [
+            "Ohjelmistosi muodostaa pankin hyväksymän pain.001 XML -aineiston ja lähettää sen ISECuren API:in. ISECure hoitaa pankkikohtaisen Web Services -yhteyden, sanomien allekirjoituksen, varmenteet ja tiedostosiirron. Pankin palauttaman pain.002-statuksen voit noutaa saman integraation kautta.",
+          ],
+          list: [
+            "Yksi REST API kaikille tukemillemme suomalaisille pankeille",
+            "PKI-varmenteiden haku, säilytys ja automaattinen uusinta",
+            "Maksuaineiston lähetys pankin sallimalla tiedostotyypillä",
+            "pain.002-palautteen nouto ja oma käsittely ohjelmistossasi",
+          ],
+        },
+        {
+          h2: "Mitä palvelu ei muuta",
+          paras: [
+            "File Exchange API ei luo maksuja, muuta XML-sisältöä eikä korvaa pankin hyväksyntää. Tarvitset yrityksen oman pankkisopimuksen ja valtuudet. Uusi Banking Data API tutkii erikseen tuettua normalisointia ja evidenssiä, mutta sen early access -kattavuus on rajattu.",
+          ],
+        },
+      ],
+      cta: {
+        title: "Yhdistä maksatus ohjelmistoosi",
+        text: "Kerro pankit, maksuaineistojen määrä ja käyttämäsi pain.001-versiot. Suunnittelemme testauksen ja tuotantoon viennin kanssasi.",
+        label: "Keskustele integraatiosta",
+      },
+    },
+    en: {
+      title: "pain.001 API for SEPA Payment Files | ISECure",
+      description:
+        "Send ISO 20022 pain.001 payment files from software to Finnish banks through one API. ISECure handles the WS channel, certificates, and transport.",
+      h1: "pain.001 API for sending SEPA payment files",
+      intro:
+        "pain.001 is the ISO 20022 Customer Credit Transfer Initiation message used by ERP, accounting, and payroll software to send SEPA payment instructions to a bank. ISECure's File Exchange API transports the file over each bank's Web Services channel through one integration.",
+      sections: [
+        {
+          h2: "What pain.001 contains",
+          paras: [
+            "A pain.001 file groups credit transfers from the debtor account into payment batches. It carries the debtor, creditor, amount, currency, execution date, and reference or remittance information required by the bank and schema version.",
+            "Banks publish their own implementation guidelines and accepted versions. The software creating the payment file remains responsible for producing XML that follows the relevant bank agreement and guideline.",
+          ],
+        },
+        {
+          h2: "How pain.001 moves through ISECure",
+          paras: [
+            "Your software creates the bank-approved pain.001 XML file and uploads it through the ISECure API. ISECure handles the bank-specific Web Services connection, message signing, certificates, and file transport. You can retrieve the bank's pain.002 response through the same integration.",
+          ],
+          list: [
+            "One REST API for every supported Finnish bank",
+            "PKI certificate enrollment, storage, and automatic renewal",
+            "Payment-file delivery using the file type accepted by the bank",
+            "pain.002 response retrieval for processing in your software",
+          ],
+        },
+        {
+          h2: "What the service does not change",
+          paras: [
+            "The File Exchange API does not create payments, rewrite XML content, or replace bank approval. The company still needs its own bank agreement and authorization. The adjacent Banking Data API is exploring supported normalization and evidence, with limited early-access coverage.",
+          ],
+        },
+      ],
+      cta: {
+        title: "Connect payment initiation to your product",
+        text: "Tell us the banks, payment-file volumes, and pain.001 versions you use. We will plan testing and production onboarding with you.",
+        label: "Discuss your integration",
+      },
+    },
+    se: {
+      title: "pain.001-API för SEPA-betalningsfiler | ISECure",
+      description:
+        "Skicka ISO 20022 pain.001-betalningsfiler från programvara till finländska banker via ett API. ISECure sköter WS-kanalen, certifikat och transport.",
+      h1: "pain.001-API för att skicka SEPA-betalningsfiler",
+      intro:
+        "pain.001 är ISO 20022-meddelandet Customer Credit Transfer Initiation som ERP-, ekonomi- och löneprogram använder för att skicka SEPA-betalningsuppdrag till banken. ISECures File Exchange API transporterar filen via bankens Web Services-kanal med en integration.",
+      sections: [
+        {
+          h2: "Vad pain.001 innehåller",
+          paras: [
+            "En pain.001-fil grupperar gireringar från betalarens konto i betalningsbatcher. Den innehåller betalare, mottagare, belopp, valuta, betalningsdag samt referens- eller meddelandeuppgifter enligt bankens och schemaversionens krav.",
+            "Bankerna publicerar egna tillämpningsanvisningar och godkända versioner. Programvaran som skapar betalningsfilen ansvarar för att XML följer bankavtalet och anvisningen.",
+          ],
+        },
+        {
+          h2: "Så går pain.001 via ISECure",
+          paras: [
+            "Din programvara skapar bankens godkända pain.001 XML-fil och laddar upp den via ISECures API. ISECure sköter den bankspecifika Web Services-anslutningen, meddelandesignering, certifikat och filtransport. Bankens pain.002-svar kan hämtas via samma integration.",
+          ],
+          list: [
+            "Ett REST-API för alla finländska banker vi stöder",
+            "Registrering, lagring och automatisk förnyelse av PKI-certifikat",
+            "Leverans med den filtyp banken godkänner",
+            "Hämtning av pain.002-svar för behandling i din programvara",
+          ],
+        },
+        {
+          h2: "Vad tjänsten inte ändrar",
+          paras: [
+            "File Exchange API skapar inte betalningar, skriver inte om XML-innehåll och ersätter inte bankens godkännande. Företaget behöver fortfarande eget bankavtal och behörigheter. Det nya Banking Data API:et utforskar normalisering och evidens för stött innehåll med begränsad early access-täckning.",
+          ],
+        },
+      ],
+      cta: {
+        title: "Anslut betalningsinitiering till din produkt",
+        text: "Berätta vilka banker, betalningsvolymer och pain.001-versioner ni använder. Vi planerar testning och produktionsstart tillsammans.",
+        label: "Diskutera integrationen",
+      },
+    },
+  },
+  "pain-002": {
+    fi: {
+      title: "pain.002 API: maksuaineiston status pankista | ISECure",
+      description:
+        "Nouda ISO 20022 pain.002 -maksupalautteet suomalaisista pankeista yhdellä API:lla. Seuraa pain.001-aineiston vastaanottoa ja käsittelyä.",
+      h1: "pain.002 API maksuaineiston statuksen noutamiseen",
+      intro:
+        "pain.002 on ISO 20022 Customer Payment Status Report -sanoma. Pankki kertoo sillä, onko pain.001-maksuaineisto vastaanotettu, hyväksytty käsittelyyn tai hylätty. ISECuren File Exchange API noutaa pankin tarjoaman palautteen ohjelmistollesi.",
+      sections: [
+        {
+          h2: "Mitä pain.002 kertoo",
+          paras: [
+            "Palaute voi koskea koko aineistoa, maksuerää tai yksittäistä tapahtumaa. Se sisältää pankin ilmoittaman statuksen ja mahdollisen syykoodin. Tyypillisiä statuksia ovat esimerkiksi vastaanotettu, käsittelyssä, hyväksytty tai hylätty, mutta saatavuus ja tarkkuus riippuvat pankista ja aineistosta.",
+            "pain.002 ei ole sama asia kuin tilitapahtuma tai lopullinen vahvistus siitä, että saajan tiliä on hyvitetty. Sovelluksen pitää tulkita status pankin ohjeen ja oman maksuprosessin mukaan.",
+          ],
+        },
+        {
+          h2: "Nouto yhdellä pankki-integraatiolla",
+          paras: [
+            "ISECure hoitaa pankin Web Services -yhteyden, varmenteet ja tiedostonoudon. Ohjelmistosi listaa ja lataa pankin palauttamat pain.002-aineistot REST API:n, SDK:n tai tiedostosynkronoinnin kautta ja yhdistää ne alkuperäiseen pain.001-aineistoon.",
+          ],
+          list: [
+            "Pankkikohtaisten yhteyksien ja varmenteiden hallinta",
+            "Uusien palautetiedostojen listaus ja lataus",
+            "Raaka ISO 20022 XML oman statuslogiikkasi käyttöön",
+            "Sama integraatiomalli eri suomalaisille pankeille",
+          ],
+        },
+        {
+          h2: "Status ei ole reaaliaikainen lupaus",
+          paras: [
+            "Palaute on saatavilla, kun pankki muodostaa ja tarjoaa tiedoston. ISECure ei muuta pankin statusta eikä lupaa jatkuvaa reaaliaikaista seurantaa. Pankkisopimus, tiedostotyypit ja palautteiden aikataulu sovitaan pankin kanssa.",
+          ],
+        },
+      ],
+      cta: {
+        title: "Tee maksujen seurannasta luotettava",
+        text: "Kerro käyttämäsi pain.001- ja pain.002-versiot sekä pankit. Autamme rakentamaan palautteiden noudon samaan integraatioon.",
+        label: "Keskustele maksupalautteista",
+      },
+    },
+    en: {
+      title: "pain.002 API for Payment Status Reports | ISECure",
+      description:
+        "Retrieve ISO 20022 pain.002 status reports from Finnish banks through one API. Track the reception and processing of pain.001 payment files.",
+      h1: "pain.002 API for retrieving payment-file status",
+      intro:
+        "pain.002 is the ISO 20022 Customer Payment Status Report. A bank uses it to report whether a pain.001 payment file was received, accepted for processing, or rejected. ISECure's File Exchange API retrieves the response made available by the bank.",
+      sections: [
+        {
+          h2: "What pain.002 tells you",
+          paras: [
+            "A report can apply to the complete file, a payment batch, or an individual transaction. It contains the status and, when supplied, a reason code. Common states describe reception, processing, acceptance, or rejection, but availability and detail vary by bank and file.",
+            "pain.002 is not a bank-account transaction or a universal final confirmation that the creditor account has been credited. Your application must interpret the status according to the bank guideline and your payment workflow.",
+          ],
+        },
+        {
+          h2: "Retrieval through one bank integration",
+          paras: [
+            "ISECure handles the bank's Web Services connection, certificates, and file retrieval. Your software lists and downloads pain.002 files through the REST API, SDK, or file synchronization, then reconciles them with the original pain.001 file.",
+          ],
+          list: [
+            "Management of bank-specific connections and certificates",
+            "Listing and downloading new response files",
+            "Raw ISO 20022 XML for your own status logic",
+            "The same integration pattern across Finnish banks",
+          ],
+        },
+        {
+          h2: "Status is not a real-time promise",
+          paras: [
+            "A response is available when the bank creates and publishes the file. ISECure does not change the bank's status or promise continuous real-time tracking. The bank agreement defines file types and response schedules.",
+          ],
+        },
+      ],
+      cta: {
+        title: "Make payment tracking dependable",
+        text: "Tell us your pain.001 and pain.002 versions and banks. We will help bring response retrieval into the same integration.",
+        label: "Discuss payment status",
+      },
+    },
+    se: {
+      title: "pain.002-API för betalningsstatus | ISECure",
+      description:
+        "Hämta ISO 20022 pain.002-statusrapporter från finländska banker via ett API. Följ mottagning och behandling av pain.001-betalningsfiler.",
+      h1: "pain.002-API för att hämta betalningsfilens status",
+      intro:
+        "pain.002 är ISO 20022-meddelandet Customer Payment Status Report. Banken använder det för att ange om en pain.001-betalningsfil har tagits emot, godkänts för behandling eller avvisats. ISECures File Exchange API hämtar svaret som banken erbjuder.",
+      sections: [
+        {
+          h2: "Vad pain.002 berättar",
+          paras: [
+            "En rapport kan gälla hela filen, en betalningsbatch eller en enskild transaktion. Den innehåller status och, när banken anger den, en orsakskod. Vanliga statusar beskriver mottagning, behandling, godkännande eller avvisning, men tillgänglighet och detaljnivå varierar.",
+            "pain.002 är inte en kontotransaktion eller en universell slutlig bekräftelse på att mottagarens konto har krediterats. Applikationen måste tolka status enligt bankens anvisning och den egna betalningsprocessen.",
+          ],
+        },
+        {
+          h2: "Hämtning via en bankintegration",
+          paras: [
+            "ISECure sköter bankens Web Services-anslutning, certifikat och filhämtning. Din programvara listar och laddar ned pain.002-filer via REST-API, SDK eller filsynkronisering och matchar dem med den ursprungliga pain.001-filen.",
+          ],
+          list: [
+            "Hantering av bankspecifika anslutningar och certifikat",
+            "Listning och nedladdning av nya svarsfiler",
+            "Rå ISO 20022 XML för din egen statuslogik",
+            "Samma integrationsmodell för finländska banker",
+          ],
+        },
+        {
+          h2: "Status är inget realtidslöfte",
+          paras: [
+            "Ett svar är tillgängligt när banken skapar och publicerar filen. ISECure ändrar inte bankens status och lovar inte kontinuerlig realtidsuppföljning. Bankavtalet definierar filtyper och svarstider.",
+          ],
+        },
+      ],
+      cta: {
+        title: "Gör betalningsuppföljningen tillförlitlig",
+        text: "Berätta vilka pain.001- och pain.002-versioner samt banker ni använder. Vi hjälper er hämta svaren via samma integration.",
+        label: "Diskutera betalningsstatus",
+      },
+    },
+  },
+  "camt-054": {
+    fi: {
+      title: "camt.054 API: veloitus- ja hyvitysilmoitukset | ISECure",
+      description:
+        "Nouda ISO 20022 camt.054 -tapahtumailmoitukset suomalaisista pankeista yhdellä API:lla. Yhdistä pankin veloitus- ja hyvitystiedot ohjelmistoon.",
+      h1: "camt.054 API pankin tapahtumailmoitusten noutamiseen",
+      intro:
+        "camt.054 on ISO 20022 Bank-to-Customer Debit/Credit Notification -sanoma. Pankki voi ilmoittaa sillä tilin veloituksista ja hyvityksistä ennen seuraavaa päivän tiliotetta. ISECuren File Exchange API noutaa pankin tarjoamat camt.054-aineistot samalla integraatiolla kuin muut pankkitiedostot.",
+      sections: [
+        {
+          h2: "camt.054 ja camt.053 palvelevat eri hetkeä",
+          paras: [
+            "camt.053 on tiliote, joka kokoaa saldot ja kirjatut tapahtumat raportointijaksolta. camt.054 on tapahtumailmoitus yksittäisistä tai ryhmitellyistä veloituksista ja hyvityksistä. Se voi nopeuttaa esimerkiksi saapuvien maksujen kohdistusta, kun pankki tarjoaa aineiston.",
+            "Saatavuus, toimitusrytmi, sisältö ja skeemaversio riippuvat pankista ja yrityksen pankkisopimuksesta. camt.054 ei siksi tarkoita automaattisesti reaaliaikaista tapahtumavirtaa.",
+          ],
+        },
+        {
+          h2: "Näin camt.054 noudetaan",
+          paras: [
+            "ISECure hoitaa pankin WS-kanavan, varmenteet, allekirjoitukset ja tiedostonoudon. Ohjelmistosi listaa ja lataa raaka-aineiston REST API:n, SDK:n tai tiedostosynkronoinnin kautta ja käsittelee pankin toimittaman ISO 20022 XML:n.",
+          ],
+          list: [
+            "Yksi yhteys eri suomalaisiin pankkeihin",
+            "Automaattinen varmenteiden elinkaaren hallinta",
+            "Uusien camt.054-tiedostojen listaus ja lataus",
+            "Aineiston alkuperäinen sisältö säilyy muuttumattomana",
+          ],
+        },
+        {
+          h2: "Normalisoitu data on erillinen early access -palvelu",
+          paras: [
+            "Nykyinen File Exchange API kuljettaa camt.054-tiedoston muuttamatta sen sisältöä. Banking Data API:n early access arvioi tuettujen aineistojen normalisointia ja evidenssiä. Emme lupaa camt.054-normalisointia ennen kuin pankki- ja versiokohtainen tuki on sovittu.",
+          ],
+        },
+      ],
+      cta: {
+        title: "Tuo pankin tapahtumailmoitukset ohjelmistoosi",
+        text: "Kerro pankit, käyttötapaus ja camt.054-versiot. Selvitämme saatavuuden ja sopivan tiedostonoutomallin.",
+        label: "Kysy camt.054-tuesta",
+      },
+    },
+    en: {
+      title: "camt.054 API for Debit and Credit Notifications | ISECure",
+      description:
+        "Retrieve ISO 20022 camt.054 notifications from Finnish banks through one API. Bring bank debit and credit information into your software.",
+      h1: "camt.054 API for bank debit and credit notifications",
+      intro:
+        "camt.054 is the ISO 20022 Bank-to-Customer Debit/Credit Notification message. A bank can use it to report account debits and credits before the next end-of-day statement. ISECure's File Exchange API retrieves files offered by the bank through the same integration as other bank files.",
+      sections: [
+        {
+          h2: "camt.054 and camt.053 serve different moments",
+          paras: [
+            "camt.053 is a statement that summarizes balances and booked entries for a reporting period. camt.054 is a notification of individual or grouped debits and credits. When offered by the bank, it can help software reconcile incoming payments sooner.",
+            "Availability, delivery frequency, content, and schema version depend on the bank and corporate agreement. camt.054 therefore does not automatically mean a real-time transaction stream.",
+          ],
+        },
+        {
+          h2: "How camt.054 is retrieved",
+          paras: [
+            "ISECure handles the bank's WS channel, certificates, signing, and file retrieval. Your software lists and downloads the raw file through the REST API, SDK, or file synchronization, then processes the ISO 20022 XML delivered by the bank.",
+          ],
+          list: [
+            "One connection pattern across Finnish banks",
+            "Automatic certificate lifecycle management",
+            "Listing and downloading new camt.054 files",
+            "Original file content remains unchanged",
+          ],
+        },
+        {
+          h2: "Normalized data is a separate early-access service",
+          paras: [
+            "The existing File Exchange API transports camt.054 without changing its content. Banking Data API early access evaluates normalization and evidence for supported files. We do not promise camt.054 normalization until bank- and version-specific support is agreed.",
+          ],
+        },
+      ],
+      cta: {
+        title: "Bring bank notifications into your product",
+        text: "Tell us the banks, use case, and camt.054 versions you need. We will confirm availability and the appropriate retrieval model.",
+        label: "Ask about camt.054 support",
+      },
+    },
+    se: {
+      title: "camt.054-API för debet- och kreditaviseringar | ISECure",
+      description:
+        "Hämta ISO 20022 camt.054-aviseringar från finländska banker via ett API. För in bankens debet- och kredituppgifter i programvara.",
+      h1: "camt.054-API för bankens debet- och kreditaviseringar",
+      intro:
+        "camt.054 är ISO 20022-meddelandet Bank-to-Customer Debit/Credit Notification. Banken kan använda det för att rapportera kontots debiteringar och krediteringar före nästa dagskontoutdrag. ISECures File Exchange API hämtar filer som banken erbjuder via samma integration som övriga bankfiler.",
+      sections: [
+        {
+          h2: "camt.054 och camt.053 används vid olika tidpunkter",
+          paras: [
+            "camt.053 är ett kontoutdrag som sammanfattar saldon och bokförda poster för en rapportperiod. camt.054 är en avisering om enskilda eller grupperade debiteringar och krediteringar. När banken erbjuder filen kan programvaran stämma av inkommande betalningar tidigare.",
+            "Tillgänglighet, leveransfrekvens, innehåll och schemaversion beror på banken och företagsavtalet. camt.054 betyder därför inte automatiskt ett transaktionsflöde i realtid.",
+          ],
+        },
+        {
+          h2: "Så hämtas camt.054",
+          paras: [
+            "ISECure sköter bankens WS-kanal, certifikat, signering och filhämtning. Din programvara listar och laddar ned råfilen via REST-API, SDK eller filsynkronisering och behandlar bankens ISO 20022 XML.",
+          ],
+          list: [
+            "En anslutningsmodell för finländska banker",
+            "Automatisk hantering av certifikatets livscykel",
+            "Listning och nedladdning av nya camt.054-filer",
+            "Det ursprungliga filinnehållet förblir oförändrat",
+          ],
+        },
+        {
+          h2: "Normaliserad data är en separat early access-tjänst",
+          paras: [
+            "Det befintliga File Exchange API:et transporterar camt.054 utan att ändra innehållet. Banking Data API early access utvärderar normalisering och evidens för stödda filer. Vi lovar inte camt.054-normalisering innan bank- och versionsspecifikt stöd har avtalats.",
+          ],
+        },
+      ],
+      cta: {
+        title: "För in bankaviseringar i din produkt",
+        text: "Berätta vilka banker, användningsfall och camt.054-versioner ni behöver. Vi bekräftar tillgänglighet och lämplig hämtningsmodell.",
+        label: "Fråga om camt.054-stöd",
+      },
+    },
+  },
+} satisfies Record<MessageType, Record<Lang, unknown>>;
+
+const relatedByMessage: Record<
+  MessageType,
+  Array<{ slug: string; fi: string; en: string; se: string }>
+> = {
+  "pain-001": [
+    {
+      slug: "pain-002",
+      fi: "pain.002-maksupalaute",
+      en: "pain.002 payment status",
+      se: "pain.002-betalningsstatus",
+    },
+    {
+      slug: "web-services",
+      fi: "Web Services -kanava",
+      en: "Web Services channel",
+      se: "Web Services-kanalen",
+    },
+    {
+      slug: "data-api",
+      fi: "ISO 20022 -pankkidata API",
+      en: "ISO 20022 Banking Data API",
+      se: "ISO 20022-bankdata-API",
+    },
+  ],
+  "pain-002": [
+    {
+      slug: "pain-001",
+      fi: "pain.001-maksuaineisto",
+      en: "pain.001 payment files",
+      se: "pain.001-betalningsfiler",
+    },
+    {
+      slug: "web-services",
+      fi: "Web Services -kanava",
+      en: "Web Services channel",
+      se: "Web Services-kanalen",
+    },
+    {
+      slug: "data-api",
+      fi: "ISO 20022 -pankkidata API",
+      en: "ISO 20022 Banking Data API",
+      se: "ISO 20022-bankdata-API",
+    },
+  ],
+  "camt-054": [
+    {
+      slug: "tiliote",
+      fi: "camt.053-tiliote",
+      en: "camt.053 bank statements",
+      se: "camt.053-kontoutdrag",
+    },
+    {
+      slug: "web-services",
+      fi: "Web Services -kanava",
+      en: "Web Services channel",
+      se: "Web Services-kanalen",
+    },
+    {
+      slug: "data-api",
+      fi: "ISO 20022 -pankkidata API",
+      en: "ISO 20022 Banking Data API",
+      se: "ISO 20022-bankdata-API",
+    },
+  ],
+};
+---
+
+<GuidePage
+  lang={lang}
+  slug={messageType}
+  content={content[messageType]}
+  related={relatedByMessage[messageType]}
+/>

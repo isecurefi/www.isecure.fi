@@ -16,6 +16,11 @@ interface LangContent {
   h1: string;
   intro: string;
   sections: Section[];
+  cta?: {
+    title: string;
+    text: string;
+    label: string;
+  };
 }
 interface Related {
   slug: string;
@@ -40,7 +45,8 @@ const alternateLinks = [
   { hreflang: "x-default", href: `${origin}/${slug}/` },
 ];
 const relatedTitle = { fi: "Lue myös", en: "See also", se: "Läs även" }[lang];
-const relatedHref = (s: string) => (lang === "fi" ? `/${s}/` : `/${lang}/${s}/`);
+const relatedHref = (s: string) =>
+  lang === "fi" ? `/${s}/` : `/${lang}/${s}/`;
 ---
 
 <Layout
@@ -69,6 +75,18 @@ const relatedHref = (s: string) => (lang === "fi" ? `/${s}/` : `/${lang}/${s}/`)
           )}
         </section>
       ))
+    }
+
+    {
+      t.cta && (
+        <aside class="guide-cta">
+          <h2>{t.cta.title}</h2>
+          <p>{t.cta.text}</p>
+          <a class="guide-cta-button" href="#contact">
+            {t.cta.label}
+          </a>
+        </aside>
+      )
     }
 
     {
@@ -122,5 +140,38 @@ const relatedHref = (s: string) => (lang === "fi" ? `/${s}/` : `/${lang}/${s}/`)
 
   .guide-related a {
     color: #0d6efd;
+  }
+
+  .guide-cta {
+    background: #eef6ff;
+    border: 1px solid #cfe2ff;
+    border-radius: 12px;
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+  }
+
+  .guide-cta h2 {
+    margin-top: 0;
+  }
+
+  .guide-cta-button {
+    background: #0d6efd;
+    border-radius: 8px;
+    color: #fff;
+    display: inline-block;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1.1rem;
+    text-decoration: none;
+  }
+
+  .guide-cta-button:hover {
+    background: #0b5ed7;
+    color: #fff;
+  }
+
+  .guide-cta-button:focus-visible {
+    outline: 3px solid #212529;
+    outline-offset: 3px;
   }
 </style>
