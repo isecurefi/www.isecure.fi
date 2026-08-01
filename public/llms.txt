@@ -28,6 +28,11 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [camt.054 notifications](https://www.isecure.fi/en/camt-054/): debit and credit notification retrieval
 - [About](https://www.isecure.fi/en/about/): company information
 
+## API documentation
+
+- [API documentation](https://isecure.fi/wsapi_v2/index.html): REST File Exchange API reference for bank file upload, listing, and download
+- [OpenAPI specification](https://isecure.fi/wsapi_v2.json): machine-readable OpenAPI description of the REST API
+
 ## SDKs and tooling
 
 - [TypeScript SDK](https://github.com/dforsber/isecure-ts-client): official TypeScript client library
