@@ -90,6 +90,9 @@ aws cloudfront update-distribution --id "$DIST_ID" --if-match "$ETAG" \
   --distribution-config "file://$CFG_NEW" \
   --query "Distribution.Status" --output text
 
+echo "   waiting for the distribution to finish deploying (a few minutes)..."
+aws cloudfront wait distribution-deployed --id "$DIST_ID"
+
 echo "== 5/6 S3: back up then delete the stale pre-Astro objects"
 mkdir -p "$BACKUP_DIR"
 for key in ws-kanava.html ws-api.html; do
