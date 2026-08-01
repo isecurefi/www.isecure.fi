@@ -55,7 +55,12 @@ async function query(client, dimensions) {
       dataState: "final",
     },
   });
-  return res.data.rows ?? [];
+  const rows = res.data.rows ?? [];
+  if (rows.length === 25000)
+    console.warn(
+      `WARNING: ${dimensions.join("+")} pull hit the 25000-row API cap — results truncated`,
+    );
+  return rows;
 }
 
 const pct = (n) => `${(n * 100).toFixed(1)}%`;

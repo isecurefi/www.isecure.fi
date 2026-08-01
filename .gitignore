@@ -54,3 +54,6 @@ gsc-key*.json
 
 # Development tools
 .aider*
+
+# Local backups of deleted S3 objects (not for the repo)
+.s3-backups/
