@@ -75,9 +75,10 @@ async function main() {
     scopes: ["https://www.googleapis.com/auth/webmasters.readonly"],
   });
 
-  const [queries, pages] = await Promise.all([
+  const [queries, pages, queryPages] = await Promise.all([
     query(client, ["query"]),
     query(client, ["page"]),
+    query(client, ["query", "page"]),
   ]);
 
   const relevant = queries.filter((r) => r.impressions >= MIN_IMPRESSIONS);
@@ -95,9 +96,19 @@ async function main() {
     .sort((a, b) => b.impressions - a.impressions)
     .slice(0, 25);
 
+  // Query→page pairs expose cannibalization: the same query ranking several
+  // URLs (e.g. a legacy page splitting impressions with its replacement).
+  const pairs = [...queryPages]
+    .sort((a, b) => b.impressions - a.impressions)
+    .slice(0, 25);
+
   mkdirSync(".gsc-data", { recursive: true });
   writeFileSync(".gsc-data/queries.json", JSON.stringify(queries, null, 2));
   writeFileSync(".gsc-data/pages.json", JSON.stringify(pages, null, 2));
+  writeFileSync(
+    ".gsc-data/query-pages.json",
+    JSON.stringify(queryPages, null, 2),
+  );
 
   console.log(
     `\nGSC ${SITE_URL} — last ${DAYS} days (${isoDaysAgo(DAYS)} → ${isoDaysAgo(1)})`,
@@ -113,6 +124,17 @@ async function main() {
     `\n== LOW CTR (page 1 but weak title/meta) — ${lowCtr.length} ==`,
   );
   console.log(table(lowCtr, "low-CTR"));
+  console.log(
+    `\n== QUERY → PAGE (top ${pairs.length} pairs by impressions) ==`,
+  );
+  console.log(
+    pairs
+      .map(
+        (r) =>
+          `  ${r.impressions.toString().padStart(6)} imp  pos ${r.position.toFixed(1).padStart(4)}  ${r.keys[0]}  →  ${r.keys[1].replace("https://www.isecure.fi", "")}`,
+      )
+      .join("\n") || "  (no data)",
+  );
   console.log("");
 }
 

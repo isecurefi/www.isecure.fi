@@ -96,9 +96,21 @@ const content = {
 };
 
 const t = content[lang];
+const origin = "https://www.isecure.fi";
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}/privacy/` },
+  { hreflang: "en", href: `${origin}/en/privacy/` },
+  { hreflang: "sv", href: `${origin}/se/privacy/` },
+  { hreflang: "x-default", href: `${origin}/en/privacy/` },
+];
 ---
 
-<Layout title={t.title} lang={lang} description={t.description}>
+<Layout
+  title={t.title}
+  lang={lang}
+  description={t.description}
+  alternateLinks={alternateLinks}
+>
   <article class="legal-page container">
     <h1>{t.title}</h1>
     <p class="legal-updated">{t.updated}</p>

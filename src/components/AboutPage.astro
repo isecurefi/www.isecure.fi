@@ -67,9 +67,21 @@ const content = {
 
 const t = content[lang];
 const awsCerts = ["SAP", "DOP", "SS", "BD", "NS", "DA", "SAA", "SOA", "CP"];
+const origin = "https://www.isecure.fi";
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}/about/` },
+  { hreflang: "en", href: `${origin}/en/about/` },
+  { hreflang: "sv", href: `${origin}/se/about/` },
+  { hreflang: "x-default", href: `${origin}/en/about/` },
+];
 ---
 
-<Layout title={t.title} lang={lang} description={t.description}>
+<Layout
+  title={t.title}
+  lang={lang}
+  description={t.description}
+  alternateLinks={alternateLinks}
+>
   <article class="about-page container">
     <h1>{t.title}</h1>
     <p class="about-intro">{t.intro}</p>
