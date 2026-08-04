@@ -11,8 +11,9 @@ const { lang } = Astro.props;
 const content = {
   fi: {
     title: "Tietosuojaseloste",
+    metaTitle: "Tietosuojaseloste | ISECure",
     description:
-      "ISECure Oy:n tietosuojaseloste: mitä tietoja keräämme, miksi ja mitkä ovat oikeutesi.",
+      "Lue ISECure Oy:n tietosuojaseloste: mitä henkilötietoja keräämme, mihin niitä käytetään, kuinka kauan niitä säilytetään ja mitkä ovat oikeutesi.",
     updated: "Päivitetty 26.7.2026",
     sections: [
       {
@@ -39,8 +40,9 @@ const content = {
   },
   en: {
     title: "Privacy Policy",
+    metaTitle: "Privacy Policy | ISECure",
     description:
-      "ISECure Oy privacy policy: what data we collect, why, and what your rights are.",
+      "Read ISECure Oy's privacy policy: what personal data we collect, how we use and retain it, who processes it, and what rights you have.",
     updated: "Updated July 26, 2026",
     sections: [
       {
@@ -67,8 +69,9 @@ const content = {
   },
   se: {
     title: "Integritetspolicy",
+    metaTitle: "Integritetspolicy | ISECure",
     description:
-      "ISECure Oy:s integritetspolicy: vilka uppgifter vi samlar in, varför och vilka rättigheter du har.",
+      "Läs ISECure Oy:s integritetspolicy: vilka personuppgifter vi samlar in, hur de används och lagras, vem som behandlar dem och vilka rättigheter du har.",
     updated: "Uppdaterad 26.7.2026",
     sections: [
       {
@@ -106,7 +109,7 @@ const alternateLinks = [
 ---
 
 <Layout
-  title={t.title}
+  title={t.metaTitle}
   lang={lang}
   description={t.description}
   alternateLinks={alternateLinks}

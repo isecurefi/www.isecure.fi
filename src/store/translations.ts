@@ -64,9 +64,9 @@ export const translations = {
       se: "WS-Kanal API",
     },
     subtitle2: {
-      en: "One and the same API interface for your integration with all banks. Scales automatically according to your needs.",
-      fi: "Yksi ja sama API rajapinta integraatiotasi varten kaikille pankeille. Skaalautuu automaattisesti tarpeidesi mukaan.",
-      se: "Ett och samma API-gränssnitt för din integration med alla banker. Skalar automatiskt enligt dina behov.",
+      en: "One API interface for integration with all supported banks. Scales automatically according to your needs.",
+      fi: "Yksi API-rajapinta integraatiotasi varten kaikille tukemillemme pankeille. Skaalautuu automaattisesti tarpeidesi mukaan.",
+      se: "Ett API-gränssnitt för integration med alla banker som stöds. Skalar automatiskt enligt dina behov.",
     },
   },
   contactForm: {
@@ -315,9 +315,9 @@ export const translations = {
         se: "ISECures WS-Kanal inkluderar WebService bankprogramvaru-SDK för flera banker: Nordea, DanskeBank, OP Bank, S-Bank/LähiTapiola, Ålandsbanken, Samlink/Crosskey banker: Handelsbanken, Aktia, POP, Sparbanken, OmaSP. Vi stöder både APP- och PKI-sidor (inklusive certifikathämtning med PIN-kod och förnyelse). WS-kanalen har varit i produktion i över 10 år och används av flera kunder.",
       },
       saas: {
-        fi: "Voit ostaa WS-kanavan suoraan palveluna Hosting -paketilla (SaaS) valitsemillesi tai kaikille pankeille.",
-        en: "You can purchase the WS-channel directly as a service with a Hosting package (SaaS) for your selected banks or all banks.",
-        se: "Du kan köpa WS-kanalen direkt som en tjänst med ett Hosting-paket (SaaS) för dina valda banker eller alla banker.",
+        fi: "Voit ostaa WS-kanavan suoraan palveluna Hosting-paketilla (SaaS) valitsemillesi tai kaikille tukemillemme pankeille.",
+        en: "You can purchase the WS-channel directly as a service with a Hosting package (SaaS) for selected or all supported banks.",
+        se: "Du kan köpa WS-kanalen direkt som en tjänst med ett Hosting-paket (SaaS) för utvalda eller alla banker som stöds.",
       },
       api: {
         title: {

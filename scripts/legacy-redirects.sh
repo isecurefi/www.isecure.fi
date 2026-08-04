@@ -1,119 +1,115 @@
 #!/usr/bin/env bash
-# One-time SEO consolidation: 301 the legacy apex (isecure.fi) marketing pages
-# to their www equivalents via ALB rules, and the stale pre-Astro www objects
-# via a CloudFront function. Leaves the legacy PHP apps (registers/sympatia,
-# ws-*status.php) and the boilingdata.com ALB rule untouched.
+# Reconcile the legacy apex and CloudFront redirects used by www.isecure.fi.
 #
-# Mappings (from GSC 90d data, 2026-08-01):
-#   apex /ws-kanava.php|.html   -> www /web-services/  (legacy WS-channel page)
-#   apex /wsapi_v2/*            -> www /               (170 imp, old API docs)
-#   apex /tiliote/**            -> 403                 (legacy upload tool and PDF)
-#   apex /index-en.html         -> www /en/            (old EN homepage)
-#   www  /ws-kanava.html        -> www /web-services/  (pre-Astro leftover, pos ~5)
-#   www  /ws-api.html           -> www /               (pre-Astro leftover)
-#   www  /{fi,en,se}/tiliote/   -> corresponding /camt-053/ landing page
+# API documentation is deliberately excluded from redirects:
+#   https://isecure.fi/wsapi_v2/index.html
+#   https://isecure.fi/wsapi_v2.json
+# Both URLs are a protected compatibility surface and must continue returning
+# HTTP 200 until a one-to-one replacement has been deployed.
 set -euo pipefail
 
 REGION=eu-west-1
-LISTENER_ARN=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener/app/isecurefi/903510e898890d25/82679a15f22111bb
-TILIOTE_403_RULE=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener-rule/app/isecurefi/903510e898890d25/82679a15f22111bb/5f9302fdf6fe11fb
 DIST_ID=E2OQLWDIQMPMBP
 FN_NAME=isecure-legacy-redirects
 BUCKET=www2.isecure.fi
+SECURITY_HEADERS_POLICY=67f7725c-6f97-4210-82d7-5512b31e9d03
+TILIOTE_403_RULE=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener-rule/app/isecurefi/903510e898890d25/82679a15f22111bb/5f9302fdf6fe11fb
+WS_REDIRECT_RULE=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener-rule/app/isecurefi/903510e898890d25/82679a15f22111bb/2af05530f2eaa95b
+BAD_API_REDIRECT_RULE=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener-rule/app/isecurefi/903510e898890d25/82679a15f22111bb/4ae07659dea60f84
+INDEX_EN_REDIRECT_RULE=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener-rule/app/isecurefi/903510e898890d25/82679a15f22111bb/0cc2e0cf3b445cb7
 BACKUP_DIR="${TMPDIR:-/tmp}/isecure-s3-backup"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FN_CODE="$SCRIPT_DIR/cloudfront-redirects.js"
 
-apex_rule() { # priority, redirect-path, json array of path patterns
-  aws elbv2 create-rule --region "$REGION" --listener-arn "$LISTENER_ARN" \
-    --priority "$1" \
-    --conditions "[
-      {\"Field\":\"host-header\",\"HostHeaderConfig\":{\"Values\":[\"isecure.fi\"]}},
-      {\"Field\":\"path-pattern\",\"PathPatternConfig\":{\"Values\":$3}}
-    ]" \
-    --actions "[{\"Type\":\"redirect\",\"RedirectConfig\":{
-      \"Protocol\":\"HTTPS\",\"Port\":\"443\",\"Host\":\"www.isecure.fi\",
-      \"Path\":\"$2\",\"Query\":\"#{query}\",\"StatusCode\":\"HTTP_301\"}}]" \
-    --query "Rules[0].Priority" --output text
+redirect_action() {
+  local path=$1
+  printf '[{"Type":"redirect","RedirectConfig":{"Protocol":"HTTPS","Port":"443","Host":"www.isecure.fi","Path":"%s","Query":"#{query}","StatusCode":"HTTP_301"}}]' "$path"
 }
 
-echo "== 1/6 ALB: keep apex /tiliote and /tilivuosi2011 blocked ahead of redirects"
-aws elbv2 set-rule-priorities --region "$REGION" \
-  --rule-priorities "RuleArn=$TILIOTE_403_RULE,Priority=2" \
-  --query "Rules[].Priority" --output text
+echo "== 1/7 ALB: remove the erroneous API-documentation redirect"
+if aws elbv2 describe-rules --region "$REGION" \
+  --rule-arns "$BAD_API_REDIRECT_RULE" >/dev/null 2>&1; then
+  aws elbv2 delete-rule --region "$REGION" --rule-arn "$BAD_API_REDIRECT_RULE"
+fi
 
-echo "== 2/6 ALB: create apex 301 rules (priorities 3-5, host-scoped to isecure.fi)"
-apex_rule 3 "/web-services/" '["/ws-kanava.php","/ws-kanava.html"]'
-apex_rule 4 "/"              '["/wsapi_v2","/wsapi_v2/*"]'
-apex_rule 5 "/en/"           '["/index-en.html"]'
+echo "== 2/7 ALB: reconcile the intended apex rules"
+aws elbv2 modify-rule --region "$REGION" --rule-arn "$WS_REDIRECT_RULE" \
+  --conditions '[{"Field":"host-header","HostHeaderConfig":{"Values":["isecure.fi"]}},{"Field":"path-pattern","PathPatternConfig":{"Values":["/ws-kanava.php","/ws-kanava.html"]}}]' \
+  --actions "$(redirect_action '/web-services/')" >/dev/null
+aws elbv2 modify-rule --region "$REGION" --rule-arn "$INDEX_EN_REDIRECT_RULE" \
+  --conditions '[{"Field":"host-header","HostHeaderConfig":{"Values":["isecure.fi"]}},{"Field":"path-pattern","PathPatternConfig":{"Values":["/index-en.html"]}}]' \
+  --actions "$(redirect_action '/en/')" >/dev/null
+aws elbv2 set-rule-priorities --region "$REGION" --rule-priorities \
+  "RuleArn=$TILIOTE_403_RULE,Priority=2" \
+  "RuleArn=$WS_REDIRECT_RULE,Priority=3" \
+  "RuleArn=$INDEX_EN_REDIRECT_RULE,Priority=4" >/dev/null
 
-echo "== 3/6 CloudFront: create + publish redirect function for stale www paths"
-FN_CODE="$(mktemp)"
-cat > "$FN_CODE" <<'EOF'
-function handler(event) {
-  var req = event.request;
-  var map = {
-    "/ws-kanava.html": "/web-services/",
-    "/ws-api.html": "/",
-    "/tiliote": "/camt-053/",
-    "/tiliote/": "/camt-053/",
-    "/en/tiliote": "/en/camt-053/",
-    "/en/tiliote/": "/en/camt-053/",
-    "/se/tiliote": "/se/camt-053/",
-    "/se/tiliote/": "/se/camt-053/"
-  };
-  var to = map[req.uri];
-  if (to) {
-    return {
-      statusCode: 301,
-      statusDescription: "Moved Permanently",
-      headers: { location: { value: "https://www.isecure.fi" + to } }
-    };
-  }
-  return req;
-}
-EOF
-FN_ARN=$(aws cloudfront create-function --name "$FN_NAME" \
-  --function-config "Comment=301s for legacy www paths,Runtime=cloudfront-js-2.0" \
-  --function-code "fileb://$FN_CODE" \
-  --query "FunctionSummary.FunctionMetadata.FunctionARN" --output text)
-FN_ETAG=$(aws cloudfront describe-function --name "$FN_NAME" --query ETag --output text)
-aws cloudfront publish-function --name "$FN_NAME" --if-match "$FN_ETAG" \
-  --query "FunctionSummary.Status" --output text
+echo "== 3/7 CloudFront: update and publish the checked-in redirect function"
+FN_ETAG=$(aws cloudfront describe-function --name "$FN_NAME" --stage DEVELOPMENT \
+  --query ETag --output text)
+aws cloudfront update-function --name "$FN_NAME" --if-match "$FN_ETAG" \
+  --function-config 'Comment=Canonical and legacy redirects for www.isecure.fi,Runtime=cloudfront-js-2.0' \
+  --function-code "fileb://$FN_CODE" >/dev/null
+FN_ETAG=$(aws cloudfront describe-function --name "$FN_NAME" --stage DEVELOPMENT \
+  --query ETag --output text)
+aws cloudfront publish-function --name "$FN_NAME" --if-match "$FN_ETAG" >/dev/null
+FN_ARN=$(aws cloudfront describe-function --name "$FN_NAME" --stage LIVE \
+  --query 'FunctionSummary.FunctionMetadata.FunctionARN' --output text)
 
-echo "== 4/6 CloudFront: attach function to distribution $DIST_ID (viewer-request)"
-CFG_JSON="$(mktemp)" CFG_NEW="$(mktemp)"
-ETAG=$(aws cloudfront get-distribution-config --id "$DIST_ID" --query ETag --output text)
-aws cloudfront get-distribution-config --id "$DIST_ID" --query DistributionConfig > "$CFG_JSON"
-python3 - "$CFG_JSON" "$CFG_NEW" "$FN_ARN" <<'EOF'
-import json, sys
-cfg = json.load(open(sys.argv[1]))
-cfg["DefaultCacheBehavior"]["FunctionAssociations"] = {
-    "Quantity": 1,
-    "Items": [{"FunctionARN": sys.argv[3], "EventType": "viewer-request"}],
-}
-json.dump(cfg, open(sys.argv[2], "w"))
-EOF
+echo "== 4/7 CloudFront: attach redirects and managed security headers"
+CFG_RAW=$(mktemp)
+CFG_JSON=$(mktemp)
+aws cloudfront get-distribution-config --id "$DIST_ID" > "$CFG_RAW"
+ETAG=$(jq -r '.ETag' "$CFG_RAW")
+jq --arg function_arn "$FN_ARN" --arg headers_policy "$SECURITY_HEADERS_POLICY" '
+  .DistributionConfig
+  | (.DefaultCacheBehavior.FunctionAssociations.Items // []) as $associations
+  | .DefaultCacheBehavior.FunctionAssociations = (
+      ($associations | map(select(.EventType != "viewer-request")))
+      + [{FunctionARN: $function_arn, EventType: "viewer-request"}]
+      | {Quantity: length, Items: .}
+    )
+  | .DefaultCacheBehavior.ResponseHeadersPolicyId = $headers_policy
+' "$CFG_RAW" > "$CFG_JSON"
 aws cloudfront update-distribution --id "$DIST_ID" --if-match "$ETAG" \
-  --distribution-config "file://$CFG_NEW" \
-  --query "Distribution.Status" --output text
-
-echo "   waiting for the distribution to finish deploying (a few minutes)..."
+  --distribution-config "file://$CFG_JSON" >/dev/null
 aws cloudfront wait distribution-deployed --id "$DIST_ID"
 
-echo "== 5/6 S3: back up then delete the stale pre-Astro objects"
+echo "== 5/7 S3: back up and remove retired duplicate route objects"
 mkdir -p "$BACKUP_DIR"
-for key in ws-kanava.html ws-api.html; do
-  aws s3 cp "s3://$BUCKET/$key" "$BACKUP_DIR/$key"
-  aws s3 rm "s3://$BUCKET/$key"
+for key in \
+  ws-kanava.html ws-api.html \
+  tiliote/ tiliote/index.html \
+  en/tiliote/ en/tiliote/index.html \
+  se/tiliote/ se/tiliote/index.html \
+  banking-api/ banking-api/index.html \
+  en/banking-api/ en/banking-api/index.html \
+  se/banking-api/ se/banking-api/index.html; do
+  if aws s3api head-object --bucket "$BUCKET" --key "$key" >/dev/null 2>&1; then
+    backup_name=${key%/}
+    if [[ "$key" == */ ]]; then
+      backup_name="$backup_name.directory-alias.html"
+    fi
+    mkdir -p "$BACKUP_DIR/$(dirname "$backup_name")"
+    aws s3api get-object --bucket "$BUCKET" --key "$key" \
+      "$BACKUP_DIR/$backup_name" >/dev/null
+    aws s3api delete-object --bucket "$BUCKET" --key "$key" >/dev/null
+  fi
 done
-echo "backups in $BACKUP_DIR"
 
-echo "== 6/6 CloudFront: invalidate redirected paths"
-aws cloudfront create-invalidation --distribution-id "$DIST_ID" \
-  --paths "/ws-kanava.html" "/ws-api.html" "/tiliote*" "/en/tiliote*" "/se/tiliote*" \
-  --query "Invalidation.Status" --output text
+echo "== 6/7 CloudFront: invalidate affected paths"
+aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths \
+  '/ws-kanava.html' '/ws-api.html' \
+  '/tiliote*' '/en/tiliote*' '/se/tiliote*' \
+  '/banking-api*' '/en/banking-api*' '/se/banking-api*' \
+  '/camt-053*' '/en/camt-053*' '/se/camt-053*' \
+  '/iso-20022*' '/en/iso-20022*' '/se/iso-20022*' >/dev/null
 
-echo "DONE. Verify with:"
-echo "  curl -sI https://isecure.fi/ws-kanava.php | grep -i location      # -> www/web-services/"
-echo "  curl -sI https://isecure.fi/wsapi_v2/index.html | grep -i location # -> www/"
-echo "  curl -sI https://isecure.fi/tiliote/kuvaus.pdf | head -1            # -> 403"
-echo "  curl -sI https://www.isecure.fi/ws-kanava.html | grep -i location  # -> www/web-services/ (after CF deploy, ~5 min)"
+echo "== 7/7 Verify protected and redirected production routes"
+test "$(curl -sS -o /dev/null -w '%{http_code}' https://isecure.fi/wsapi_v2/index.html)" = 200
+test "$(curl -sS -o /dev/null -w '%{http_code}' https://isecure.fi/wsapi_v2.json)" = 200
+test "$(curl -sS -o /dev/null -w '%{http_code}' https://isecure.fi/tiliote/kuvaus.pdf)" = 403
+test "$(curl -sS -o /dev/null -w '%{http_code}' https://isecure.fi/tilivuosi2011/2011-tiliotteet.pdf)" = 403
+test "$(curl -sS -o /dev/null -w '%{http_code}' https://www.isecure.fi/camt-053)" = 301
+test "$(curl -sS -o /dev/null -w '%{http_code}' https://www.isecure.fi/iso-20022)" = 301
+echo "Reconciliation complete. Retired S3 backups: $BACKUP_DIR"

@@ -68,12 +68,12 @@ const defaultStructuredData = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://isecure.fi/#organization",
+      "@id": "https://www.isecure.fi/#organization",
       name: "ISECure Oy",
-      url: "https://isecure.fi",
+      url: "https://www.isecure.fi",
       logo: {
         "@type": "ImageObject",
-        url: "https://isecure.fi/images/isecure-small-logo.png",
+        url: "https://www.isecure.fi/images/isecure-small-logo.png",
         width: 161,
         height: 61,
       },
@@ -94,11 +94,11 @@ const defaultStructuredData = {
     },
     {
       "@type": "WebSite",
-      "@id": "https://isecure.fi/#website",
-      url: "https://isecure.fi",
+      "@id": "https://www.isecure.fi/#website",
+      url: "https://www.isecure.fi",
       name: "ISECure",
       publisher: {
-        "@id": "https://isecure.fi/#organization",
+        "@id": "https://www.isecure.fi/#organization",
       },
       inLanguage: lang === "en" ? "en-US" : lang === "se" ? "sv-SE" : "fi-FI",
     },
@@ -115,7 +115,7 @@ const defaultStructuredData = {
       },
       description: socialDescription,
       provider: {
-        "@id": "https://isecure.fi/#organization",
+        "@id": "https://www.isecure.fi/#organization",
       },
     },
   ],
@@ -319,9 +319,6 @@ const fullTitle = titleAlreadyBranded
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"
     ></script>
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=AW-1025469048"></script>
 
     <!-- Bootstrap JavaScript -->
     <script
@@ -330,10 +327,7 @@ const fullTitle = titleAlreadyBranded
       crossorigin="anonymous"
       defer></script>
   </head>
-  <body
-    class={bodyClass}
-    data-isecure-theme={htmlClass ? "light" : undefined}
-  >
+  <body class={bodyClass} data-isecure-theme={htmlClass ? "light" : undefined}>
     <Navigation lang={lang} />
     <main class:list={["main-content", { "main-content--wide": fullWidth }]}>
       <slot />

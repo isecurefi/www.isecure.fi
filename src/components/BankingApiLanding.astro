@@ -48,7 +48,7 @@ const highlightedTsCode = hljs.highlight(tsCode, {
 const content = {
   fi: {
     eyebrow: "Säästä kuukausien pankkikohtainen integraatiotyö",
-    title: "Kaikki pankit yhden API:n takana",
+    title: "Tuetut pankit yhden API:n takana",
     lead: "ISECure tarjoaa rajapinnan maksuaineistoille, tiliotteille ja varmenteille: sinä lähetät ja noudat, me hoidamme pankkiyhteyden, tilit, sertifikaatit ja tietoturvan.",
     icp: "Suunniteltu ohjelmistoyrityksille: taloushallinnon, ERP:n, laskutuksen ja rahoituksen tuotteille, jotka tarvitsevat pankkiyhteydet.",
     primaryCta: "Aloita testirajapinnalla",
@@ -57,7 +57,11 @@ const content = {
     darkLabel: "Tumma",
     lightLabel: "Vaalea",
     proof: [
-      { value: "Tuhansien", label: "suomalaisten yritysten", text: "pankkiliikenne kulkee ISECuren kautta" },
+      {
+        value: "Tuhansien",
+        label: "suomalaisten yritysten",
+        text: "pankkiliikenne kulkee ISECuren kautta",
+      },
       {
         value: "10+ vuotta",
         label: "luotettavasti tuotannossa",
@@ -114,7 +118,12 @@ const content = {
     architectureEyebrow: "Arkkitehtuuri",
     architectureLead:
       "Kehittäjä lähettää ja noutaa pankkiaineistoja API:n kautta. ISECure hoitaa pankkien WS-liikenteen, varmenteet, avainsäilytyksen ja operatiivisen valvonnan.",
-    flow: ["Sovellus", "TypeScript, Python tai PHP client", "ISECure WS-Kanava API", "Pankit ja WS-kanava"],
+    flow: [
+      "Sovellus",
+      "TypeScript, Python tai PHP client",
+      "ISECure WS-Kanava API",
+      "Pankit ja WS-kanava",
+    ],
     sftpOption: {
       title: "Vaihtoehtoisesti: Luotettava SFTP/S3-synkronointi",
       text: "Tiedostopohjaisissa työnkuluissa pankkiaineistoja voidaan synkronoida SFTP:n tai S3:n kautta ilman suoraa REST API -integraatiota. Sama ISECure-yhteys hoitaa pankkien WS-liikenteen taustalla.",
@@ -165,7 +174,8 @@ const content = {
       "ISECure yhdistää samaan integraatiomalliin pankit kuten Nordea, OP, Danske Bank, S-Pankki/LähiTapiola ja Ålandsbanken sekä Samlink- ja Crosskey-yhteyksien kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSP:n. Pankkiaineistot kulkevat palvelun läpi ilman aineistotyyppikohtaista suodatusta tai prosessointia.",
     pricingEyebrow: "Hinnoittelu",
     pricingTitle: "Yksinkertainen hinnoittelu",
-    pricingLead: "Kiinteä perusmaksu ja pankkitilikohtaiset lisenssit. Ei transaktio- eikä volyymimaksuja.",
+    pricingLead:
+      "Kiinteä perusmaksu ja pankkitilikohtaiset lisenssit. Ei transaktio- eikä volyymimaksuja.",
     pricingFromLabel: "Alkaen",
     pricingFrom: "38 € / kk",
     pricingFromNote: "Sisältää perusmaksun ja 10 pankkitililisenssiä.",
@@ -178,7 +188,11 @@ const content = {
     ],
     pricingContactCta: "Ota yhteyttä",
     pricing: [
-      { value: "18 € / kk", label: "Perusmaksu", text: "Palvelun kiinteä kuukausimaksu." },
+      {
+        value: "18 € / kk",
+        label: "Perusmaksu",
+        text: "Palvelun kiinteä kuukausimaksu.",
+      },
       {
         value: "2 € / tili / kk",
         label: "Pankkitililisenssi",
@@ -191,7 +205,8 @@ const content = {
       },
     ],
     pricingExample: "Esimerkki: 20 pankkitiliä = 18 € + 40 € = 58 €/kk.",
-    pricingNote: "Vuosilaskutus · Tililisenssit 10 lisenssin paketeissa · Hintoihin lisätään ALV",
+    pricingNote:
+      "Vuosilaskutus · Tililisenssit 10 lisenssin paketeissa · Hintoihin lisätään ALV",
     faqTitle: "Usein kysyttyä",
     faqEyebrow: "Kysymykset",
     faqs: [
@@ -225,7 +240,7 @@ const content = {
   },
   en: {
     eyebrow: "Save months of bank-by-bank integration work",
-    title: "All banks behind the same API",
+    title: "Supported banks behind one API",
     lead: "ISECure gives you one interface for payment files, statements, and certificates: your product sends and retrieves, we handle the bank connection, accounts, certificates, and security.",
     icp: "Built for software companies: accounting, ERP, invoicing, and finance products that need bank connectivity.",
     primaryCta: "Start with the test API",
@@ -234,9 +249,21 @@ const content = {
     darkLabel: "Dark",
     lightLabel: "Light",
     proof: [
-      { value: "Thousands", label: "Finnish companies", text: "bank traffic runs through ISECure" },
-      { value: "10+ years", label: "in production", text: "bank connectivity, certificates, and file traffic" },
-      { value: "Accounting + ERP", label: "software platforms", text: "use ISECure for production bank connectivity" },
+      {
+        value: "Thousands",
+        label: "Finnish companies",
+        text: "bank traffic runs through ISECure",
+      },
+      {
+        value: "10+ years",
+        label: "in production",
+        text: "bank connectivity, certificates, and file traffic",
+      },
+      {
+        value: "Accounting + ERP",
+        label: "software platforms",
+        text: "use ISECure for production bank connectivity",
+      },
     ],
     quickstartEyebrow: "Get started",
     quickstartTitle: "First test call in three steps",
@@ -283,7 +310,12 @@ const content = {
     architectureEyebrow: "Architecture",
     architectureLead:
       "Developers send and retrieve bank files through the API. ISECure handles bank WS traffic, certificates, key storage, and operational monitoring.",
-    flow: ["Application", "TypeScript, Python, or PHP client", "ISECure WS-Channel API", "Banks and WS-channel"],
+    flow: [
+      "Application",
+      "TypeScript, Python, or PHP client",
+      "ISECure WS-Channel API",
+      "Banks and WS-channel",
+    ],
     sftpOption: {
       title: "Reliable SFTP/S3 sync",
       text: "For file-based workflows, bank files can be synchronized through SFTP or S3 without requiring a direct REST API integration. The same ISECure connection handles bank WS traffic underneath.",
@@ -334,7 +366,8 @@ const content = {
       "ISECure connects the same integration model to banks such as Nordea, OP, Danske Bank, S-Bank/LähiTapiola, and Ålandsbanken, plus Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections. Bank files pass through the service without file-type-specific filtering or processing.",
     pricingEyebrow: "Pricing",
     pricingTitle: "Simple pricing",
-    pricingLead: "A fixed base fee plus per-bank-account licenses. No transaction or volume fees.",
+    pricingLead:
+      "A fixed base fee plus per-bank-account licenses. No transaction or volume fees.",
     pricingFromLabel: "From",
     pricingFrom: "38 € / month",
     pricingFromNote: "Includes the base fee and 10 bank account licenses.",
@@ -347,7 +380,11 @@ const content = {
     ],
     pricingContactCta: "Contact us",
     pricing: [
-      { value: "18 € / month", label: "Base fee", text: "Fixed monthly fee for the service." },
+      {
+        value: "18 € / month",
+        label: "Base fee",
+        text: "Fixed monthly fee for the service.",
+      },
       {
         value: "2 € / account / month",
         label: "Bank account license",
@@ -360,7 +397,8 @@ const content = {
       },
     ],
     pricingExample: "Example: 20 bank accounts = 18 € + 40 € = 58 €/month.",
-    pricingNote: "Annual billing · Account licenses in packages of 10 · VAT added on top",
+    pricingNote:
+      "Annual billing · Account licenses in packages of 10 · VAT added on top",
     faqTitle: "Frequently asked questions",
     faqEyebrow: "FAQ",
     faqs: [
@@ -403,8 +441,16 @@ const content = {
     darkLabel: "Mörk",
     lightLabel: "Ljus",
     proof: [
-      { value: "Tusentals", label: "finländska företag", text: "banktrafik går via ISECure" },
-      { value: "10+ år", label: "i produktion", text: "bankförbindelser, certifikat och filtrafik" },
+      {
+        value: "Tusentals",
+        label: "finländska företag",
+        text: "banktrafik går via ISECure",
+      },
+      {
+        value: "10+ år",
+        label: "i produktion",
+        text: "bankförbindelser, certifikat och filtrafik",
+      },
       {
         value: "Bokföring + ERP",
         label: "mjukvaruplattformar",
@@ -456,7 +502,12 @@ const content = {
     architectureEyebrow: "Arkitektur",
     architectureLead:
       "Utvecklare skickar och hämtar bankfiler via API:t. ISECure hanterar bankernas WS-trafik, certifikat, nyckellagring och operativ övervakning.",
-    flow: ["Applikation", "TypeScript, Python eller PHP-klient", "ISECure WS-Kanal API", "Banker och WS-kanal"],
+    flow: [
+      "Applikation",
+      "TypeScript, Python eller PHP-klient",
+      "ISECure WS-Kanal API",
+      "Banker och WS-kanal",
+    ],
     sftpOption: {
       title: "Tillförlitlig SFTP/S3-synkronisering",
       text: "För filbaserade arbetsflöden kan bankfiler synkroniseras via SFTP eller S3 utan direkt REST API-integration. Samma ISECure-förbindelse hanterar bankernas WS-trafik i bakgrunden.",
@@ -507,7 +558,8 @@ const content = {
       "ISECure kopplar samma integrationsmodell till banker som Nordea, OP, Danske Bank, S-Bank/LähiTapiola och Ålandsbanken samt Handelsbanken, Aktia, POP Banken, Sparbanken och OmaSP via Samlink- och Crosskey-förbindelser. Bankfiler passerar genom tjänsten utan filtypsspecifik filtrering eller bearbetning.",
     pricingEyebrow: "Prissättning",
     pricingTitle: "Enkel prissättning",
-    pricingLead: "Fast grundavgift och licenser per bankkonto. Inga transaktions- eller volymavgifter.",
+    pricingLead:
+      "Fast grundavgift och licenser per bankkonto. Inga transaktions- eller volymavgifter.",
     pricingFromLabel: "Från",
     pricingFrom: "38 € / mån",
     pricingFromNote: "Inkluderar grundavgiften och 10 bankkontolicenser.",
@@ -520,7 +572,11 @@ const content = {
     ],
     pricingContactCta: "Kontakta oss",
     pricing: [
-      { value: "18 € / mån", label: "Grundavgift", text: "Fast månadsavgift för tjänsten." },
+      {
+        value: "18 € / mån",
+        label: "Grundavgift",
+        text: "Fast månadsavgift för tjänsten.",
+      },
       {
         value: "2 € / konto / mån",
         label: "Bankkontolicens",
@@ -533,7 +589,8 @@ const content = {
       },
     ],
     pricingExample: "Exempel: 20 bankkonton = 18 € + 40 € = 58 €/mån.",
-    pricingNote: "Årsfakturering · Kontolicenser i paket om 10 · Moms tillkommer",
+    pricingNote:
+      "Årsfakturering · Kontolicenser i paket om 10 · Moms tillkommer",
     faqTitle: "Vanliga frågor",
     faqEyebrow: "FAQ",
     faqs: [
@@ -580,7 +637,10 @@ const t = content[lang];
         <p class="hero-icp">{t.icp}</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#quickstart">{t.primaryCta}</a>
-          <a class="button button-secondary" href="https://isecure.fi/wsapi_v2/index.html">{t.secondaryCta}</a>
+          <a
+            class="button button-secondary"
+            href="https://isecure.fi/wsapi_v2/index.html">{t.secondaryCta}</a
+          >
         </div>
         <div class="proof-strip" aria-label="ISECure proof points">
           {
@@ -616,7 +676,10 @@ const t = content[lang];
       <h2>{t.quickstartTitle}</h2>
       <p>{t.quickstartLead}</p>
       <div class="doc-actions">
-        <a class="button button-primary" href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a>
+        <a
+          class="button button-primary"
+          href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a
+        >
         <a
           class="button button-secondary"
           href="https://github.com/isecurefi/isecure-ts-client"
@@ -675,8 +738,14 @@ const t = content[lang];
         <h2>{t.architectureTitle}</h2>
         <p>{t.architectureLead}</p>
         <div class="doc-actions architecture-actions">
-          <a class="button button-primary" href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a>
-          <a class="button button-secondary" href="https://isecure.fi/wsapi_v2.json">{t.openApiCta}</a>
+          <a
+            class="button button-primary"
+            href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a
+          >
+          <a
+            class="button button-secondary"
+            href="https://isecure.fi/wsapi_v2.json">{t.openApiCta}</a
+          >
         </div>
       </div>
       <div class="flow-panel" aria-label={t.architectureTitle}>
@@ -687,7 +756,9 @@ const t = content[lang];
                 <span>{index + 1}</span>
                 <strong>{step}</strong>
               </div>
-              {index < t.flow.length - 1 && <div class="flow-line" aria-hidden="true" />}
+              {index < t.flow.length - 1 && (
+                <div class="flow-line" aria-hidden="true" />
+              )}
             </>
           ))
         }
@@ -712,9 +783,15 @@ const t = content[lang];
       </div>
       <div class="management-app-meta">
         <div class="platform-list" aria-label={t.managementApp.platformsLabel}>
-          {["macOS", "Windows", "iOS", "Android"].map((platform) => <span>{platform}</span>)}
+          {
+            ["macOS", "Windows", "iOS", "Android"].map((platform) => (
+              <span>{platform}</span>
+            ))
+          }
         </div>
-        <a class="button button-primary" href="#contact">{t.managementApp.cta}</a>
+        <a class="button button-primary" href="#contact"
+          >{t.managementApp.cta}</a
+        >
       </div>
     </div>
   </section>
@@ -760,10 +837,14 @@ const t = content[lang];
         <p class="pricing-price">{t.pricingFrom}</p>
         <p class="pricing-from-note">{t.pricingFromNote}</p>
         <p class="pricing-analogy">{t.pricingAnalogy}</p>
-        <ul class="pricing-included">{t.pricingIncluded.map((item) => <li>{item}</li>)}</ul>
+        <ul class="pricing-included">
+          {t.pricingIncluded.map((item) => <li>{item}</li>)}
+        </ul>
         <div class="doc-actions">
           <a class="button button-primary" href="#quickstart">{t.primaryCta}</a>
-          <a class="button button-secondary" href="#contact">{t.pricingContactCta}</a>
+          <a class="button button-secondary" href="#contact"
+            >{t.pricingContactCta}</a
+          >
         </div>
       </div>
       <div class="pricing-breakdown">
@@ -814,13 +895,18 @@ const t = content[lang];
       document.documentElement.dataset.isecureTheme = theme;
       document.body.dataset.isecureTheme = theme;
       buttons.forEach((button) => {
-        button.setAttribute("aria-pressed", button.dataset.themeChoice === theme ? "true" : "false");
+        button.setAttribute(
+          "aria-pressed",
+          button.dataset.themeChoice === theme ? "true" : "false",
+        );
       });
       localStorage.setItem("isecure-banking-theme", theme);
     }
 
     buttons.forEach((button) => {
-      button.addEventListener("click", () => setTheme(button.dataset.themeChoice));
+      button.addEventListener("click", () =>
+        setTheme(button.dataset.themeChoice),
+      );
     });
 
     setTheme(initialTheme);
@@ -843,7 +929,11 @@ const t = content[lang];
     --landing-bg: #071116;
     --landing-card: #101c25;
     --landing-card-strong: #142633;
-    --landing-hero-bg: radial-gradient(circle at 18% 12%, rgba(79, 209, 197, 0.2), transparent 34%),
+    --landing-hero-bg: radial-gradient(
+        circle at 18% 12%,
+        rgba(79, 209, 197, 0.2),
+        transparent 34%
+      ),
       linear-gradient(120deg, #071116 0%, #0c1825 54%, #071116 100%);
     --landing-code-bg: #09131b;
     --landing-code-ink: #d8f6f1;
@@ -873,7 +963,12 @@ const t = content[lang];
     --landing-bg: #ffffff;
     --landing-card: #ffffff;
     --landing-card-strong: #f8fbfc;
-    --landing-hero-bg: linear-gradient(120deg, rgba(0, 111, 106, 0.12), rgba(23, 78, 166, 0.08)), #f8fbfc;
+    --landing-hero-bg: linear-gradient(
+        120deg,
+        rgba(0, 111, 106, 0.12),
+        rgba(23, 78, 166, 0.08)
+      ),
+      #f8fbfc;
     --landing-code-bg: #f8fbfc;
     --landing-code-ink: #13212d;
     --landing-code-muted: #64748b;
@@ -911,7 +1006,8 @@ const t = content[lang];
 
   :global(body.banking-theme-page .navbar-brand) {
     align-items: center;
-    background: url("/images/isecure-small-logo.png") center calc(50% - 4px) / contain no-repeat;
+    background: url("/images/isecure-small-logo.png") center calc(50% - 4px) /
+      contain no-repeat;
     display: inline-flex;
     flex: 0 0 69px;
     font-size: 0;
@@ -953,7 +1049,9 @@ const t = content[lang];
     filter: invert(1);
   }
 
-  :global(body.banking-theme-page[data-isecure-theme="light"] .navbar-toggler-icon) {
+  :global(
+    body.banking-theme-page[data-isecure-theme="light"] .navbar-toggler-icon
+  ) {
     filter: none;
   }
 
@@ -985,7 +1083,9 @@ const t = content[lang];
     width: 30px;
   }
 
-  :global(body.banking-theme-page .site-theme-toggle button[aria-pressed="true"]) {
+  :global(
+    body.banking-theme-page .site-theme-toggle button[aria-pressed="true"]
+  ) {
     background: var(--landing-primary-bg);
     color: var(--landing-primary-ink);
   }
@@ -1150,7 +1250,12 @@ const t = content[lang];
   }
 
   .proof-item {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)), var(--landing-card);
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.04),
+        rgba(255, 255, 255, 0.01)
+      ),
+      var(--landing-card);
     border: 1px solid var(--landing-line);
     border-left: 0;
     min-height: 158px;
@@ -1379,7 +1484,12 @@ const t = content[lang];
 
   .management-app-panel {
     align-items: center;
-    background: linear-gradient(135deg, rgba(79, 209, 197, 0.12), rgba(138, 180, 255, 0.1)), var(--landing-card);
+    background: linear-gradient(
+        135deg,
+        rgba(79, 209, 197, 0.12),
+        rgba(138, 180, 255, 0.1)
+      ),
+      var(--landing-card);
     border: 1px solid var(--landing-line);
     border-radius: 8px;
     display: grid;
@@ -1511,7 +1621,12 @@ const t = content[lang];
   }
 
   .bank-panel {
-    background: linear-gradient(135deg, rgba(79, 209, 197, 0.12), rgba(138, 180, 255, 0.1)), var(--landing-card);
+    background: linear-gradient(
+        135deg,
+        rgba(79, 209, 197, 0.12),
+        rgba(138, 180, 255, 0.1)
+      ),
+      var(--landing-card);
     padding: 36px;
   }
 
@@ -1521,7 +1636,12 @@ const t = content[lang];
   }
 
   .pricing-panel {
-    background: linear-gradient(135deg, rgba(79, 209, 197, 0.12), rgba(138, 180, 255, 0.1)), var(--landing-card);
+    background: linear-gradient(
+        135deg,
+        rgba(79, 209, 197, 0.12),
+        rgba(138, 180, 255, 0.1)
+      ),
+      var(--landing-card);
     border: 1px solid var(--landing-line);
     border-radius: 8px;
     display: grid;

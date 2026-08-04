@@ -8,7 +8,7 @@ const content = {
   fi: {
     title: "OP-pankkiyhteys ja maksuliikenne ohjelmistoon | ISECure",
     description:
-      "Yhdistä ohjelmistosi OP:n yritysten maksuliikenteeseen yhdellä rajapinnalla. ISECure hoitaa Web Services -yhteyden, varmenteet, tiliotteet (camt.053) ja maksut (pain.001).",
+      "Yhdistä ohjelmistosi OP:n Web Services -kanavaan. ISECure hoitaa varmenteet, camt.053-tiliotteet ja pain.001-maksut yhden API:n kautta.",
     h1: "OP-pankkiyhteys ohjelmistoon",
     intro:
       "ISECure tuo OP:n yritysten maksuliikenteen ohjelmistotuotteeseesi yhtenä rajapintana. Hoidamme Web Services -yhteyden, varmenteet ja aineistoliikenteen, jotta voit keskittyä omaan tuotteeseesi.",
@@ -27,9 +27,9 @@ const content = {
         ],
       },
       {
-        h2: "Yksi integraatio, kaikki pankit",
+        h2: "Yksi integraatio tukemiimme pankkeihin",
         paras: [
-          "Sama ISECure-rajapinta kattaa OP:n lisäksi Nordean, Danske Bankin, S-Pankin, Ålandsbankenin sekä Samlinkin ja Crosskeyn kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSp:n. Kun integroit kerran, saat kaikki suomalaiset pankit.",
+          "Sama ISECure-rajapinta kattaa OP:n lisäksi Nordean, Danske Bankin, S-Pankin, Ålandsbankenin sekä Samlinkin ja Crosskeyn kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSp:n. Yksi integraatio kattaa kaikki nämä tukemamme pankit.",
           "Yksityiset avaimet säilytetään AWS KMS -salauksella PCI DSS -tason ympäristössä, erillään asiakkaan ohjelmistotiimistä.",
         ],
       },
@@ -63,9 +63,9 @@ const content = {
         ],
       },
       {
-        h2: "One integration, every bank",
+        h2: "One integration for supported banks",
         paras: [
-          "The same ISECure API covers, besides OP, also Nordea, Danske Bank, S-Pankki, Ålandsbanken, and — via Samlink and Crosskey — Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP. Integrate once and you get every Finnish bank.",
+          "Besides OP, the same ISECure API covers Nordea, Danske Bank, S-Pankki, Ålandsbanken, and — via Samlink and Crosskey — Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP. One integration covers all these supported banks.",
           "Private keys are stored with AWS KMS encryption in a PCI DSS level environment, separate from your software team.",
         ],
       },
@@ -99,9 +99,9 @@ const content = {
         ],
       },
       {
-        h2: "En integration, alla banker",
+        h2: "En integration för banker som stöds",
         paras: [
-          "Samma ISECure-API täcker förutom OP även Nordea, Danske Bank, S-Pankki, Ålandsbanken och — via Samlink och Crosskey — Handelsbanken, Aktia, POP Bank, Sparbanken och OmaSp. Integrera en gång och du får alla finländska banker.",
+          "Samma ISECure-API täcker förutom OP även Nordea, Danske Bank, S-Pankki, Ålandsbanken och — via Samlink och Crosskey — Handelsbanken, Aktia, POP Bank, Sparbanken och OmaSp. En integration täcker alla dessa banker som stöds.",
           "Privata nycklar lagras med AWS KMS-kryptering i en PCI DSS-miljö, åtskilt från ditt programvaruteam.",
         ],
       },
@@ -116,9 +116,24 @@ const content = {
 } satisfies Record<Lang, unknown>;
 
 const related = [
-  { slug: "nordea", fi: "Nordea-pankkiyhteys", en: "Nordea bank connectivity", se: "Nordea-bankförbindelse" },
-  { slug: "web-services", fi: "Web Services -kanava", en: "Web Services channel", se: "Web Services-kanalen" },
-  { slug: "pankkiyhteys", fi: "Pankkiyhteysohjelma: rakenna itse vai osta", en: "Bank connectivity: build vs buy", se: "Bankförbindelse: bygga eller köpa" },
+  {
+    slug: "nordea",
+    fi: "Nordea-pankkiyhteys",
+    en: "Nordea bank connectivity",
+    se: "Nordea-bankförbindelse",
+  },
+  {
+    slug: "web-services",
+    fi: "Web Services -kanava",
+    en: "Web Services channel",
+    se: "Web Services-kanalen",
+  },
+  {
+    slug: "pankkiyhteys",
+    fi: "Pankkiyhteysohjelma: rakenna itse vai osta",
+    en: "Bank connectivity: build vs buy",
+    se: "Bankförbindelse: bygga eller köpa",
+  },
 ];
 ---
 

@@ -12,12 +12,12 @@ const content = {
   fi: {
     title: "Tietoa meistä",
     description:
-      "ISECure Oy on helsinkiläinen ohjelmistoyritys, jonka pankkiyhteyspalvelu on ollut tuotannossa yli 10 vuotta ja välittää satojen suomalaisten yritysten pankkiliikennettä.",
+      "ISECure Oy on helsinkiläinen ohjelmistoyritys, jonka pankkiyhteyspalvelu on ollut tuotannossa yli 10 vuotta ja palvelee tuhansia suomalaisia yrityksiä.",
     intro:
-      "ISECure Oy on helsinkiläinen ohjelmistoyritys, joka tarjoaa pankkiyhteydet yhtenä rajapintana ohjelmistoyrityksille. Palvelumme on ollut tuotannossa yli 10 vuotta, ja sen kautta kulkee satojen suomalaisten yritysten pankkiliikenne.",
+      "ISECure Oy on helsinkiläinen ohjelmistoyritys, joka tarjoaa pankkiyhteydet yhtenä rajapintana ohjelmistoyrityksille. Palvelumme on ollut tuotannossa yli 10 vuotta, ja sen kautta kulkee tuhansien suomalaisten yritysten pankkiliikenne.",
     facts: [
       "Yli 10 vuotta tuotannossa: WS-kanavan pankkiyhteydet, varmenteet ja aineistoliikenne",
-      "Satojen suomalaisten yritysten pankkiliikenne kulkee palvelun kautta",
+      "Tuhansien suomalaisten yritysten pankkiliikenne kulkee palvelun kautta",
       "Palvelu toimii AWS:ssä PCI DSS -sertifioiduilla komponenteilla",
       "Avoimet SDK:t ja OpenAPI-kuvaus — kehitys näkyy GitHubissa",
     ],
@@ -30,12 +30,12 @@ const content = {
   en: {
     title: "About us",
     description:
-      "ISECure Oy is a Helsinki-based software company whose bank connectivity service has run in production for over 10 years, carrying bank traffic for hundreds of Finnish companies.",
+      "ISECure Oy is a Helsinki software company. Its bank connectivity service has run in production for over 10 years and serves thousands of Finnish companies.",
     intro:
-      "ISECure Oy is a Helsinki-based software company providing bank connectivity as a single API for software companies. Our service has been in production for over 10 years and carries the bank traffic of hundreds of Finnish companies.",
+      "ISECure Oy is a Helsinki-based software company providing bank connectivity as a single API for software companies. Our service has been in production for over 10 years and carries the bank traffic of thousands of Finnish companies.",
     facts: [
       "10+ years in production: WS-channel bank connectivity, certificates, and file traffic",
-      "Bank traffic of hundreds of Finnish companies runs through the service",
+      "Bank traffic of thousands of Finnish companies runs through the service",
       "Runs on AWS with PCI DSS certified components",
       "Open SDKs and an OpenAPI description — development is visible on GitHub",
     ],
@@ -48,12 +48,12 @@ const content = {
   se: {
     title: "Om oss",
     description:
-      "ISECure Oy är ett Helsingforsbaserat mjukvaruföretag vars bankförbindelsetjänst har varit i produktion i över 10 år och förmedlar banktrafik för hundratals finländska företag.",
+      "ISECure Oy är ett mjukvaruföretag i Helsingfors. Bankförbindelsetjänsten har varit i produktion i över 10 år och betjänar tusentals finländska företag.",
     intro:
-      "ISECure Oy är ett Helsingforsbaserat mjukvaruföretag som erbjuder bankförbindelser som ett enda API för mjukvarubolag. Vår tjänst har varit i produktion i över 10 år och förmedlar banktrafiken för hundratals finländska företag.",
+      "ISECure Oy är ett Helsingforsbaserat mjukvaruföretag som erbjuder bankförbindelser som ett enda API för mjukvarubolag. Vår tjänst har varit i produktion i över 10 år och förmedlar banktrafiken för tusentals finländska företag.",
     facts: [
       "Över 10 år i produktion: WS-kanalens bankförbindelser, certifikat och filtrafik",
-      "Banktrafik för hundratals finländska företag går genom tjänsten",
+      "Banktrafik för tusentals finländska företag går genom tjänsten",
       "Körs på AWS med PCI DSS-certifierade komponenter",
       "Öppna SDK:er och OpenAPI-beskrivning — utvecklingen syns på GitHub",
     ],
@@ -91,7 +91,12 @@ const alternateLinks = [
     </ul>
 
     <section class="about-founder">
-      <img src="/images/dforsber.png" class="about-portrait" alt="Dan Forsberg" loading="lazy" />
+      <img
+        src="/images/dforsber.png"
+        class="about-portrait"
+        alt="Dan Forsberg"
+        loading="lazy"
+      />
       <div>
         <h2>{t.founderTitle}</h2>
         <p><strong>Dan Forsberg, D.Sc.</strong></p>
@@ -104,7 +109,11 @@ const alternateLinks = [
       <div class="about-certs">
         {
           awsCerts.map((cert) => (
-            <img src={`/images/AWS_${cert}.png`} alt={`AWS ${cert} certification`} loading="lazy" />
+            <img
+              src={`/images/AWS_${cert}.png`}
+              alt={`AWS ${cert} certification`}
+              loading="lazy"
+            />
           ))
         }
       </div>

@@ -8,7 +8,7 @@ const content = {
   fi: {
     title: "Nordea-pankkiyhteys ohjelmistoon | ISECure",
     description:
-      "Yhdistä ohjelmistosi Nordean yritysten Web Services -kanavaan yhdellä rajapinnalla. ISECure hoitaa varmenteet, avaimet ja aineistoliikenteen — tiliotteet (camt.053) ja maksut (pain.001).",
+      "Yhdistä ohjelmistosi Nordean Web Services -kanavaan. ISECure hoitaa varmenteet, avaimet, camt.053-tiliotteet ja pain.001-maksut yhden API:n kautta.",
     h1: "Nordea-pankkiyhteys ohjelmistoon",
     intro:
       "ISECure yhdistää ohjelmistotuotteesi Nordean yritysten Web Services -kanavaan yhtenä rajapintana. Sinun ei tarvitse rakentaa pankkikohtaista integraatiota tai hallita varmenteita ja avaimia — hoidamme sen puolestasi.",
@@ -30,7 +30,7 @@ const content = {
         h2: "Miksi ISECure Nordea-yhteyteen",
         paras: [
           "Nordean WS-yhteyden käyttöönotto vaatii varmennehakemuksen, avainten hallinnan ja sanomien allekirjoituksen. ISECure hoitaa tämän kokonaisuuden ja tarjoaa yhden REST-rajapinnan sekä TypeScript-, Python- ja PHP-SDK:t.",
-          "Yksityiset avaimet säilytetään AWS KMS -salauksella PCI DSS -tason ympäristössä, erillään asiakkaan ohjelmistotiimistä. Sama yhteys kattaa muutkin suomalaiset pankit, joten yhdellä integraatiolla saat kaikki pankit.",
+          "Yksityiset avaimet säilytetään AWS KMS -salauksella PCI DSS -tason ympäristössä, erillään asiakkaan ohjelmistotiimistä. Sama yhteys kattaa myös muut tukemamme suomalaiset pankit.",
         ],
       },
       {
@@ -44,7 +44,7 @@ const content = {
   en: {
     title: "Nordea bank connectivity for software | ISECure",
     description:
-      "Connect your software to Nordea's corporate Web Services channel through one API. ISECure handles certificates, keys, and file traffic — statements (camt.053) and payments (pain.001).",
+      "Connect software to Nordea's corporate Web Services channel. ISECure handles certificates, camt.053 statements, and pain.001 payments through one API.",
     h1: "Nordea bank connectivity for software",
     intro:
       "ISECure connects your software product to Nordea's corporate Web Services channel as a single API. You don't build a bank-specific integration or manage certificates and keys — we handle it for you.",
@@ -66,7 +66,7 @@ const content = {
         h2: "Why ISECure for the Nordea connection",
         paras: [
           "Setting up Nordea's WS connection requires a certificate application, key management, and message signing. ISECure handles the whole thing and offers one REST API plus TypeScript, Python, and PHP SDKs.",
-          "Private keys are stored with AWS KMS encryption in a PCI DSS level environment, separate from your software team. The same connection covers the other Finnish banks too, so one integration gives you every bank.",
+          "Private keys are stored with AWS KMS encryption in a PCI DSS level environment, separate from your software team. The same connection also covers the other Finnish banks we support.",
         ],
       },
       {
@@ -80,7 +80,7 @@ const content = {
   se: {
     title: "Nordea-bankförbindelse för programvara | ISECure",
     description:
-      "Anslut din programvara till Nordeas Web Services-kanal för företag via ett API. ISECure sköter certifikat, nycklar och filtrafik — kontoutdrag (camt.053) och betalningar (pain.001).",
+      "Anslut programvara till Nordeas Web Services-kanal. ISECure sköter certifikat, camt.053-kontoutdrag och pain.001-betalningar via ett API.",
     h1: "Nordea-bankförbindelse för programvara",
     intro:
       "ISECure ansluter din programvaruprodukt till Nordeas Web Services-kanal för företag som ett enda API. Du bygger ingen bankspecifik integration och hanterar inga certifikat eller nycklar — vi sköter det åt dig.",
@@ -102,7 +102,7 @@ const content = {
         h2: "Varför ISECure för Nordea-anslutningen",
         paras: [
           "Att ta i bruk Nordeas WS-anslutning kräver certifikatansökan, nyckelhantering och meddelandesignering. ISECure sköter helheten och erbjuder ett REST-API samt SDK:er för TypeScript, Python och PHP.",
-          "Privata nycklar lagras med AWS KMS-kryptering i en PCI DSS-miljö, åtskilt från ditt programvaruteam. Samma anslutning täcker även de övriga finländska bankerna, så en integration ger dig alla banker.",
+          "Privata nycklar lagras med AWS KMS-kryptering i en PCI DSS-miljö, åtskilt från ditt programvaruteam. Samma anslutning täcker även de andra finländska banker vi stöder.",
         ],
       },
       {
@@ -116,9 +116,24 @@ const content = {
 } satisfies Record<Lang, unknown>;
 
 const related = [
-  { slug: "op", fi: "OP-pankkiyhteys", en: "OP bank connectivity", se: "OP-bankförbindelse" },
-  { slug: "web-services", fi: "Web Services -kanava", en: "Web Services channel", se: "Web Services-kanalen" },
-  { slug: "pankkiyhteys", fi: "Pankkiyhteysohjelma: rakenna itse vai osta", en: "Bank connectivity: build vs buy", se: "Bankförbindelse: bygga eller köpa" },
+  {
+    slug: "op",
+    fi: "OP-pankkiyhteys",
+    en: "OP bank connectivity",
+    se: "OP-bankförbindelse",
+  },
+  {
+    slug: "web-services",
+    fi: "Web Services -kanava",
+    en: "Web Services channel",
+    se: "Web Services-kanalen",
+  },
+  {
+    slug: "pankkiyhteys",
+    fi: "Pankkiyhteysohjelma: rakenna itse vai osta",
+    en: "Bank connectivity: build vs buy",
+    se: "Bankförbindelse: bygga eller köpa",
+  },
 ];
 ---
 

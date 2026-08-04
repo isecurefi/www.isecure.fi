@@ -13,7 +13,7 @@ const meta = {
   fi: {
     title: "Pankki API ja SDK:t",
     description:
-      "ISECure Banking API ja SDK:t yhdistävät ohjelmistotuotteesi suomalaisiin pankkeihin WS-kanavan kautta. REST API, OpenAPI, TypeScript SDK, Python SDK ja PHP SDK pankkiaineistoille.",
+      "Yhdistä ohjelmistosi tukemiimme suomalaisiin pankkeihin ISECure Banking API:lla. REST API, OpenAPI sekä TypeScript-, Python- ja PHP-SDK:t pankkiaineistoille.",
     keywords:
       "pankki API, banking API, TypeScript SDK, Python SDK, PHP SDK, WS-Kanava API, pankki-integraatio, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
     breadcrumb: "Pankki API ja SDK:t",
@@ -25,7 +25,7 @@ const meta = {
   en: {
     title: "Banking API and SDKs",
     description:
-      "ISECure Banking API and SDKs connect your software product to Finnish banks through the WS-channel. REST API, OpenAPI, TypeScript SDK, Python SDK, and PHP SDK for bank files.",
+      "Connect your software to supported Finnish banks with ISECure Banking API. REST API, OpenAPI, and TypeScript, Python, and PHP SDKs for bank files.",
     keywords:
       "banking API, TypeScript SDK, Python SDK, PHP SDK, WS-Channel API, bank integration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
     breadcrumb: "Banking API and SDKs",
@@ -37,7 +37,7 @@ const meta = {
   se: {
     title: "Bank API och SDK:er",
     description:
-      "ISECure Banking API och SDK:er kopplar din mjukvaruprodukt till finländska banker via WS-kanalen. REST API, OpenAPI, TypeScript SDK, Python SDK och PHP SDK för bankfiler.",
+      "Anslut din programvara till finländska banker som stöds med ISECure Banking API. REST API, OpenAPI samt SDK:er för TypeScript, Python och PHP.",
     keywords:
       "bank API, TypeScript SDK, Python SDK, PHP SDK, WS-Kanal API, bankintegration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
     breadcrumb: "Bank API och SDK:er",
@@ -252,13 +252,13 @@ const structuredData = {
     {
       "@type": "FAQPage",
       mainEntity: structuredFaqs.map((faq) => ({
-          "@type": "Question",
-          name: faq.q,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: faq.a,
-          },
-        })),
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.a,
+        },
+      })),
     },
     {
       "@type": "BreadcrumbList",
