@@ -90,28 +90,130 @@ for (const file of htmlFiles) {
 
 const docsPath = join(dist, "wsapi_v2", "index.html");
 const docs = readFileSync(docsPath, "utf8");
+const docsSource = readFileSync(
+  join(root, "src", "pages", "wsapi_v2", "index.astro"),
+  "utf8",
+);
+const packageManifest = JSON.parse(
+  readFileSync(join(root, "package.json"), "utf8"),
+);
+const dependencyLock = readFileSync(join(root, "yarn.lock"), "utf8");
 const expectedOperations = 26;
-if (count(docs, /data-operation(?=[ >])/g) !== expectedOperations) {
-  failures.push(
-    `API docs: expected ${expectedOperations} static operation links`,
-  );
+const rendererVersion =
+  packageManifest.dependencies?.["@scalar/api-reference"] ?? "";
+if (!/^\d+\.\d+\.\d+$/.test(rendererVersion)) {
+  failures.push("API docs: Scalar must be pinned to an exact version");
 }
-if (count(docs, /data-operation-group(?=[ >])/g) !== 6) {
-  failures.push("API docs: expected six operation groups");
+if (/@redocly\//i.test(dependencyLock) || /redoc@npm:/i.test(dependencyLock)) {
+  failures.push("API docs: Redoc/Redocly dependency remains in yarn.lock");
 }
 if (/jquery(?:-2\.1\.4)?|code\.jquery\.com/i.test(docs)) {
   failures.push("API docs: obsolete jQuery runtime is present");
 }
-if (!docs.includes("https://ws-api.test.isecure.fi/v2")) {
-  failures.push("API docs: staging endpoint is missing");
+if (/swagger-ui(?:-es-bundle|-dist)?/i.test(docs)) {
+  failures.push("API docs: retired Swagger UI renderer is present");
 }
-if (!docs.includes("Safe browsing mode")) {
-  failures.push("API docs: read-only safety notice is missing");
+if (/redoc(?:ly|\.standalone|\b)/i.test(docs)) {
+  failures.push("API docs: retired Redoc/Redocly renderer is present");
+}
+if (!docs.includes('id="api-reference"')) {
+  failures.push("API docs: API reference container is missing");
+}
+if (!docs.includes('data-renderer="scalar"')) {
+  failures.push("API docs: self-hosted Scalar renderer marker is missing");
+}
+if (!docs.includes('data-reference-only="true"')) {
+  failures.push("API docs: reference-only safety marker is missing");
+}
+if (/docs-header|environment-bar|docs-footer/.test(docs)) {
+  failures.push("API docs: obsolete custom top or bottom chrome is present");
+}
+for (const [setting, pattern] of [
+  ["API client", /hideClientButton:\s*true/],
+  ["test request", /hideTestRequestButton:\s*true/],
+  ["agent", /agent:\s*{[\s\S]*?disabled:\s*true/],
+  ["MCP", /mcp:\s*{[\s\S]*?disabled:\s*true/],
+  ["telemetry", /telemetry:\s*false/],
+  ["remote fonts", /withDefaultFonts:\s*false/],
+  ["developer tools", /showDeveloperTools:\s*"never"/],
+  ["light/dark theme toggle", /hideDarkModeToggle:\s*false/],
+]) {
+  if (!pattern.test(docsSource)) {
+    failures.push(`API docs: ${setting} is not explicitly disabled`);
+  }
+}
+if (/forceDarkModeState:/.test(docsSource)) {
+  failures.push("API docs: theme is forced instead of user-selectable");
 }
 
 const rawSpec = JSON.parse(readFileSync(join(dist, "wsapi_v2.json"), "utf8"));
 if (rawSpec.info?.termsOfService !== "https://www.isecure.fi/ws-api-terms/") {
   failures.push("Published OpenAPI document has the wrong Terms URL");
+}
+if (rawSpec.info?.contact?.email !== "support@isecure.fi") {
+  failures.push("Published OpenAPI document has the wrong support email");
+}
+const typescriptSdkUrl = "https://github.com/isecurefi/isecure-ts-client";
+if (rawSpec.externalDocs?.url !== typescriptSdkUrl) {
+  failures.push("Published OpenAPI document has the wrong TypeScript SDK URL");
+}
+if (!rawSpec.info?.description?.includes(typescriptSdkUrl)) {
+  failures.push("API introduction does not link to the TypeScript SDK");
+}
+if (rawSpec.info?.description?.includes("dforsber/isecure-ts-client")) {
+  failures.push("API introduction still links to the retired SDK repository");
+}
+
+const httpMethods = new Set([
+  "delete",
+  "get",
+  "head",
+  "options",
+  "patch",
+  "post",
+  "put",
+]);
+const publishedOperations = Object.values(rawSpec.paths).flatMap((pathItem) =>
+  Object.entries(pathItem)
+    .filter(
+      ([method, operation]) =>
+        httpMethods.has(method) && operation?.operationId,
+    )
+    .map(([, operation]) => operation),
+);
+if (publishedOperations.length !== expectedOperations) {
+  failures.push(
+    `API docs: expected ${expectedOperations} published operations, found ${publishedOperations.length}`,
+  );
+}
+for (const operation of publishedOperations) {
+  const typescriptSample = (operation["x-code-samples"] ?? []).find(
+    (sample) => sample.lang === "TypeScript",
+  );
+  if (
+    !typescriptSample?.source?.includes("client.") ||
+    typescriptSample.label !== "Official TypeScript SDK"
+  ) {
+    failures.push(
+      `API docs: ${operation.operationId} has no official TypeScript SDK sample`,
+    );
+  }
+}
+
+const tagGroups = rawSpec["x-tagGroups"] ?? [];
+const groupedTags = new Set(tagGroups.flatMap((group) => group.tags ?? []));
+for (const requiredTag of [
+  "Session",
+  "Files",
+  "Account",
+  "Certs",
+  "Pgp",
+  "Integrator",
+  "Schemas",
+]) {
+  if (!groupedTags.has(requiredTag)) {
+    failures.push(`API docs: ${requiredTag} is missing from left navigation`);
+  }
 }
 const rawSpecText = JSON.stringify(rawSpec);
 for (const unsafeExample of [

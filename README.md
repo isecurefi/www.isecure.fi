@@ -70,12 +70,29 @@ Review and commit both data files. Do not fetch a floating specification during
 The documentation experience is implemented in
 `src/pages/wsapi_v2/index.astro`. It provides:
 
-- a searchable, keyboard-accessible operation map;
-- locally bundled Swagger UI assets without jQuery or CDN dependencies;
-- preserved mappings for links into the previous generated reference;
-- copyable production and staging endpoints and safe request examples;
-- a complete schema browser and downloadable raw specification;
-- read-only browsing—browser-executed production requests are disabled.
+- a pinned, locally bundled Scalar API Reference renderer under the MIT
+  license, without a CDN or Redoc/Redocly dependency;
+- a responsive reference layout with search and navigation on the left,
+  operation documentation in the center, and generated HTTP plus official
+  TypeScript SDK examples on the right;
+- all 26 operations, grouped workflows, TypeScript SDK samples, and a dedicated
+  schema section in the navigation;
+- preserved mappings for links into both previous documentation renderers;
+- a downloadable raw specification;
+- read-only browsing: API client, test-request, agent, MCP, persistence,
+  telemetry, and developer-tool controls are disabled, and no request proxy is
+  configured;
+- system fonts and renderer-native spacing, without remote font requests or a
+  custom site header, environment strip, or footer around the reference;
+- user-selectable light and dark themes, with distinct sidebar and content
+  surfaces in both modes.
+
+The renderer is pinned in `package.json`. Keep it self-hosted, MIT-licensed, and
+free of Redoc/Redocly packages. Preserve the left navigation and right example
+column when changing its theme or upgrading it, and do not add a separate top
+bar around the reference. The published specification adds presentation-only
+tag descriptions, navigation groups, and official TypeScript SDK samples so
+every operation and schema remains reachable from the left menu.
 
 The local published specification overrides the obsolete Terms URL and
 sanitizes legacy credential and personal-data examples. The mirrored upstream

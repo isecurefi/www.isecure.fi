@@ -10,10 +10,10 @@
     "@aws-sdk/client-sns": "^3.1102.0",
     "@aws-sdk/credential-provider-cognito-identity": "^3.972.65",
     "@popperjs/core": "^2.11.8",
+    "@scalar/api-reference": "1.64.0",
     "bootstrap": "^5.3.8",
     "highlight.js": "^11.11.1",
-    "sharp": "^0.35.3",
-    "swagger-ui-dist": "5.32.12"
+    "sharp": "^0.35.3"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.3",

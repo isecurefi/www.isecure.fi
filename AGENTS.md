@@ -38,6 +38,29 @@ credentials and personal-data examples. Keep those publishing overrides when
 syncing the upstream document; never expose plausible live secrets merely
 because they appear in the source specification.
 
+The human-readable reference uses the pinned, self-hosted
+`@scalar/api-reference` package under the MIT license. Redoc and Redocly
+packages are intentionally excluded. Its desktop information architecture must
+retain searchable operation/schema navigation on the left, documentation in
+the center, and request/response examples on the right. Do not add a custom top
+bar, environment strip, site footer, marketing-led landing page, or card grid
+around the renderer. Keep all operations, the Integrator tag, code samples, and
+the dedicated Schemas group reachable from the left menu. Keep the light/dark
+theme switch enabled and maintain visible separation between the sidebar and
+content surfaces in both themes.
+
+The TypeScript SDK at
+`https://github.com/isecurefi/isecure-ts-client` is the preferred official
+client. Link it from the introduction and keep a non-empty, SDK-native
+TypeScript sample on every published operation. Do not substitute the retired
+personal-repository URL or relabel generated JavaScript as TypeScript.
+
+The documentation is reference-only: keep Scalar's API client, test-request,
+agent, MCP, authentication persistence, telemetry, developer tools, and remote
+fonts disabled, and do not configure a request proxy. Confirm the package and
+its transitive dependency graph remain free of Redoc/Redocly code when
+upgrading the renderer.
+
 The previous apex paths are permanent compatibility URLs:
 
 - `https://isecure.fi/wsapi_v2/index.html`
