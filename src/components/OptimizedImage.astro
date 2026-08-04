@@ -1,27 +1,27 @@
 ---
-import { Image } from 'astro:assets';
-import type { OptimizedImageProps } from '../utils/imageOptimization';
-import { getResponsiveSizes } from '../utils/imageOptimization';
+import { Image } from "astro:assets";
+import type { OptimizedImageProps } from "../utils/imageOptimization";
+import { getResponsiveSizes } from "../utils/imageOptimization";
 
 interface Props extends OptimizedImageProps {
   quality?: number;
 }
 
-const { 
-  src, 
-  alt, 
-  width, 
+const {
+  src,
+  alt,
+  width,
   height,
   class: className,
-  loading = 'lazy',
-  decoding = 'async',
+  loading = "lazy",
+  decoding = "async",
   sizes,
   fetchpriority,
-  quality = 90
+  quality = 90,
 } = Astro.props;
 
 const imageWidth = width || 800;
-const imageHeight = height || Math.round(imageWidth * (9/16));
+const imageHeight = height || Math.round(imageWidth * (9 / 16));
 const imageSizes = sizes || getResponsiveSizes(imageWidth);
 ---
 

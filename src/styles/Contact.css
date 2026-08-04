@@ -10,11 +10,8 @@
   --contact-accent-ink: #ffffff;
   --contact-badge-bg: rgba(255, 255, 255, 0.55);
 
-  background: linear-gradient(
-      135deg,
-      rgba(13, 110, 253, 0.08),
-      rgba(25, 135, 84, 0.05)
-    ),
+  background:
+    linear-gradient(135deg, rgba(13, 110, 253, 0.08), rgba(25, 135, 84, 0.05)),
     var(--contact-bg);
   border: 1px solid var(--contact-line);
   border-radius: 8px;

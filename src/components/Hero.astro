@@ -1,8 +1,8 @@
 ---
-import '../styles/Hero.css';
-import { getText } from '../store/translations';
-import type { Lang } from '../types';
-import OptimizedImage from './OptimizedImage.astro';
+import "../styles/Hero.css";
+import { getText } from "../store/translations";
+import type { Lang } from "../types";
+import OptimizedImage from "./OptimizedImage.astro";
 
 interface Props {
   lang: Lang;
@@ -13,7 +13,7 @@ const { lang } = Astro.props;
 
 <section class="hero-section bg-gradient">
   <div class="hero-title">
-    <h1>{getText('frontContent.title', lang)}</h1>
+    <h1>{getText("frontContent.title", lang)}</h1>
   </div>
   <div class="hero-container container">
     <div class="hero-item" style="height: 100%;">
@@ -22,7 +22,11 @@ const { lang } = Astro.props;
           <div class="hero-image-container">
             <OptimizedImage
               src="/images/isecure_header1_b.png"
-              alt={lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'}
+              alt={lang === "en"
+                ? "WS-Channel"
+                : lang === "se"
+                  ? "WS-Kanal"
+                  : "WS-Kanava"}
               class="hero-image"
               width={600}
               height={400}
@@ -33,13 +37,24 @@ const { lang } = Astro.props;
             />
           </div>
           <div class="hero-text">
-            <h1>{getText('hero.title1', lang)}</h1>
-            <h3>{getText('hero.subtitle1', lang)}</h3>
+            <h1>{getText("hero.title1", lang)}</h1>
+            <h3>{getText("hero.subtitle1", lang)}</h3>
           </div>
         </div>
         <div class="hero-button">
-          <a href={lang === 'fi' ? '/ws-channel/index.html' : `/${lang}/ws-channel/index.html`} class="btn btn-primary">
-            {lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'}
+          <a
+            href={lang === "fi"
+              ? "/ws-channel/index.html"
+              : `/${lang}/ws-channel/index.html`}
+            class="btn btn-primary"
+          >
+            {
+              lang === "en"
+                ? "WS-Channel"
+                : lang === "se"
+                  ? "WS-Kanal"
+                  : "WS-Kanava"
+            }
           </a>
         </div>
       </div>
@@ -51,7 +66,7 @@ const { lang } = Astro.props;
           <div class="hero-image-container">
             <OptimizedImage
               src="/images/kustom.png"
-              alt={`${lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'} API`}
+              alt={`${lang === "en" ? "WS-Channel" : lang === "se" ? "WS-Kanal" : "WS-Kanava"} API`}
               class="hero-image"
               width={600}
               height={400}
@@ -62,13 +77,24 @@ const { lang } = Astro.props;
             />
           </div>
           <div class="hero-text">
-            <h1>{getText('hero.title2', lang)}</h1>
-            <h3>{getText('hero.subtitle2', lang)}</h3>
+            <h1>{getText("hero.title2", lang)}</h1>
+            <h3>{getText("hero.subtitle2", lang)}</h3>
           </div>
         </div>
         <div class="hero-button">
-          <a href={lang === 'fi' ? '/ws-api/index.html' : `/${lang}/ws-api/index.html`} class="btn btn-primary">
-            {lang === 'en' ? 'WS-Channel' : lang === 'se' ? 'WS-Kanal' : 'WS-Kanava'} API
+          <a
+            href={lang === "fi"
+              ? "/ws-api/index.html"
+              : `/${lang}/ws-api/index.html`}
+            class="btn btn-primary"
+          >
+            {
+              lang === "en"
+                ? "WS-Channel"
+                : lang === "se"
+                  ? "WS-Kanal"
+                  : "WS-Kanava"
+            } API
           </a>
         </div>
       </div>

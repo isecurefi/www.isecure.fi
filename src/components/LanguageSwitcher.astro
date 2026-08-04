@@ -1,6 +1,6 @@
 ---
-import type { Lang } from '../types';
-import { getLocalizedPathname } from '../utils/languages';
+import type { Lang } from "../types";
+import { getLocalizedPathname } from "../utils/languages";
 
 interface Props {
   currentLang: Lang;
@@ -9,64 +9,77 @@ interface Props {
 const { currentLang } = Astro.props;
 
 const languages: Record<Lang, string> = {
-  fi: 'FI',
-  en: 'EN',
-  se: 'SE'
+  fi: "FI",
+  en: "EN",
+  se: "SE",
 };
 ---
 
 <div class="language-switcher">
-  {Object.entries(languages).map(([lang, label]) => (
-    <a
-      href={lang === 'fi' ? '/' : getLocalizedPathname(Astro.url.pathname.replace('/index.html', '/'), lang as Lang)}
-      class={`lang-link ${currentLang === lang ? 'active' : ''}`}
-      data-lang={lang}
-      aria-label={`Switch to ${label}`}
-      onclick={`
+  {
+    Object.entries(languages).map(([lang, label]) => (
+      <a
+        href={
+          lang === "fi"
+            ? "/"
+            : getLocalizedPathname(
+                Astro.url.pathname.replace("/index.html", "/"),
+                lang as Lang,
+              )
+        }
+        class={`lang-link ${currentLang === lang ? "active" : ""}`}
+        data-lang={lang}
+        aria-label={`Switch to ${label}`}
+        onclick={`
         localStorage.setItem('preferred-lang', '${lang}');
-        window.location.href = '${lang === 'fi' ? '/' : getLocalizedPathname(Astro.url.pathname.replace('/index.html', '/'), lang as Lang)}';
+        window.location.href = '${lang === "fi" ? "/" : getLocalizedPathname(Astro.url.pathname.replace("/index.html", "/"), lang as Lang)}';
         return false;
       `}
-    >
-      {label}
-    </a>
-  ))}
+      >
+        {label}
+      </a>
+    ))
+  }
 </div>
 
 <script>
   function detectCurrentLanguage() {
     const path = window.location.pathname;
-    
+
     // Special cases for Finnish
-    if (path === "/" || 
-        path === "/index.html" || 
-        path === "/ws-channel" || 
-        path === "/ws-api" ||
-        path.startsWith("/ws-channel/") || 
-        path.startsWith("/ws-api/")) {
+    if (
+      path === "/" ||
+      path === "/index.html" ||
+      path === "/ws-channel" ||
+      path === "/ws-api" ||
+      path.startsWith("/ws-channel/") ||
+      path.startsWith("/ws-api/")
+    ) {
       return "fi";
     }
-    
+
     // Check for explicit language prefixes
     if (path.startsWith("/en") || path === "/en") return "en";
     if (path.startsWith("/se") || path === "/se") return "se";
-    
+
     // Default to Finnish for any other path
     return "fi";
   }
 
   function updateLanguageHighlight() {
     const currentLang = detectCurrentLanguage();
-    
+
     // Remove all active classes first
-    document.querySelectorAll('.lang-link').forEach(link => {
-      link.classList.remove('active');
+    document.querySelectorAll(".lang-link").forEach((link) => {
+      link.classList.remove("active");
     });
-    
+
     // Find and highlight the correct language link
-    const linkToActivate = document.querySelector(`.lang-link[data-lang="${currentLang}"]`);
+    const linkToActivate = document.querySelector(
+      `.lang-link[data-lang="${currentLang}"]`,
+    );
     if (linkToActivate) {
-      linkToActivate.classList.add('active');
+      linkToActivate.classList.add("active");
     }
   }
 
@@ -74,7 +87,7 @@ const languages: Record<Lang, string> = {
   updateLanguageHighlight();
 
   // Update on Astro page transitions
-  document.addEventListener('astro:page-load', updateLanguageHighlight);
+  document.addEventListener("astro:page-load", updateLanguageHighlight);
 </script>
 
 <style>

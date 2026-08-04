@@ -38,7 +38,9 @@ const { lang = "fi" } = Astro.props;
             </h2>
           </div>
           <div class="panel-body">
-            <h3 class="content-subtitle">{getText("frontContent.apiSection.title", lang)}</h3>
+            <h3 class="content-subtitle">
+              {getText("frontContent.apiSection.title", lang)}
+            </h3>
 
             <p>{getText("frontContent.apiSection.description", lang)}</p>
 
@@ -54,8 +56,19 @@ const { lang = "fi" } = Astro.props;
               decoding="async"
             /><br /><br />
             <div style="text-align:center;">
-              <a href={lang === 'fi' ? '/ws-api/index.html' : `/${lang}/ws-api/index.html`} class="btn btn-primary">
-                {lang === "en" ? "READ MORE" : lang === "se" ? "LÄS MER" : "LUE LISÄÄ"}
+              <a
+                href={lang === "fi"
+                  ? "/ws-api/index.html"
+                  : `/${lang}/ws-api/index.html`}
+                class="btn btn-primary"
+              >
+                {
+                  lang === "en"
+                    ? "READ MORE"
+                    : lang === "se"
+                      ? "LÄS MER"
+                      : "LUE LISÄÄ"
+                }
               </a>
             </div>
           </div>
@@ -65,16 +78,30 @@ const { lang = "fi" } = Astro.props;
         <div class="panel panel-primary">
           <div class="panel-heading panel-heading-second">
             <h2 class="panel-title">
-              <span class="panel-subtitle">{getText("frontContent.apiSection.bankFiles.title", lang)}</span><br />
+              <span class="panel-subtitle"
+                >{
+                  getText("frontContent.apiSection.bankFiles.title", lang)
+                }</span
+              ><br />
               <span class="panel-main-title">
-                {lang === "en" ? "ISECure WS-Channel" : lang === "se" ? "ISECure WS-Kanal" : "ISECure WS-Kanava"} SFTP Sync
+                {
+                  lang === "en"
+                    ? "ISECure WS-Channel"
+                    : lang === "se"
+                      ? "ISECure WS-Kanal"
+                      : "ISECure WS-Kanava"
+                } SFTP Sync
               </span>
             </h2>
           </div>
           <div class="panel-body">
-            <h3 class="content-subtitle">{getText("frontContent.apiSection.bankFiles.subtitle", lang)}</h3>
+            <h3 class="content-subtitle">
+              {getText("frontContent.apiSection.bankFiles.subtitle", lang)}
+            </h3>
 
-            <p>{getText("frontContent.apiSection.bankFiles.description", lang)}</p>
+            <p>
+              {getText("frontContent.apiSection.bankFiles.description", lang)}
+            </p>
 
             <img
               src="/images/sftp-sync.svg"
@@ -86,8 +113,19 @@ const { lang = "fi" } = Astro.props;
               decoding="async"
             /><br /><br />
             <div style="text-align:center;">
-              <a href={lang === 'fi' ? '/ws-api/index.html#sftp' : `/${lang}/ws-api/index.html#sftp`} class="btn btn-primary">
-                {lang === "en" ? "READ MORE" : lang === "se" ? "LÄS MER" : "LUE LISÄÄ"}
+              <a
+                href={lang === "fi"
+                  ? "/ws-api/index.html#sftp"
+                  : `/${lang}/ws-api/index.html#sftp`}
+                class="btn btn-primary"
+              >
+                {
+                  lang === "en"
+                    ? "READ MORE"
+                    : lang === "se"
+                      ? "LÄS MER"
+                      : "LUE LISÄÄ"
+                }
               </a>
             </div>
           </div>
