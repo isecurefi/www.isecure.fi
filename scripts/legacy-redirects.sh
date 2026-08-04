@@ -5,12 +5,13 @@
 # ws-*status.php) and the boilingdata.com ALB rule untouched.
 #
 # Mappings (from GSC 90d data, 2026-08-01):
-#   apex /ws-kanava.php|.html   -> www /pankkiyhteys/  (splits "pankkiyhteysohjelma")
+#   apex /ws-kanava.php|.html   -> www /web-services/  (legacy WS-channel page)
 #   apex /wsapi_v2/*            -> www /               (170 imp, old API docs)
-#   apex /tiliote/kuvaus.pdf    -> www /tiliote/       (84 imp; currently ALB-403)
+#   apex /tiliote/**            -> 403                 (legacy upload tool and PDF)
 #   apex /index-en.html         -> www /en/            (old EN homepage)
-#   www  /ws-kanava.html        -> www /pankkiyhteys/  (pre-Astro leftover, pos ~5)
+#   www  /ws-kanava.html        -> www /web-services/  (pre-Astro leftover, pos ~5)
 #   www  /ws-api.html           -> www /               (pre-Astro leftover)
+#   www  /{fi,en,se}/tiliote/   -> corresponding /camt-053/ landing page
 set -euo pipefail
 
 REGION=eu-west-1
@@ -34,16 +35,15 @@ apex_rule() { # priority, redirect-path, json array of path patterns
     --query "Rules[0].Priority" --output text
 }
 
-echo "== 1/6 ALB: move apex /tiliote 403 rule from priority 2 to 20 (so the PDF redirect below wins)"
+echo "== 1/6 ALB: keep apex /tiliote and /tilivuosi2011 blocked ahead of redirects"
 aws elbv2 set-rule-priorities --region "$REGION" \
-  --rule-priorities "RuleArn=$TILIOTE_403_RULE,Priority=20" \
+  --rule-priorities "RuleArn=$TILIOTE_403_RULE,Priority=2" \
   --query "Rules[].Priority" --output text
 
-echo "== 2/6 ALB: create apex 301 rules (priorities 3-6, host-scoped to isecure.fi)"
-apex_rule 3 "/pankkiyhteys/" '["/ws-kanava.php","/ws-kanava.html"]'
+echo "== 2/6 ALB: create apex 301 rules (priorities 3-5, host-scoped to isecure.fi)"
+apex_rule 3 "/web-services/" '["/ws-kanava.php","/ws-kanava.html"]'
 apex_rule 4 "/"              '["/wsapi_v2","/wsapi_v2/*"]'
-apex_rule 5 "/tiliote/"      '["/tiliote/kuvaus.pdf"]'
-apex_rule 6 "/en/"           '["/index-en.html"]'
+apex_rule 5 "/en/"           '["/index-en.html"]'
 
 echo "== 3/6 CloudFront: create + publish redirect function for stale www paths"
 FN_CODE="$(mktemp)"
@@ -51,8 +51,14 @@ cat > "$FN_CODE" <<'EOF'
 function handler(event) {
   var req = event.request;
   var map = {
-    "/ws-kanava.html": "/pankkiyhteys/",
-    "/ws-api.html": "/"
+    "/ws-kanava.html": "/web-services/",
+    "/ws-api.html": "/",
+    "/tiliote": "/camt-053/",
+    "/tiliote/": "/camt-053/",
+    "/en/tiliote": "/en/camt-053/",
+    "/en/tiliote/": "/en/camt-053/",
+    "/se/tiliote": "/se/camt-053/",
+    "/se/tiliote/": "/se/camt-053/"
   };
   var to = map[req.uri];
   if (to) {
@@ -101,13 +107,13 @@ for key in ws-kanava.html ws-api.html; do
 done
 echo "backups in $BACKUP_DIR"
 
-echo "== 6/6 CloudFront: invalidate the two redirected paths"
+echo "== 6/6 CloudFront: invalidate redirected paths"
 aws cloudfront create-invalidation --distribution-id "$DIST_ID" \
-  --paths "/ws-kanava.html" "/ws-api.html" \
+  --paths "/ws-kanava.html" "/ws-api.html" "/tiliote*" "/en/tiliote*" "/se/tiliote*" \
   --query "Invalidation.Status" --output text
 
 echo "DONE. Verify with:"
-echo "  curl -sI https://isecure.fi/ws-kanava.php | grep -i location      # -> www/pankkiyhteys/"
+echo "  curl -sI https://isecure.fi/ws-kanava.php | grep -i location      # -> www/web-services/"
 echo "  curl -sI https://isecure.fi/wsapi_v2/index.html | grep -i location # -> www/"
-echo "  curl -sI https://isecure.fi/tiliote/kuvaus.pdf | grep -i location  # -> www/tiliote/"
-echo "  curl -sI https://www.isecure.fi/ws-kanava.html | grep -i location  # -> www/pankkiyhteys/ (after CF deploy, ~5 min)"
+echo "  curl -sI https://isecure.fi/tiliote/kuvaus.pdf | head -1            # -> 403"
+echo "  curl -sI https://www.isecure.fi/ws-kanava.html | grep -i location  # -> www/web-services/ (after CF deploy, ~5 min)"

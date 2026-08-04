@@ -18,11 +18,12 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [Home (Finnish)](https://www.isecure.fi/): Finnish-language product overview
 - [Home (Swedish)](https://www.isecure.fi/se/): Swedish-language product overview
 - [ISO 20022 Banking Data API](https://www.isecure.fi/en/data-api/): early access for normalized bank data with source evidence
+- [ISO 20022 message guide](https://www.isecure.fi/en/iso-20022/): comparison of pain.001, pain.002, camt.053, and camt.054 in bank integrations
 - [Bank integration for software products](https://www.isecure.fi/en/pankkiyhteys/): adding Finnish bank connectivity to a software product, build vs. buy
 - [Finnish bank Web Services channel](https://www.isecure.fi/en/web-services/): how the corporate Web Services (WS) channel works
 - [Nordea bank connectivity](https://www.isecure.fi/en/nordea/): connecting software to Nordea's corporate Web Services channel
 - [OP bank connectivity](https://www.isecure.fi/en/op/): connecting software to OP's corporate Web Services channel
-- [camt.053 bank statements](https://www.isecure.fi/en/tiliote/): machine-readable ISO 20022 statements
+- [camt.053 bank statements](https://www.isecure.fi/en/camt-053/): machine-readable ISO 20022 statements
 - [pain.001 payment files](https://www.isecure.fi/en/pain-001/): SEPA payment initiation file delivery
 - [pain.002 payment status](https://www.isecure.fi/en/pain-002/): bank payment-status response retrieval
 - [camt.054 notifications](https://www.isecure.fi/en/camt-054/): debit and credit notification retrieval

@@ -43,9 +43,9 @@ const jsonExample = `{
 
 const content = {
   fi: {
-    title: "ISO 20022 -pankkidata API camt.053-tiliotteille | ISECure",
+    title: "camt.053-tiliote API lähde-evidenssillä | ISECure",
     description:
-      "Normalisoi camt.053-tiliotteet ja tuettu ISO 20022 -pankkidata REST/JSON-resursseiksi, joissa jokainen arvo linkittyy lähdeaineistoon. Pyydä aikaista pääsyä.",
+      "Muunna camt.053-tiliotteet tuetuiksi REST/JSON-resursseiksi, joissa jokainen arvo linkittyy lähdeaineistoon. Pyydä Banking Data API:n aikaista pääsyä.",
     hero: {
       eyebrow: "ISO 20022 Banking Data API · aikainen pääsy",
       h1: "camt.053 ja muu tuettu ISO 20022 -pankkidata yhdeksi API:ksi",
@@ -92,7 +92,7 @@ const content = {
       lead: "Nykyinen File Exchange API siirtää pankin ja sopimuksen sallimat aineistot muuttamatta niiden sisältöä. Uusi Banking Data API lisää tuetuille aineistoille normalisoinnin ja evidenssin.",
       items: [
         {
-          slug: "tiliote",
+          slug: "camt-053",
           label: "camt.053-tiliote",
           text: "Päivän tiliote, saldot ja kirjatut tapahtumat.",
         },
@@ -218,9 +218,9 @@ const content = {
     },
   },
   en: {
-    title: "ISO 20022 Banking Data API for camt.053 Statements | ISECure",
+    title: "camt.053 Bank Statement API with Source Evidence | ISECure",
     description:
-      "Normalize camt.053 statements and supported ISO 20022 bank data into REST/JSON resources with evidence back to every source value. Request early access.",
+      "Turn camt.053 statements into supported REST/JSON resources with evidence back to every source value. Request Banking Data API early access.",
     hero: {
       eyebrow: "ISO 20022 Banking Data API · early access",
       h1: "Turn camt.053 and supported ISO 20022 bank data into one API",
@@ -267,7 +267,7 @@ const content = {
       lead: "The existing File Exchange API transports files allowed by the bank and customer agreement without changing their content. The new Banking Data API adds normalization and evidence for supported files.",
       items: [
         {
-          slug: "tiliote",
+          slug: "camt-053",
           label: "camt.053 bank statements",
           text: "End-of-day statements, balances, and booked entries.",
         },
@@ -393,9 +393,9 @@ const content = {
     },
   },
   se: {
-    title: "ISO 20022-bankdata-API för camt.053-kontoutdrag | ISECure",
+    title: "camt.053-kontoutdrags-API med källevidens | ISECure",
     description:
-      "Normalisera camt.053-kontoutdrag och stött ISO 20022-bankdata till REST/JSON-resurser med evidens tillbaka till varje källvärde. Begär tidig tillgång.",
+      "Gör camt.053-kontoutdrag till stödda REST/JSON-resurser med evidens tillbaka till varje källvärde. Begär tidig tillgång till Banking Data API.",
     hero: {
       eyebrow: "ISO 20022 Banking Data API · tidig tillgång",
       h1: "Gör camt.053 och stött ISO 20022-bankdata till ett API",
@@ -442,7 +442,7 @@ const content = {
       lead: "Det befintliga File Exchange API:et transporterar filer som banken och kundavtalet tillåter utan att ändra innehållet. Det nya Banking Data API:et lägger till normalisering och evidens för stödda filer.",
       items: [
         {
-          slug: "tiliote",
+          slug: "camt-053",
           label: "camt.053-kontoutdrag",
           text: "Dagliga kontoutdrag, saldon och bokförda poster.",
         },
@@ -841,7 +841,8 @@ const privacyHref = lang === "fi" ? "/privacy/" : `/${lang}/privacy/`;
             {t.form.fallback}
             <a
               href="mailto:sales@isecure.fi?subject=Bank%20Data%20%26%20Evidence%20API%20early%20access"
-              >sales@isecure.fi</a>
+              >sales@isecure.fi</a
+            >
           </p>
         </form>
       </div>

@@ -11,6 +11,7 @@ export default defineConfig({
     sitemap({
       filter: (page) =>
         !page.includes("/thankyou/") &&
+        !page.includes("/tiliote/") &&
         !page.includes("/banking-api/") &&
         !page.includes("/ws-api/") &&
         !page.includes("/ws-channel/") &&

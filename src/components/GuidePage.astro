@@ -44,6 +44,8 @@ const alternateLinks = [
   { hreflang: "sv", href: `${origin}/se/${slug}/` },
   { hreflang: "x-default", href: `${origin}/en/${slug}/` },
 ];
+const canonicalHref =
+  lang === "fi" ? `${origin}/${slug}/` : `${origin}/${lang}/${slug}/`;
 const relatedTitle = { fi: "Lue myös", en: "See also", se: "Läs även" }[lang];
 const relatedHref = (s: string) =>
   lang === "fi" ? `/${s}/` : `/${lang}/${s}/`;
@@ -53,6 +55,7 @@ const relatedHref = (s: string) =>
   title={t.title}
   lang={lang}
   description={t.description}
+  canonicalUrl={canonicalHref}
   alternateLinks={alternateLinks}
 >
   <article class="guide-page container">

@@ -6,10 +6,10 @@ const { lang } = Astro.props;
 
 const content = {
   fi: {
-    title: "camt.053 API: konekielinen tiliote ohjelmistoon | ISECure",
+    title: "Mikä on camt.053? Konekielinen tiliote API | ISECure",
     description:
-      "camt.053 API tuo konekielisen ISO 20022 -tiliotteen ohjelmistoon yhdestä rajapinnasta. Lue camt053-sisällöstä, versioista, noudosta ja täsmäytyksestä.",
-    h1: "camt.053 API: konekielinen tiliote ohjelmistoon",
+      "Nouda ISO 20022 camt.053 -tiliotteet suomalaisista pankeista yhdellä API:lla. Saldot, kirjatut tapahtumat ja viitetiedot ohjelmistoosi.",
+    h1: "camt.053 API konekielisten tiliotteiden noutamiseen",
     intro:
       "Konekielinen tiliote tuo pankkitilin tapahtumat rakenteisessa muodossa suoraan taloushallinnon tai ERP-ohjelmistoon, jolloin täsmäytys ja kirjaukset voidaan automatisoida. Nykyään tiliote noudetaan camt.053-muodossa Web Services -kanavan kautta.",
     sections: [
@@ -39,18 +39,29 @@ const content = {
         ],
       },
       {
+        h2: "camt.053 ja camt.054 palvelevat eri tarpeita",
+        paras: [
+          "camt.053 kokoaa tilin saldot ja kirjatut tapahtumat raportointijaksolta. camt.054 puolestaan on pankin tarjoama veloitus- ja hyvitysilmoitus, joka voi saapua ennen seuraavaa tiliotetta. Aineistojen saatavuus ja toimitusrytmi määräytyvät pankkisopimuksen mukaan.",
+        ],
+      },
+      {
         h2: "Tiliotteet ISECuren kautta",
         paras: [
           "ISECure noutaa camt.053-tiliotteet kaikilta tukemiltamme suomalaisilta pankeilta yhdellä REST-rajapinnalla. Hoidamme varmenteet ja allekirjoitukset, joten ohjelmistosi saa tiliotteet valmiina yhdestä paikasta — samalla integraatiolla kaikista pankeista.",
         ],
       },
     ],
+    cta: {
+      title: "Tuo camt.053-tiliotteet ohjelmistoosi",
+      text: "Kerro pankit, tiliotemäärät ja käyttämäsi camt.053-versiot. Suunnittelemme tiedostonoudon ja käyttöönoton kanssasi.",
+      label: "Keskustele tilioteintegraatiosta",
+    },
   },
   en: {
-    title: "camt.053 API for Machine-Readable Bank Statements | ISECure",
+    title: "What Is camt.053? Bank Statement API | ISECure",
     description:
-      "A camt.053 API delivers ISO 20022 bank statements to software through one integration. Learn about camt053 content, versions, retrieval, and reconciliation.",
-    h1: "camt.053 API for machine-readable bank statements",
+      "Retrieve ISO 20022 camt.053 statements from Finnish banks through one API. Bring balances, booked entries, and references into your software.",
+    h1: "camt.053 API for retrieving bank statements",
     intro:
       "A machine-readable statement brings a bank account's transactions in structured form straight into accounting or ERP software, so reconciliation and bookings can be automated. Today the statement is retrieved in camt.053 format over the Web Services channel.",
     sections: [
@@ -80,18 +91,29 @@ const content = {
         ],
       },
       {
+        h2: "camt.053 and camt.054 serve different needs",
+        paras: [
+          "camt.053 summarizes account balances and booked entries for a reporting period. camt.054 is a debit or credit notification that a bank may provide before the next statement. Availability and delivery frequency depend on the bank agreement.",
+        ],
+      },
+      {
         h2: "Statements through ISECure",
         paras: [
           "ISECure retrieves camt.053 statements from all the Finnish banks we support through one REST API. We handle the certificates and signing, so your software gets statements ready from one place — from every bank with the same integration.",
         ],
       },
     ],
+    cta: {
+      title: "Bring camt.053 statements into your product",
+      text: "Tell us the banks, statement volumes, and camt.053 versions you use. We will plan retrieval and production onboarding with you.",
+      label: "Discuss statement integration",
+    },
   },
   se: {
-    title: "camt.053-API för maskinläsbara kontoutdrag | ISECure",
+    title: "Vad är camt.053? API för kontoutdrag | ISECure",
     description:
-      "Ett camt.053-API levererar ISO 20022-kontoutdrag till programvara via en integration. Läs om camt053-innehåll, versioner, hämtning och avstämning.",
-    h1: "camt.053-API för maskinläsbara kontoutdrag",
+      "Hämta ISO 20022 camt.053-kontoutdrag från finländska banker via ett API. För in saldon, bokförda poster och referenser i programvaran.",
+    h1: "camt.053-API för att hämta kontoutdrag",
     intro:
       "Ett maskinläsbart kontoutdrag för in ett bankkontos transaktioner i strukturerad form direkt i ekonomi- eller ERP-programvara, så att avstämning och bokföring kan automatiseras. I dag hämtas kontoutdraget i camt.053-format via Web Services-kanalen.",
     sections: [
@@ -121,16 +143,33 @@ const content = {
         ],
       },
       {
+        h2: "camt.053 och camt.054 fyller olika behov",
+        paras: [
+          "camt.053 sammanfattar kontosaldon och bokförda poster för en rapportperiod. camt.054 är en debet- eller kreditavisering som banken kan erbjuda före nästa kontoutdrag. Tillgänglighet och leveransfrekvens beror på bankavtalet.",
+        ],
+      },
+      {
         h2: "Kontoutdrag via ISECure",
         paras: [
           "ISECure hämtar camt.053-kontoutdrag från alla finländska banker vi stöder via ett REST-API. Vi sköter certifikaten och signeringen, så din programvara får kontoutdragen färdiga från ett ställe — från alla banker med samma integration.",
         ],
       },
     ],
+    cta: {
+      title: "För in camt.053-kontoutdrag i er produkt",
+      text: "Berätta vilka banker, kontoutdragsvolymer och camt.053-versioner ni använder. Vi planerar hämtning och produktionsstart tillsammans.",
+      label: "Diskutera kontoutdragsintegration",
+    },
   },
 } satisfies Record<Lang, unknown>;
 
 const related = [
+  {
+    slug: "iso-20022",
+    fi: "ISO 20022 -sanomaopas",
+    en: "ISO 20022 message guide",
+    se: "ISO 20022-meddelandeguide",
+  },
   {
     slug: "data-api",
     fi: "ISO 20022 -pankkidata API",
@@ -164,4 +203,4 @@ const related = [
 ];
 ---
 
-<GuidePage lang={lang} slug="tiliote" content={content} related={related} />
+<GuidePage lang={lang} slug="camt-053" content={content} related={related} />

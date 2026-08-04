@@ -6,9 +6,9 @@ const { lang } = Astro.props;
 
 const content = {
   fi: {
-    title: "Pankkiyhteysohjelma ja API suomalaisiin pankkeihin | ISECure",
+    title: "Pankkiyhteysohjelma ja API yrityksille | ISECure",
     description:
-      "Pankkiyhteysohjelma yhdistää ERP- tai taloushallintotuotteesi suomalaisiin pankkeihin yhdellä API:lla. Vertaa itse rakentamista ja palveluna ostamista.",
+      "Yhdistä ERP- tai taloushallintotuote suomalaisiin pankkeihin yhdellä pankkiyhteysohjelman API:lla. ISECure hoitaa WS-kanavat ja varmenteet.",
     h1: "Pankkiyhteysohjelma: kaikki suomalaiset pankit yhdellä API:lla",
     intro:
       "Kun ERP-, taloushallinto- tai rahoitustuotteesi tarvitsee suomalaiset pankkiyhteydet, edessä on valinta: rakentaa pankkiyhteysohjelma itse jokaiseen pankkiin vai käyttää yhtä valmista API-palvelua. Tämä sivu vertailee vaihtoehtoja ohjelmistoyrityksen näkökulmasta.",
@@ -42,9 +42,9 @@ const content = {
     ],
   },
   en: {
-    title: "Secure Bank Integration API for Software | ISECure",
+    title: "Secure Bank Integration for Finnish Banks | ISECure",
     description:
-      "A secure bank integration API connects accounting, ERP, and treasury software to Finnish banks. Compare building bank connectivity with using one managed API.",
+      "Connect accounting, ERP, or treasury software securely to Finnish banks through one managed API for WS channels, certificates, and file transport.",
     h1: "Secure bank integration for software through one API",
     intro:
       "When your software product needs Finnish bank connectivity, you face a choice: build the integration to each bank yourself, or buy it as a single service. This page compares the options from a software vendor's perspective.",
@@ -78,9 +78,9 @@ const content = {
     ],
   },
   se: {
-    title: "Bankkonto-API för programvara och finländska banker | ISECure",
+    title: "Bankkonto-API för finländska banker | ISECure",
     description:
-      "Ett bankkonto-API ansluter ekonomi-, ERP- och treasuryprogram till finländska banker. Jämför egen bankintegration med ett hanterat API.",
+      "Anslut ekonomi-, ERP- eller treasuryprogram säkert till finländska banker via ett hanterat API för WS-kanaler, certifikat och filtransport.",
     h1: "Bankkonto-API för programvara och finländska banker",
     intro:
       "När din programvaruprodukt behöver finländska bankförbindelser står du inför ett val: bygga integrationen till varje bank själv, eller köpa den som en enda tjänst. Den här sidan jämför alternativen ur ett mjukvarubolags perspektiv.",
@@ -116,6 +116,12 @@ const content = {
 } satisfies Record<Lang, unknown>;
 
 const related = [
+  {
+    slug: "iso-20022",
+    fi: "ISO 20022 -sanomaopas",
+    en: "ISO 20022 message guide",
+    se: "ISO 20022-meddelandeguide",
+  },
   {
     slug: "web-services",
     fi: "Web Services -kanava",

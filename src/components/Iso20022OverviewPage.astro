@@ -1,0 +1,410 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const origin = "https://www.isecure.fi";
+const base = lang === "fi" ? "/" : `/${lang}/`;
+const canonicalUrl = `${origin}${base}iso-20022/`;
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}/iso-20022/` },
+  { hreflang: "en", href: `${origin}/en/iso-20022/` },
+  { hreflang: "sv", href: `${origin}/se/iso-20022/` },
+  { hreflang: "x-default", href: `${origin}/en/iso-20022/` },
+];
+
+const content = {
+  fi: {
+    title: "ISO 20022 -sanomat: camt.053, camt.054 ja pain | ISECure",
+    description:
+      "Vertaa ISO 20022 camt.053-, camt.054-, pain.001- ja pain.002-sanomia. Katso mitä kukin pankkisanoma tekee ja miten aineistot integroidaan.",
+    eyebrow: "ISO 20022 -opas ohjelmistotiimeille",
+    h1: "ISO 20022 -sanomat pankki-integraatiossa",
+    intro:
+      "ISO 20022 määrittelee rakenteisia sanomia maksujen lähettämiseen, maksustatusten vastaanottamiseen sekä tiliotteiden ja tapahtumailmoitusten noutamiseen. Oikea sanoma riippuu siitä, mitä ohjelmistosi tekee ja mitä yrityksen pankkisopimus tarjoaa.",
+    messageTitle: "Valitse sanoma käyttötarkoituksen mukaan",
+    messages: [
+      {
+        slug: "pain-001",
+        code: "pain.001",
+        name: "Maksuaineisto",
+        direction: "Ohjelmisto → pankki",
+        text: "Customer Credit Transfer Initiation välittää SEPA-maksutoimeksiannot pankille.",
+      },
+      {
+        slug: "pain-002",
+        code: "pain.002",
+        name: "Maksun status",
+        direction: "Pankki → ohjelmisto",
+        text: "Customer Payment Status Report kertoo aineiston vastaanotosta, hyväksynnästä tai hylkäyksestä.",
+      },
+      {
+        slug: "camt-053",
+        code: "camt.053",
+        name: "Konekielinen tiliote",
+        direction: "Pankki → ohjelmisto",
+        text: "Bank-to-Customer Statement kokoaa saldot ja kirjatut tapahtumat raportointijaksolta.",
+      },
+      {
+        slug: "camt-054",
+        code: "camt.054",
+        name: "Veloitus- ja hyvitysilmoitus",
+        direction: "Pankki → ohjelmisto",
+        text: "Debit/Credit Notification ilmoittaa pankin tarjoamista veloituksista ja hyvityksistä.",
+      },
+    ],
+    sections: [
+      {
+        h2: "Tiedostonsiirto ja datan normalisointi ovat eri asioita",
+        paras: [
+          "ISECuren tuotannossa oleva File Exchange API siirtää pankin ja sopimuksen sallimat ISO 20022 -aineistot muuttamatta niiden sisältöä. Se hoitaa pankkikohtaiset Web Services -yhteydet, allekirjoitukset ja varmenteet yhden REST API:n takana.",
+          "Banking Data API on erillinen early access -palvelu, joka normalisoi tuettua camt.053- ja muuta pankkidataa JSON-resursseiksi sekä säilyttää linkin takaisin lähdetiedostoon ja ISO 20022 -kenttään.",
+        ],
+      },
+      {
+        h2: "Mitä toteutus edelleen vaatii",
+        paras: [
+          "Yritys tarvitsee omat pankkisopimukset ja aineistokohtaiset valtuudet. Pankki määrittää hyväksytyt sanoma- ja skeemaversiot, tiedostotyypit sekä toimitusrytmin. Ohjelmiston pitää käsitellä myös pankkikohtaiset soveltamisohjeet ja mahdolliset poikkeukset.",
+        ],
+        list: [
+          "Pankkisopimukset ja aineistovaltuudet",
+          "Pankin hyväksymä ISO 20022 -versio",
+          "Web Services -varmenteet ja allekirjoitus",
+          "Sanomien validointi, statuslogiikka ja täsmäytys",
+        ],
+      },
+    ],
+    dataLink: "Tutustu normalisoituun Banking Data API:in",
+    ctaTitle: "Yhdistä ISO 20022 -aineistot tuotteeseesi",
+    ctaText:
+      "Kerro pankit, sanomatyypit ja käyttämäsi versiot. Selvitämme sopivan tiedostonsiirto- tai datamallin.",
+    ctaLabel: "Keskustele integraatiosta",
+  },
+  en: {
+    title: "ISO 20022 Messages: camt.053, camt.054 and pain | ISECure",
+    description:
+      "Compare ISO 20022 camt.053, camt.054, pain.001, and pain.002. Learn what each bank message does and how to integrate the files.",
+    eyebrow: "ISO 20022 guide for software teams",
+    h1: "ISO 20022 messages in bank integration",
+    intro:
+      "ISO 20022 defines structured messages for sending payments, receiving payment status, and retrieving statements or account notifications. The right message depends on what your product needs to do and what the company's bank agreement provides.",
+    messageTitle: "Choose the message by business task",
+    messages: [
+      {
+        slug: "pain-001",
+        code: "pain.001",
+        name: "Payment initiation file",
+        direction: "Software → bank",
+        text: "Customer Credit Transfer Initiation carries SEPA payment instructions to the bank.",
+      },
+      {
+        slug: "pain-002",
+        code: "pain.002",
+        name: "Payment status",
+        direction: "Bank → software",
+        text: "Customer Payment Status Report describes reception, acceptance, or rejection of a payment file.",
+      },
+      {
+        slug: "camt-053",
+        code: "camt.053",
+        name: "Bank statement",
+        direction: "Bank → software",
+        text: "Bank-to-Customer Statement summarizes balances and booked entries for a reporting period.",
+      },
+      {
+        slug: "camt-054",
+        code: "camt.054",
+        name: "Debit/credit notification",
+        direction: "Bank → software",
+        text: "Debit/Credit Notification reports debits and credits when the bank provides the message.",
+      },
+    ],
+    sections: [
+      {
+        h2: "File transport and data normalization are different layers",
+        paras: [
+          "ISECure's production File Exchange API transports ISO 20022 files allowed by the bank and customer agreement without changing their content. It places bank-specific Web Services connections, signing, and certificates behind one REST API.",
+          "Banking Data API is a separate early-access service that turns supported camt.053 and other bank data into normalized JSON resources while preserving a link back to the source file and ISO 20022 field.",
+        ],
+      },
+      {
+        h2: "What an implementation still requires",
+        paras: [
+          "The company needs its own bank agreements and file authorizations. Each bank defines accepted message and schema versions, file types, and delivery schedules. Your software must also handle bank implementation guidelines and exceptions.",
+        ],
+        list: [
+          "Bank agreements and file authorizations",
+          "An ISO 20022 version accepted by the bank",
+          "Web Services certificates and message signing",
+          "Message validation, status logic, and reconciliation",
+        ],
+      },
+    ],
+    dataLink: "Explore the normalized Banking Data API",
+    ctaTitle: "Connect ISO 20022 files to your product",
+    ctaText:
+      "Tell us the banks, message types, and versions you use. We will identify the appropriate file-transport or data model.",
+    ctaLabel: "Discuss your integration",
+  },
+  se: {
+    title: "ISO 20022-meddelanden: camt.053, camt.054 och pain | ISECure",
+    description:
+      "Jämför ISO 20022 camt.053, camt.054, pain.001 och pain.002. Läs vad varje bankmeddelande gör och hur filerna integreras.",
+    eyebrow: "ISO 20022-guide för programvaruteam",
+    h1: "ISO 20022-meddelanden i bankintegration",
+    intro:
+      "ISO 20022 definierar strukturerade meddelanden för att skicka betalningar, ta emot betalningsstatus och hämta kontoutdrag eller kontoaviseringar. Rätt meddelande beror på vad produkten ska göra och vad företagets bankavtal erbjuder.",
+    messageTitle: "Välj meddelande enligt användningsfall",
+    messages: [
+      {
+        slug: "pain-001",
+        code: "pain.001",
+        name: "Betalningsfil",
+        direction: "Programvara → bank",
+        text: "Customer Credit Transfer Initiation förmedlar SEPA-betalningsuppdrag till banken.",
+      },
+      {
+        slug: "pain-002",
+        code: "pain.002",
+        name: "Betalningsstatus",
+        direction: "Bank → programvara",
+        text: "Customer Payment Status Report beskriver mottagning, godkännande eller avvisning av en betalningsfil.",
+      },
+      {
+        slug: "camt-053",
+        code: "camt.053",
+        name: "Kontoutdrag",
+        direction: "Bank → programvara",
+        text: "Bank-to-Customer Statement sammanfattar saldon och bokförda poster för en rapportperiod.",
+      },
+      {
+        slug: "camt-054",
+        code: "camt.054",
+        name: "Debet-/kreditavisering",
+        direction: "Bank → programvara",
+        text: "Debit/Credit Notification rapporterar debiteringar och krediteringar när banken erbjuder meddelandet.",
+      },
+    ],
+    sections: [
+      {
+        h2: "Filtransport och datanormalisering är olika lager",
+        paras: [
+          "ISECures File Exchange API i produktion transporterar ISO 20022-filer som banken och kundavtalet tillåter utan att ändra innehållet. Bankspecifika Web Services-anslutningar, signering och certifikat samlas bakom ett REST-API.",
+          "Banking Data API är en separat tjänst med tidig tillgång som normaliserar stött camt.053- och annan bankdata till JSON-resurser och bevarar länken tillbaka till källfil och ISO 20022-fält.",
+        ],
+      },
+      {
+        h2: "Vad en implementation fortfarande kräver",
+        paras: [
+          "Företaget behöver egna bankavtal och filbehörigheter. Varje bank definierar godkända meddelande- och schemaversioner, filtyper och leveransrytmer. Programvaran måste även hantera bankens tillämpningsanvisningar och undantag.",
+        ],
+        list: [
+          "Bankavtal och filbehörigheter",
+          "En ISO 20022-version som banken godkänner",
+          "Web Services-certifikat och meddelandesignering",
+          "Meddelandevalidering, statuslogik och avstämning",
+        ],
+      },
+    ],
+    dataLink: "Utforska det normaliserade Banking Data API:et",
+    ctaTitle: "Anslut ISO 20022-filer till er produkt",
+    ctaText:
+      "Berätta vilka banker, meddelandetyper och versioner ni använder. Vi identifierar en lämplig filtransport- eller datamodell.",
+    ctaLabel: "Diskutera integrationen",
+  },
+} satisfies Record<Lang, unknown>;
+
+const t = content[lang];
+---
+
+<Layout
+  title={t.title}
+  lang={lang}
+  description={t.description}
+  canonicalUrl={canonicalUrl}
+  alternateLinks={alternateLinks}
+>
+  <article class="iso-overview container">
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h1>{t.h1}</h1>
+    <p class="lead">{t.intro}</p>
+
+    <section>
+      <h2>{t.messageTitle}</h2>
+      <div class="message-grid">
+        {
+          t.messages.map((message) => (
+            <a class="message-card" href={`${base}${message.slug}/`}>
+              <span class="message-code">{message.code}</span>
+              <h3>{message.name}</h3>
+              <p class="message-direction">{message.direction}</p>
+              <p>{message.text}</p>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      t.sections.map((section) => (
+        <section class="prose-section">
+          <h2>{section.h2}</h2>
+          {section.paras.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+          {section.list && (
+            <ul>
+              {section.list.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+
+    <p class="data-link">
+      <a href={`${base}data-api/`}>{t.dataLink} →</a>
+    </p>
+
+    <aside class="guide-cta">
+      <h2>{t.ctaTitle}</h2>
+      <p>{t.ctaText}</p>
+      <a class="guide-cta-button" href="#contact">{t.ctaLabel}</a>
+    </aside>
+  </article>
+</Layout>
+
+<style>
+  .iso-overview {
+    margin: 3rem auto;
+    max-width: 960px;
+  }
+
+  .eyebrow {
+    color: #0d6efd;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .lead {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    max-width: 780px;
+  }
+
+  .iso-overview section {
+    margin-top: 2.5rem;
+  }
+
+  .message-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .message-card {
+    border: 1px solid #d8e2ee;
+    border-radius: 12px;
+    color: #212529;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .message-card:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 0.5rem 1.25rem rgba(13, 110, 253, 0.12);
+    color: #212529;
+    transform: translateY(-2px);
+  }
+
+  .message-card:focus-visible,
+  .guide-cta-button:focus-visible {
+    outline: 3px solid #212529;
+    outline-offset: 3px;
+  }
+
+  .message-code {
+    color: #0d6efd;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", monospace;
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .message-card h3 {
+    font-size: 1.15rem;
+    margin: 0.45rem 0;
+  }
+
+  .message-card p,
+  .prose-section p,
+  .prose-section ul {
+    line-height: 1.7;
+  }
+
+  .message-direction {
+    color: #5c6773;
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+  }
+
+  .prose-section {
+    max-width: 780px;
+  }
+
+  .prose-section ul {
+    padding-left: 1.25rem;
+  }
+
+  .data-link a {
+    color: #0d6efd;
+    font-weight: 700;
+  }
+
+  .guide-cta {
+    background: #eef6ff;
+    border: 1px solid #cfe2ff;
+    border-radius: 12px;
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+  }
+
+  .guide-cta h2 {
+    margin-top: 0;
+  }
+
+  .guide-cta-button {
+    background: #0d6efd;
+    border-radius: 8px;
+    color: #fff;
+    display: inline-block;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1.1rem;
+    text-decoration: none;
+  }
+
+  .guide-cta-button:hover {
+    background: #0b5ed7;
+    color: #fff;
+  }
+
+  @media (max-width: 700px) {
+    .message-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

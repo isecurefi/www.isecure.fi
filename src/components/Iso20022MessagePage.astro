@@ -136,9 +136,9 @@ const content = {
   },
   "pain-002": {
     fi: {
-      title: "pain.002 API: maksuaineiston status pankista | ISECure",
+      title: "Mikä on pain.002? Maksuaineiston status API | ISECure",
       description:
-        "Nouda ISO 20022 pain.002 -maksupalautteet suomalaisista pankeista yhdellä API:lla. Seuraa pain.001-aineiston vastaanottoa ja käsittelyä.",
+        "Selvitä mitä ISO 20022 pain.002 tarkoittaa ja nouda maksuaineiston hyväksyntä- tai hylkäysstatus suomalaisista pankeista yhdellä API:lla.",
       h1: "pain.002 API maksuaineiston statuksen noutamiseen",
       intro:
         "pain.002 on ISO 20022 Customer Payment Status Report -sanoma. Pankki kertoo sillä, onko pain.001-maksuaineisto vastaanotettu, hyväksytty käsittelyyn tai hylätty. ISECuren File Exchange API noutaa pankin tarjoaman palautteen ohjelmistollesi.",
@@ -176,9 +176,9 @@ const content = {
       },
     },
     en: {
-      title: "pain.002 API for Payment Status Reports | ISECure",
+      title: "What Is pain.002? Payment Status Report API | ISECure",
       description:
-        "Retrieve ISO 20022 pain.002 status reports from Finnish banks through one API. Track the reception and processing of pain.001 payment files.",
+        "Learn what ISO 20022 pain.002 means and retrieve acceptance or rejection status for payment files from Finnish banks through one API.",
       h1: "pain.002 API for retrieving payment-file status",
       intro:
         "pain.002 is the ISO 20022 Customer Payment Status Report. A bank uses it to report whether a pain.001 payment file was received, accepted for processing, or rejected. ISECure's File Exchange API retrieves the response made available by the bank.",
@@ -216,9 +216,9 @@ const content = {
       },
     },
     se: {
-      title: "pain.002-API för betalningsstatus | ISECure",
+      title: "Vad är pain.002? API för betalningsstatus | ISECure",
       description:
-        "Hämta ISO 20022 pain.002-statusrapporter från finländska banker via ett API. Följ mottagning och behandling av pain.001-betalningsfiler.",
+        "Läs vad ISO 20022 pain.002 betyder och hämta status för godkända eller avvisade betalningsfiler från finländska banker via ett API.",
       h1: "pain.002-API för att hämta betalningsfilens status",
       intro:
         "pain.002 är ISO 20022-meddelandet Customer Payment Status Report. Banken använder det för att ange om en pain.001-betalningsfil har tagits emot, godkänts för behandling eller avvisats. ISECures File Exchange API hämtar svaret som banken erbjuder.",
@@ -258,9 +258,9 @@ const content = {
   },
   "camt-054": {
     fi: {
-      title: "camt.054 API: veloitus- ja hyvitysilmoitukset | ISECure",
+      title: "Mikä on camt.054? Tapahtumailmoitus API | ISECure",
       description:
-        "Nouda ISO 20022 camt.054 -tapahtumailmoitukset suomalaisista pankeista yhdellä API:lla. Yhdistä pankin veloitus- ja hyvitystiedot ohjelmistoon.",
+        "Selvitä mitä ISO 20022 camt.054 tarkoittaa ja nouda pankin veloitus- ja hyvitysilmoitukset suomalaisista pankeista yhdellä API:lla.",
       h1: "camt.054 API pankin tapahtumailmoitusten noutamiseen",
       intro:
         "camt.054 on ISO 20022 Bank-to-Customer Debit/Credit Notification -sanoma. Pankki voi ilmoittaa sillä tilin veloituksista ja hyvityksistä ennen seuraavaa päivän tiliotetta. ISECuren File Exchange API noutaa pankin tarjoamat camt.054-aineistot samalla integraatiolla kuin muut pankkitiedostot.",
@@ -298,9 +298,9 @@ const content = {
       },
     },
     en: {
-      title: "camt.054 API for Debit and Credit Notifications | ISECure",
+      title: "What Is camt.054? Debit/Credit Notification API | ISECure",
       description:
-        "Retrieve ISO 20022 camt.054 notifications from Finnish banks through one API. Bring bank debit and credit information into your software.",
+        "Learn what ISO 20022 camt.054 means and retrieve bank debit and credit notifications from Finnish banks through one integration API.",
       h1: "camt.054 API for bank debit and credit notifications",
       intro:
         "camt.054 is the ISO 20022 Bank-to-Customer Debit/Credit Notification message. A bank can use it to report account debits and credits before the next end-of-day statement. ISECure's File Exchange API retrieves files offered by the bank through the same integration as other bank files.",
@@ -338,9 +338,9 @@ const content = {
       },
     },
     se: {
-      title: "camt.054-API för debet- och kreditaviseringar | ISECure",
+      title: "Vad är camt.054? API för kontoaviseringar | ISECure",
       description:
-        "Hämta ISO 20022 camt.054-aviseringar från finländska banker via ett API. För in bankens debet- och kredituppgifter i programvara.",
+        "Läs vad ISO 20022 camt.054 betyder och hämta bankens debet- och kreditaviseringar från finländska banker via ett integrations-API.",
       h1: "camt.054-API för bankens debet- och kreditaviseringar",
       intro:
         "camt.054 är ISO 20022-meddelandet Bank-to-Customer Debit/Credit Notification. Banken kan använda det för att rapportera kontots debiteringar och krediteringar före nästa dagskontoutdrag. ISECures File Exchange API hämtar filer som banken erbjuder via samma integration som övriga bankfiler.",
@@ -386,6 +386,12 @@ const relatedByMessage: Record<
 > = {
   "pain-001": [
     {
+      slug: "iso-20022",
+      fi: "ISO 20022 -sanomaopas",
+      en: "ISO 20022 message guide",
+      se: "ISO 20022-meddelandeguide",
+    },
+    {
       slug: "pain-002",
       fi: "pain.002-maksupalaute",
       en: "pain.002 payment status",
@@ -405,6 +411,12 @@ const relatedByMessage: Record<
     },
   ],
   "pain-002": [
+    {
+      slug: "iso-20022",
+      fi: "ISO 20022 -sanomaopas",
+      en: "ISO 20022 message guide",
+      se: "ISO 20022-meddelandeguide",
+    },
     {
       slug: "pain-001",
       fi: "pain.001-maksuaineisto",
@@ -426,10 +438,16 @@ const relatedByMessage: Record<
   ],
   "camt-054": [
     {
-      slug: "tiliote",
+      slug: "camt-053",
       fi: "camt.053-tiliote",
       en: "camt.053 bank statements",
       se: "camt.053-kontoutdrag",
+    },
+    {
+      slug: "iso-20022",
+      fi: "ISO 20022 -sanomaopas",
+      en: "ISO 20022 message guide",
+      se: "ISO 20022-meddelandeguide",
     },
     {
       slug: "web-services",
