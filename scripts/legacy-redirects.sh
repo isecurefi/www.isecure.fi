@@ -13,6 +13,7 @@ DIST_ID=E2OQLWDIQMPMBP
 FN_NAME=isecure-legacy-redirects
 BUCKET=www2.isecure.fi
 SECURITY_HEADERS_POLICY=67f7725c-6f97-4210-82d7-5512b31e9d03
+TARGET_GROUP_ARN=arn:aws:elasticloadbalancing:eu-west-1:589434896614:targetgroup/isecurefi/c32259ec39891a2a
 TILIOTE_403_RULE=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener-rule/app/isecurefi/903510e898890d25/82679a15f22111bb/5f9302fdf6fe11fb
 WS_REDIRECT_RULE=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener-rule/app/isecurefi/903510e898890d25/82679a15f22111bb/2af05530f2eaa95b
 BAD_API_REDIRECT_RULE=arn:aws:elasticloadbalancing:eu-west-1:589434896614:listener-rule/app/isecurefi/903510e898890d25/82679a15f22111bb/4ae07659dea60f84
@@ -43,6 +44,9 @@ aws elbv2 set-rule-priorities --region "$REGION" --rule-priorities \
   "RuleArn=$TILIOTE_403_RULE,Priority=2" \
   "RuleArn=$WS_REDIRECT_RULE,Priority=3" \
   "RuleArn=$INDEX_EN_REDIRECT_RULE,Priority=4" >/dev/null
+aws elbv2 modify-target-group --region "$REGION" \
+  --target-group-arn "$TARGET_GROUP_ARN" \
+  --matcher 'HttpCode=200-399' >/dev/null
 
 echo "== 3/7 CloudFront: update and publish the checked-in redirect function"
 FN_ETAG=$(aws cloudfront describe-function --name "$FN_NAME" --stage DEVELOPMENT \
