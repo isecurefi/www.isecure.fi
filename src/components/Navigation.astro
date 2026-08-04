@@ -5,9 +5,10 @@ import LanguageSwitcher from "./LanguageSwitcher.astro";
 
 interface Props {
   lang: Lang;
+  showLanguageSwitcher?: boolean;
 }
 
-const { lang } = Astro.props;
+const { lang, showLanguageSwitcher = true } = Astro.props;
 const themeLabels = {
   fi: { label: "Teema", dark: "Tumma teema", light: "Vaalea teema" },
   en: { label: "Theme", dark: "Dark theme", light: "Light theme" },
@@ -82,7 +83,7 @@ const navItems = [
           <span aria-hidden="true">☼</span>
         </button>
       </div>
-      <LanguageSwitcher currentLang={lang} />
+      {showLanguageSwitcher && <LanguageSwitcher currentLang={lang} />}
     </div>
   </div>
 </nav>

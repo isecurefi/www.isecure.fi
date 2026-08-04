@@ -20,6 +20,7 @@ export interface Props {
   }>;
   fullWidth?: boolean;
   bodyClass?: string;
+  showLanguageSwitcher?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   fullWidth = false,
   bodyClass = "",
   alternateLinks = [],
+  showLanguageSwitcher = true,
 } = Astro.props;
 const htmlClass = bodyClass.includes("banking-theme-page")
   ? "banking-theme-root"
@@ -327,7 +329,7 @@ const fullTitle = titleAlreadyBranded
       defer></script>
   </head>
   <body class={bodyClass} data-isecure-theme={htmlClass ? "light" : undefined}>
-    <Navigation lang={lang} />
+    <Navigation lang={lang} showLanguageSwitcher={showLanguageSwitcher} />
     <main class:list={["main-content", { "main-content--wide": fullWidth }]}>
       <slot />
       <Contact lang={lang} />

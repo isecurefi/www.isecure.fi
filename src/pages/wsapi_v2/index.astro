@@ -1,0 +1,634 @@
+---
+import "swagger-ui-dist/swagger-ui.css";
+
+import sourceSpec from "../../data/wsapi_v2.json";
+import sourceMetadata from "../../data/wsapi_v2.source.json";
+import ApiDocsLayout from "../../layouts/ApiDocsLayout.astro";
+
+const HTTP_METHODS = new Set([
+  "delete",
+  "get",
+  "head",
+  "options",
+  "patch",
+  "post",
+  "put",
+]);
+type Operation = {
+  method: string;
+  path: string;
+  operationId: string;
+  summary: string;
+  tag: string;
+  anchor: string;
+  legacyAnchor: string;
+};
+
+const operations: Operation[] = [];
+for (const [path, pathItem] of Object.entries(sourceSpec.paths)) {
+  for (const [method, operation] of Object.entries(pathItem)) {
+    if (!HTTP_METHODS.has(method) || !("operationId" in operation)) continue;
+    const tag = operation.tags?.[0] ?? "Other";
+    operations.push({
+      method: method.toUpperCase(),
+      path,
+      operationId: operation.operationId,
+      summary: operation.summary,
+      tag,
+      anchor: `operations-${tag}-${operation.operationId}`,
+      legacyAnchor: `operation-${path.replace(/[/{}/]/g, "-")}-${method}`,
+    });
+  }
+}
+
+const tagDescriptions: Record<string, string> = {
+  Account: "Registration, verification, password recovery, and account setup.",
+  Session: "Login, logout, SMS MFA, and authenticator-app TOTP workflows.",
+  Files: "List, upload, download, and delete bank files.",
+  Certs: "Enroll, import, export, configure, and share bank certificates.",
+  Pgp: "Manage PGP public keys used for protected certificate exports.",
+  Integrator: "Manage the customer accounts associated with an integrator key.",
+};
+const preferredTagOrder = [
+  "Session",
+  "Files",
+  "Account",
+  "Certs",
+  "Pgp",
+  "Integrator",
+];
+const operationTags = [
+  ...new Set(operations.map((operation) => operation.tag)),
+];
+const tagGroups = operationTags
+  .sort(
+    (left, right) =>
+      preferredTagOrder.indexOf(left) - preferredTagOrder.indexOf(right),
+  )
+  .map((name) => ({
+    name,
+    description: tagDescriptions[name] ?? `${name} operations.`,
+    operations: operations.filter((operation) => operation.tag === name),
+  }));
+const schemaCount = Object.keys(sourceSpec.definitions).length;
+const legacyHashMap = Object.fromEntries([
+  ...operations.map((operation) => [operation.legacyAnchor, operation.anchor]),
+  ...Object.keys(sourceSpec.definitions).map((name) => [
+    `definition-${name}`,
+    `model-${name}`,
+  ]),
+]);
+const serializedLegacyHashMap = JSON.stringify(legacyHashMap).replace(
+  /</g,
+  "\\u003c",
+);
+const description =
+  "Complete reference for the ISECure WS Channel API: authentication, Finnish bank file exchange, certificates, sessions, MFA, and integration schemas.";
+---
+
+<ApiDocsLayout
+  title="ISECure WS Channel API documentation"
+  description={description}
+  version={sourceSpec.info.version}
+  operationCount={operations.length}
+>
+  <header class="docs-header">
+    <a class="brand" href="/" aria-label="ISECure home">
+      <img
+        src="/images/isecure-small-logo.png"
+        width="161"
+        height="61"
+        alt="ISECure"
+      />
+      <span>Developer documentation</span>
+    </a>
+    <nav aria-label="Documentation links">
+      <a href="/">Product</a>
+      <a href="https://github.com/isecurefi/wsapi-v2">GitHub</a>
+      <a class="header-cta" href="/wsapi_v2.json" download>OpenAPI JSON</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="docs-hero" id="introduction" aria-labelledby="docs-title">
+      <div class="hero-copy">
+        <div class="eyebrow-row">
+          <span class="version-pill">{sourceSpec.info.version}</span>
+          <span class="status-pill"
+            ><span aria-hidden="true"></span> Production API</span
+          >
+        </div>
+        <p class="eyebrow">WS Channel · REST API</p>
+        <h1 id="docs-title">
+          Move bank files securely.<br />Build the integration clearly.
+        </h1>
+        <p class="hero-lead">
+          One browsable reference for account setup, authentication, bank
+          certificates, file exchange, MFA, and integrator workflows across
+          Finnish banks.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-action" href="#api-reference"
+            >Browse 26 operations</a
+          >
+          <a class="secondary-action" href="#quick-start"
+            >Read the quick start</a
+          >
+        </div>
+      </div>
+
+      <aside class="endpoint-card" aria-label="API endpoints">
+        <div class="endpoint-card-heading">
+          <span>Base URL</span>
+          <span class="live-label">HTTPS</span>
+        </div>
+        <div class="endpoint-environments">
+          <div>
+            <span>Production</span>
+            <div class="copy-row">
+              <code>https://ws-api.isecure.fi/v2</code>
+              <button
+                type="button"
+                class="copy-button"
+                data-copy="https://ws-api.isecure.fi/v2"
+                aria-label="Copy production base URL">Copy</button
+              >
+            </div>
+          </div>
+          <div>
+            <span>Staging</span>
+            <div class="copy-row">
+              <code>https://ws-api.test.isecure.fi/v2</code>
+              <button
+                type="button"
+                class="copy-button"
+                data-copy="https://ws-api.test.isecure.fi/v2"
+                aria-label="Copy staging base URL">Copy</button
+              >
+            </div>
+          </div>
+        </div>
+        <dl class="endpoint-stats">
+          <div><dt>Operations</dt><dd>{operations.length}</dd></div>
+          <div><dt>Schemas</dt><dd>{schemaCount}</dd></div>
+          <div><dt>Format</dt><dd>JSON</dd></div>
+        </dl>
+        <p>
+          API access requires an integrator API key and, for protected
+          operations, an authenticated ID token.
+        </p>
+      </aside>
+    </section>
+
+    <section
+      class="quick-start section-shell"
+      id="quick-start"
+      aria-labelledby="quick-start-title"
+    >
+      <div class="section-heading">
+        <p class="eyebrow">First request</p>
+        <h2 id="quick-start-title">From credentials to files in three steps</h2>
+        <p>
+          Start with the TypeScript SDK for browser or Node.js applications, or
+          use the REST API directly from any HTTPS client.
+        </p>
+      </div>
+      <ol class="step-grid">
+        <li>
+          <span class="step-number">01</span>
+          <h3>Enroll your integration</h3>
+          <p>
+            Request a service agreement and API key. Register separate
+            <code>admin</code> and <code>data</code> roles when automation needs to
+            remain isolated from configuration.
+          </p>
+          <a href="mailto:sales@isecure.fi?subject=WS%20Channel%20API%20access"
+            >Request API access</a
+          >
+        </li>
+        <li id="authentication">
+          <span class="step-number">02</span>
+          <h3>Authenticate safely</h3>
+          <p>
+            Login returns an ID token. Send it in <code>Authorization</code>
+            together with the integrator key in <code>x-api-key</code>. Admin
+            workflows require MFA.
+          </p>
+          <a href="#operations-Session-InitLogin"
+            >Open authentication operations</a
+          >
+        </li>
+        <li>
+          <span class="step-number">03</span>
+          <h3>Exchange bank files</h3>
+          <p>
+            List, upload, download, and remove ISO 20022 files after the bank
+            certificate has been enrolled or shared with the account.
+          </p>
+          <a href="#operations-Files-ListFiles">Open file operations</a>
+        </li>
+      </ol>
+
+      <div class="code-example" aria-labelledby="curl-example-title">
+        <div class="code-example-heading">
+          <div>
+            <span class="code-language">cURL</span>
+            <h3 id="curl-example-title">List files from Nordea</h3>
+          </div>
+          <button
+            type="button"
+            class="copy-button copy-button-dark"
+            data-copy={'curl --request GET \\\n  --url "https://ws-api.isecure.fi/v2/files/nordea" \\\n  --header "Authorization: $ID_TOKEN" \\\n  --header "x-api-key: $API_KEY"'}
+            aria-label="Copy cURL example">Copy</button
+          >
+        </div>
+        <pre><code><span>curl</span> --request GET \
+  --url <mark>"https://ws-api.isecure.fi/v2/files/nordea"</mark> \
+  --header <mark>"Authorization: $ID_TOKEN"</mark> \
+  --header <mark>"x-api-key: $API_KEY"</mark></code></pre>
+        <p>
+          Keep tokens and keys in a secret manager. Never commit credentials or
+          paste them into support requests.
+        </p>
+      </div>
+    </section>
+
+    <section
+      class="browse-section section-shell"
+      aria-labelledby="browse-title"
+    >
+      <div class="section-heading section-heading-row">
+        <div>
+          <p class="eyebrow">API map</p>
+          <h2 id="browse-title">Jump directly to an operation</h2>
+        </div>
+        <label class="operation-search">
+          <span class="visually-hidden">Search operations</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"
+            ><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
+            ></path></svg
+          >
+          <input
+            id="operation-search"
+            type="search"
+            placeholder="Search name, path, or method…"
+            autocomplete="off"
+            aria-describedby="search-hint search-results"
+          />
+          <kbd aria-hidden="true">⌘ K</kbd>
+        </label>
+      </div>
+      <p id="search-hint" class="visually-hidden">
+        Type to filter the operation list. Press Enter to open the first result.
+      </p>
+      <p id="search-results" class="search-results" aria-live="polite">
+        Showing all {operations.length} operations
+      </p>
+      <div class="operation-groups" id="operation-groups">
+        {
+          tagGroups.map((group) => (
+            <section
+              class="operation-group"
+              data-operation-group
+              data-search={group.name.toLowerCase()}
+            >
+              <div class="operation-group-heading">
+                <h3>{group.name}</h3>
+                <span>{group.operations.length}</span>
+              </div>
+              <p>{group.description}</p>
+              <ul>
+                {group.operations.map((operation) => (
+                  <li
+                    data-operation
+                    data-search={`${operation.method} ${operation.operationId} ${operation.summary} ${operation.path}`.toLowerCase()}
+                  >
+                    <a href={`#${operation.anchor}`}>
+                      <span
+                        class:list={[
+                          "method",
+                          `method-${operation.method.toLowerCase()}`,
+                        ]}
+                      >
+                        {operation.method}
+                      </span>
+                      <span class="operation-name">{operation.summary}</span>
+                      <code>{operation.path}</code>
+                      <span class="arrow" aria-hidden="true">
+                        →
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+      <div class="no-results" id="no-results" hidden>
+        <strong>No matching operations</strong>
+        <span
+          >Try an operation name such as “Login”, a path such as “/files”, or an
+          HTTP method.</span
+        >
+      </div>
+    </section>
+
+    <section
+      class="reference-section"
+      id="api-reference"
+      aria-labelledby="reference-title"
+    >
+      <div class="reference-heading section-shell">
+        <div>
+          <p class="eyebrow">Complete reference</p>
+          <h2 id="reference-title">Operations and schemas</h2>
+          <p>
+            Filter by tag or operation, expand only what you need, and copy
+            request models directly from the schema reference.
+          </p>
+        </div>
+        <div class="reference-actions">
+          <button type="button" class="utility-button" id="collapse-operations"
+            >Collapse all</button
+          >
+          <a class="utility-button" href="/wsapi_v2.json" download
+            >Download specification</a
+          >
+        </div>
+      </div>
+      <div class="reference-note section-shell">
+        <strong>Safe browsing mode</strong>
+        <span>
+          Interactive requests are disabled here to prevent accidental
+          production changes. Use the SDK or copy an example into your secured
+          development environment.
+        </span>
+      </div>
+      <div id="swagger-ui" aria-busy="true">
+        <div class="docs-loading" role="status">
+          <span aria-hidden="true"></span>
+          Loading API reference…
+        </div>
+      </div>
+      <noscript>
+        <p class="noscript-message">
+          JavaScript is required for the interactive reference. The complete
+          specification remains available as <a href="/wsapi_v2.json"
+            >OpenAPI JSON</a
+          >.
+        </p>
+      </noscript>
+    </section>
+  </main>
+
+  <footer class="docs-footer">
+    <div>
+      <a href="/" aria-label="ISECure home">
+        <img
+          src="/images/isecure-small-logo.png"
+          width="132"
+          height="50"
+          alt="ISECure"
+          loading="lazy"
+        />
+      </a>
+      <p>Secure Finnish bank connectivity for software teams.</p>
+    </div>
+    <nav aria-label="Footer links">
+      <a href="/ws-api-terms/">API service terms</a>
+      <a href="/privacy/">Privacy</a>
+      <a href="mailto:support@isecure.fi">Developer support</a>
+      <a
+        href={`https://github.com/isecurefi/wsapi-v2/commit/${sourceMetadata.commit}`}
+      >
+        Source {sourceMetadata.commit.slice(0, 7)}
+      </a>
+    </nav>
+  </footer>
+
+  <div class="copy-status" id="copy-status" role="status" aria-live="polite">
+  </div>
+  <script
+    id="legacy-hash-map"
+    type="application/json"
+    set:html={serializedLegacyHashMap}
+  />
+
+  <script>
+    const parseJsonScript = (id: string): Record<string, unknown> => {
+      const element = document.getElementById(id);
+      return JSON.parse(element?.textContent ?? "{}");
+    };
+
+    const legacyHashes = parseJsonScript("legacy-hash-map") as Record<
+      string,
+      string
+    >;
+    const initialHash = window.location.hash.slice(1);
+    if (legacyHashes[initialHash]) {
+      history.replaceState(null, "", `#${legacyHashes[initialHash]}`);
+    }
+
+    let referencePromise: Promise<void> | undefined;
+    const loadReference = () => {
+      referencePromise ??= (async () => {
+        const container = document.getElementById("swagger-ui");
+        try {
+          const [swaggerModule, response] = await Promise.all([
+            import("swagger-ui-dist/swagger-ui-es-bundle.js"),
+            fetch("/wsapi_v2.json", {
+              headers: { Accept: "application/json" },
+            }),
+          ]);
+          if (!response.ok) {
+            throw new Error(
+              `OpenAPI request failed with HTTP ${response.status}`,
+            );
+          }
+          const spec = await response.json();
+          swaggerModule.default({
+            spec,
+            dom_id: "#swagger-ui",
+            deepLinking: true,
+            displayOperationId: true,
+            displayRequestDuration: true,
+            docExpansion: "list",
+            defaultModelExpandDepth: 2,
+            defaultModelsExpandDepth: 1,
+            filter: true,
+            operationsSorter: "alpha",
+            persistAuthorization: false,
+            showExtensions: true,
+            showCommonExtensions: true,
+            supportedSubmitMethods: [],
+            tagsSorter: "alpha",
+            tryItOutEnabled: false,
+            validatorUrl: null,
+            syntaxHighlight: { activate: true, theme: "agate" },
+            onComplete: () => {
+              container?.setAttribute("aria-busy", "false");
+              if (window.location.hash) {
+                window.setTimeout(() => {
+                  document
+                    .querySelector(window.location.hash)
+                    ?.scrollIntoView();
+                }, 0);
+              }
+            },
+          });
+        } catch (error) {
+          if (!container) return;
+          container.setAttribute("aria-busy", "false");
+          container.replaceChildren();
+          const message = document.createElement("p");
+          message.className = "reference-error";
+          message.append("The interactive reference could not be loaded. ");
+          const link = document.createElement("a");
+          link.href = "/wsapi_v2.json";
+          link.textContent = "Open the complete OpenAPI document";
+          message.append(link, ".");
+          container.append(message);
+          console.error(error);
+        }
+      })();
+      return referencePromise;
+    };
+
+    const referenceSection = document.getElementById("api-reference");
+    const opensReference = (link: HTMLAnchorElement) =>
+      link.hash.startsWith("#operations-") || link.hash.startsWith("#model-");
+    document
+      .querySelectorAll<HTMLAnchorElement>("a[href^='#']")
+      .forEach((link) => {
+        if (opensReference(link)) link.addEventListener("click", loadReference);
+      });
+    const currentHash = window.location.hash;
+    if (
+      currentHash.startsWith("#operations-") ||
+      currentHash.startsWith("#model-")
+    ) {
+      void loadReference();
+    } else if (referenceSection && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            observer.disconnect();
+            void loadReference();
+          }
+        },
+        { rootMargin: "700px 0px" },
+      );
+      observer.observe(referenceSection);
+    } else {
+      void loadReference();
+    }
+
+    const copyStatus = document.getElementById("copy-status");
+    const announce = (message: string) => {
+      if (copyStatus) copyStatus.textContent = message;
+    };
+    const copyText = async (value: string) => {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+        return;
+      }
+      const textarea = document.createElement("textarea");
+      textarea.value = value;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.append(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      textarea.remove();
+    };
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-copy]")
+      .forEach((button) => {
+        button.addEventListener("click", async () => {
+          const original = button.textContent;
+          try {
+            await copyText(button.dataset.copy ?? "");
+            button.textContent = "Copied";
+            announce("Copied to clipboard");
+          } catch {
+            button.textContent = "Copy failed";
+            announce("Could not copy to clipboard");
+          }
+          window.setTimeout(() => {
+            button.textContent = original;
+          }, 1800);
+        });
+      });
+
+    const searchInput =
+      document.querySelector<HTMLInputElement>("#operation-search");
+    const operationElements = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-operation]"),
+    );
+    const groupElements = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-operation-group]"),
+    );
+    const resultStatus = document.getElementById("search-results");
+    const noResults = document.getElementById("no-results");
+
+    const filterOperations = () => {
+      const query = searchInput?.value.trim().toLowerCase() ?? "";
+      let visibleCount = 0;
+      for (const operation of operationElements) {
+        const visible = !query || operation.dataset.search?.includes(query);
+        operation.hidden = !visible;
+        if (visible) visibleCount += 1;
+      }
+      for (const group of groupElements) {
+        group.hidden = !group.querySelector("[data-operation]:not([hidden])");
+      }
+      if (resultStatus) {
+        resultStatus.textContent = query
+          ? `${visibleCount} matching operation${visibleCount === 1 ? "" : "s"}`
+          : `Showing all ${operationElements.length} operations`;
+      }
+      if (noResults) noResults.hidden = visibleCount !== 0;
+    };
+    searchInput?.addEventListener("input", filterOperations);
+    searchInput?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        const firstMatch = document.querySelector<HTMLAnchorElement>(
+          "[data-operation]:not([hidden]) a",
+        );
+        if (firstMatch) {
+          event.preventDefault();
+          firstMatch.click();
+        }
+      }
+      if (event.key === "Escape") {
+        searchInput.value = "";
+        filterOperations();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      const target = event.target as HTMLElement;
+      const isTyping = ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchInput?.focus();
+      } else if (event.key === "/" && !isTyping) {
+        event.preventDefault();
+        searchInput?.focus();
+      }
+    });
+
+    document
+      .getElementById("collapse-operations")
+      ?.addEventListener("click", async () => {
+        await loadReference();
+        document
+          .querySelectorAll<HTMLButtonElement>(
+            "#swagger-ui .opblock-summary[aria-expanded='true']",
+          )
+          .forEach((summary) => summary.click());
+        document.getElementById("api-reference")?.scrollIntoView();
+      });
+  </script>
+</ApiDocsLayout>

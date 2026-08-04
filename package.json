@@ -12,7 +12,8 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",
     "highlight.js": "^11.11.1",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "swagger-ui-dist": "5.32.12"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -32,15 +33,19 @@
   },
   "packageManager": "yarn@4.6.0",
   "scripts": {
-    "dev": "yarn astro dev",
-    "start": "yarn astro dev",
-    "build": "yarn astro build",
+    "dev": "yarn api:validate && yarn astro dev",
+    "start": "yarn dev",
+    "build": "yarn api:validate && yarn astro build && yarn verify:build && yarn test:redirects",
     "preview": "yarn astro preview",
+    "api:sync": "node scripts/sync-openapi.mjs",
+    "api:validate": "node scripts/validate-openapi.mjs",
     "gsc": "node --env-file=.env scripts/gsc-pull.mjs",
     "gsc:reconcile": "node --env-file=.env scripts/gsc-manage.mjs",
-    "lint": "yarn eslint \"src/**/*.{js,ts,astro}\"",
+    "lint": "yarn eslint \"src/**/*.{js,ts,astro}\" \"scripts/**/*.{js,mjs}\"",
     "format": "yarn prettier --plugin=prettier-plugin-astro --write \"**/*.{astro,css,html,js,json,md,mjs,ts}\"",
+    "verify:build": "node scripts/check-build.mjs",
     "verify:production": "node scripts/check-production.mjs",
+    "test:redirects": "node scripts/test-cloudfront-redirects.mjs",
     "deploy": "yarn lint && yarn format && yarn build && aws s3 cp --cache-control \"public, max-age=86400\" --recursive dist/ s3://www2.isecure.fi/ && node scripts/upload-directory-indexes.mjs s3://www2.isecure.fi/ && aws cloudfront create-invalidation --distribution-id E2OQLWDIQMPMBP --paths \"/*\""
   },
   "repository": {

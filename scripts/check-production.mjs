@@ -1,13 +1,37 @@
 const checks = [
   {
     name: "HTML API documentation is available",
-    url: "https://isecure.fi/wsapi_v2/index.html",
+    url: "https://www.isecure.fi/wsapi_v2/",
     status: 200,
+    contentType: "text/html",
+    contains: "Move bank files securely",
   },
   {
     name: "OpenAPI document is available",
-    url: "https://isecure.fi/wsapi_v2.json",
+    url: "https://www.isecure.fi/wsapi_v2.json",
     status: 200,
+    contentType: "application/json",
+    contains: '"version": "v2.7.0"',
+  },
+  {
+    name: "API service terms are available",
+    url: "https://www.isecure.fi/ws-api-terms/",
+    status: 200,
+    contentType: "text/html",
+    contains: "customer- or partner-specific",
+  },
+  {
+    name: "Legacy HTML API documentation redirects to www",
+    url: "https://isecure.fi/wsapi_v2/index.html?source=production-check",
+    status: 301,
+    location: "https://www.isecure.fi:443/wsapi_v2/?source=production-check",
+  },
+  {
+    name: "Legacy OpenAPI document redirects to www",
+    url: "https://isecure.fi/wsapi_v2.json?source=production-check",
+    status: 301,
+    location:
+      "https://www.isecure.fi:443/wsapi_v2.json?source=production-check",
   },
   {
     name: "Legacy statement files are blocked",
@@ -60,11 +84,23 @@ for (const check of checks) {
     const statusMatches = response.status === check.status;
     const locationMatches =
       check.location === undefined || location === check.location;
+    const contentType = response.headers.get("content-type") ?? "";
+    const contentTypeMatches =
+      check.contentType === undefined ||
+      contentType.includes(check.contentType);
+    const body = check.contains === undefined ? "" : await response.text();
+    const bodyMatches =
+      check.contains === undefined || body.includes(check.contains);
 
-    if (!statusMatches || !locationMatches) {
+    if (
+      !statusMatches ||
+      !locationMatches ||
+      !contentTypeMatches ||
+      !bodyMatches
+    ) {
       failures += 1;
       console.error(
-        `FAIL ${check.name}: status=${response.status}, location=${location ?? "-"}`,
+        `FAIL ${check.name}: status=${response.status}, location=${location ?? "-"}, content-type=${contentType || "-"}`,
       );
       continue;
     }

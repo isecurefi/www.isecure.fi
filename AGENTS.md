@@ -1,7 +1,7 @@
 # ISECure website agent guide
 
-This repository builds the public marketing site at `https://www.isecure.fi`.
-It does **not** contain the legacy API reference or the operational PHP tools
+This repository builds the public marketing site and WS Channel API reference
+at `https://www.isecure.fi`. It does **not** contain the operational PHP tools
 served from `https://isecure.fi`.
 
 ## Project structure
@@ -20,18 +20,35 @@ served from `https://isecure.fi`.
 
 ## API documentation is a protected contract
 
-The production API documentation remains on the legacy apex host until a real
-replacement is deployed:
+The canonical production API documentation is built in this repository:
 
-- Human-readable reference: `https://isecure.fi/wsapi_v2/index.html`
-- OpenAPI document: `https://isecure.fi/wsapi_v2.json`
+- Human-readable reference: `https://www.isecure.fi/wsapi_v2/`
+- OpenAPI document: `https://www.isecure.fi/wsapi_v2.json`
+- Service-terms summary: `https://www.isecure.fi/ws-api-terms/`
 
-Do not redirect, delete, block, or repurpose `/wsapi_v2/` or
-`/wsapi_v2.json`. Marketing pages and `public/llms.txt` link to these URLs
-intentionally. Before changing API-documentation routing, confirm that both URLs
-return HTTP 200 and that a replacement preserves deep links. A future migration
-must deploy the replacement first and then add one-to-one permanent redirects;
-never redirect the API reference to the homepage.
+The authoritative specification remains
+`https://github.com/isecurefi/wsapi-v2`. `src/data/wsapi_v2.json` is a committed
+mirror and `src/data/wsapi_v2.source.json` records its exact upstream commit.
+Use `yarn api:sync` for an explicit update, then review and commit both files.
+Normal `dev` and `build` commands validate the local copy and must not fetch a
+floating specification from the network.
+
+The published JSON and interactive reference sanitize legacy example
+credentials and personal-data examples. Keep those publishing overrides when
+syncing the upstream document; never expose plausible live secrets merely
+because they appear in the source specification.
+
+The previous apex paths are permanent compatibility URLs:
+
+- `https://isecure.fi/wsapi_v2/index.html`
+- `https://isecure.fi/wsapi_v2/`
+- `https://isecure.fi/wsapi_v2.json`
+
+They must redirect one-to-one to the matching `www` resources, preserving query
+strings and browser fragments. Never redirect API documentation to the homepage
+or a marketing alias. Keep the recoverable EC2 source until the CloudFront copy
+and redirects have been stable and verified. Preserve mappings for old
+operation and schema anchors when changing the documentation renderer.
 
 The Astro routes `/ws-api/` and `/ws-channel/` are legacy marketing aliases,
 not the API reference. Do not confuse them with `/wsapi_v2/`.
@@ -45,7 +62,8 @@ CloudFront. Treat them as separate production surfaces.
 - `/tiliote`, `/tiliote/**`, `/tilivuosi2011`, and `/tilivuosi2011/**` must
   remain inaccessible on the legacy apex and at the EC2 origin.
 - `/ws-kanava.php` and `/ws-kanava.html` redirect to the matching Web Services
-  marketing page.
+  marketing page. The apex `/wsapi_v2/**` and `/wsapi_v2.json` paths redirect to
+  the corresponding CloudFront documentation resources.
 - Operational applications such as `/registers/sympatia/**` must not be
   redirected or removed without an explicit migration decision.
 - Reconcile legacy redirects with `scripts/legacy-redirects.sh`; keep the
@@ -93,7 +111,13 @@ Before publishing, also verify:
 - one title, description, canonical, and H1 per indexable page;
 - reciprocal hreflang links;
 - no retired routes in the sitemap;
-- `/wsapi_v2/index.html` and `/wsapi_v2.json` still return HTTP 200;
+- `www` `/wsapi_v2/`, `/wsapi_v2.json`, and `/ws-api-terms/` return HTTP 200;
+- the OpenAPI document passes `yarn api:validate`, has the expected JSON MIME
+  type, and is sourced from a recorded upstream commit;
+- apex `/wsapi_v2/index.html`, `/wsapi_v2/`, and `/wsapi_v2.json` return
+  one-to-one HTTP 301 redirects to `www`, preserving query strings;
+- the API reference remains keyboard searchable, responsive, and usable
+  without browser-executed production requests;
 - sensitive legacy paths return HTTP 403 at the apex and no successful response
   from a direct-origin request;
 - legacy and canonical redirects preserve query strings.
@@ -111,5 +135,8 @@ Production uses the existing S3/CloudFront workflow, not OpenAI Sites:
   legacy routing.
 
 Build first, upload `dist/`, run `scripts/upload-directory-indexes.mjs`, and
-invalidate CloudFront. Do not use destructive S3 synchronization. Preserve
-unrelated EC2 content and existing user changes.
+invalidate CloudFront. Verify the new API documentation on `www` before running
+`scripts/legacy-redirects.sh`; that script must refuse the ALB migration if the
+replacement is unhealthy. Do not use destructive S3 synchronization. Preserve
+the recoverable legacy documentation files, unrelated EC2 content, and existing
+user changes.

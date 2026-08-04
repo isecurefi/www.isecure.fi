@@ -1,0 +1,82 @@
+---
+import "../styles/api-docs.css";
+
+interface Props {
+  title: string;
+  description: string;
+  version: string;
+  operationCount: number;
+}
+
+const { title, description, version, operationCount } = Astro.props;
+const canonicalUrl = "https://www.isecure.fi/wsapi_v2/";
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: title,
+  description,
+  version,
+  url: canonicalUrl,
+  author: {
+    "@type": "Organization",
+    name: "ISECure Oy",
+    url: "https://www.isecure.fi/",
+  },
+  about: {
+    "@type": "SoftwareApplication",
+    name: "ISECure WS Channel API",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Cloud",
+  },
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: operationCount,
+  },
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#071116" />
+    <meta name="color-scheme" content="light" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="preload" as="image" href="/images/isecure-small-logo.png" />
+    <link rel="alternate" type="application/json" href="/wsapi_v2.json" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ISECure" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta
+      property="og:image"
+      content="https://www.isecure.fi/images/isecure-og-image.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <script type="application/ld+json" set:html={structuredData} />
+    <title>{title}</title>
+
+    <script async is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-BJ6B7H7K8E");
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"
+    ></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#api-reference">Skip to API reference</a>
+    <slot />
+  </body>
+</html>

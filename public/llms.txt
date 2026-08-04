@@ -31,8 +31,8 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 
 ## API documentation
 
-- [API documentation](https://isecure.fi/wsapi_v2/index.html): REST File Exchange API reference for bank file upload, listing, and download
-- [OpenAPI specification](https://isecure.fi/wsapi_v2.json): machine-readable OpenAPI description of the REST API
+- [API documentation](https://www.isecure.fi/wsapi_v2/): REST File Exchange API reference for authentication, certificates, bank file upload, listing, and download
+- [OpenAPI specification](https://www.isecure.fi/wsapi_v2.json): machine-readable OpenAPI 2.0 description of the REST API
 
 ## SDKs and tooling
 

@@ -1,0 +1,136 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const description =
+  "Information about agreements, acceptable use, security responsibilities, and support for the ISECure WS Channel API.";
+---
+
+<Layout
+  title="WS Channel API service terms | ISECure"
+  lang="en"
+  description={description}
+  canonicalUrl="https://www.isecure.fi/ws-api-terms/"
+  showLanguageSwitcher={false}
+>
+  <article class="terms-page container">
+    <p class="eyebrow">Developer resources</p>
+    <h1>WS Channel API service terms</h1>
+    <p class="lead">
+      WS Channel API access is provided under a customer- or partner-specific
+      service agreement with ISECure Oy. That signed agreement, including any
+      attached service description and data-processing terms, governs your use
+      of the API.
+    </p>
+
+    <section>
+      <h2>Before using the API</h2>
+      <p>
+        Contact ISECure to obtain the applicable agreement and an integrator API
+        key. API keys, identity tokens, passwords, private keys, and MFA secrets
+        are confidential credentials. Keep them out of source control, browser
+        logs, analytics, and support messages.
+      </p>
+    </section>
+
+    <section>
+      <h2>Responsible integration</h2>
+      <p>
+        Use the API only for the accounts, banks, and purposes covered by your
+        agreement. Respect documented rate limits, validate responses, avoid
+        unnecessary retries, and protect bank files and personal data according
+        to applicable law and your security obligations.
+      </p>
+    </section>
+
+    <section>
+      <h2>Availability and changes</h2>
+      <p>
+        Banks and upstream services can introduce delays or maintenance windows.
+        API behavior, supported banks, and security requirements may evolve.
+        Version-specific behavior is documented in the
+        <a href="/wsapi_v2/">API reference</a> and its changelog.
+      </p>
+    </section>
+
+    <section>
+      <h2>Questions and support</h2>
+      <p>
+        For commercial terms or a copy of the agreement, contact
+        <a href="mailto:sales@isecure.fi">sales@isecure.fi</a>. For integration
+        support, contact
+        <a href="mailto:support@isecure.fi">support@isecure.fi</a> and include the
+        API request ID—not credentials or bank-file contents.
+      </p>
+    </section>
+
+    <aside>
+      <strong>Important</strong>
+      <p>
+        This page is a practical summary and does not replace the signed service
+        agreement between you and ISECure Oy.
+      </p>
+    </aside>
+  </article>
+</Layout>
+
+<style>
+  .terms-page {
+    margin: 4rem auto;
+    max-width: 800px;
+  }
+
+  .eyebrow {
+    color: #087f72;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.7rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1.2rem;
+  }
+
+  .lead {
+    color: #52636b;
+    font-size: 1.12rem;
+    line-height: 1.75;
+  }
+
+  section {
+    border-top: 1px solid #dde5e8;
+    margin-top: 2rem;
+    padding-top: 2rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.6rem;
+  }
+
+  p {
+    line-height: 1.75;
+  }
+
+  a {
+    color: #086f65;
+    font-weight: 650;
+    text-underline-offset: 3px;
+  }
+
+  aside {
+    border: 1px solid #b9ddd8;
+    border-radius: 10px;
+    background: #edfaf8;
+    margin-top: 2.5rem;
+    padding: 1rem 1.2rem;
+  }
+
+  aside p {
+    margin: 0.25rem 0 0;
+  }
+</style>

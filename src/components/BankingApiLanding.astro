@@ -164,7 +164,7 @@ const content = {
       {
         title: "OpenAPI",
         status: "Saatavilla",
-        href: "https://isecure.fi/wsapi_v2.json",
+        href: "/wsapi_v2.json",
         text: "Avoin rajapintakuvaus, API-dokumentaatio ja komentorivityökalu tukevat testausta, käyttöönottoa ja CI/CD-työnkulkuja.",
       },
     ],
@@ -356,7 +356,7 @@ const content = {
       {
         title: "OpenAPI",
         status: "Available",
-        href: "https://isecure.fi/wsapi_v2.json",
+        href: "/wsapi_v2.json",
         text: "The API description, documentation, and command-line tool support testing, onboarding, and CI/CD workflows.",
       },
     ],
@@ -548,7 +548,7 @@ const content = {
       {
         title: "OpenAPI",
         status: "Tillgänglig",
-        href: "https://isecure.fi/wsapi_v2.json",
+        href: "/wsapi_v2.json",
         text: "API-beskrivning, dokumentation och kommandoradsverktyg stöder testning, onboarding och CI/CD-arbetsflöden.",
       },
     ],
@@ -637,9 +637,8 @@ const t = content[lang];
         <p class="hero-icp">{t.icp}</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#quickstart">{t.primaryCta}</a>
-          <a
-            class="button button-secondary"
-            href="https://isecure.fi/wsapi_v2/index.html">{t.secondaryCta}</a
+          <a class="button button-secondary" href="/wsapi_v2/"
+            >{t.secondaryCta}</a
           >
         </div>
         <div class="proof-strip" aria-label="ISECure proof points">
@@ -676,10 +675,7 @@ const t = content[lang];
       <h2>{t.quickstartTitle}</h2>
       <p>{t.quickstartLead}</p>
       <div class="doc-actions">
-        <a
-          class="button button-primary"
-          href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a
-        >
+        <a class="button button-primary" href="/wsapi_v2/">{t.docsCta}</a>
         <a
           class="button button-secondary"
           href="https://github.com/isecurefi/isecure-ts-client"
@@ -738,13 +734,9 @@ const t = content[lang];
         <h2>{t.architectureTitle}</h2>
         <p>{t.architectureLead}</p>
         <div class="doc-actions architecture-actions">
-          <a
-            class="button button-primary"
-            href="https://isecure.fi/wsapi_v2/index.html">{t.docsCta}</a
-          >
-          <a
-            class="button button-secondary"
-            href="https://isecure.fi/wsapi_v2.json">{t.openApiCta}</a
+          <a class="button button-primary" href="/wsapi_v2/">{t.docsCta}</a>
+          <a class="button button-secondary" href="/wsapi_v2.json"
+            >{t.openApiCta}</a
           >
         </div>
       </div>

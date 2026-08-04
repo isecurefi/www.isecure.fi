@@ -17,18 +17,30 @@ function querySuffix(querystring) {
   return pairs.length > 0 ? "?" + pairs.join("&") : "";
 }
 
+// CloudFront Functions invokes this global entry point.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handler(event) {
   var request = event.request;
   var uri = request.uri;
 
-  // API reference paths are a protected compatibility surface on the apex
-  // host. Never let the generic canonicalization rules repurpose them.
-  if (
-    uri === "/wsapi_v2" ||
-    uri === "/wsapi_v2.json" ||
-    uri.startsWith("/wsapi_v2/")
-  ) {
+  // API documentation is published as a static directory index. Keep the
+  // machine-readable specification untouched and canonicalize HTML variants.
+  if (uri === "/wsapi_v2.json" || uri === "/wsapi_v2/") {
     return request;
+  }
+
+  if (uri === "/wsapi_v2" || uri === "/wsapi_v2/index.html") {
+    return {
+      statusCode: 301,
+      statusDescription: "Moved Permanently",
+      headers: {
+        location: {
+          value:
+            "https://www.isecure.fi/wsapi_v2/" +
+            querySuffix(request.querystring),
+        },
+      },
+    };
   }
 
   var map = {
