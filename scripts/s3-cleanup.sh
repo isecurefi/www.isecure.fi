@@ -31,11 +31,6 @@ aws s3 rm "$BUCKET/error.html"
 aws s3 rm "$BUCKET/.DS_Store"
 
 # -- Deliberately COMMENTED OUT — decide first, then uncomment: --------------
-# thankyou.html (2024): possibly a Google Ads conversion URL. Check
-# Ads > Goals > Conversions for a page-load conversion on /thankyou.html
-# before removing. Current site uses /thankyou/ (noindex).
-#aws s3 cp "$BUCKET/thankyou.html" "$BACKUP_DIR/thankyou.html" && aws s3 rm "$BUCKET/thankyou.html"
-#
 # boilingdata/ (2021, 5 objects, 9.5 MB: aws-amplify bundles): belongs to the
 # BoilingData product. Confirm nothing at www.boilingdata.com links to
 # https://www.isecure.fi/boilingdata/... before removing.

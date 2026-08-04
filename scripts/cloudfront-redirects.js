@@ -32,6 +32,7 @@ function handler(event) {
   }
 
   var map = {
+    "/thankyou.html": "/thankyou/",
     "/ws-kanava.html": "/web-services/",
     "/ws-api.html": "/",
     "/tiliote": "/camt-053/",

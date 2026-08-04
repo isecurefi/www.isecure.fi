@@ -1,5 +1,5 @@
 import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
-import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
+import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
 
 const snsClient = new SNSClient({
   region: "eu-west-1",

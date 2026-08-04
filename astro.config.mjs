@@ -22,9 +22,9 @@ export default defineConfig({
       sourcemap: false,
       rollupOptions: {
         output: {
-          manualChunks: {
-            vendor: ["bootstrap"],
-            utils: ["./src/utils/"],
+          manualChunks(id) {
+            if (id.includes("node_modules/bootstrap")) return "vendor";
+            if (id.includes("/src/utils/")) return "utils";
           },
         },
       },

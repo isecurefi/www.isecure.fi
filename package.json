@@ -3,29 +3,32 @@
   "version": "1.0.0",
   "description": "- Original [README.md](https://github.com/IronSummitMedia/startbootstrap-modern-business/blob/gh-pages/README.md)",
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "dependencies": {
-    "@astrojs/sitemap": "^3.2.1",
-    "@aws-sdk/client-sns": "^3.716.0",
-    "@aws-sdk/credential-providers": "^3.716.0",
-    "@eslint/js": "^8.55.0",
-    "bootstrap": "^5.3.2",
-    "eslint": "^8.55.0",
-    "google-auth-library": "^10.9.0",
+    "@aws-sdk/client-sns": "^3.1102.0",
+    "@aws-sdk/credential-provider-cognito-identity": "^3.972.65",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8",
     "highlight.js": "^11.11.1",
-    "jquery": "^3.7.1",
-    "sharp": "^0.33.5"
+    "sharp": "^0.35.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.2",
-    "astro": "^3.2.3",
-    "autoprefixer": "^10.4.14",
-    "cssnano": "^6.0.1",
-    "eslint-plugin-astro": "^1.3.1",
-    "globals": "^15.14.0",
-    "prettier": "^3.1.0",
+    "@astrojs/sitemap": "^3.7.3",
+    "@eslint/js": "^10.0.1",
+    "astro": "^7.1.6",
+    "autoprefixer": "^10.5.4",
+    "cssnano": "^8.0.2",
+    "eslint": "^10.8.0",
+    "eslint-plugin-astro": "^3.1.0",
+    "globals": "^17.9.0",
+    "google-auth-library": "^11.0.0",
+    "postcss": "^8.5.25",
+    "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.66.0"
   },
   "packageManager": "yarn@4.6.0",
   "scripts": {
@@ -34,8 +37,9 @@
     "build": "yarn astro build",
     "preview": "yarn astro preview",
     "gsc": "node --env-file=.env scripts/gsc-pull.mjs",
+    "gsc:reconcile": "node --env-file=.env scripts/gsc-manage.mjs",
     "lint": "yarn eslint \"src/**/*.{js,ts,astro}\"",
-    "format": "yarn prettier --plugin=prettier-plugin-astro --write .",
+    "format": "yarn prettier --plugin=prettier-plugin-astro --write \"**/*.{astro,css,html,js,json,md,mjs,ts}\"",
     "verify:production": "node scripts/check-production.mjs",
     "deploy": "yarn lint && yarn format && yarn build && aws s3 cp --cache-control \"public, max-age=86400\" --recursive dist/ s3://www2.isecure.fi/ && node scripts/upload-directory-indexes.mjs s3://www2.isecure.fi/ && aws cloudfront create-invalidation --distribution-id E2OQLWDIQMPMBP --paths \"/*\""
   },

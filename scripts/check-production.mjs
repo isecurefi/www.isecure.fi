@@ -43,6 +43,12 @@ const checks = [
     status: 301,
     location: "https://www.isecure.fi/en/",
   },
+  {
+    name: "Legacy thank-you page redirects to the current route",
+    url: "https://www.isecure.fi/thankyou.html?source=production-check",
+    status: 301,
+    location: "https://www.isecure.fi/thankyou/?source=production-check",
+  },
 ];
 
 let failures = 0;

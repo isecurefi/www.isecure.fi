@@ -54,16 +54,32 @@ CloudFront. Treat them as separate production surfaces.
 ## Analytics and lead handling
 
 - GA4 property tag: `G-BJ6B7H7K8E`.
-- Google Ads destination: `AW-1025469048`.
-- Load `gtag.js` once, then configure both destinations on the shared
-  `dataLayer`.
+- Google Ads is not in use. Do not restore the retired `AW-1025469048`
+  destination without an explicit advertising decision.
+- Load `gtag.js` once and use the shared `dataLayer` for analytics events.
 - Fire `generate_lead` only after the lead-delivery request succeeds.
 - Contact and early-access forms use the shared lead-delivery utility. Do not
   log or expose submitted personal data.
+- Cloudflare Turnstile must not be implemented as a client-only check. Route
+  form submissions through a server endpoint that validates the token with
+  Siteverify before publishing to SNS, and keep the Turnstile secret out of the
+  static bundle.
+
+## Search Console
+
+- The canonical sitemap submission is
+  `https://www.isecure.fi/sitemap-index.xml` for the `sc-domain:isecure.fi`
+  property.
+- Use `yarn gsc` for read-only search-performance pulls.
+- Use `yarn gsc:reconcile` to preview sitemap and URL-index status, and append
+  `--apply` only when deliberately removing the retired sitemap submissions and
+  resubmitting the canonical sitemap.
+- The URL Inspection API cannot request indexing for ordinary pages. Submit the
+  sitemap and use Search Console's manual request only when necessary.
 
 ## Validation
 
-Use the repository's Yarn version through Corepack and a supported Node version.
+Use the repository's Yarn version through Corepack and Node 22.12 or newer.
 
 ```sh
 corepack yarn lint
@@ -89,6 +105,10 @@ Production uses the existing S3/CloudFront workflow, not OpenAI Sites:
 - S3 bucket: `s3://www2.isecure.fi/`
 - CloudFront distribution: `E2OQLWDIQMPMBP`
 - Viewer-request function: `isecure-legacy-redirects`
+- CloudFront requires TLS 1.2 (`TLSv1.2_2021`) and advertises HTTP/2 and HTTP/3.
+- The legacy apex ALB HTTPS listener uses
+  `ELBSecurityPolicy-TLS13-1-2-Res-2021-06`; do not weaken it when changing
+  legacy routing.
 
 Build first, upload `dist/`, run `scripts/upload-directory-indexes.mjs`, and
 invalidate CloudFront. Do not use destructive S3 synchronization. Preserve
