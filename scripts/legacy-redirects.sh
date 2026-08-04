@@ -73,7 +73,8 @@ DOCS_TMP=$(mktemp)
 OPENAPI_TMP=$(mktemp)
 trap 'rm -f "$DOCS_TMP" "$OPENAPI_TMP"' EXIT
 test "$(curl -sS -o "$DOCS_TMP" -w '%{http_code}' https://www.isecure.fi/wsapi_v2/)" = 200
-grep -q 'Move bank files securely' "$DOCS_TMP"
+grep -q 'data-renderer="scalar"' "$DOCS_TMP"
+grep -q 'data-reference-only="true"' "$DOCS_TMP"
 test "$(curl -sS -o "$OPENAPI_TMP" -w '%{http_code}' https://www.isecure.fi/wsapi_v2.json)" = 200
 jq -e '.swagger == "2.0" and .info.version == "v2.7.0"' "$OPENAPI_TMP" >/dev/null
 

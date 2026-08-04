@@ -4,7 +4,7 @@ const checks = [
     url: "https://www.isecure.fi/wsapi_v2/",
     status: 200,
     contentType: "text/html",
-    contains: "Move bank files securely",
+    contains: ['data-renderer="scalar"', 'data-reference-only="true"'],
   },
   {
     name: "OpenAPI document is available",
@@ -88,9 +88,15 @@ for (const check of checks) {
     const contentTypeMatches =
       check.contentType === undefined ||
       contentType.includes(check.contentType);
-    const body = check.contains === undefined ? "" : await response.text();
+    const expectedContents = Array.isArray(check.contains)
+      ? check.contains
+      : check.contains === undefined
+        ? []
+        : [check.contains];
+    const body = expectedContents.length === 0 ? "" : await response.text();
     const bodyMatches =
-      check.contains === undefined || body.includes(check.contains);
+      expectedContents.length === 0 ||
+      expectedContents.every((expected) => body.includes(expected));
 
     if (
       !statusMatches ||
