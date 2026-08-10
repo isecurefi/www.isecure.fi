@@ -35,6 +35,44 @@ export function validateOpenApi(spec) {
     errors.push("Missing X-Api-Key security definition");
   }
 
+  const listCerts = spec.paths?.["/certs"]?.get;
+  const listCertsResponse = spec.definitions?.ListCertsResp;
+  const connection = spec.definitions?.BankConnectionDescriptor;
+  const connectionCertificate =
+    spec.definitions?.BankConnectionCertificateDescriptor;
+  if (
+    listCertsResponse?.properties?.Connections?.items?.["$ref"] !==
+    "#/definitions/BankConnectionDescriptor"
+  ) {
+    errors.push("ListCerts must expose typed bank Connections");
+  }
+  if (listCertsResponse?.required?.includes("Connections")) {
+    errors.push("ListCerts Connections must remain additive and optional");
+  }
+  if (connection?.properties?.Access?.enum?.join(",") !== "direct,shared") {
+    errors.push("Bank connection Access must be closed to direct or shared");
+  }
+  if (
+    connectionCertificate?.properties?.Purpose?.enum?.join(",") !==
+    "signing,encryption"
+  ) {
+    errors.push(
+      "Bank connection certificate Purpose must be closed to signing or encryption",
+    );
+  }
+  if (
+    !listCerts?.description?.includes(
+      "without exposing the linked owner or shared certificate material",
+    )
+  ) {
+    errors.push("ListCerts must state its shared-certificate privacy boundary");
+  }
+  if (
+    spec.definitions?.LoginMFAReq?.properties?.SetupTOTP?.type !== "boolean"
+  ) {
+    errors.push("LoginMFA SetupTOTP must be a boolean");
+  }
+
   const operationIds = new Set();
   let operationCount = 0;
 

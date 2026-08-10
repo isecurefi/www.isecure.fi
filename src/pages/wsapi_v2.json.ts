@@ -44,7 +44,10 @@ const result = await client.passwordReset(
   Challenge,
 );`,
   VerifyPhone: `const state = await client.verifyPhone("123456");`,
-  ListCerts: `const certificates = await client.listCerts();`,
+  ListCerts: `const { Connections = [] } = await client.listCerts();
+for (const connection of Connections) {
+  console.log(connection.Bank, connection.Access, connection.Certificates);
+}`,
   ConfigCerts: `const result = await client.configCerts({ Export: "disabled" });`,
   UnshareCerts: `const result = await client.unshareCerts("customer@example.com");`,
   ShareCerts: `const result = await client.shareCerts("customer@example.com");`,
