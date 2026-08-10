@@ -11,7 +11,7 @@ const checks = [
     url: "https://www.isecure.fi/wsapi_v2.json",
     status: 200,
     contentType: "application/json",
-    contains: '"version": "v2.7.0"',
+    contains: '"version": "v2.8.0"',
   },
   {
     name: "API service terms are available",
