@@ -3,6 +3,23 @@
 The public ISECure website and developer documentation, built as a static Astro
 site and published through Amazon S3 and CloudFront.
 
+## Product-content authority
+
+The sibling `bankfiles-platform` repository owns the target product strategy, dated competitive
+evidence, public-launch design, implementation tasks, conformance, and support status. In a shared
+workspace, start with:
+
+- `../bankfiles-platform/docs/reports/isecure-financial-action-control-plane.html`;
+- `../bankfiles-platform/docs/reports/competitive-landscape.html`;
+- `../bankfiles-platform/docs/public-website-product-launch-design.md`; and
+- the `WEBCLAIM-*`, `WEBSITE-*`, `WEBPUBLISH-*`, and `WEBGROWTH-*` outcomes in
+  `../bankfiles-platform/TASKS.md`.
+
+This repository implements the approved multilingual Astro presentation. It does not independently
+define product categories, competitor conclusions, availability, qualification, or regulatory
+claims. Existing WebServices pages remain the sold-product path until an exact reviewed task admits
+a new product route or homepage promotion.
+
 ## What is in this repository
 
 - Finnish marketing pages at `/`, English pages at `/en/`, and Swedish pages at

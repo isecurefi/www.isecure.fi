@@ -1,0 +1,14 @@
+---
+import DailyCashPage from "../../components/DailyCashPage.astro";
+import { languages } from "../../utils/languages";
+
+export function getStaticPaths() {
+  return languages
+    .filter((lang) => lang !== "fi")
+    .map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props;
+---
+
+<DailyCashPage lang={lang} />

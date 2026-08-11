@@ -1,0 +1,113 @@
+---
+import type { DailyCashContent } from "../data/dailyCash";
+
+interface Props {
+  copy: DailyCashContent["dashboard"];
+}
+
+const { copy } = Astro.props;
+const accounts = [
+  {
+    label: copy.accountLabels[0],
+    amount: "306 200.10 EUR",
+    status: copy.fresh,
+    stale: false,
+  },
+  {
+    label: copy.accountLabels[1],
+    amount: "175 050.33 EUR",
+    status: copy.fresh,
+    stale: false,
+  },
+  {
+    label: copy.accountLabels[2],
+    amount: "84 200.00 USD",
+    status: copy.stale,
+    stale: true,
+  },
+];
+---
+
+<aside
+  class="daily-cash-demo"
+  aria-label={copy.title}
+  data-synthetic-preview="true"
+>
+  <header class="demo-header">
+    <div>
+      <span class="demo-product">{copy.label}</span>
+      <h2>{copy.title}</h2>
+    </div>
+    <span class="demo-synthetic">{copy.synthetic}</span>
+  </header>
+
+  <div class="demo-as-of">{copy.asOf}</div>
+
+  <div class="demo-coverage">
+    <span class="coverage-mark" aria-hidden="true"></span>
+    <div>
+      <strong>{copy.coverage}</strong>
+      <span>{copy.coverageDetail}</span>
+    </div>
+  </div>
+
+  <section class="demo-position" aria-label={copy.entity}>
+    <span>{copy.entity}</span>
+    <div class="position-values">
+      <strong>481 250.43 <small>EUR</small></strong>
+      <strong>84 200.00 <small>USD</small></strong>
+    </div>
+  </section>
+
+  <section class="demo-block" aria-labelledby="demo-accounts-title">
+    <h3 id="demo-accounts-title">{copy.accounts}</h3>
+    <div class="demo-list">
+      {
+        accounts.map((account) => (
+          <div class="demo-account">
+            <span class="account-symbol" aria-hidden="true">
+              ▦
+            </span>
+            <div>
+              <strong>{account.label}</strong>
+              <span class:list={["source-state", { stale: account.stale }]}>
+                {account.status}
+              </span>
+            </div>
+            <strong class="account-amount">{account.amount}</strong>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="demo-block" aria-labelledby="demo-activity-title">
+    <h3 id="demo-activity-title">{copy.activity}</h3>
+    <div class="demo-list">
+      {
+        copy.activityRows.map((entry) => (
+          <div class="demo-entry">
+            <span
+              class:list={["entry-arrow", `entry-${entry.direction}`]}
+              aria-hidden="true"
+            >
+              {entry.direction === "in" ? "↓" : "↑"}
+            </span>
+            <div>
+              <strong>{entry.label}</strong>
+              <span>{entry.detail}</span>
+            </div>
+            <strong class:list={["entry-amount", `amount-${entry.direction}`]}>
+              {entry.amount}
+            </strong>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <footer class="demo-evidence">
+    <span aria-hidden="true">⌁</span>
+    {copy.evidence}
+  </footer>
+</aside>

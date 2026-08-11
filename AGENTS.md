@@ -4,6 +4,15 @@ This repository builds the public marketing site and WS Channel API reference
 at `https://www.isecure.fi`. It does **not** contain the operational PHP tools
 served from `https://isecure.fi`.
 
+Product direction and public claims are governed in the sibling `bankfiles-platform` repository.
+Before changing product navigation, homepage positioning, module availability, integration claims,
+or launch state, read its product north star, competitive landscape, public website product-launch
+design, and applicable `WEBCLAIM-*`/`WEBSITE-*`/`WEBPUBLISH-*`/`WEBGROWTH-*` task. Reuse the approved
+category, hero, and differentiator roles rather than inventing another slogan or taxonomy. This
+repository owns presentation and publication implementation only; platform conformance and
+compatibility own support status. A draft, generated contract, synthetic example, or competitor gap
+is never a public availability or superiority claim.
+
 ## Project structure
 
 - Astro static site with Finnish at `/`, English at `/en/`, and Swedish at

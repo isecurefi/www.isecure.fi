@@ -88,6 +88,60 @@ for (const file of htmlFiles) {
   }
 }
 
+const dailyCashPages = [
+  ["daily-cash/index.html", "/daily-cash/", "fi"],
+  ["en/daily-cash/index.html", "/en/daily-cash/", "en"],
+  ["se/daily-cash/index.html", "/se/daily-cash/", "sv"],
+];
+for (const [relativeFile, canonicalPath, htmlLang] of dailyCashPages) {
+  const file = join(dist, relativeFile);
+  if (!existsSync(file)) {
+    failures.push(`Daily Cash preview: missing ${relativeFile}`);
+    continue;
+  }
+  const html = readFileSync(file, "utf8");
+  if (!html.includes('<meta name="robots" content="noindex, nofollow">')) {
+    failures.push(`${relativeFile}: preview must remain noindex and nofollow`);
+  }
+  if (
+    !html.includes(
+      `rel="canonical" href="https://www.isecure.fi${canonicalPath}"`,
+    )
+  ) {
+    failures.push(`${relativeFile}: wrong Daily Cash canonical URL`);
+  }
+  if (!html.includes(`<html lang="${htmlLang}"`)) {
+    failures.push(`${relativeFile}: wrong document language`);
+  }
+  if (!html.includes('data-synthetic-preview="true"')) {
+    failures.push(`${relativeFile}: synthetic product-data marker is missing`);
+  }
+  if (/schema\.org\/(?:InStock|PreOrder)/iu.test(html)) {
+    failures.push(
+      `${relativeFile}: preview must not publish an availability claim`,
+    );
+  }
+}
+
+for (const entryPage of ["index.html", "en/index.html", "se/index.html"]) {
+  const html = readFileSync(join(dist, entryPage), "utf8");
+  if (/href="\/(?:en\/|se\/)?daily-cash\//u.test(html)) {
+    failures.push(
+      `${entryPage}: Daily Cash must remain outside public navigation`,
+    );
+  }
+}
+
+for (const sitemapFile of findFiles(dist, ".xml").filter((file) =>
+  file.includes("sitemap"),
+)) {
+  if (readFileSync(sitemapFile, "utf8").includes("/daily-cash/")) {
+    failures.push(
+      `${relative(dist, sitemapFile)}: Daily Cash preview must remain outside sitemaps`,
+    );
+  }
+}
+
 const docsPath = join(dist, "wsapi_v2", "index.html");
 const docs = readFileSync(docsPath, "utf8");
 const docsSource = readFileSync(

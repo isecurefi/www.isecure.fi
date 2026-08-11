@@ -1,0 +1,213 @@
+---
+import { dailyCashContent } from "../data/dailyCash";
+import Layout from "../layouts/Layout.astro";
+import "../styles/DailyCash.css";
+import type { Lang } from "../types";
+import DailyCashPositionPreview from "./DailyCashPositionPreview.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const copy = dailyCashContent[lang];
+const origin = "https://www.isecure.fi";
+const route = lang === "fi" ? "/daily-cash/" : `/${lang}/daily-cash/`;
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}/daily-cash/` },
+  { hreflang: "en", href: `${origin}/en/daily-cash/` },
+  { hreflang: "sv", href: `${origin}/se/daily-cash/` },
+  { hreflang: "x-default", href: `${origin}/en/daily-cash/` },
+];
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${origin}${route}#webpage`,
+  url: `${origin}${route}`,
+  name: copy.meta.title,
+  description: copy.meta.description,
+  inLanguage: lang === "en" ? "en-US" : lang === "se" ? "sv-SE" : "fi-FI",
+  about: {
+    "@type": "Thing",
+    name: "Daily Cash product-development preview",
+    description:
+      "A non-production preview of bank-statement-based cash visibility.",
+  },
+  publisher: { "@id": "https://www.isecure.fi/#organization" },
+};
+---
+
+<Layout
+  title={copy.meta.title}
+  description={copy.meta.description}
+  socialDescription={copy.meta.description}
+  canonicalUrl={`${origin}${route}`}
+  alternateLinks={alternateLinks}
+  structuredData={structuredData}
+  robots="noindex, nofollow"
+  lang={lang}
+  fullWidth={true}
+  bodyClass="banking-theme-page daily-cash-product-page"
+>
+  <article class="daily-cash-landing">
+    <div class="preview-ribbon" role="note">
+      <span aria-hidden="true"></span>
+      {copy.previewLabel}
+    </div>
+
+    <header class="daily-cash-hero">
+      <div class="daily-cash-shell hero-layout">
+        <div class="hero-copy">
+          <p class="section-eyebrow">{copy.hero.eyebrow}</p>
+          <h1>{copy.hero.title}</h1>
+          <p class="hero-lead">{copy.hero.lead}</p>
+          <div class="hero-actions">
+            <a class="cash-button cash-button-primary" href="#daily-cash-how"
+              >{copy.hero.primaryAction}</a
+            >
+            <a
+              class="cash-button cash-button-secondary"
+              href="#daily-cash-status">{copy.hero.secondaryAction}</a
+            >
+          </div>
+          <p class="hero-qualifier">
+            <span aria-hidden="true">i</span>{copy.hero.qualifier}
+          </p>
+        </div>
+        <DailyCashPositionPreview copy={copy.dashboard} />
+      </div>
+    </header>
+
+    <section class="plain-section">
+      <div class="daily-cash-shell plain-layout">
+        <p class="section-eyebrow">{copy.plain.eyebrow}</p>
+        <div>
+          <h2>{copy.plain.title}</h2>
+          <p>{copy.plain.body}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="daily-cash-section value-section">
+      <div class="daily-cash-shell">
+        <p class="section-eyebrow">{copy.value.eyebrow}</p>
+        <h2>{copy.value.title}</h2>
+        <div class="value-grid">
+          {
+            copy.value.items.map((item, index) => (
+              <article class="value-card">
+                <span class="value-index">0{index + 1}</span>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="daily-cash-section how-section" id="daily-cash-how">
+      <div class="daily-cash-shell">
+        <p class="section-eyebrow">{copy.how.eyebrow}</p>
+        <h2>{copy.how.title}</h2>
+        <ol class="process-grid">
+          {
+            copy.how.steps.map((step) => (
+              <li>
+                <span>{step.number}</span>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="daily-cash-section essentials-section">
+      <div class="daily-cash-shell essentials-layout">
+        <div class="essentials-intro">
+          <p class="section-eyebrow">{copy.essentials.eyebrow}</p>
+          <h2>{copy.essentials.title}</h2>
+          <p>{copy.essentials.lead}</p>
+        </div>
+        <dl class="essentials-list">
+          {
+            copy.essentials.rows.map((row) => (
+              <div>
+                <dt>{row.capability}</dt>
+                <dd>{row.answer}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <section class="daily-cash-section trust-section">
+      <div class="daily-cash-shell">
+        <p class="section-eyebrow">{copy.trust.eyebrow}</p>
+        <h2>{copy.trust.title}</h2>
+        <div class="trust-grid">
+          {
+            copy.trust.items.map((item) => (
+              <article>
+                <span class="trust-mark" aria-hidden="true">
+                  ✓
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="daily-cash-section status-section" id="daily-cash-status">
+      <div class="daily-cash-shell status-panel">
+        <div class="status-copy">
+          <span class="status-label">{copy.status.label}</span>
+          <h2>{copy.status.title}</h2>
+          <p>{copy.status.body}</p>
+          <a class="cash-button cash-button-primary" href="#contact"
+            >{copy.status.action}</a
+          >
+        </div>
+        <div class="status-lists">
+          <div>
+            <h3>{copy.status.included}</h3>
+            <ul class="included-list">
+              {copy.status.includedItems.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h3>{copy.status.excluded}</h3>
+            <ul class="excluded-list">
+              {copy.status.excludedItems.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="daily-cash-section faq-section">
+      <div class="daily-cash-shell faq-layout">
+        <div>
+          <p class="section-eyebrow">{copy.faq.eyebrow}</p>
+          <h2>{copy.faq.title}</h2>
+        </div>
+        <div class="faq-list">
+          {
+            copy.faq.items.map((item) => (
+              <details>
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </article>
+</Layout>

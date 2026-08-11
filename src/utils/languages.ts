@@ -30,27 +30,9 @@ export function getLanguageFromUrl(url: URL | null): Lang {
 }
 
 export function getLocalizedPathname(pathname: string, lang: Lang): string {
-  // Special case for root path with Finnish language
-  if (lang === "fi") {
-    if (
-      pathname === "/" ||
-      pathname === "/index.html" ||
-      pathname === "/fi/index.html" ||
-      pathname === "/fi"
-    ) {
-      return "/";
-    }
-    // Remove /fi/ prefix for Finnish URLs and ensure index.html
-    const cleanPath = pathname.replace(/^\/fi\//, "/");
-    // Add index.html if it's a directory path
-    return cleanPath.endsWith("/") ? `${cleanPath}index.html` : cleanPath;
-  }
-
-  // Remove existing language prefix if present
-  const cleanPath = pathname.replace(/^\/(fi|en|se)/, "");
-
-  // For non-Finnish languages or non-root paths, include language prefix and index.html
-  const path = lang === "fi" ? cleanPath : `/${lang}${cleanPath}`;
-  // Add index.html if it's a directory path
-  return path.endsWith("/") ? `${path}index.html` : path;
+  const withoutIndex = pathname.replace(/\/index\.html$/u, "/");
+  const withoutLanguage = withoutIndex.replace(/^\/(?:fi|en|se)(?=\/|$)/u, "");
+  const contentPath = withoutLanguage === "" ? "/" : withoutLanguage;
+  const localized = lang === "fi" ? contentPath : `/${lang}${contentPath}`;
+  return localized.endsWith("/") ? localized : `${localized}/`;
 }
