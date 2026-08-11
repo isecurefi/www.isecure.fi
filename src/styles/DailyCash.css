@@ -49,6 +49,22 @@ body.daily-cash-product-page .footer-logo img {
   padding: 0.2rem 0.35rem;
 }
 
+body.daily-cash-product-page .footer strong,
+body.daily-cash-product-page .footer span,
+body.daily-cash-product-page .footer p {
+  color: var(--landing-muted) !important;
+}
+
+body.daily-cash-product-page .footer strong,
+body.daily-cash-product-page .footer a {
+  color: var(--landing-ink) !important;
+}
+
+body.daily-cash-product-page .footer a:hover,
+body.daily-cash-product-page .footer a:focus-visible {
+  color: var(--landing-primary-bg) !important;
+}
+
 body.daily-cash-product-page .site-theme-toggle {
   align-items: center;
   background: var(--landing-soft);
