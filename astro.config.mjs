@@ -12,6 +12,7 @@ export default defineConfig({
       filter: (page) =>
         !page.includes("/thankyou/") &&
         !page.includes("/daily-cash/") &&
+        !page.includes("/invoicing/") &&
         !page.includes("/ws-api/") &&
         !page.includes("/ws-channel/") &&
         !page.includes("/images/logo-candidates/"),

@@ -875,36 +875,6 @@ const t = content[lang];
   </section>
 </article>
 
-<script is:inline>
-  (() => {
-    if (!document.body.classList.contains("banking-theme-page")) return;
-
-    const savedTheme = localStorage.getItem("isecure-banking-theme");
-    const initialTheme = savedTheme === "dark" ? "dark" : "light";
-    const buttons = document.querySelectorAll("[data-theme-choice]");
-
-    function setTheme(theme) {
-      document.documentElement.dataset.isecureTheme = theme;
-      document.body.dataset.isecureTheme = theme;
-      buttons.forEach((button) => {
-        button.setAttribute(
-          "aria-pressed",
-          button.dataset.themeChoice === theme ? "true" : "false",
-        );
-      });
-      localStorage.setItem("isecure-banking-theme", theme);
-    }
-
-    buttons.forEach((button) => {
-      button.addEventListener("click", () =>
-        setTheme(button.dataset.themeChoice),
-      );
-    });
-
-    setTheme(initialTheme);
-  })();
-</script>
-
 <style>
   :global(html.banking-theme-root),
   :global(body.banking-theme-page) {

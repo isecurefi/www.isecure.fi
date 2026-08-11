@@ -123,11 +123,85 @@ for (const [relativeFile, canonicalPath, htmlLang] of dailyCashPages) {
   }
 }
 
+const invoicingPages = [
+  [
+    "invoicing/index.html",
+    "/invoicing/",
+    "fi",
+    "Maksun toimeenpano",
+    "Asiakirja ≠ hyväksyntä ≠ maksu ≠ selvitys ≠ kirjanpito",
+  ],
+  [
+    "en/invoicing/index.html",
+    "/en/invoicing/",
+    "en",
+    "Payment execution",
+    "Document ≠ approval ≠ payment ≠ settlement ≠ bookkeeping",
+  ],
+  [
+    "se/invoicing/index.html",
+    "/se/invoicing/",
+    "sv",
+    "Betalningsutförande",
+    "Dokument ≠ godkännande ≠ betalning ≠ avveckling ≠ bokföring",
+  ],
+];
+for (const [
+  relativeFile,
+  canonicalPath,
+  htmlLang,
+  paymentExecution,
+  lifecycleBoundary,
+] of invoicingPages) {
+  const file = join(dist, relativeFile);
+  if (!existsSync(file)) {
+    failures.push(`Invoicing preview: missing ${relativeFile}`);
+    continue;
+  }
+  const html = readFileSync(file, "utf8");
+  if (!html.includes('<meta name="robots" content="noindex, nofollow">')) {
+    failures.push(`${relativeFile}: preview must remain noindex and nofollow`);
+  }
+  if (
+    !html.includes(
+      `rel="canonical" href="https://www.isecure.fi${canonicalPath}"`,
+    )
+  ) {
+    failures.push(`${relativeFile}: wrong Invoicing canonical URL`);
+  }
+  if (!html.includes(`<html lang="${htmlLang}"`)) {
+    failures.push(`${relativeFile}: wrong document language`);
+  }
+  if (!html.includes('data-synthetic-preview="true"')) {
+    failures.push(`${relativeFile}: synthetic product-data marker is missing`);
+  }
+  if (!html.includes(paymentExecution)) {
+    failures.push(
+      `${relativeFile}: payment execution must remain a separate lifecycle state`,
+    );
+  }
+  if (!html.includes(lifecycleBoundary)) {
+    failures.push(
+      `${relativeFile}: localized lifecycle-boundary warning is missing`,
+    );
+  }
+  if (/schema\.org\/(?:InStock|PreOrder)/iu.test(html)) {
+    failures.push(
+      `${relativeFile}: preview must not publish an availability claim`,
+    );
+  }
+}
+
 for (const entryPage of ["index.html", "en/index.html", "se/index.html"]) {
   const html = readFileSync(join(dist, entryPage), "utf8");
   if (/href="\/(?:en\/|se\/)?daily-cash\//u.test(html)) {
     failures.push(
       `${entryPage}: Daily Cash must remain outside public navigation`,
+    );
+  }
+  if (/href="\/(?:en\/|se\/)?invoicing\//u.test(html)) {
+    failures.push(
+      `${entryPage}: Invoicing must remain outside public navigation`,
     );
   }
 }
@@ -138,6 +212,11 @@ for (const sitemapFile of findFiles(dist, ".xml").filter((file) =>
   if (readFileSync(sitemapFile, "utf8").includes("/daily-cash/")) {
     failures.push(
       `${relative(dist, sitemapFile)}: Daily Cash preview must remain outside sitemaps`,
+    );
+  }
+  if (readFileSync(sitemapFile, "utf8").includes("/invoicing/")) {
+    failures.push(
+      `${relative(dist, sitemapFile)}: Invoicing preview must remain outside sitemaps`,
     );
   }
 }

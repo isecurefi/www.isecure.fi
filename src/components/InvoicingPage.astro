@@ -1,0 +1,175 @@
+---
+import { invoicingContent } from "../data/invoicing";
+import Layout from "../layouts/Layout.astro";
+import "../styles/Invoicing.css";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const copy = invoicingContent[lang];
+const origin = "https://www.isecure.fi";
+const route = lang === "fi" ? "/invoicing/" : `/${lang}/invoicing/`;
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}/invoicing/` },
+  { hreflang: "en", href: `${origin}/en/invoicing/` },
+  { hreflang: "sv", href: `${origin}/se/invoicing/` },
+  { hreflang: "x-default", href: `${origin}/en/invoicing/` },
+];
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${origin}${route}#webpage`,
+  url: `${origin}${route}`,
+  name: copy.meta.title,
+  description: copy.meta.description,
+  inLanguage: lang === "en" ? "en-US" : lang === "se" ? "sv-SE" : "fi-FI",
+  about: {
+    "@type": "Thing",
+    name: "ISECure Invoicing product-development preview",
+    description:
+      "A non-production synthetic preview of an evidence-linked invoice workbench.",
+  },
+  publisher: { "@id": "https://www.isecure.fi/#organization" },
+};
+---
+
+<Layout
+  title={copy.meta.title}
+  description={copy.meta.description}
+  socialDescription={copy.meta.description}
+  canonicalUrl={`${origin}${route}`}
+  alternateLinks={alternateLinks}
+  structuredData={structuredData}
+  robots="noindex, nofollow"
+  lang={lang}
+  fullWidth={true}
+  bodyClass="banking-theme-page invoicing-product-page"
+>
+  <article class="invoicing-landing" data-synthetic-preview="true">
+    <div class="invoice-preview-ribbon" role="note">
+      <span aria-hidden="true"></span>{copy.previewLabel}
+    </div>
+
+    <header class="invoice-hero">
+      <div class="invoice-shell invoice-hero-layout">
+        <div class="invoice-hero-copy">
+          <p class="invoice-eyebrow">{copy.hero.eyebrow}</p>
+          <h1>{copy.hero.title}</h1>
+          <p class="invoice-lead">{copy.hero.lead}</p>
+          <a class="invoice-button" href="#invoice-workflow"
+            >{copy.hero.action}</a
+          >
+          <p class="invoice-qualifier">
+            <span aria-hidden="true">i</span>{copy.hero.qualifier}
+          </p>
+        </div>
+        <section class="invoice-mock" aria-label={copy.mock.synthetic}>
+          <div class="invoice-mock-topline">
+            <div>
+              <span>{copy.mock.label}</span><strong
+                >{copy.mock.synthetic}</strong
+              >
+            </div>
+            <span class="invoice-mock-status">{copy.mock.previewState}</span>
+          </div>
+          <nav aria-label={copy.mock.label}>
+            <span class="active">{copy.mock.incoming}</span>
+            <span>{copy.mock.outgoing}</span>
+            <span>{copy.mock.due}</span>
+          </nav>
+          <div class="invoice-mock-head">
+            <span>{copy.mock.invoice}</span><span>{copy.mock.counterparty}</span
+            ><span>{copy.mock.amount}</span><span>{copy.mock.state}</span>
+          </div>
+          <div class="invoice-mock-row">
+            <strong>FI-2026-00421</strong><span>Northwind Logistics</span><span
+              >12 400,00 EUR</span
+            ><b>{copy.mock.due}</b>
+          </div>
+          <div class="invoice-mock-row">
+            <strong>DRAFT-2026-0007</strong><span>Contoso Finland</span><span
+              >3 250,00 EUR</span
+            ><b>{copy.mock.draft}</b>
+          </div>
+          <div class="invoice-mock-row">
+            <strong>WOOD-2026-1337</strong><span>Woodgrove Services</span><span
+              >1 590,00 EUR</span
+            ><b>{copy.mock.settled}</b>
+          </div>
+          <footer>{copy.mock.boundary}</footer>
+        </section>
+      </div>
+    </header>
+
+    <section class="invoice-plain-section">
+      <div class="invoice-shell invoice-plain-layout">
+        <p class="invoice-eyebrow">{copy.plain.eyebrow}</p>
+        <div><h2>{copy.plain.title}</h2><p>{copy.plain.body}</p></div>
+      </div>
+    </section>
+
+    <section class="invoice-section" id="invoice-workflow">
+      <div class="invoice-shell">
+        <p class="invoice-eyebrow">{copy.profiles.eyebrow}</p>
+        <h2>{copy.profiles.title}</h2>
+        <div class="invoice-profile-grid">
+          {
+            copy.profiles.items.map((item, index) => (
+              <article>
+                <>
+                  <span>0{index + 1}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                </>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="invoice-section invoice-lifecycle-section">
+      <div class="invoice-shell">
+        <p class="invoice-eyebrow">{copy.lifecycle.eyebrow}</p>
+        <h2>{copy.lifecycle.title}</h2>
+        <p class="invoice-section-lead">{copy.lifecycle.lead}</p>
+        <ol class="invoice-stage-list">
+          {
+            copy.lifecycle.stages.map((stage, index) => (
+              <li>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {stage}
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="invoice-section invoice-status-section">
+      <div class="invoice-shell invoice-status-panel">
+        <div>
+          <span class="invoice-status-label">{copy.status.label}</span>
+          <h2>{copy.status.title}</h2>
+          <p>{copy.status.body}</p>
+          <a class="invoice-button" href="#contact">{copy.status.action}</a>
+        </div>
+        <div class="invoice-status-lists">
+          <section>
+            <h3>{copy.status.included}</h3><ul>
+              {copy.status.includedItems.map((item) => <li>{item}</li>)}
+            </ul>
+          </section>
+          <section>
+            <h3>{copy.status.excluded}</h3><ul class="invoice-excluded">
+              {copy.status.excludedItems.map((item) => <li>{item}</li>)}
+            </ul>
+          </section>
+        </div>
+      </div>
+    </section>
+  </article>
+</Layout>
