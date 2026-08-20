@@ -1,5 +1,5 @@
 ---
-import { getDeveloperSurface } from "../data/productRegistry";
+import { getCatalogRecord } from "../data/productRegistry";
 import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import type { Lang } from "../types";
 import CatalogAccessSummary from "./CatalogAccessSummary.astro";
@@ -9,130 +9,128 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const surface = getDeveloperSurface("processing-api");
-const contactHref = lang === "fi" ? "/#contact" : `/${lang}/#contact`;
+const record = getCatalogRecord("processing-api");
 const exampleUrl =
   "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-manual-upload/README.md";
 const copy = {
   fi: {
-    eyebrow: "Erillinen Processing API",
-    heading: "Muodosta hyväksyttävä pain.001 hallitusta maksuerästä",
-    lead: "Processing API on erillinen rajapinta maksuerän luontiin, validointiin, hyväksyntään sekä tarkan pain.001.001.09-aineiston muodostamiseen ja lataamiseen. Se ei muuta tuotannossa olevaa ISECure REST API:a tai sen File Exchange -operaatioita.",
-    statusTitle: "Tarkka vaihe ja pääsy",
+    eyebrow: "Processing API",
+    heading: "Valmistele pankin maksuaineistot hallitusti",
+    lead: "Processing API auttaa ohjelmistoasi muodostamaan pankille lähetettävän maksuaineiston hallitulla työnkululla. Se tarkistaa maksutiedot, lukitsee hyväksytyn version ja antaa sovelluksesi ladata täsmälleen saman tiedoston allekirjoitusta ja pankkiin lähettämistä varten.",
+    statusTitle: "Tuotevaihe ja käyttöoikeus",
     statusText:
-      "Maksuaineiston muodostava lähdekoodi ja TypeScript SDK -polku on toteutettu. Testiympäristön pätevöinti on kesken. Tämä ei ole tuotantosaatavuus-, pankkituki- tai palvelutasolupaus.",
-    accessLabel: "Pyydä Processing API:n käyttöoikeus",
-    flowTitle: "Mitä työnkulku tekee",
+      "Processing API on saatavilla ISECuren testiympäristössä tilausasiakkaille pyynnöstä. Tuote on Experimental-vaiheessa, ja pankki- ja maakohtaisten maksuaineistojen pätevöinti jatkuu. Tuotantokäyttöä, pankkitukea tai palvelutasoa ei vielä luvata.",
+    flowTitle: "Näin maksuaineisto valmistuu",
     flow: [
-      "Listaa käyttäjälle sallitut pankki- ja maakohtaiset maksuvientiprofiilit.",
-      "Luo maksuerä, lisää tai korjaa maksuja sekä validoi ja viimeistele muuttumaton versio.",
-      "Muodostaa ja validoi tarkan pain.001.001.09-aineiston ennen erillistä ihmishyväksyntää.",
-      "Tarkistaa valtuudet uudelleen, vapauttaa samat muuttumattomat tavut ja lataa ne TypeScript SDK:n tarkistamina.",
+      "Valitse pankille ja maalle sopiva maksuaineiston muoto käyttäjän käyttöoikeuksien rajoissa.",
+      "Luo maksuerä ja lisää tai korjaa siihen kuuluvat maksut.",
+      "Tarkista pakolliset tiedot ja lukitse yksi muuttumaton versio henkilön hyväksyttäväksi.",
+      "Lataa hyväksynnän jälkeen täsmälleen sama tiedosto. Nykyinen tekninen tulostusmuoto on ISO 20022 pain.001.001.09, ja TypeScript SDK tarkistaa, ettei ladattu tiedosto ole muuttunut.",
     ],
-    boundaryTitle: "Eri rajapinta ja eri vastuu",
+    boundaryTitle: "Mihin Processing API:n vastuu päättyy",
     boundaries: [
-      "Processing API käyttää omaa API Gatewayta ja omaa audience-rajattua istuntoa. File Exchange -istuntoa ei voi käyttää siihen.",
-      "ISECure REST API — File Exchange hoitaa erikseen varmenteet sekä pankkitiedostojen listauksen, latauksen ja lähetyksen.",
-      "Processing API ei vastaanota asiakkaan OpenPGP-yksityisavainta eikä lähetä maksua pankkiin.",
-      "Hyväksyntä tarkoittaa tarkan aineiston hyväksyntää, ei pankin hyväksyntää tai toteutunutta maksua.",
+      "Processing API ja Bank Connectivity käyttävät erillisiä kirjautumisistuntoja.",
+      "Bank Connectivity hoitaa erikseen pankkivarmenteet sekä pankkitiedostojen listauksen, latauksen ja lähetyksen.",
+      "Asiakkaan yksityinen allekirjoitusavain säilyy omassa sovelluksessa. Processing API ei vastaanota avainta eikä lähetä maksua pankkiin.",
+      "ISECuren työnkulussa annettu hyväksyntä koskee valmisteltua tiedostoa. Se ei ole pankin hyväksyntä eikä todiste toteutuneesta maksusta.",
     ],
-    relationshipTitle: "Miten rajapinnat liittyvät toisiinsa",
+    relationshipTitle:
+      "Miten Processing API ja Bank Connectivity toimivat yhdessä",
     processingLabel: "Processing API",
-    processing: "Luo ja vapauttaa tarkan pain.001-aineiston.",
-    localLabel: "Paikallinen sovellus",
-    local: "Tarkistaa ja allekirjoittaa samat tavut asiakkaan hallinnassa.",
-    exchangeLabel: "ISECure REST API — File Exchange",
+    processing: "Luo ja vapauttaa tarkistetun maksuaineiston.",
+    localLabel: "Asiakkaan sovellus",
+    local:
+      "Tarkistaa ja allekirjoittaa ladatun tiedoston asiakkaan hallinnassa.",
+    exchangeLabel: "Bank Connectivity",
     exchange:
-      "Siirtää allekirjoitetun tiedoston pankkiin erillisen valtuutuksen ja pankkisopimuksen rajoissa.",
+      "Siirtää allekirjoitetun tiedoston pankkiin erillisen käyttöoikeuden ja pankkisopimuksen rajoissa.",
     transport:
-      "Pankkikohtaiset kanavat kuuluvat erilliseen Secure Transport -kerrokseen. Suunniteltu EBICS-tuki ei tarkoita nykyistä pankki- tai tuotantotukea.",
+      "Pankkiin lähettäminen edellyttää erillistä Bank Connectivity -käyttöoikeutta, asiakkaan pankkisopimusta ja tuettua pankkiyhteyttä.",
     exampleTitle: "Aja valmis TypeScript-esimerkki",
     exampleText:
-      "Esimerkki käyttää erillisiä Processing- ja File Exchange -istuntoja, lataa tarkistetun pain.001-aineiston, allekirjoittaa sen paikallisesti ja tekee yhden erikseen vahvistetun lähetyksen.",
+      "Esimerkki valmistelee ja lataa tarkistetun maksuaineiston, allekirjoittaa sen asiakkaan sovelluksessa ja lähettää sen pankkiin vasta erillisen vahvistuksen jälkeen.",
     exampleLabel: "Avaa Processing API -esimerkki",
-    docsLabel: "Avaa tuotannon File Exchange API -dokumentaatio",
+    docsLabel: "Avaa Bank Connectivity -rajapinnan dokumentaatio",
   },
   en: {
-    eyebrow: "Separate Processing API",
-    heading: "Generate an approvable pain.001 from a governed payment batch",
-    lead: "Processing API is a separate interface for creating, validating, and approving a payment batch and generating and downloading exact pain.001.001.09. It does not change the production ISECure REST API or its File Exchange operations.",
-    statusTitle: "Exact stage and access",
+    eyebrow: "Processing API",
+    heading: "Prepare bank payment files with control and approval",
+    lead: "Processing API helps your software prepare bank payment files through a controlled workflow. It checks the payment details, locks the approved version, and lets your application download the exact same file for signing and delivery to the bank.",
+    statusTitle: "Product stage and access",
     statusText:
-      "The payment-export implementation and TypeScript SDK path exist. Test-environment qualification is still in progress. This is not a production-availability, bank-support, or service-level claim.",
-    accessLabel: "Request Processing API access",
-    flowTitle: "What the workflow does",
+      "Processing API is available in the ISECure test environment to subscribed customers by request. The product is Experimental, and qualification of bank- and country-specific payment files is still in progress. Production use, bank support, and service levels are not yet promised.",
+    flowTitle: "How a payment file is prepared",
     flow: [
-      "Lists the bank- and country-specific payment-export profiles admitted for the user.",
-      "Creates a payment batch, adds or corrects transfers, and validates and finalizes an immutable revision.",
-      "Generates and validates exact pain.001.001.09 before separate human approval.",
-      "Rechecks authority, releases the same immutable bytes, and downloads them with TypeScript SDK integrity verification.",
+      "Choose the payment-file format for the bank and country within the user's access rights.",
+      "Create a payment batch and add or correct its payments.",
+      "Check the required details and lock one unchanged version for a person to approve.",
+      "After approval, download the exact same file. The current technical output is ISO 20022 pain.001.001.09, and the TypeScript SDK verifies that the downloaded file has not changed.",
     ],
-    boundaryTitle: "A separate API with a separate responsibility",
+    boundaryTitle: "Where Processing API's responsibility ends",
     boundaries: [
-      "Processing API has its own API Gateway and audience-bound session. A File Exchange session cannot be used for it.",
-      "ISECure REST API — File Exchange separately owns certificates and bank-file listing, download, and upload.",
-      "Processing API never receives the customer's OpenPGP private key and does not submit the payment to a bank.",
-      "Approval means approval of the exact file—not bank authorization or a completed payment.",
+      "Processing API and Bank Connectivity use separate sign-in sessions.",
+      "Bank Connectivity separately handles bank certificates and bank-file listing, download, and upload.",
+      "The customer's private signing key stays in their own application. Processing API never receives the key and does not submit a payment to a bank.",
+      "Approval in the ISECure workflow applies to the prepared file. It is not bank authorization or proof of a completed payment.",
     ],
-    relationshipTitle: "How the interfaces work together",
+    relationshipTitle: "How Processing API works with Bank Connectivity",
     processingLabel: "Processing API",
-    processing: "Creates and releases the exact pain.001 file.",
-    localLabel: "Local application",
-    local: "Verifies and signs those same bytes under the customer's control.",
-    exchangeLabel: "ISECure REST API — File Exchange",
+    processing: "Creates and releases the checked payment file.",
+    localLabel: "Customer application",
+    local:
+      "Verifies and signs the downloaded file under the customer's control.",
+    exchangeLabel: "Bank Connectivity",
     exchange:
-      "Transports the signed file to the bank under separate authorization and the customer's bank agreement.",
+      "Sends the signed file to the bank under separate access rights and the customer's bank agreement.",
     transport:
-      "Bank-specific channels belong to the separate Secure Transport layer. Planned EBICS work does not imply current bank or production support.",
+      "Sending to a bank requires separate Bank Connectivity access, the customer's bank agreement, and a supported bank connection.",
     exampleTitle: "Run the complete TypeScript example",
     exampleText:
-      "The example uses separate Processing and File Exchange sessions, downloads the verified pain.001 file, signs it locally, and performs one explicitly confirmed upload.",
+      "The example prepares and downloads a checked payment file, signs it in the customer's application, and sends it to the bank only after separate confirmation.",
     exampleLabel: "Open the Processing API example",
-    docsLabel: "Open the production File Exchange API documentation",
+    docsLabel: "Open the Bank Connectivity API documentation",
   },
   se: {
-    eyebrow: "Separat Processing API",
-    heading:
-      "Generera en pain.001 som kan godkännas från en styrd betalningsbatch",
-    lead: "Processing API är ett separat gränssnitt för att skapa, validera och godkänna en betalningsbatch samt generera och hämta exakt pain.001.001.09. Det ändrar inte ISECure REST API i produktion eller dess File Exchange-operationer.",
-    statusTitle: "Exakt fas och åtkomst",
+    eyebrow: "Processing API",
+    heading: "Förbered bankens betalningsfiler med kontroll och godkännande",
+    lead: "Processing API hjälper er programvara att skapa betalningsfiler för banken i ett kontrollerat flöde. Det kontrollerar betalningsuppgifterna, låser den godkända versionen och låter er applikation hämta exakt samma fil för signering och överföring till banken.",
+    statusTitle: "Produktfas och åtkomst",
     statusText:
-      "Implementationen för betalningsexport och TypeScript SDK-flödet finns. Kvalificeringen av testmiljön pågår fortfarande. Detta är inget löfte om produktionstillgänglighet, bankstöd eller servicenivå.",
-    accessLabel: "Begär åtkomst till Processing API",
-    flowTitle: "Vad arbetsflödet gör",
+      "Processing API är tillgängligt i ISECures testmiljö för prenumerationskunder på begäran. Produkten är i Experimental-fasen och kvalificeringen av bank- och landsspecifika betalningsfiler pågår. Detta är ännu inget löfte om produktion, bankstöd eller servicenivå.",
+    flowTitle: "Så förbereds en betalningsfil",
     flow: [
-      "Listar bank- och landsspecifika betalningsexportprofiler som användaren har tillgång till.",
-      "Skapar en betalningsbatch, lägger till eller korrigerar betalningar samt validerar och slutför en oföränderlig revision.",
-      "Genererar och validerar exakt pain.001.001.09 före ett separat mänskligt godkännande.",
-      "Kontrollerar behörigheten på nytt, frigör samma oföränderliga byte och hämtar dem med integritetskontroll i TypeScript SDK:t.",
+      "Välj betalningsfilens format för banken och landet inom användarens åtkomsträttigheter.",
+      "Skapa en betalningsbatch och lägg till eller korrigera dess betalningar.",
+      "Kontrollera de obligatoriska uppgifterna och lås en oförändrad version som en person kan godkänna.",
+      "Hämta exakt samma fil efter godkännandet. Det nuvarande tekniska utdataformatet är ISO 20022 pain.001.001.09, och TypeScript SDK:t kontrollerar att den hämtade filen inte har ändrats.",
     ],
-    boundaryTitle: "Ett separat API med ett separat ansvar",
+    boundaryTitle: "Var Processing API:s ansvar slutar",
     boundaries: [
-      "Processing API har en egen API Gateway och en separat audience-bunden session. En File Exchange-session kan inte användas.",
-      "ISECure REST API — File Exchange ansvarar separat för certifikat samt listning, hämtning och uppladdning av bankfiler.",
-      "Processing API tar aldrig emot kundens privata OpenPGP-nyckel och skickar inte betalningen till banken.",
-      "Godkännande betyder godkännande av den exakta filen, inte bankens auktorisering eller en genomförd betalning.",
+      "Processing API och Bank Connectivity använder separata inloggningssessioner.",
+      "Bank Connectivity hanterar separat bankcertifikat samt listning, hämtning och uppladdning av bankfiler.",
+      "Kundens privata signeringsnyckel stannar i den egna applikationen. Processing API tar aldrig emot nyckeln och skickar inte en betalning till banken.",
+      "Godkännandet i ISECures flöde gäller den förberedda filen. Det är inte bankens auktorisering eller bevis på en genomförd betalning.",
     ],
-    relationshipTitle: "Så samverkar gränssnitten",
+    relationshipTitle: "Så samverkar Processing API med Bank Connectivity",
     processingLabel: "Processing API",
-    processing: "Skapar och frigör den exakta pain.001-filen.",
-    localLabel: "Lokal applikation",
-    local: "Verifierar och signerar samma byte under kundens kontroll.",
-    exchangeLabel: "ISECure REST API — File Exchange",
+    processing: "Skapar och frigör den kontrollerade betalningsfilen.",
+    localLabel: "Kundens applikation",
+    local: "Verifierar och signerar den hämtade filen under kundens kontroll.",
+    exchangeLabel: "Bank Connectivity",
     exchange:
-      "Transporterar den signerade filen till banken under separat behörighet och kundens bankavtal.",
+      "Skickar den signerade filen till banken med separat åtkomst och inom kundens bankavtal.",
     transport:
-      "Bankspecifika kanaler hör till det separata Secure Transport-lagret. Planerat EBICS-arbete innebär inte nuvarande bank- eller produktionsstöd.",
+      "Överföring till banken kräver separat åtkomst till Bank Connectivity, kundens bankavtal och en bankanslutning som stöds.",
     exampleTitle: "Kör det fullständiga TypeScript-exemplet",
     exampleText:
-      "Exemplet använder separata Processing- och File Exchange-sessioner, hämtar den verifierade pain.001-filen, signerar den lokalt och gör en uttryckligen bekräftad uppladdning.",
+      "Exemplet förbereder och hämtar en kontrollerad betalningsfil, signerar den i kundens applikation och skickar den till banken först efter en separat bekräftelse.",
     exampleLabel: "Öppna Processing API-exemplet",
-    docsLabel: "Öppna dokumentationen för File Exchange API i produktion",
+    docsLabel: "Öppna dokumentationen för Bank Connectivity API",
   },
 }[lang];
 ---
 
-<CatalogPageLayout {lang} {surface} bodyClass="processing-api-page">
+<CatalogPageLayout {lang} {record} bodyClass="processing-api-page">
   <article class="processing-api container">
     <header>
       <p class="eyebrow">{copy.eyebrow}</p>
@@ -144,14 +142,14 @@ const copy = {
       <div>
         <CatalogAccessSummary
           {lang}
-          stage={surface.stage}
-          access={surface.access}
+          stage={record.stage}
+          access={record.access}
         />
         <h2 id="processing-status">{copy.statusTitle}</h2>
       </div>
       <div class="status-copy">
         <p>{copy.statusText}</p>
-        <a href={contactHref}>{copy.accessLabel}</a>
+        <a href={record.cta.href[lang]}>{record.cta.label[lang]}</a>
       </div>
     </section>
 

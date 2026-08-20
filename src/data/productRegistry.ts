@@ -171,7 +171,7 @@ const statusGlossary: readonly CatalogGlossaryTerm[] = [
     term: text("Pääsy", "Access", "Åtkomst"),
     definition: text(
       "Kertoo ympäristön sekä vaaditaanko rekisteröinti, maksullinen tilaus ja erillinen hyväksyntä.",
-      "States the environment and whether registration, a paid subscription, and separate admission are required.",
+      "States the environment and whether registration, a paid subscription, and separate access approval are required.",
       "Anger miljön och om registrering, en betald prenumeration och separat godkännande krävs.",
     ),
   },
@@ -314,9 +314,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
           "Är REST API:t en separat bankprodukt?",
         ),
         answer: text(
-          "Ei. Se on nykyisen Pankkiyhteydet-tuotteen kehittäjäpinta pankkiaineistojen siirtoon.",
-          "No. It is the developer surface of the current Bank Connectivity product for bank-file exchange.",
-          "Nej. Det är utvecklarytan för den nuvarande Bankförbindelser-produkten för filutbyte.",
+          "Ei. REST API on Pankkiyhteydet-tuotteen käyttörajapinta pankkiaineistojen siirtoon.",
+          "No. The REST API is how the Bank Connectivity product is used for bank-file exchange.",
+          "Nej. REST API:t är gränssnittet för att använda Bankförbindelser-produkten för filutbyte.",
         ),
       },
     ],
@@ -460,6 +460,128 @@ export const catalogRecords: readonly CatalogRecord[] = [
         "Testaa File Exchange API:n listaus-, lataus- ja allekirjoitettu lähetyspolku synteettisesti.",
         "Test File Exchange API listing, download, and signed upload with synthetic data.",
         "Testa listning, hämtning och signerad uppladdning i File Exchange API med syntetiska data.",
+      ),
+    },
+  },
+  {
+    kind: "product",
+    id: "processing-api",
+    category: text("Maksuaineistot", "Payment files", "Betalningsfiler"),
+    name: text("Processing API", "Processing API", "Processing API"),
+    buyerJob: text(
+      "Valmistele pankin maksuaineistot hallitusti.",
+      "Prepare bank payment files with control and approval.",
+      "Förbered bankens betalningsfiler med kontroll och godkännande.",
+    ),
+    summary: text(
+      "Rajapinta maksutietojen tarkistamiseen, hyväksytyn version lukitsemiseen ja pankille lähetettävän maksuaineiston lataamiseen.",
+      "An API for checking payment details, locking the approved version, and downloading the payment file for bank delivery.",
+      "Ett API för att kontrollera betalningsuppgifter, låsa den godkända versionen och hämta betalningsfilen för överföring till banken.",
+    ),
+    stage: "experimental",
+    access: subscribedTestAccess,
+    visibility: "soft-launch",
+    routes: routeSet("processing-api"),
+    capabilities: [
+      {
+        direction: "input",
+        label: text("Maksutiedot", "Payment details", "Betalningsuppgifter"),
+        detail: text(
+          "Vastaanottaa pankille ja maalle sopivat maksutiedot käyttäjän käyttöoikeuksien rajoissa.",
+          "Accepts payment details for the selected bank and country within the user's access rights.",
+          "Tar emot betalningsuppgifter för vald bank och valt land inom användarens åtkomsträttigheter.",
+        ),
+      },
+      {
+        direction: "bidirectional",
+        label: text(
+          "Tarkistus ja hyväksyntä",
+          "Checks and approval",
+          "Kontroll och godkännande",
+        ),
+        detail: text(
+          "Tarkistaa pakolliset tiedot ja lukitsee yhden muuttumattoman version henkilön hyväksyttäväksi.",
+          "Checks the required details and locks one unchanged version for a person to approve.",
+          "Kontrollerar obligatoriska uppgifter och låser en oförändrad version som en person kan godkänna.",
+        ),
+      },
+      {
+        direction: "output",
+        label: text(
+          "Ladattava maksuaineisto",
+          "Downloadable payment file",
+          "Betalningsfil för hämtning",
+        ),
+        detail: text(
+          "Muodostaa ja lataa saman tarkistetun tiedoston. Nykyinen tekninen muoto on ISO 20022 pain.001.001.09.",
+          "Generates and downloads the same checked file. The current technical format is ISO 20022 pain.001.001.09.",
+          "Genererar och hämtar samma kontrollerade fil. Det nuvarande tekniska formatet är ISO 20022 pain.001.001.09.",
+        ),
+      },
+    ],
+    qualification: {
+      label: text("Testiympäristö", "Test environment", "Testmiljö"),
+      scope: text(
+        "Saatavilla ISECuren testiympäristössä tilausasiakkaille pyynnöstä. Pankki- ja maakohtaisten maksuaineistojen pätevöinti jatkuu; tuotantokäyttöä, pankkitukea tai palvelutasoa ei vielä luvata.",
+        "Available in the ISECure test environment to subscribed customers by request. Qualification of bank- and country-specific payment files is still in progress; production use, bank support, and service levels are not yet promised.",
+        "Tillgängligt i ISECures testmiljö för prenumerationskunder på begäran. Kvalificeringen av bank- och landsspecifika betalningsfiler pågår; produktion, bankstöd och servicenivå utlovas ännu inte.",
+      ),
+      evidenceDate: "2026-08-20",
+      evidenceSource:
+        "Processing API implementation and TypeScript client example",
+    },
+    limitations: localizedLists(
+      [
+        "Processing API ei lähetä maksua pankkiin.",
+        "Hyväksyntä koskee valmisteltua tiedostoa eikä ole pankin hyväksyntä tai toteutunut maksu.",
+        "Asiakkaan yksityinen allekirjoitusavain säilyy omassa sovelluksessa.",
+      ],
+      [
+        "Processing API does not submit a payment to a bank.",
+        "Approval applies to the prepared file; it is not bank authorization or a completed payment.",
+        "The customer's private signing key stays in their own application.",
+      ],
+      [
+        "Processing API skickar inte en betalning till banken.",
+        "Godkännandet gäller den förberedda filen; det är inte bankens auktorisering eller en genomförd betalning.",
+        "Kundens privata signeringsnyckel stannar i den egna applikationen.",
+      ],
+    ),
+    cta: {
+      label: text(
+        "Pyydä Processing API:n käyttöoikeus",
+        "Request Processing API access",
+        "Begär åtkomst till Processing API",
+      ),
+      href: contactHref,
+    },
+    faq: [
+      {
+        question: text(
+          "Lähettääkö Processing API aineiston pankkiin?",
+          "Does Processing API send the file to a bank?",
+          "Skickar Processing API filen till banken?",
+        ),
+        answer: text(
+          "Ei. Processing API muodostaa ja vapauttaa tarkistetun maksuaineiston. Pankkiin lähettäminen on Pankkiyhteydet-tuotteen erillinen tehtävä.",
+          "No. Processing API creates and releases the checked payment file. Sending it to a bank is a separate responsibility of Bank Connectivity.",
+          "Nej. Processing API skapar och frigör den kontrollerade betalningsfilen. Överföring till banken är ett separat ansvar för Bankförbindelser.",
+        ),
+      },
+    ],
+    glossary: statusGlossary,
+    aliases: ["payment-export", "iso20022"],
+    dependencies: [],
+    seo: {
+      title: text(
+        "Processing API hallittujen maksuaineistojen luontiin | ISECure",
+        "Processing API for controlled bank payment files | ISECure",
+        "Processing API för kontrollerade betalningsfiler | ISECure",
+      ),
+      description: text(
+        "Valmistele, tarkista ja hyväksy pankille lähetettävä maksuaineisto hallitussa työnkulussa.",
+        "Prepare, check, and approve bank payment files through a controlled workflow.",
+        "Förbered, kontrollera och godkänn betalningsfiler för banken i ett kontrollerat flöde.",
       ),
     },
   },
@@ -992,33 +1114,6 @@ export const developerSurfaces = [
         "Tuotannon rajapinta pankkivarmenteille sekä tiedostojen listaukseen, lataukseen ja lähetykseen.",
         "Production API for bank certificates and file listing, download, and upload.",
         "Produktions-API för bankcertifikat samt listning, hämtning och uppladdning av filer.",
-      ),
-    },
-  },
-  {
-    id: "processing-api",
-    kind: "api",
-    productId: "treasury-essentials",
-    name: text("Processing API", "Processing API", "Processing API"),
-    summary: text(
-      "Erillinen experimental-vaiheen rajapinta maksuerän luontiin, validointiin, hyväksyntään sekä tarkan pain.001-aineiston muodostamiseen ja lataamiseen.",
-      "A separate Experimental API for creating, validating, and approving payment batches and generating and downloading exact pain.001 files.",
-      "Ett separat API i Experimental-fasen för att skapa, validera och godkänna betalningsbatcher samt generera och hämta exakta pain.001-filer.",
-    ),
-    stage: "experimental",
-    access: subscribedTestAccess,
-    visibility: "soft-launch",
-    routes: routeSet("processing-api"),
-    seo: {
-      title: text(
-        "Processing API pain.001-maksuaineistojen luontiin | ISECure",
-        "Processing API for pain.001 payment generation | ISECure",
-        "Processing API för generering av pain.001-betalningar | ISECure",
-      ),
-      description: text(
-        "Experimental-vaiheessa oleva erillinen rajapinta maksuerän validointiin, hyväksyntään sekä tarkan pain.001.001.09-aineiston lataamiseen.",
-        "Separate Experimental API for validating and approving a payment batch and downloading exact pain.001.001.09.",
-        "Separat API i Experimental-fasen för att validera och godkänna en betalningsbatch och hämta exakt pain.001.001.09.",
       ),
     },
   },

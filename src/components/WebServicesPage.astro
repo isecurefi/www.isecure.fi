@@ -1,8 +1,34 @@
 ---
-import GuidePage from "./GuidePage.astro";
+import { getCatalogRecord } from "../data/productRegistry";
+import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import type { Lang } from "../types";
+import CapabilityDirectionTable from "./CapabilityDirectionTable.astro";
+import CatalogAccessSummary from "./CatalogAccessSummary.astro";
+import CatalogFaqGlossary from "./CatalogFaqGlossary.astro";
+
+interface PageContent {
+  title: string;
+  description: string;
+  h1: string;
+  intro: string;
+  statusTitle: string;
+  limitationsTitle: string;
+  simulatorTitle: string;
+  simulatorText: string;
+  simulatorLink: string;
+  sections: Array<{
+    h2: string;
+    paras: string[];
+    list?: string[];
+  }>;
+}
 
 const { lang } = Astro.props;
+const record = getCatalogRecord("bank-connectivity");
+const simulatorRecord = getCatalogRecord("bank-simulation");
+if (simulatorRecord.visibility === "none") {
+  throw new Error("Bank Simulator must have a public route");
+}
 
 const content = {
   fi: {
@@ -12,6 +38,12 @@ const content = {
     h1: "WS-kanava API: yksi integraatio suomalaisiin pankkeihin",
     intro:
       "Web Services -kanava on suomalaisten pankkien standardi yritysasiakkaiden aineistoliikenteelle: tiliotteiden noutamiselle ja maksuaineistojen lähettämiselle. Tässä oppaassa käymme läpi, miten se toimii ja mitä integrointi vaatii.",
+    statusTitle: "Tarkka vaihe ja pääsy",
+    limitationsTitle: "Palvelun rajat",
+    simulatorTitle: "Testaa ensin Pankkisimulaattorilla",
+    simulatorText:
+      "Oikeat pankkikanavat eivät tarjoa vastaavaa asiakkaan hallitsemaa testiympäristöä. Pankkisimulaattorilla voit testata saman API:n varmenteen rekisteröinnin, tiedostojen listauksen ja latauksen sekä allekirjoitetun maksuaineiston lähetyksen turvallisesti synteettisillä aineistoilla.",
+    simulatorLink: "Tutustu Pankkisimulaattoriin",
     sections: [
       {
         h2: "Mikä Web Services -kanava on",
@@ -48,6 +80,12 @@ const content = {
     h1: "Finnish bank Web Services through one API",
     intro:
       "The Web Services channel is the Finnish banks' standard for corporate file traffic: retrieving statements and sending payment files. This guide covers how it works and what integrating it requires.",
+    statusTitle: "Exact stage and access",
+    limitationsTitle: "Service boundaries",
+    simulatorTitle: "Test first with Bank Simulator",
+    simulatorText:
+      "Real bank channels do not provide an equivalent customer-controlled test environment. Bank Simulator lets you safely test the same API's certificate enrollment, file listing and download, and signed payment-file upload with synthetic data.",
+    simulatorLink: "Explore Bank Simulator",
     sections: [
       {
         h2: "What the Web Services channel is",
@@ -84,6 +122,12 @@ const content = {
     h1: "WS-kanal API: en integration till finländska banker",
     intro:
       "Web Services-kanalen är de finländska bankernas standard för företagens filtrafik: att hämta kontoutdrag och skicka betalningsfiler. Den här guiden går igenom hur den fungerar och vad en integration kräver.",
+    statusTitle: "Exakt fas och åtkomst",
+    limitationsTitle: "Tjänstens gränser",
+    simulatorTitle: "Testa först med Banksimulatorn",
+    simulatorText:
+      "Riktiga bankkanaler erbjuder inte en motsvarande testmiljö som kunden kan styra. Med Banksimulatorn kan ni säkert testa certifikatregistrering, fillistning och hämtning samt uppladdning av signerade betalningsfiler via samma API med syntetiska data.",
+    simulatorLink: "Utforska Banksimulatorn",
     sections: [
       {
         h2: "Vad Web Services-kanalen är",
@@ -113,7 +157,9 @@ const content = {
       },
     ],
   },
-} satisfies Record<Lang, unknown>;
+} satisfies Record<Lang, PageContent>;
+
+const t = content[lang];
 
 const related = [
   {
@@ -153,12 +199,282 @@ const related = [
     se: "Bankförbindelse: bygga eller köpa",
   },
 ];
+const relatedTitle = { fi: "Lue myös", en: "See also", se: "Läs även" }[lang];
+const relatedHref = (slug: string) =>
+  lang === "fi" ? `/${slug}/` : `/${lang}/${slug}/`;
 ---
 
-<GuidePage
+<CatalogPageLayout
   lang={lang}
-  slug="web-services"
-  catalogId="bank-connectivity"
-  content={content}
-  related={related}
-/>
+  title={t.title}
+  description={t.description}
+  {record}
+  bodyClass="bank-connectivity-page"
+>
+  <article class="bank-connectivity container">
+    <header>
+      <p class="eyebrow">{record.name[lang]}</p>
+      <h1>{t.h1}</h1>
+      <p class="lead">{t.intro}</p>
+    </header>
+
+    <section class="status" aria-labelledby="bank-connectivity-status">
+      <div>
+        <CatalogAccessSummary
+          {lang}
+          stage={record.stage}
+          access={record.access}
+        />
+        <h2 id="bank-connectivity-status">{t.statusTitle}</h2>
+      </div>
+      <div class="status-copy">
+        <p>{record.qualification.scope[lang]}</p>
+        <a href={record.cta.href[lang]}>{record.cta.label[lang]}</a>
+      </div>
+    </section>
+
+    <div class="product-sections">
+      {
+        t.sections.map((section) => (
+          <section>
+            <h2>{section.h2}</h2>
+            {section.paras.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+            {section.list && (
+              <ul>
+                {section.list.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))
+      }
+
+      <section>
+        <h2>{t.limitationsTitle}</h2>
+        <ul class="boundaries">
+          {record.limitations[lang].map((limitation) => <li>{limitation}</li>)}
+        </ul>
+      </section>
+    </div>
+
+    <aside class="simulator-callout">
+      <div>
+        <h2>{t.simulatorTitle}</h2>
+        <p>{t.simulatorText}</p>
+      </div>
+      <a href={simulatorRecord.routes[lang]}>{t.simulatorLink}</a>
+    </aside>
+
+    <CapabilityDirectionTable {lang} {record} />
+    <CatalogFaqGlossary {lang} {record} />
+
+    <aside class="related">
+      <h2>{relatedTitle}</h2>
+      <ul>
+        {
+          related.map((item) => (
+            <li>
+              <a href={relatedHref(item.slug)}>{item[lang]}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+  </article>
+</CatalogPageLayout>
+
+<style>
+  .bank-connectivity {
+    margin: 3rem auto;
+    max-width: 1000px;
+  }
+
+  header,
+  .bank-connectivity > section,
+  .product-sections,
+  .simulator-callout,
+  .related {
+    margin-inline: auto;
+    max-width: 900px;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    color: #087f72;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .lead,
+  .product-sections p,
+  .product-sections li {
+    line-height: 1.7;
+  }
+
+  .lead {
+    font-size: 1.12rem;
+  }
+
+  .status,
+  .product-sections,
+  .simulator-callout,
+  .related {
+    margin-top: 2.5rem;
+  }
+
+  .status {
+    background: #eef5ff;
+    border: 1px solid #bfd1e8;
+    border-radius: 12px;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1.45fr);
+    padding: 1.4rem;
+  }
+
+  .status h2 {
+    font-size: 1.35rem;
+    margin: 0.6rem 0 0;
+  }
+
+  .status p {
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .status-copy a {
+    background: #087f72;
+    border-radius: 8px;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 700;
+    margin-top: 0.9rem;
+    padding: 0.65rem 0.9rem;
+    text-decoration: none;
+  }
+
+  .status-copy a:focus-visible,
+  .related a:focus-visible {
+    outline: 3px solid #17252b;
+    outline-offset: 3px;
+  }
+
+  .product-sections {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .product-sections h2 {
+    font-size: 1.45rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .product-sections p {
+    margin: 0 0 0.75rem;
+  }
+
+  .product-sections ul {
+    padding-left: 1.4rem;
+  }
+
+  .product-sections li + li {
+    margin-top: 0.5rem;
+  }
+
+  .boundaries {
+    border-left: 4px solid #087f72;
+    padding-left: 1.25rem;
+  }
+
+  .simulator-callout {
+    align-items: center;
+    background: #eef8f6;
+    border: 1px solid #b9ddd6;
+    border-radius: 12px;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 1.5rem;
+  }
+
+  .simulator-callout h2 {
+    font-size: 1.4rem;
+    margin: 0 0 0.65rem;
+  }
+
+  .simulator-callout p {
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .simulator-callout a {
+    background: #087f72;
+    border-radius: 8px;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 700;
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+  }
+
+  .simulator-callout a:focus-visible {
+    outline: 3px solid #17252b;
+    outline-offset: 3px;
+  }
+
+  .related {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+  }
+
+  .related h2 {
+    font-size: 1.35rem;
+  }
+
+  .related ul {
+    columns: 2;
+    line-height: 1.7;
+    padding-left: 1.25rem;
+  }
+
+  .related li {
+    break-inside: avoid;
+    margin-bottom: 0.45rem;
+  }
+
+  .related a {
+    color: #075d75;
+  }
+
+  @media (max-width: 760px) {
+    .status,
+    .simulator-callout {
+      grid-template-columns: 1fr;
+    }
+
+    .related ul {
+      columns: 1;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .bank-connectivity {
+      margin-block: 2rem;
+    }
+  }
+</style>

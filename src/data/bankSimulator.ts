@@ -8,12 +8,13 @@ interface SimulatorSection {
 
 interface SimulatorContent {
   meta: {
-    title: string;
     description: string;
   };
   eyebrow: string;
   title: string;
   intro: string;
+  baseUrlLabel: string;
+  bankLabel: string;
   sections: SimulatorSection[];
   exampleTitle: string;
   exampleText: string;
@@ -24,7 +25,6 @@ interface SimulatorContent {
 export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
   fi: {
     meta: {
-      title: "Pankkisimulaattori testiaineistoille",
       description:
         "Testaa ISECure REST API:n varmenteita, tiedostolistausta, latausta ja allekirjoitettua pain.001-lähetystä pankkisimulaattorilla.",
     },
@@ -32,6 +32,8 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     title: "Pankkisimulaattori",
     intro:
       "Pankkisimulaattorilla voit testata nykyistä File Exchange API:a ja TypeScript SDK:ta ilman oikeaa pankkiyhteyttä. Käytä testiympäristössä pankkitunnistetta simulator.",
+    baseUrlLabel: "Perusosoite",
+    bankLabel: "Pankki",
     sections: [
       {
         title: "Ympäristö ja rajapinta",
@@ -85,7 +87,6 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
   },
   en: {
     meta: {
-      title: "Bank Simulator for test bank files",
       description:
         "Test ISECure REST API certificates, file listing, downloads, and signed pain.001 uploads with Bank Simulator.",
     },
@@ -93,6 +94,8 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     title: "Bank Simulator",
     intro:
       "Use Bank Simulator to test the existing File Exchange API and TypeScript SDK without a real bank connection. Select the bank identifier simulator in the test environment.",
+    baseUrlLabel: "Base URL",
+    bankLabel: "Bank",
     sections: [
       {
         title: "Environment and interface",
@@ -146,7 +149,6 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
   },
   se: {
     meta: {
-      title: "Banksimulator för testfiler",
       description:
         "Testa certifikat, fillistning, hämtning och signerad pain.001-uppladdning i ISECure REST API med banksimulatorn.",
     },
@@ -154,6 +156,8 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     title: "Banksimulator",
     intro:
       "Använd banksimulatorn för att testa det befintliga File Exchange API:t och TypeScript SDK:t utan en riktig bankförbindelse. Välj bankidentifieraren simulator i testmiljön.",
+    baseUrlLabel: "Basadress",
+    bankLabel: "Bank",
     sections: [
       {
         title: "Miljö och gränssnitt",

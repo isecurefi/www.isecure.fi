@@ -357,7 +357,7 @@ const productIndexPages = [
     "products/index.html",
     "/products/",
     "fi",
-    "Yksi tuotehierarkia",
+    "Valitse työnkulkuusi sopiva tuote",
     "Tuotteet",
     "Pankkiyhteydet",
     [
@@ -377,7 +377,7 @@ const productIndexPages = [
     "en/products/index.html",
     "/en/products/",
     "en",
-    "One product hierarchy",
+    "Choose the product that fits your workflow",
     "Products",
     "Bank Connectivity",
     [
@@ -397,7 +397,7 @@ const productIndexPages = [
     "se/products/index.html",
     "/se/products/",
     "sv",
-    "En produkthierarki",
+    "Välj produkten som passar ert arbetsflöde",
     "Produkter",
     "Bankförbindelser",
     [
@@ -527,6 +527,7 @@ const processingApiPages = [
     "processing-api/index.html",
     "/processing-api/",
     "fi",
+    "Valmistele pankin maksuaineistot hallitusti",
     "Testiympäristö",
     "Rekisteröinti vaaditaan",
     "Maksullinen tilaus vaaditaan",
@@ -536,6 +537,7 @@ const processingApiPages = [
     "en/processing-api/index.html",
     "/en/processing-api/",
     "en",
+    "Prepare bank payment files with control and approval",
     "Test environment",
     "Registration required",
     "Paid subscription required",
@@ -545,6 +547,7 @@ const processingApiPages = [
     "se/processing-api/index.html",
     "/se/processing-api/",
     "sv",
+    "Förbered bankens betalningsfiler med kontroll och godkännande",
     "Testmiljö",
     "Registrering krävs",
     "Betald prenumeration krävs",
@@ -560,6 +563,7 @@ for (const [
   relativeFile,
   canonicalPath,
   htmlLang,
+  heading,
   environmentLabel,
   registrationLabel,
   subscriptionLabel,
@@ -573,6 +577,11 @@ for (const [
   const html = readFileSync(file, "utf8");
   if (!html.includes(`<html lang="${htmlLang}"`)) {
     failures.push(`${relativeFile}: wrong Processing API document language`);
+  }
+  if (!new RegExp(`<h1[^>]*>${heading}</h1>`, "u").test(html)) {
+    failures.push(
+      `${relativeFile}: plain-language Processing API H1 is missing`,
+    );
   }
   if (
     !html.includes(
@@ -591,7 +600,7 @@ for (const [
   }
   for (const marker of [
     'data-catalog-record="processing-api"',
-    'data-catalog-kind="api"',
+    'data-catalog-kind="product"',
     'data-catalog-stage="experimental"',
     'data-catalog-visibility="soft-launch"',
     "Experimental",
@@ -599,9 +608,8 @@ for (const [
     registrationLabel,
     subscriptionLabel,
     admissionLabel,
-    "ISECure REST API — File Exchange",
+    "Bank Connectivity",
     "pain.001.001.09",
-    "API Gateway",
     processingExampleUrl,
   ]) {
     if (!html.includes(marker)) {
@@ -637,6 +645,31 @@ for (const [relativeFile, recordId, stage, visibility] of [
     if (!html.includes(marker)) {
       failures.push(`${relativeFile}: missing registry marker ${marker}`);
     }
+  }
+}
+
+for (const [relativeFile, simulatorPath, reason] of [
+  [
+    "web-services/index.html",
+    "/bank-simulator/",
+    "Oikeat pankkikanavat eivät tarjoa vastaavaa asiakkaan hallitsemaa testiympäristöä.",
+  ],
+  [
+    "en/web-services/index.html",
+    "/en/bank-simulator/",
+    "Real bank channels do not provide an equivalent customer-controlled test environment.",
+  ],
+  [
+    "se/web-services/index.html",
+    "/se/bank-simulator/",
+    "Riktiga bankkanaler erbjuder inte en motsvarande testmiljö som kunden kan styra.",
+  ],
+]) {
+  const html = readFileSync(join(dist, relativeFile), "utf8");
+  if (!html.includes(`href="${simulatorPath}"`) || !html.includes(reason)) {
+    failures.push(
+      `${relativeFile}: Bank Simulator product link or testing rationale is missing`,
+    );
   }
 }
 

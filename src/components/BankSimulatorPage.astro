@@ -18,12 +18,7 @@ const sdkExampleUrl =
   "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/bank-simulator/README.md";
 ---
 
-<CatalogPageLayout
-  title={content.meta.title}
-  lang={lang}
-  description={content.meta.description}
-  {record}
->
+<CatalogPageLayout lang={lang} description={content.meta.description} {record}>
   <article class="simulator-guide container">
     <header class="simulator-header">
       <p class="simulator-eyebrow">{content.eyebrow}</p>
@@ -31,15 +26,17 @@ const sdkExampleUrl =
       <p class="simulator-intro">{content.intro}</p>
       <dl class="simulator-facts">
         <div>
-          <dt>Base URL</dt>
+          <dt>{content.baseUrlLabel}</dt>
           <dd><code>https://ws-api.test.isecure.fi/v2</code></dd>
         </div>
         <div>
-          <dt>Bank</dt>
+          <dt>{content.bankLabel}</dt>
           <dd><code>simulator</code></dd>
         </div>
       </dl>
     </header>
+
+    <CatalogStatus {lang} {record} />
 
     <div class="simulator-sections">
       {
@@ -61,7 +58,6 @@ const sdkExampleUrl =
       }
     </div>
 
-    <CatalogStatus {lang} {record} />
     <CapabilityDirectionTable {lang} {record} />
     <CatalogFaqGlossary {lang} {record} />
 
