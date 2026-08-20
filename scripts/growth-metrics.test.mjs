@@ -71,5 +71,6 @@ test("Markdown states the evidence boundary and missing analytics setup", () => 
   };
   const markdown = renderGrowthMarkdown(report);
   assert.match(markdown, /not approval for a public claim/u);
+  assert.match(markdown, /consent-based collection starts 2026-08-21/u);
   assert.match(markdown, /GA4_PROPERTY_ID is not set/u);
 });

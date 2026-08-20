@@ -1,6 +1,7 @@
 const EXPECTED_CTR = [
   0, 0.28, 0.15, 0.1, 0.07, 0.05, 0.04, 0.03, 0.025, 0.02, 0.018,
 ];
+export const CONSENT_MEASUREMENT_START = "2026-08-21";
 
 function isoDate(date) {
   return date.toISOString().slice(0, 10);
@@ -177,6 +178,12 @@ export function renderGrowthMarkdown(report) {
     "",
     "This local report is decision input, not approval for a public claim or automatic content change.",
     "",
+    ...(report.window.prior.startDate < CONSENT_MEASUREMENT_START
+      ? [
+          `GA4 method boundary: consent-based collection starts ${CONSENT_MEASUREMENT_START}. Do not interpret GA changes until both comparison windows start on or after this date.`,
+          "",
+        ]
+      : []),
     "## Search discovery",
     "",
     `- Clicks: ${search.current.clicks} (${formatChange(clicksChange)})`,

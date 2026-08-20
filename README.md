@@ -164,6 +164,12 @@ striking-distance queries, legacy results, consented sessions/page views, produc
 selections, successful contacts, and session-to-contact conversion. Missing GA4 access is reported
 as unavailable, never as zero.
 
+Consent-based collection starts on 21 August 2026. GA data from before and after that boundary uses
+different collection rules and is not a like-for-like trend. Treat the first complete post-change
+window as a new baseline, and make a growth comparison only when both adjacent 28-day windows are
+fully after the boundary. With the three-day reporting delay, the first such comparison is available
+on 18 October 2026.
+
 Review the report with the production/build checks, Search Console indexing state, current claim
 evidence, and short buyer observations. A metric may justify investigation but never approves a
 claim, homepage promotion, redirect, or retirement. Admit each concrete change as its own task in
