@@ -1,0 +1,80 @@
+---
+import {
+  catalogUi,
+  getPublicProductRecords,
+  type CatalogRecord,
+} from "../data/productRegistry";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+  current?: CatalogRecord;
+}
+
+const { lang, current } = Astro.props;
+const ui = catalogUi[lang];
+const indexHref = lang === "fi" ? "/products/" : `/${lang}/products/`;
+const records = getPublicProductRecords();
+---
+
+<nav class="catalog-navigation" aria-label={ui.products}>
+  <a href={indexHref} aria-current={!current ? "page" : undefined}>
+    {ui.products}
+  </a>
+  {
+    records.map((record) => (
+      <a
+        href={record.routes[lang]}
+        aria-current={record.id === current?.id ? "page" : undefined}
+      >
+        {record.name[lang]}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .catalog-navigation {
+    align-items: center;
+    border-bottom: 1px solid var(--border-color, #dee2e6);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin: 0 auto;
+    max-width: 1120px;
+    padding: 0.85rem 1.25rem;
+  }
+
+  .catalog-navigation a {
+    color: inherit;
+    font-size: 0.88rem;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .catalog-navigation a[aria-current="page"] {
+    color: #087f72;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3rem;
+  }
+
+  .catalog-navigation a:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  :global(body.banking-theme-page[data-isecure-theme="dark"])
+    .catalog-navigation {
+    border-color: #27434a;
+    color: #d8e5e8;
+  }
+
+  @media (max-width: 576px) {
+    .catalog-navigation {
+      align-items: flex-start;
+      flex-direction: column;
+      padding-inline: 1rem;
+    }
+  }
+</style>

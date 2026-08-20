@@ -43,7 +43,7 @@ const content = {
         {
           h2: "Mitä palvelu ei muuta",
           paras: [
-            "File Exchange API ei luo maksuja, muuta XML-sisältöä eikä korvaa pankin hyväksyntää. Tarvitset yrityksen oman pankkisopimuksen ja valtuudet. Uusi Banking Data API tutkii erikseen tuettua normalisointia ja evidenssiä, mutta sen early access -kattavuus on rajattu.",
+            "Tuotannossa oleva ISECure REST API — File Exchange ei luo maksuja, muuta XML-sisältöä eikä korvaa pankin hyväksyntää. Erillinen Processing API voi testikäytössä muodostaa hallitusta maksuerästä tarkan pain.001.001.09-aineiston, mutta se ei lähetä aineistoa pankkiin. Pankkilähetys vaatii yrityksen pankkisopimuksen ja valtuudet.",
           ],
         },
       ],
@@ -83,7 +83,7 @@ const content = {
         {
           h2: "What the service does not change",
           paras: [
-            "The File Exchange API does not create payments, rewrite XML content, or replace bank approval. The company still needs its own bank agreement and authorization. The adjacent Banking Data API is exploring supported normalization and evidence, with limited early-access coverage.",
+            "The production ISECure REST API — File Exchange does not create payments, rewrite XML content, or replace bank approval. The separate Processing API can generate exact pain.001.001.09 from a governed payment batch in the test environment, but it does not submit the file to a bank. Bank submission still requires the company's bank agreement and authorization.",
           ],
         },
       ],
@@ -123,7 +123,7 @@ const content = {
         {
           h2: "Vad tjänsten inte ändrar",
           paras: [
-            "File Exchange API skapar inte betalningar, skriver inte om XML-innehåll och ersätter inte bankens godkännande. Företaget behöver fortfarande eget bankavtal och behörigheter. Det nya Banking Data API:et utforskar normalisering och evidens för stött innehåll med begränsad early access-täckning.",
+            "ISECure REST API — File Exchange i produktion skapar inte betalningar, skriver inte om XML-innehåll och ersätter inte bankens godkännande. Det separata Processing API:t kan i testmiljön generera exakt pain.001.001.09 från en styrd betalningsbatch, men skickar inte filen till banken. Banköverföring kräver fortfarande företagets bankavtal och behörigheter.",
           ],
         },
       ],
@@ -285,9 +285,9 @@ const content = {
           ],
         },
         {
-          h2: "Normalisoitu data on erillinen early access -palvelu",
+          h2: "Processing API ei laajenna camt.054-tukea",
           paras: [
-            "Nykyinen File Exchange API kuljettaa camt.054-tiedoston muuttamatta sen sisältöä. Banking Data API:n early access arvioi tuettujen aineistojen normalisointia ja evidenssiä. Emme lupaa camt.054-normalisointia ennen kuin pankki- ja versiokohtainen tuki on sovittu.",
+            "Tuotannossa oleva ISECure REST API — File Exchange kuljettaa camt.054-tiedoston muuttamatta sen sisältöä. Erillisen Processing API:n tämänhetkinen julkinen testikuvaus koskee pain.001-maksuaineiston muodostamista; se ei lupaa camt.054-normalisointia tai pankki- ja versiokohtaista tukea.",
           ],
         },
       ],
@@ -325,9 +325,9 @@ const content = {
           ],
         },
         {
-          h2: "Normalized data is a separate early-access service",
+          h2: "Processing API does not expand camt.054 support",
           paras: [
-            "The existing File Exchange API transports camt.054 without changing its content. Banking Data API early access evaluates normalization and evidence for supported files. We do not promise camt.054 normalization until bank- and version-specific support is agreed.",
+            "The production ISECure REST API — File Exchange transports camt.054 without changing its content. The current public test scope of the separate Processing API covers pain.001 payment generation; it does not promise camt.054 normalization or bank- and version-specific support.",
           ],
         },
       ],
@@ -365,9 +365,9 @@ const content = {
           ],
         },
         {
-          h2: "Normaliserad data är en separat early access-tjänst",
+          h2: "Processing API utökar inte stödet för camt.054",
           paras: [
-            "Det befintliga File Exchange API:et transporterar camt.054 utan att ändra innehållet. Banking Data API early access utvärderar normalisering och evidens för stödda filer. Vi lovar inte camt.054-normalisering innan bank- och versionsspecifikt stöd har avtalats.",
+            "ISECure REST API — File Exchange i produktion transporterar camt.054 utan att ändra innehållet. Den nuvarande offentliga testomfattningen för det separata Processing API:t gäller generering av pain.001-betalningar; den lovar inte camt.054-normalisering eller bank- och versionsspecifikt stöd.",
           ],
         },
       ],
@@ -404,10 +404,10 @@ const relatedByMessage: Record<
       se: "Web Services-kanalen",
     },
     {
-      slug: "data-api",
-      fi: "ISO 20022 -pankkidata API",
-      en: "ISO 20022 Banking Data API",
-      se: "ISO 20022-bankdata-API",
+      slug: "processing-api",
+      fi: "Processing API maksuaineistoille",
+      en: "Processing API for payment files",
+      se: "Processing API för betalningsfiler",
     },
   ],
   "pain-002": [
@@ -430,10 +430,10 @@ const relatedByMessage: Record<
       se: "Web Services-kanalen",
     },
     {
-      slug: "data-api",
-      fi: "ISO 20022 -pankkidata API",
-      en: "ISO 20022 Banking Data API",
-      se: "ISO 20022-bankdata-API",
+      slug: "processing-api",
+      fi: "Processing API maksuaineistoille",
+      en: "Processing API for payment files",
+      se: "Processing API för betalningsfiler",
     },
   ],
   "camt-054": [
@@ -456,10 +456,10 @@ const relatedByMessage: Record<
       se: "Web Services-kanalen",
     },
     {
-      slug: "data-api",
-      fi: "ISO 20022 -pankkidata API",
-      en: "ISO 20022 Banking Data API",
-      se: "ISO 20022-bankdata-API",
+      slug: "processing-api",
+      fi: "Processing API maksuaineistoille",
+      en: "Processing API for payment files",
+      se: "Processing API för betalningsfiler",
     },
   ],
 };

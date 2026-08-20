@@ -59,10 +59,10 @@ const content = {
     ],
     sections: [
       {
-        h2: "Tiedostonsiirto ja datan normalisointi ovat eri asioita",
+        h2: "Tiedostonsiirto ja maksuaineiston muodostaminen ovat eri vastuita",
         paras: [
-          "ISECuren tuotannossa oleva File Exchange API siirtää pankin ja sopimuksen sallimat ISO 20022 -aineistot muuttamatta niiden sisältöä. Se hoitaa pankkikohtaiset Web Services -yhteydet, allekirjoitukset ja varmenteet yhden REST API:n takana.",
-          "Banking Data API on erillinen early access -palvelu, joka normalisoi tuettua camt.053- ja muuta pankkidataa JSON-resursseiksi sekä säilyttää linkin takaisin lähdetiedostoon ja ISO 20022 -kenttään.",
+          "Tuotannossa oleva ISECure REST API — File Exchange siirtää pankin ja sopimuksen sallimat ISO 20022 -aineistot muuttamatta niiden sisältöä. Se hoitaa pankkikohtaiset Web Services -yhteydet, allekirjoitukset ja varmenteet.",
+          "Erillinen Processing API muodostaa testikäytössä hallitusta maksuerästä tarkan pain.001-aineiston. Sillä on oma API Gateway ja audience-rajattu istunto; se ei lähetä aineistoa pankkiin.",
         ],
       },
       {
@@ -78,7 +78,7 @@ const content = {
         ],
       },
     ],
-    dataLink: "Tutustu normalisoituun Banking Data API:in",
+    dataLink: "Tutustu Processing API:n maksuaineistopolkuun",
     ctaTitle: "Yhdistä ISO 20022 -aineistot tuotteeseesi",
     ctaText:
       "Kerro pankit, sanomatyypit ja käyttämäsi versiot. Selvitämme sopivan tiedostonsiirto- tai datamallin.",
@@ -125,10 +125,10 @@ const content = {
     ],
     sections: [
       {
-        h2: "File transport and data normalization are different layers",
+        h2: "File transport and payment generation have separate responsibilities",
         paras: [
-          "ISECure's production File Exchange API transports ISO 20022 files allowed by the bank and customer agreement without changing their content. It places bank-specific Web Services connections, signing, and certificates behind one REST API.",
-          "Banking Data API is a separate early-access service that turns supported camt.053 and other bank data into normalized JSON resources while preserving a link back to the source file and ISO 20022 field.",
+          "The production ISECure REST API — File Exchange transports ISO 20022 files allowed by the bank and customer agreement without changing their content. It handles bank-specific Web Services connections, signing, and certificates.",
+          "The separate Processing API generates exact pain.001 from a governed payment batch in the test environment. It has its own API Gateway and audience-bound session; it does not submit the file to a bank.",
         ],
       },
       {
@@ -144,7 +144,7 @@ const content = {
         ],
       },
     ],
-    dataLink: "Explore the normalized Banking Data API",
+    dataLink: "Explore the Processing API payment workflow",
     ctaTitle: "Connect ISO 20022 files to your product",
     ctaText:
       "Tell us the banks, message types, and versions you use. We will identify the appropriate file-transport or data model.",
@@ -191,10 +191,10 @@ const content = {
     ],
     sections: [
       {
-        h2: "Filtransport och datanormalisering är olika lager",
+        h2: "Filtransport och betalningsgenerering har olika ansvar",
         paras: [
-          "ISECures File Exchange API i produktion transporterar ISO 20022-filer som banken och kundavtalet tillåter utan att ändra innehållet. Bankspecifika Web Services-anslutningar, signering och certifikat samlas bakom ett REST-API.",
-          "Banking Data API är en separat tjänst med tidig tillgång som normaliserar stött camt.053- och annan bankdata till JSON-resurser och bevarar länken tillbaka till källfil och ISO 20022-fält.",
+          "ISECure REST API — File Exchange i produktion transporterar ISO 20022-filer som banken och kundavtalet tillåter utan att ändra innehållet. Det hanterar bankspecifika Web Services-anslutningar, signering och certifikat.",
+          "Det separata Processing API:t genererar exakt pain.001 från en styrd betalningsbatch i testmiljön. Det har en egen API Gateway och audience-bunden session och skickar inte filen till banken.",
         ],
       },
       {
@@ -210,7 +210,7 @@ const content = {
         ],
       },
     ],
-    dataLink: "Utforska det normaliserade Banking Data API:et",
+    dataLink: "Utforska betalningsflödet i Processing API",
     ctaTitle: "Anslut ISO 20022-filer till er produkt",
     ctaText:
       "Berätta vilka banker, meddelandetyper och versioner ni använder. Vi identifierar en lämplig filtransport- eller datamodell.",
@@ -268,7 +268,7 @@ const t = content[lang];
     }
 
     <p class="data-link">
-      <a href={`${base}data-api/`}>{t.dataLink} →</a>
+      <a href={`${base}processing-api/`}>{t.dataLink} →</a>
     </p>
 
     <aside class="guide-cta">

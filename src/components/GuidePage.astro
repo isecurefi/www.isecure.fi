@@ -1,5 +1,10 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import CatalogFaqGlossary from "./CatalogFaqGlossary.astro";
+import CapabilityDirectionTable from "./CapabilityDirectionTable.astro";
+import CatalogStatus from "./CatalogStatus.astro";
+import ProviderDetail from "./ProviderDetail.astro";
+import { getCatalogRecord } from "../data/productRegistry";
+import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import type { Lang } from "../types";
 
 // Shared presentational component for keyword-targeted content pages.
@@ -33,30 +38,23 @@ interface Props {
   slug: string;
   content: Record<Lang, LangContent>;
   related?: Related[];
+  catalogId?: string;
 }
 
-const { lang, slug, content, related = [] } = Astro.props;
+const { lang, slug, content, related = [], catalogId } = Astro.props;
 const t = content[lang];
-const origin = "https://www.isecure.fi";
-const alternateLinks = [
-  { hreflang: "fi", href: `${origin}/${slug}/` },
-  { hreflang: "en", href: `${origin}/en/${slug}/` },
-  { hreflang: "sv", href: `${origin}/se/${slug}/` },
-  { hreflang: "x-default", href: `${origin}/en/${slug}/` },
-];
-const canonicalHref =
-  lang === "fi" ? `${origin}/${slug}/` : `${origin}/${lang}/${slug}/`;
+const catalogRecord = catalogId ? getCatalogRecord(catalogId) : undefined;
 const relatedTitle = { fi: "Lue myös", en: "See also", se: "Läs även" }[lang];
 const relatedHref = (s: string) =>
   lang === "fi" ? `/${s}/` : `/${lang}/${s}/`;
 ---
 
-<Layout
+<CatalogPageLayout
   title={t.title}
   lang={lang}
   description={t.description}
-  canonicalUrl={canonicalHref}
-  alternateLinks={alternateLinks}
+  {slug}
+  record={catalogRecord}
 >
   <article class="guide-page container">
     <h1>{t.h1}</h1>
@@ -78,6 +76,22 @@ const relatedHref = (s: string) =>
           )}
         </section>
       ))
+    }
+
+    {
+      catalogRecord?.kind === "product" && (
+        <>
+          <CatalogStatus lang={lang} record={catalogRecord} />
+          <CapabilityDirectionTable lang={lang} record={catalogRecord} />
+          <CatalogFaqGlossary lang={lang} record={catalogRecord} />
+        </>
+      )
+    }
+
+    {
+      catalogRecord?.kind === "integration" && (
+        <ProviderDetail lang={lang} record={catalogRecord} />
+      )
     }
 
     {
@@ -107,7 +121,7 @@ const relatedHref = (s: string) =>
       )
     }
   </article>
-</Layout>
+</CatalogPageLayout>
 
 <style>
   .guide-page {

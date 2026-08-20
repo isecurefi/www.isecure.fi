@@ -394,10 +394,7 @@ export function setStoredLang(lang: Lang): void {
   }
 }
 
-export function getText(
-  key: string,
-  lang: Lang = getStoredLang(),
-): string | Record<string, string> {
+export function getText(key: string, lang: Lang = getStoredLang()): string {
   const keys = key.split(".");
   let result: unknown = translations;
   for (const k of keys) {
@@ -407,5 +404,10 @@ export function getText(
       return key;
     }
   }
-  return result[lang] || result[defaultLang] || key;
+  if (!result || typeof result !== "object") {
+    return typeof result === "string" ? result : key;
+  }
+  const localized = result as Partial<Record<Lang, unknown>>;
+  const value = localized[lang] ?? localized[defaultLang];
+  return typeof value === "string" ? value : key;
 }

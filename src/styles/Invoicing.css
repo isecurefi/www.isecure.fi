@@ -412,56 +412,8 @@ body.invoicing-product-page .contact-section {
   font-size: 0.7rem;
 }
 
-.invoice-status-panel {
-  background: var(--invoice-surface-2);
-  border: 1px solid var(--invoice-line);
-  border-radius: 16px;
-  display: grid;
-  gap: 3rem;
-  grid-template-columns: 0.9fr 1.1fr;
-  padding-block: clamp(2rem, 5vw, 4rem);
-}
-
-.invoice-status-label {
-  color: var(--invoice-accent);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.invoice-status-panel h2 {
-  margin-top: 0.8rem;
-}
-
-.invoice-status-panel p,
-.invoice-status-panel li {
-  color: var(--invoice-muted);
-  line-height: 1.55;
-}
-
-.invoice-status-lists {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: 1fr 1fr;
-}
-
-.invoice-status-lists h3 {
-  font-size: 0.85rem;
-}
-
-.invoice-status-lists ul {
-  list-style: "✓  ";
-  padding-left: 1.2rem;
-}
-
-.invoice-status-lists .invoice-excluded {
-  list-style: "—  ";
-}
-
 @media (max-width: 980px) {
-  .invoice-hero-layout,
-  .invoice-status-panel {
+  .invoice-hero-layout {
     grid-template-columns: 1fr;
   }
 
@@ -475,8 +427,7 @@ body.invoicing-product-page .contact-section {
 }
 
 @media (max-width: 680px) {
-  .invoice-plain-layout,
-  .invoice-status-lists {
+  .invoice-plain-layout {
     grid-template-columns: 1fr;
   }
 

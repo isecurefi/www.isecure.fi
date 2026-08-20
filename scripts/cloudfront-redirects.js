@@ -65,6 +65,15 @@ function handler(event) {
     "/se/banking-api": "/se/",
     "/se/banking-api/": "/se/",
     "/se/banking-api/index.html": "/se/",
+    "/data-api": "/processing-api/",
+    "/data-api/": "/processing-api/",
+    "/data-api/index.html": "/processing-api/",
+    "/en/data-api": "/en/processing-api/",
+    "/en/data-api/": "/en/processing-api/",
+    "/en/data-api/index.html": "/en/processing-api/",
+    "/se/data-api": "/se/processing-api/",
+    "/se/data-api/": "/se/processing-api/",
+    "/se/data-api/index.html": "/se/processing-api/",
   };
   var destination = map[uri];
 

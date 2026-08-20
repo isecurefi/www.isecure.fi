@@ -39,6 +39,12 @@ const cases = [
     uri: "/tiliote/index.html",
     expected: "https://www.isecure.fi/camt-053/",
   },
+  {
+    name: "retired Banking Data route points to the Processing API",
+    uri: "/en/data-api/",
+    querystring: { source: { value: "old-page" } },
+    expected: "https://www.isecure.fi/en/processing-api/?source=old-page",
+  },
 ];
 
 let failures = 0;

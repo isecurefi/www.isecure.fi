@@ -1,0 +1,384 @@
+---
+import { getDeveloperSurface } from "../data/productRegistry";
+import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
+import type { Lang } from "../types";
+import CatalogAccessSummary from "./CatalogAccessSummary.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const surface = getDeveloperSurface("processing-api");
+const contactHref = lang === "fi" ? "/#contact" : `/${lang}/#contact`;
+const exampleUrl =
+  "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-manual-upload/README.md";
+const copy = {
+  fi: {
+    eyebrow: "Erillinen Processing API",
+    heading: "Muodosta hyväksyttävä pain.001 hallitusta maksuerästä",
+    lead: "Processing API on erillinen rajapinta maksuerän luontiin, validointiin, hyväksyntään sekä tarkan pain.001.001.09-aineiston muodostamiseen ja lataamiseen. Se ei muuta tuotannossa olevaa ISECure REST API:a tai sen File Exchange -operaatioita.",
+    statusTitle: "Tarkka vaihe ja pääsy",
+    statusText:
+      "Maksuaineiston muodostava lähdekoodi ja TypeScript SDK -polku on toteutettu. Testiympäristön pätevöinti on kesken. Tämä ei ole tuotantosaatavuus-, pankkituki- tai palvelutasolupaus.",
+    accessLabel: "Pyydä Processing API:n käyttöoikeus",
+    flowTitle: "Mitä työnkulku tekee",
+    flow: [
+      "Listaa käyttäjälle sallitut pankki- ja maakohtaiset maksuvientiprofiilit.",
+      "Luo maksuerä, lisää tai korjaa maksuja sekä validoi ja viimeistele muuttumaton versio.",
+      "Muodostaa ja validoi tarkan pain.001.001.09-aineiston ennen erillistä ihmishyväksyntää.",
+      "Tarkistaa valtuudet uudelleen, vapauttaa samat muuttumattomat tavut ja lataa ne TypeScript SDK:n tarkistamina.",
+    ],
+    boundaryTitle: "Eri rajapinta ja eri vastuu",
+    boundaries: [
+      "Processing API käyttää omaa API Gatewayta ja omaa audience-rajattua istuntoa. File Exchange -istuntoa ei voi käyttää siihen.",
+      "ISECure REST API — File Exchange hoitaa erikseen varmenteet sekä pankkitiedostojen listauksen, latauksen ja lähetyksen.",
+      "Processing API ei vastaanota asiakkaan OpenPGP-yksityisavainta eikä lähetä maksua pankkiin.",
+      "Hyväksyntä tarkoittaa tarkan aineiston hyväksyntää, ei pankin hyväksyntää tai toteutunutta maksua.",
+    ],
+    relationshipTitle: "Miten rajapinnat liittyvät toisiinsa",
+    processingLabel: "Processing API",
+    processing: "Luo ja vapauttaa tarkan pain.001-aineiston.",
+    localLabel: "Paikallinen sovellus",
+    local: "Tarkistaa ja allekirjoittaa samat tavut asiakkaan hallinnassa.",
+    exchangeLabel: "ISECure REST API — File Exchange",
+    exchange:
+      "Siirtää allekirjoitetun tiedoston pankkiin erillisen valtuutuksen ja pankkisopimuksen rajoissa.",
+    transport:
+      "Pankkikohtaiset kanavat kuuluvat erilliseen Secure Transport -kerrokseen. Suunniteltu EBICS-tuki ei tarkoita nykyistä pankki- tai tuotantotukea.",
+    exampleTitle: "Aja valmis TypeScript-esimerkki",
+    exampleText:
+      "Esimerkki käyttää erillisiä Processing- ja File Exchange -istuntoja, lataa tarkistetun pain.001-aineiston, allekirjoittaa sen paikallisesti ja tekee yhden erikseen vahvistetun lähetyksen.",
+    exampleLabel: "Avaa Processing API -esimerkki",
+    docsLabel: "Avaa tuotannon File Exchange API -dokumentaatio",
+  },
+  en: {
+    eyebrow: "Separate Processing API",
+    heading: "Generate an approvable pain.001 from a governed payment batch",
+    lead: "Processing API is a separate interface for creating, validating, and approving a payment batch and generating and downloading exact pain.001.001.09. It does not change the production ISECure REST API or its File Exchange operations.",
+    statusTitle: "Exact stage and access",
+    statusText:
+      "The payment-export implementation and TypeScript SDK path exist. Test-environment qualification is still in progress. This is not a production-availability, bank-support, or service-level claim.",
+    accessLabel: "Request Processing API access",
+    flowTitle: "What the workflow does",
+    flow: [
+      "Lists the bank- and country-specific payment-export profiles admitted for the user.",
+      "Creates a payment batch, adds or corrects transfers, and validates and finalizes an immutable revision.",
+      "Generates and validates exact pain.001.001.09 before separate human approval.",
+      "Rechecks authority, releases the same immutable bytes, and downloads them with TypeScript SDK integrity verification.",
+    ],
+    boundaryTitle: "A separate API with a separate responsibility",
+    boundaries: [
+      "Processing API has its own API Gateway and audience-bound session. A File Exchange session cannot be used for it.",
+      "ISECure REST API — File Exchange separately owns certificates and bank-file listing, download, and upload.",
+      "Processing API never receives the customer's OpenPGP private key and does not submit the payment to a bank.",
+      "Approval means approval of the exact file—not bank authorization or a completed payment.",
+    ],
+    relationshipTitle: "How the interfaces work together",
+    processingLabel: "Processing API",
+    processing: "Creates and releases the exact pain.001 file.",
+    localLabel: "Local application",
+    local: "Verifies and signs those same bytes under the customer's control.",
+    exchangeLabel: "ISECure REST API — File Exchange",
+    exchange:
+      "Transports the signed file to the bank under separate authorization and the customer's bank agreement.",
+    transport:
+      "Bank-specific channels belong to the separate Secure Transport layer. Planned EBICS work does not imply current bank or production support.",
+    exampleTitle: "Run the complete TypeScript example",
+    exampleText:
+      "The example uses separate Processing and File Exchange sessions, downloads the verified pain.001 file, signs it locally, and performs one explicitly confirmed upload.",
+    exampleLabel: "Open the Processing API example",
+    docsLabel: "Open the production File Exchange API documentation",
+  },
+  se: {
+    eyebrow: "Separat Processing API",
+    heading:
+      "Generera en pain.001 som kan godkännas från en styrd betalningsbatch",
+    lead: "Processing API är ett separat gränssnitt för att skapa, validera och godkänna en betalningsbatch samt generera och hämta exakt pain.001.001.09. Det ändrar inte ISECure REST API i produktion eller dess File Exchange-operationer.",
+    statusTitle: "Exakt fas och åtkomst",
+    statusText:
+      "Implementationen för betalningsexport och TypeScript SDK-flödet finns. Kvalificeringen av testmiljön pågår fortfarande. Detta är inget löfte om produktionstillgänglighet, bankstöd eller servicenivå.",
+    accessLabel: "Begär åtkomst till Processing API",
+    flowTitle: "Vad arbetsflödet gör",
+    flow: [
+      "Listar bank- och landsspecifika betalningsexportprofiler som användaren har tillgång till.",
+      "Skapar en betalningsbatch, lägger till eller korrigerar betalningar samt validerar och slutför en oföränderlig revision.",
+      "Genererar och validerar exakt pain.001.001.09 före ett separat mänskligt godkännande.",
+      "Kontrollerar behörigheten på nytt, frigör samma oföränderliga byte och hämtar dem med integritetskontroll i TypeScript SDK:t.",
+    ],
+    boundaryTitle: "Ett separat API med ett separat ansvar",
+    boundaries: [
+      "Processing API har en egen API Gateway och en separat audience-bunden session. En File Exchange-session kan inte användas.",
+      "ISECure REST API — File Exchange ansvarar separat för certifikat samt listning, hämtning och uppladdning av bankfiler.",
+      "Processing API tar aldrig emot kundens privata OpenPGP-nyckel och skickar inte betalningen till banken.",
+      "Godkännande betyder godkännande av den exakta filen, inte bankens auktorisering eller en genomförd betalning.",
+    ],
+    relationshipTitle: "Så samverkar gränssnitten",
+    processingLabel: "Processing API",
+    processing: "Skapar och frigör den exakta pain.001-filen.",
+    localLabel: "Lokal applikation",
+    local: "Verifierar och signerar samma byte under kundens kontroll.",
+    exchangeLabel: "ISECure REST API — File Exchange",
+    exchange:
+      "Transporterar den signerade filen till banken under separat behörighet och kundens bankavtal.",
+    transport:
+      "Bankspecifika kanaler hör till det separata Secure Transport-lagret. Planerat EBICS-arbete innebär inte nuvarande bank- eller produktionsstöd.",
+    exampleTitle: "Kör det fullständiga TypeScript-exemplet",
+    exampleText:
+      "Exemplet använder separata Processing- och File Exchange-sessioner, hämtar den verifierade pain.001-filen, signerar den lokalt och gör en uttryckligen bekräftad uppladdning.",
+    exampleLabel: "Öppna Processing API-exemplet",
+    docsLabel: "Öppna dokumentationen för File Exchange API i produktion",
+  },
+}[lang];
+---
+
+<CatalogPageLayout {lang} {surface} bodyClass="processing-api-page">
+  <article class="processing-api container">
+    <header>
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.heading}</h1>
+      <p class="lead">{copy.lead}</p>
+    </header>
+
+    <section class="status" aria-labelledby="processing-status">
+      <div>
+        <CatalogAccessSummary
+          {lang}
+          stage={surface.stage}
+          access={surface.access}
+        />
+        <h2 id="processing-status">{copy.statusTitle}</h2>
+      </div>
+      <div class="status-copy">
+        <p>{copy.statusText}</p>
+        <a href={contactHref}>{copy.accessLabel}</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>{copy.flowTitle}</h2>
+      <ol class="flow">
+        {copy.flow.map((step) => <li>{step}</li>)}
+      </ol>
+    </section>
+
+    <section>
+      <h2>{copy.boundaryTitle}</h2>
+      <ul class="boundaries">
+        {copy.boundaries.map((boundary) => <li>{boundary}</li>)}
+      </ul>
+    </section>
+
+    <section>
+      <h2>{copy.relationshipTitle}</h2>
+      <div class="relationship" role="list">
+        <p role="listitem">
+          <strong>{copy.processingLabel}</strong><span>{copy.processing}</span>
+        </p>
+        <span aria-hidden="true">→</span>
+        <p role="listitem">
+          <strong>{copy.localLabel}</strong><span>{copy.local}</span>
+        </p>
+        <span aria-hidden="true">→</span>
+        <p role="listitem">
+          <strong>{copy.exchangeLabel}</strong><span>{copy.exchange}</span>
+        </p>
+      </div>
+      <p class="transport-note">{copy.transport}</p>
+    </section>
+
+    <aside class="example">
+      <h2>{copy.exampleTitle}</h2>
+      <p>{copy.exampleText}</p>
+      <div>
+        <a href={exampleUrl} target="_blank" rel="noopener"
+          >{copy.exampleLabel}</a
+        >
+        <a href="/wsapi_v2/">{copy.docsLabel}</a>
+      </div>
+    </aside>
+  </article>
+</CatalogPageLayout>
+
+<style>
+  .processing-api {
+    margin: 3rem auto;
+    max-width: 1000px;
+  }
+
+  header,
+  .processing-api > section,
+  .example {
+    margin-inline: auto;
+    max-width: 900px;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    color: #087f72;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .lead,
+  section p,
+  section li,
+  .example p {
+    line-height: 1.7;
+  }
+
+  .lead {
+    font-size: 1.12rem;
+  }
+
+  .processing-api > section,
+  .example {
+    margin-top: 2.5rem;
+  }
+
+  .status {
+    background: #eef5ff;
+    border: 1px solid #bfd1e8;
+    border-radius: 12px;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1.45fr);
+    padding: 1.4rem;
+  }
+
+  .status h2 {
+    font-size: 1.35rem;
+    margin: 0.6rem 0 0;
+  }
+
+  .status p {
+    margin: 0;
+  }
+
+  .status-copy a {
+    background: #087f72;
+    border-radius: 8px;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 700;
+    margin-top: 0.9rem;
+    padding: 0.65rem 0.9rem;
+    text-decoration: none;
+  }
+
+  .status-copy a:focus-visible {
+    outline: 3px solid #17252b;
+    outline-offset: 3px;
+  }
+
+  .flow,
+  .boundaries {
+    padding-left: 1.4rem;
+  }
+
+  .flow li + li,
+  .boundaries li + li {
+    margin-top: 0.65rem;
+  }
+
+  .relationship {
+    align-items: stretch;
+    display: grid;
+    gap: 0.7rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(
+        0,
+        1.2fr
+      );
+  }
+
+  .relationship p {
+    border: 1px solid #d6e0e2;
+    border-radius: 10px;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  .relationship strong {
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .relationship > span {
+    align-self: center;
+    font-weight: 800;
+  }
+
+  .transport-note {
+    border-left: 4px solid #087f72;
+    margin-top: 1rem;
+    padding-left: 1rem;
+  }
+
+  .example {
+    background: #eef8f6;
+    border: 1px solid #b9ddd6;
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .example div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .example a {
+    border: 1px solid #087f72;
+    border-radius: 8px;
+    color: #087f72;
+    display: inline-block;
+    font-weight: 700;
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+  }
+
+  .example a:first-child {
+    background: #087f72;
+    color: #fff;
+  }
+
+  .example a:focus-visible {
+    outline: 3px solid #17252b;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 760px) {
+    .status,
+    .relationship {
+      grid-template-columns: 1fr;
+    }
+
+    .relationship > span {
+      justify-self: center;
+      transform: rotate(90deg);
+    }
+  }
+
+  @media (max-width: 576px) {
+    .processing-api {
+      margin-block: 2rem;
+    }
+
+    .example a {
+      text-align: center;
+      width: 100%;
+    }
+  }
+</style>

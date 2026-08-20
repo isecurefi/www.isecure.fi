@@ -1,0 +1,29 @@
+---
+import type { CatalogRecord } from "../data/productRegistry";
+import type { Lang } from "../types";
+import CapabilityDirectionTable from "./CapabilityDirectionTable.astro";
+import CatalogStatus from "./CatalogStatus.astro";
+
+interface Props {
+  lang: Lang;
+  record: CatalogRecord;
+}
+
+const { lang, record } = Astro.props;
+if (record.kind !== "integration") {
+  throw new Error(
+    `ProviderDetail requires an integration record: ${record.id}`,
+  );
+}
+---
+
+<aside class="provider-detail" data-provider-id={record.id}>
+  <CatalogStatus {lang} {record} />
+  <CapabilityDirectionTable {lang} {record} />
+</aside>
+
+<style>
+  .provider-detail {
+    margin-top: 2.5rem;
+  }
+</style>

@@ -26,9 +26,9 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     meta: {
       title: "Pankkisimulaattori testiaineistoille",
       description:
-        "Testaa ISECure REST API:n varmenteita, tiedostolistausta, latausta ja allekirjoitettua pain.001-lähetystä gpgtest-pankkisimulaattorilla.",
+        "Testaa ISECure REST API:n varmenteita, tiedostolistausta, latausta ja allekirjoitettua pain.001-lähetystä pankkisimulaattorilla.",
     },
-    eyebrow: "ISECure REST API · gpgtest",
+    eyebrow: "ISECure REST API · testiympäristö",
     title: "Pankkisimulaattori",
     intro:
       "Pankkisimulaattorilla voit testata nykyistä File Exchange API:a ja TypeScript SDK:ta ilman oikeaa pankkiyhteyttä. Käytä testiympäristössä pankkitunnistetta simulator.",
@@ -36,7 +36,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
       {
         title: "Ympäristö ja rajapinta",
         paragraphs: [
-          "Testiympäristön osoite on https://ws-api.test.isecure.fi/v2. Simulaattori on käytettävissä vain tässä gpgtest-ympäristössä.",
+          "Testiympäristön osoite on https://ws-api.test.isecure.fi/v2. Simulaattori on käytettävissä vain ISECuren testiympäristössä.",
           'Käytä samoja rekisteröinti-, kirjautumis-, varmenne- ja tiedosto-operaatioita kuin muille pankeille. TypeScript SDK:ssa ei ole simulaattorikohtaisia metodeja; valitse asiakasasetuksissa Bank: "simulator".',
         ],
       },
@@ -87,9 +87,9 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     meta: {
       title: "Bank Simulator for test bank files",
       description:
-        "Test ISECure REST API certificates, file listing, downloads, and signed pain.001 uploads with the gpgtest Bank Simulator.",
+        "Test ISECure REST API certificates, file listing, downloads, and signed pain.001 uploads with Bank Simulator.",
     },
-    eyebrow: "ISECure REST API · gpgtest",
+    eyebrow: "ISECure REST API · test environment",
     title: "Bank Simulator",
     intro:
       "Use Bank Simulator to test the existing File Exchange API and TypeScript SDK without a real bank connection. Select the bank identifier simulator in the test environment.",
@@ -97,7 +97,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
       {
         title: "Environment and interface",
         paragraphs: [
-          "The test base URL is https://ws-api.test.isecure.fi/v2. Bank Simulator is available only in this gpgtest environment.",
+          "The test base URL is https://ws-api.test.isecure.fi/v2. Bank Simulator is available only in the ISECure test environment.",
           'Use the same registration, login, certificate, and file operations as for other banks. The TypeScript SDK has no simulator-specific methods; select Bank: "simulator" in the client configuration.',
         ],
       },
@@ -148,9 +148,9 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     meta: {
       title: "Banksimulator för testfiler",
       description:
-        "Testa certifikat, fillistning, hämtning och signerad pain.001-uppladdning i ISECure REST API med gpgtest-banksimulatorn.",
+        "Testa certifikat, fillistning, hämtning och signerad pain.001-uppladdning i ISECure REST API med banksimulatorn.",
     },
-    eyebrow: "ISECure REST API · gpgtest",
+    eyebrow: "ISECure REST API · testmiljö",
     title: "Banksimulator",
     intro:
       "Använd banksimulatorn för att testa det befintliga File Exchange API:t och TypeScript SDK:t utan en riktig bankförbindelse. Välj bankidentifieraren simulator i testmiljön.",
@@ -158,7 +158,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
       {
         title: "Miljö och gränssnitt",
         paragraphs: [
-          "Testmiljöns basadress är https://ws-api.test.isecure.fi/v2. Banksimulatorn är tillgänglig endast i denna gpgtest-miljö.",
+          "Testmiljöns basadress är https://ws-api.test.isecure.fi/v2. Banksimulatorn är tillgänglig endast i ISECures testmiljö.",
           'Använd samma registrerings-, inloggnings-, certifikat- och filoperationer som för andra banker. TypeScript SDK:t har inga simulatorspecifika metoder; välj Bank: "simulator" i klientkonfigurationen.',
         ],
       },

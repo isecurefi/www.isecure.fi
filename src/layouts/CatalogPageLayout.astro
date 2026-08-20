@@ -1,0 +1,100 @@
+---
+import CatalogNavigation from "../components/CatalogNavigation.astro";
+import type { CatalogRecord, DeveloperSurface } from "../data/productRegistry";
+import Layout from "./Layout.astro";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+  record?: CatalogRecord;
+  surface?: DeveloperSurface;
+  slug?: string;
+  title?: string;
+  description?: string;
+  fullWidth?: boolean;
+  bodyClass?: string;
+}
+
+const {
+  lang,
+  record,
+  surface,
+  fullWidth = false,
+  bodyClass = "",
+} = Astro.props;
+if (record?.visibility === "none") {
+  throw new Error(`Catalog record ${record.id} has no public or preview route`);
+}
+if (!record && !surface && !Astro.props.slug) {
+  throw new Error(
+    "CatalogPageLayout requires a record, developer surface, or slug",
+  );
+}
+const catalogEntry = record ?? surface;
+const origin = "https://www.isecure.fi";
+const slug = Astro.props.slug ?? "";
+const routes =
+  catalogEntry && catalogEntry.visibility !== "none"
+    ? catalogEntry.routes
+    : {
+        fi: `/${slug}/`,
+        en: `/en/${slug}/`,
+        se: `/se/${slug}/`,
+      };
+const canonicalUrl = `${origin}${routes[lang]}`;
+const title = Astro.props.title ?? catalogEntry?.seo.title[lang] ?? "ISECure";
+const description =
+  Astro.props.description ?? catalogEntry?.seo.description[lang] ?? "";
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}${routes.fi}` },
+  { hreflang: "en", href: `${origin}${routes.en}` },
+  { hreflang: "sv", href: `${origin}${routes.se}` },
+  { hreflang: "x-default", href: `${origin}${routes.en}` },
+];
+const structuredData = catalogEntry
+  ? {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      url: canonicalUrl,
+      name: title,
+      description,
+      inLanguage: lang === "fi" ? "fi-FI" : lang === "en" ? "en-US" : "sv-SE",
+      about: {
+        "@type": "Thing",
+        name: catalogEntry.name[lang],
+        description: catalogEntry.summary[lang],
+      },
+      publisher: { "@id": `${origin}/#organization` },
+    }
+  : undefined;
+const robots =
+  record?.visibility === "draft" ? "noindex, nofollow" : "index, follow";
+---
+
+<Layout
+  {title}
+  {description}
+  socialDescription={description}
+  {canonicalUrl}
+  {alternateLinks}
+  {structuredData}
+  {robots}
+  {lang}
+  {fullWidth}
+  {bodyClass}
+>
+  <div
+    data-catalog-record={catalogEntry?.id}
+    data-catalog-kind={catalogEntry?.kind}
+    data-catalog-stage={catalogEntry?.stage}
+    data-catalog-visibility={catalogEntry?.visibility}
+  >
+    {
+      record && record.visibility !== "draft" && (
+        <CatalogNavigation {lang} current={record} />
+      )
+    }
+    <slot />
+  </div>
+</Layout>

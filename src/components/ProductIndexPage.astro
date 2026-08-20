@@ -1,0 +1,212 @@
+---
+import {
+  catalogUi,
+  developerSurfaces,
+  getPublicProductRecords,
+} from "../data/productRegistry";
+import Layout from "../layouts/Layout.astro";
+import type { Lang } from "../types";
+import CatalogNavigation from "./CatalogNavigation.astro";
+import CatalogAccessSummary from "./CatalogAccessSummary.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const origin = "https://www.isecure.fi";
+const route = lang === "fi" ? "/products/" : `/${lang}/products/`;
+const canonicalUrl = `${origin}${route}`;
+const ui = catalogUi[lang];
+const copy = {
+  fi: {
+    title: "Tuotteet | ISECure",
+    description: "ISECuren tuotteet sekä niiden tuotevaihe ja käyttöönpääsy.",
+    eyebrow: "ISECure-tuotteet",
+    heading: "Yksi tuotehierarkia, selkeä vaihe ja pääsy",
+    lead: "Tuotevaihe kertoo kypsyydestä, ja ympäristö, rekisteröinti, maksullinen tilaus sekä käyttöönpääsy näkyvät erikseen.",
+  },
+  en: {
+    title: "Products | ISECure",
+    description:
+      "ISECure products with their product stage and customer access.",
+    eyebrow: "ISECure products",
+    heading: "One product hierarchy, explicit stage and access",
+    lead: "Product stage describes maturity, while environment, registration, paid subscription, and admission are shown separately.",
+  },
+  se: {
+    title: "Produkter | ISECure",
+    description: "ISECures produkter med produktfas och kundåtkomst.",
+    eyebrow: "ISECure-produkter",
+    heading: "En produkthierarki, tydlig fas och åtkomst",
+    lead: "Produktfasen beskriver mognad, medan miljö, registrering, betald prenumeration och åtkomst visas separat.",
+  },
+}[lang];
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}/products/` },
+  { hreflang: "en", href: `${origin}/en/products/` },
+  { hreflang: "sv", href: `${origin}/se/products/` },
+  { hreflang: "x-default", href: `${origin}/en/products/` },
+];
+const products = getPublicProductRecords();
+const entries = [
+  ...products,
+  ...developerSurfaces.filter((surface) => surface.id !== "file-exchange-api"),
+];
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  url: canonicalUrl,
+  name: copy.title,
+  description: copy.description,
+  inLanguage: lang === "fi" ? "fi-FI" : lang === "en" ? "en-US" : "sv-SE",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: entries.map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: entry.name[lang],
+      url: `${origin}${entry.routes[lang]}`,
+    })),
+  },
+};
+---
+
+<Layout
+  title={copy.title}
+  description={copy.description}
+  socialDescription={copy.description}
+  {canonicalUrl}
+  {alternateLinks}
+  {structuredData}
+  {lang}
+  bodyClass="product-index-page"
+>
+  <CatalogNavigation {lang} />
+  <article class="product-index container">
+    <header>
+      <p class="product-index-eyebrow">{copy.eyebrow}</p>
+      <h1>{copy.heading}</h1>
+      <p>{copy.lead}</p>
+    </header>
+
+    <section aria-label={ui.catalogEntries}>
+      <div class="product-grid">
+        {
+          entries.map((entry) => (
+            <article class="product-card" data-catalog-entry={entry.id}>
+              <CatalogAccessSummary
+                {lang}
+                stage={entry.stage}
+                access={entry.access}
+                compact
+                card
+              >
+                <h3 slot="title">
+                  <a href={entry.routes[lang]}>{entry.name[lang]}</a>
+                </h3>
+                <div class="product-card-content" data-card-content>
+                  <p>
+                    {entry.kind === "product"
+                      ? entry.buyerJob[lang]
+                      : entry.summary[lang]}
+                  </p>
+                  {entry.kind === "product" && (
+                    <small>{entry.qualification.scope[lang]}</small>
+                  )}
+                </div>
+              </CatalogAccessSummary>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .product-index {
+    margin: 3rem auto;
+    max-width: 1040px;
+  }
+
+  .product-index > header {
+    max-width: 780px;
+  }
+
+  .product-index-eyebrow {
+    color: #087f72;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .product-index h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .product-index > header > p:last-child {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .product-index section {
+    margin-top: 3rem;
+  }
+
+  .product-grid {
+    display: grid;
+    column-gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2.5rem;
+  }
+
+  .product-card {
+    min-width: 0;
+    padding: 0;
+  }
+
+  .product-card h3 {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .product-card p {
+    font-size: 1.03rem;
+    line-height: 1.6;
+    margin-top: 0.8rem;
+  }
+
+  .product-card small {
+    color: #53636a;
+    display: block;
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  .product-card a {
+    color: #075d75;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .product-card a:hover {
+    color: #087f72;
+  }
+
+  .product-card a:focus-visible {
+    border-radius: 3px;
+    outline: 3px solid #58b7aa;
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 700px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

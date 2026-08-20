@@ -1,5 +1,8 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import { getDraftCatalogPaths } from "./src/data/productRegistry.ts";
+
+const draftCatalogPaths = new Set(getDraftCatalogPaths());
 
 export default defineConfig({
   site: "https://www.isecure.fi",
@@ -11,8 +14,7 @@ export default defineConfig({
     sitemap({
       filter: (page) =>
         !page.includes("/thankyou/") &&
-        !page.includes("/daily-cash/") &&
-        !page.includes("/invoicing/") &&
+        !draftCatalogPaths.has(new URL(page).pathname) &&
         !page.includes("/ws-api/") &&
         !page.includes("/ws-channel/") &&
         !page.includes("/images/logo-candidates/"),

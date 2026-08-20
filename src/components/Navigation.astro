@@ -43,8 +43,7 @@ const navItems = [
     <button
       class="navbar-toggler"
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
+      data-site-nav-toggle
       aria-controls="navbarNav"
       aria-expanded="false"
       aria-label="Toggle navigation"
@@ -87,3 +86,17 @@ const navItems = [
     </div>
   </div>
 </nav>
+
+<script is:inline>
+  document.querySelectorAll("[data-site-nav-toggle]").forEach((toggle) => {
+    if (!(toggle instanceof HTMLButtonElement)) return;
+    const controlledId = toggle.getAttribute("aria-controls");
+    const menu = controlledId ? document.getElementById(controlledId) : null;
+    if (!menu) return;
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+      menu.classList.toggle("show", !expanded);
+    });
+  });
+</script>

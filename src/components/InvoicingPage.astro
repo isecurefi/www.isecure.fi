@@ -1,8 +1,12 @@
 ---
 import { invoicingContent } from "../data/invoicing";
-import Layout from "../layouts/Layout.astro";
+import { getCatalogRecord } from "../data/productRegistry";
+import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import "../styles/Invoicing.css";
 import type { Lang } from "../types";
+import CapabilityDirectionTable from "./CapabilityDirectionTable.astro";
+import CatalogStatus from "./CatalogStatus.astro";
+import CatalogFaqGlossary from "./CatalogFaqGlossary.astro";
 
 interface Props {
   lang: Lang;
@@ -10,43 +14,16 @@ interface Props {
 
 const { lang } = Astro.props;
 const copy = invoicingContent[lang];
-const origin = "https://www.isecure.fi";
-const route = lang === "fi" ? "/invoicing/" : `/${lang}/invoicing/`;
-const alternateLinks = [
-  { hreflang: "fi", href: `${origin}/invoicing/` },
-  { hreflang: "en", href: `${origin}/en/invoicing/` },
-  { hreflang: "sv", href: `${origin}/se/invoicing/` },
-  { hreflang: "x-default", href: `${origin}/en/invoicing/` },
-];
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": `${origin}${route}#webpage`,
-  url: `${origin}${route}`,
-  name: copy.meta.title,
-  description: copy.meta.description,
-  inLanguage: lang === "en" ? "en-US" : lang === "se" ? "sv-SE" : "fi-FI",
-  about: {
-    "@type": "Thing",
-    name: "ISECure Invoicing product-development preview",
-    description:
-      "A non-production synthetic preview of an evidence-linked invoice workbench.",
-  },
-  publisher: { "@id": "https://www.isecure.fi/#organization" },
-};
+const record = getCatalogRecord("invoicing");
 ---
 
-<Layout
+<CatalogPageLayout
   title={copy.meta.title}
   description={copy.meta.description}
-  socialDescription={copy.meta.description}
-  canonicalUrl={`${origin}${route}`}
-  alternateLinks={alternateLinks}
-  structuredData={structuredData}
-  robots="noindex, nofollow"
   lang={lang}
   fullWidth={true}
   bodyClass="banking-theme-page invoicing-product-page"
+  {record}
 >
   <article class="invoicing-landing" data-synthetic-preview="true">
     <div class="invoice-preview-ribbon" role="note">
@@ -149,27 +126,12 @@ const structuredData = {
       </div>
     </section>
 
-    <section class="invoice-section invoice-status-section">
-      <div class="invoice-shell invoice-status-panel">
-        <div>
-          <span class="invoice-status-label">{copy.status.label}</span>
-          <h2>{copy.status.title}</h2>
-          <p>{copy.status.body}</p>
-          <a class="invoice-button" href="#contact">{copy.status.action}</a>
-        </div>
-        <div class="invoice-status-lists">
-          <section>
-            <h3>{copy.status.included}</h3><ul>
-              {copy.status.includedItems.map((item) => <li>{item}</li>)}
-            </ul>
-          </section>
-          <section>
-            <h3>{copy.status.excluded}</h3><ul class="invoice-excluded">
-              {copy.status.excludedItems.map((item) => <li>{item}</li>)}
-            </ul>
-          </section>
-        </div>
+    <section class="invoice-section">
+      <div class="invoice-shell">
+        <CatalogStatus {lang} {record} />
+        <CapabilityDirectionTable {lang} {record} />
+        <CatalogFaqGlossary {lang} {record} />
       </div>
     </section>
   </article>
-</Layout>
+</CatalogPageLayout>

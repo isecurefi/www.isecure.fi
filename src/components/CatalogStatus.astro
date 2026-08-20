@@ -1,0 +1,115 @@
+---
+import { catalogUi, type CatalogRecord } from "../data/productRegistry";
+import type { Lang } from "../types";
+import CatalogAccessSummary from "./CatalogAccessSummary.astro";
+
+interface Props {
+  lang: Lang;
+  record: CatalogRecord;
+}
+
+const { lang, record } = Astro.props;
+const ui = catalogUi[lang];
+const externalCta = /^https?:\/\//u.test(record.cta.href[lang]);
+---
+
+<section class="catalog-status" aria-labelledby={`${record.id}-status`}>
+  <div class="catalog-status-copy">
+    <CatalogAccessSummary {lang} stage={record.stage} access={record.access} />
+    <h2 id={`${record.id}-status`}>{ui.qualification}</h2>
+    <h3>{record.qualification.label[lang]}</h3>
+    <p>{record.qualification.scope[lang]}</p>
+    <a
+      class="catalog-cta"
+      href={record.cta.href[lang]}
+      target={externalCta ? "_blank" : undefined}
+      rel={externalCta ? "noopener" : undefined}
+    >
+      {record.cta.label[lang]}
+    </a>
+  </div>
+  <div class="catalog-limitations">
+    <h3>{ui.limitation}</h3>
+    <ul>
+      {record.limitations[lang].map((limitation) => <li>{limitation}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .catalog-status {
+    background: #f6faf9;
+    border: 1px solid #bedbd5;
+    border-radius: 14px;
+    color: #17252b;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.8fr);
+    margin: 2.5rem auto;
+    max-width: 1000px;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .catalog-status h2 {
+    font-size: clamp(1.4rem, 3vw, 1.85rem);
+    margin: 0.75rem 0 1rem;
+  }
+
+  .catalog-status h3 {
+    font-size: 1rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .catalog-status p,
+  .catalog-status li {
+    line-height: 1.65;
+  }
+
+  .catalog-cta {
+    background: #087f72;
+    border-radius: 8px;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 750;
+    margin-top: 0.6rem;
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+  }
+
+  .catalog-cta:hover {
+    background: #066b61;
+    color: #fff;
+  }
+
+  .catalog-cta:focus-visible {
+    outline: 3px solid #17252b;
+    outline-offset: 3px;
+  }
+
+  .catalog-limitations {
+    border-left: 1px solid #bedbd5;
+    padding-left: 2rem;
+  }
+
+  .catalog-limitations ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .catalog-limitations li + li {
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 720px) {
+    .catalog-status {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog-limitations {
+      border-left: 0;
+      border-top: 1px solid #bedbd5;
+      padding-left: 0;
+      padding-top: 1.25rem;
+    }
+  }
+</style>

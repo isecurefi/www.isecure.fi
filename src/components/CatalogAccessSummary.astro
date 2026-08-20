@@ -1,0 +1,152 @@
+---
+import {
+  accessOfferLabels,
+  catalogUi,
+  stageLabel,
+  type CatalogAccessOffer,
+  type CatalogStage,
+} from "../data/productRegistry";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+  stage: CatalogStage;
+  access: readonly CatalogAccessOffer[];
+  compact?: boolean;
+  card?: boolean;
+}
+
+const { lang, stage, access, compact = false, card = false } = Astro.props;
+const ui = catalogUi[lang];
+---
+
+<div
+  class:list={[
+    "catalog-access-summary",
+    { compact, "catalog-card-mode": card },
+  ]}
+>
+  {
+    card ? (
+      <div class="catalog-card-heading">
+        <div class="catalog-card-title">
+          <slot name="title" />
+        </div>
+        <span
+          class:list={["catalog-stage-badge", `is-${stage}`]}
+          data-card-labels="true"
+        >
+          {stageLabel(stage, lang)}
+        </span>
+      </div>
+    ) : (
+      <span class:list={["catalog-stage-badge", `is-${stage}`]}>
+        {stageLabel(stage, lang)}
+      </span>
+    )
+  }
+  <slot />
+  {
+    access.length > 0 ? (
+      <ul aria-label={ui.access} data-card-access={card || undefined}>
+        {access.map((offer) => {
+          const labels = accessOfferLabels(offer, lang);
+          return (
+            <li>
+              <strong>{labels[0]}</strong>
+              <span>{labels.slice(1).join(" · ")}</span>
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <p>{ui.noAccess}</p>
+    )
+  }
+</div>
+
+<style>
+  .catalog-access-summary {
+    color: #17252b;
+  }
+
+  .catalog-stage-badge {
+    background: #e1efec;
+    border-radius: 999px;
+    color: #075d54;
+    display: inline-flex;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    padding: 0.35rem 0.65rem;
+    text-transform: uppercase;
+  }
+
+  .catalog-stage-badge.is-planned,
+  .catalog-stage-badge.is-retired {
+    background: #fff0cc;
+    color: #775000;
+  }
+
+  .catalog-stage-badge.is-experimental,
+  .catalog-stage-badge.is-beta {
+    background: #e7f0ff;
+    color: #174f8a;
+  }
+
+  .catalog-card-heading {
+    align-items: center;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.8rem;
+  }
+
+  .catalog-card-title {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .catalog-card-heading .catalog-stage-badge {
+    flex: 0 0 auto;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.55rem;
+    list-style: none;
+    margin: 0.85rem 0 0;
+    padding: 0;
+  }
+
+  li {
+    line-height: 1.45;
+  }
+
+  li strong,
+  li span {
+    display: block;
+  }
+
+  li span,
+  p {
+    color: #53636a;
+    font-size: 0.84rem;
+    margin: 0.18rem 0 0;
+  }
+
+  .compact ul {
+    gap: 0.4rem;
+  }
+
+  .compact li span {
+    font-size: 0.78rem;
+  }
+
+  .catalog-card-mode li strong {
+    font-size: 0.98rem;
+  }
+
+  .catalog-card-mode li span {
+    font-size: 0.9rem;
+  }
+</style>

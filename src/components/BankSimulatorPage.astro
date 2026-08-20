@@ -1,7 +1,11 @@
 ---
 import { bankSimulatorContent } from "../data/bankSimulator";
-import Layout from "../layouts/Layout.astro";
+import { getCatalogRecord } from "../data/productRegistry";
+import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import type { Lang } from "../types";
+import CapabilityDirectionTable from "./CapabilityDirectionTable.astro";
+import CatalogStatus from "./CatalogStatus.astro";
+import CatalogFaqGlossary from "./CatalogFaqGlossary.astro";
 
 interface Props {
   lang: Lang;
@@ -9,46 +13,16 @@ interface Props {
 
 const { lang } = Astro.props;
 const content = bankSimulatorContent[lang];
-const origin = "https://www.isecure.fi";
-const path = lang === "fi" ? "/bank-simulator/" : `/${lang}/bank-simulator/`;
-const canonicalUrl = `${origin}${path}`;
-const alternateLinks = [
-  { hreflang: "fi", href: `${origin}/bank-simulator/` },
-  { hreflang: "en", href: `${origin}/en/bank-simulator/` },
-  { hreflang: "sv", href: `${origin}/se/bank-simulator/` },
-  { hreflang: "x-default", href: `${origin}/en/bank-simulator/` },
-];
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "TechArticle",
-  headline: content.title,
-  description: content.meta.description,
-  url: canonicalUrl,
-  inLanguage: lang === "fi" ? "fi-FI" : lang === "en" ? "en-US" : "sv-SE",
-  author: {
-    "@type": "Organization",
-    name: "ISECure Oy",
-    url: origin,
-  },
-  about: {
-    "@type": "SoftwareApplication",
-    name: "ISECure Bank Simulator",
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "Cloud",
-  },
-};
+const record = getCatalogRecord("bank-simulation");
 const sdkExampleUrl =
   "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/bank-simulator/README.md";
 ---
 
-<Layout
+<CatalogPageLayout
   title={content.meta.title}
   lang={lang}
   description={content.meta.description}
-  socialDescription={content.meta.description}
-  canonicalUrl={canonicalUrl}
-  alternateLinks={alternateLinks}
-  structuredData={structuredData}
+  {record}
 >
   <article class="simulator-guide container">
     <header class="simulator-header">
@@ -87,6 +61,10 @@ const sdkExampleUrl =
       }
     </div>
 
+    <CatalogStatus {lang} {record} />
+    <CapabilityDirectionTable {lang} {record} />
+    <CatalogFaqGlossary {lang} {record} />
+
     <aside class="simulator-example">
       <h2>{content.exampleTitle}</h2>
       <p>{content.exampleText}</p>
@@ -105,7 +83,7 @@ const sdkExampleUrl =
       </div>
     </aside>
   </article>
-</Layout>
+</CatalogPageLayout>
 
 <style>
   .simulator-guide {

@@ -1,0 +1,113 @@
+---
+import { catalogUi, type CatalogRecord } from "../data/productRegistry";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+  record: CatalogRecord;
+}
+
+const { lang, record } = Astro.props;
+const ui = catalogUi[lang];
+---
+
+{
+  (record.faq.length > 0 || record.glossary.length > 0) && (
+    <section class="catalog-help">
+      {record.faq.length > 0 && (
+        <div>
+          <h2>{ui.faq}</h2>
+          <div class="catalog-faq-list">
+            {record.faq.map((item) => (
+              <details>
+                <summary>{item.question[lang]}</summary>
+                <p>{item.answer[lang]}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      )}
+      {record.glossary.length > 0 && (
+        <aside>
+          <h2>{ui.glossary}</h2>
+          <dl>
+            {record.glossary.map((item) => (
+              <div>
+                <dt>{item.term[lang]}</dt>
+                <dd>{item.definition[lang]}</dd>
+              </div>
+            ))}
+          </dl>
+        </aside>
+      )}
+    </section>
+  )
+}
+
+<style>
+  .catalog-help {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1.25fr) minmax(240px, 0.75fr);
+    margin: 2.5rem auto;
+    max-width: 1000px;
+  }
+
+  .catalog-help h2 {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    margin-bottom: 1rem;
+  }
+
+  .catalog-faq-list details {
+    border-top: 1px solid #d6e0e2;
+    padding: 0.85rem 0;
+  }
+
+  .catalog-faq-list details:last-child {
+    border-bottom: 1px solid #d6e0e2;
+  }
+
+  .catalog-faq-list summary {
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .catalog-faq-list p {
+    line-height: 1.65;
+    margin: 0.75rem 0 0;
+  }
+
+  .catalog-help aside {
+    background: #f4f7f8;
+    border-radius: 12px;
+    color: #17252b;
+    padding: 1.25rem;
+  }
+
+  .catalog-help dl,
+  .catalog-help dd {
+    margin: 0;
+  }
+
+  .catalog-help dl div + div {
+    border-top: 1px solid #d6e0e2;
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+  }
+
+  .catalog-help dt {
+    font-weight: 750;
+  }
+
+  .catalog-help dd {
+    color: #53636a;
+    line-height: 1.55;
+    margin-top: 0.2rem;
+  }
+
+  @media (max-width: 720px) {
+    .catalog-help {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

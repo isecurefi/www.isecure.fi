@@ -1,8 +1,12 @@
 ---
 import { dailyCashContent } from "../data/dailyCash";
-import Layout from "../layouts/Layout.astro";
+import { getCatalogRecord } from "../data/productRegistry";
+import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import "../styles/DailyCash.css";
 import type { Lang } from "../types";
+import CapabilityDirectionTable from "./CapabilityDirectionTable.astro";
+import CatalogStatus from "./CatalogStatus.astro";
+import CatalogFaqGlossary from "./CatalogFaqGlossary.astro";
 import DailyCashPositionPreview from "./DailyCashPositionPreview.astro";
 
 interface Props {
@@ -11,43 +15,16 @@ interface Props {
 
 const { lang } = Astro.props;
 const copy = dailyCashContent[lang];
-const origin = "https://www.isecure.fi";
-const route = lang === "fi" ? "/daily-cash/" : `/${lang}/daily-cash/`;
-const alternateLinks = [
-  { hreflang: "fi", href: `${origin}/daily-cash/` },
-  { hreflang: "en", href: `${origin}/en/daily-cash/` },
-  { hreflang: "sv", href: `${origin}/se/daily-cash/` },
-  { hreflang: "x-default", href: `${origin}/en/daily-cash/` },
-];
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": `${origin}${route}#webpage`,
-  url: `${origin}${route}`,
-  name: copy.meta.title,
-  description: copy.meta.description,
-  inLanguage: lang === "en" ? "en-US" : lang === "se" ? "sv-SE" : "fi-FI",
-  about: {
-    "@type": "Thing",
-    name: "Daily Cash product-development preview",
-    description:
-      "A non-production preview of bank-statement-based cash visibility.",
-  },
-  publisher: { "@id": "https://www.isecure.fi/#organization" },
-};
+const record = getCatalogRecord("daily-cash");
 ---
 
-<Layout
+<CatalogPageLayout
   title={copy.meta.title}
   description={copy.meta.description}
-  socialDescription={copy.meta.description}
-  canonicalUrl={`${origin}${route}`}
-  alternateLinks={alternateLinks}
-  structuredData={structuredData}
-  robots="noindex, nofollow"
   lang={lang}
   fullWidth={true}
   bodyClass="banking-theme-page daily-cash-product-page"
+  {record}
 >
   <article class="daily-cash-landing">
     <div class="preview-ribbon" role="note">
@@ -164,50 +141,12 @@ const structuredData = {
       </div>
     </section>
 
-    <section class="daily-cash-section status-section" id="daily-cash-status">
-      <div class="daily-cash-shell status-panel">
-        <div class="status-copy">
-          <span class="status-label">{copy.status.label}</span>
-          <h2>{copy.status.title}</h2>
-          <p>{copy.status.body}</p>
-          <a class="cash-button cash-button-primary" href="#contact"
-            >{copy.status.action}</a
-          >
-        </div>
-        <div class="status-lists">
-          <div>
-            <h3>{copy.status.included}</h3>
-            <ul class="included-list">
-              {copy.status.includedItems.map((item) => <li>{item}</li>)}
-            </ul>
-          </div>
-          <div>
-            <h3>{copy.status.excluded}</h3>
-            <ul class="excluded-list">
-              {copy.status.excludedItems.map((item) => <li>{item}</li>)}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="daily-cash-section faq-section">
-      <div class="daily-cash-shell faq-layout">
-        <div>
-          <p class="section-eyebrow">{copy.faq.eyebrow}</p>
-          <h2>{copy.faq.title}</h2>
-        </div>
-        <div class="faq-list">
-          {
-            copy.faq.items.map((item) => (
-              <details>
-                <summary>{item.question}</summary>
-                <p>{item.answer}</p>
-              </details>
-            ))
-          }
-        </div>
+    <section class="daily-cash-section" id="daily-cash-status">
+      <div class="daily-cash-shell">
+        <CatalogStatus {lang} {record} />
+        <CapabilityDirectionTable {lang} {record} />
+        <CatalogFaqGlossary {lang} {record} />
       </div>
     </section>
   </article>
-</Layout>
+</CatalogPageLayout>

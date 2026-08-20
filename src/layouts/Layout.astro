@@ -215,9 +215,7 @@ const fullTitle = titleAlreadyBranded
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={structuredData} />
 
-    <!-- Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Analytics resource hints -->
     <link
       rel="preconnect"
       href="https://www.googletagmanager.com"
@@ -225,15 +223,7 @@ const fullTitle = titleAlreadyBranded
     />
     <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
-    <!-- Preload critical assets -->
-    <link
-      rel="preload"
-      as="font"
-      href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2"
-      type="font/woff2"
-      crossorigin
-      fetchpriority="high"
-    />
+    <!-- Preload critical local assets -->
     <link
       rel="preload"
       as="image"
@@ -289,26 +279,6 @@ const fullTitle = titleAlreadyBranded
       }
     </style>
 
-    <!-- Preconnect to required origins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="preconnect" href="https://www.google-analytics.com" />
-
-    <!-- Optimize font loading -->
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&display=optional"
-      media="print"
-      onload="this.media='all'"
-      fetchpriority="low"
-    />
-
     <!-- Analytics -->
     <script async is:inline>
       window.dataLayer = window.dataLayer || [];
@@ -320,13 +290,6 @@ const fullTitle = titleAlreadyBranded
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"
     ></script>
-
-    <!-- Bootstrap JavaScript -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-      crossorigin="anonymous"
-      defer></script>
   </head>
   <body class={bodyClass} data-isecure-theme={htmlClass ? "light" : undefined}>
     <Navigation lang={lang} showLanguageSwitcher={showLanguageSwitcher} />

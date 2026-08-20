@@ -76,6 +76,21 @@ for (const file of htmlFiles) {
     if (count(html, /<h1(?:\s|>)/gi) !== 1) {
       failures.push(`${page}: expected exactly one H1`);
     }
+    const internalTaskId = html.match(
+      /\b(?!(?:ISO|RFC|SHA)-)[A-Z]{3,}[A-Z0-9]*-\d{3}\b/u,
+    )?.[0];
+    if (internalTaskId) {
+      failures.push(`${page}: internal task ID is public: ${internalTaskId}`);
+    }
+  }
+
+  if (
+    /Banking Data API/iu.test(html) ||
+    /href="\/(?:en\/|se\/)?data-api\//u.test(html)
+  ) {
+    failures.push(
+      `${page}: retired Banking Data API wording or route is public`,
+    );
   }
 
   const links = [
@@ -84,6 +99,29 @@ for (const file of htmlFiles) {
   for (const target of links) {
     if (!localTargetExists(target, file)) {
       failures.push(`${page}: broken local target ${target}`);
+    }
+  }
+
+  for (const match of html.matchAll(
+    /<(script|img)\b[^>]*\bsrc="(https?:\/\/[^"]+)"|<link\b[^>]*\brel="(?:stylesheet|preload)"[^>]*\bhref="(https?:\/\/[^"]+)"/giu,
+  )) {
+    const remoteUrl = match[2] ?? match[3];
+    if (
+      remoteUrl &&
+      !remoteUrl.startsWith("https://www.googletagmanager.com/gtag/js")
+    ) {
+      failures.push(`${page}: remote runtime asset ${remoteUrl}`);
+    }
+  }
+}
+
+for (const extension of [".html", ".json", ".js", ".txt", ".xml"]) {
+  for (const file of findFiles(dist, extension)) {
+    const content = readFileSync(file, "utf8");
+    if (/gpgtest/iu.test(content)) {
+      failures.push(
+        `${relative(dist, file)}: internal API Gateway stage name is public`,
+      );
     }
   }
 }
@@ -193,18 +231,35 @@ for (const [
 }
 
 const bankSimulatorPages = [
-  ["bank-simulator/index.html", "/bank-simulator/", "fi", "Pankkisimulaattori"],
+  [
+    "bank-simulator/index.html",
+    "/bank-simulator/",
+    "fi",
+    "Pankkisimulaattori",
+    "Testiympäristö",
+    "Rekisteröinti vaaditaan",
+    "Maksullinen tilaus vaaditaan",
+    "Pyydä käyttöoikeus",
+  ],
   [
     "en/bank-simulator/index.html",
     "/en/bank-simulator/",
     "en",
     "Bank Simulator",
+    "Test environment",
+    "Registration required",
+    "Paid subscription required",
+    "Request access",
   ],
   [
     "se/bank-simulator/index.html",
     "/se/bank-simulator/",
     "sv",
     "Banksimulator",
+    "Testmiljö",
+    "Registrering krävs",
+    "Betald prenumeration krävs",
+    "Begär åtkomst",
   ],
 ];
 const simulatorGuideUrls = [
@@ -219,6 +274,10 @@ for (const [
   canonicalPath,
   htmlLang,
   heading,
+  environmentLabel,
+  registrationLabel,
+  subscriptionLabel,
+  admissionLabel,
 ] of bankSimulatorPages) {
   const file = join(dist, relativeFile);
   if (!existsSync(file)) {
@@ -248,6 +307,11 @@ for (const [
     }
   }
   for (const requiredText of [
+    "Beta",
+    environmentLabel,
+    registrationLabel,
+    subscriptionLabel,
+    admissionLabel,
     "https://ws-api.test.isecure.fi/v2",
     "simulator",
     "camt.053.001.02",
@@ -288,6 +352,309 @@ for (const [entryPage, simulatorPath] of [
   }
 }
 
+const productIndexPages = [
+  [
+    "products/index.html",
+    "/products/",
+    "fi",
+    "Yksi tuotehierarkia",
+    "Tuotteet",
+    "Pankkiyhteydet",
+    [
+      "Experimental",
+      "Beta",
+      "GA",
+      "Testiympäristö",
+      "Tuotanto",
+      "Rekisteröinti vaaditaan",
+      "Maksullinen tilaus vaaditaan",
+      "Tilausta ei vaadita",
+      "Avoin rekisteröinti",
+      "Pyydä käyttöoikeus",
+    ],
+  ],
+  [
+    "en/products/index.html",
+    "/en/products/",
+    "en",
+    "One product hierarchy",
+    "Products",
+    "Bank Connectivity",
+    [
+      "Experimental",
+      "Beta",
+      "GA",
+      "Test environment",
+      "Production",
+      "Registration required",
+      "Paid subscription required",
+      "No subscription required",
+      "Open registration",
+      "Request access",
+    ],
+  ],
+  [
+    "se/products/index.html",
+    "/se/products/",
+    "sv",
+    "En produkthierarki",
+    "Produkter",
+    "Bankförbindelser",
+    [
+      "Experimental",
+      "Beta",
+      "GA",
+      "Testmiljö",
+      "Produktion",
+      "Registrering krävs",
+      "Betald prenumeration krävs",
+      "Ingen prenumeration krävs",
+      "Öppen registrering",
+      "Begär åtkomst",
+    ],
+  ],
+];
+const productIndexUrls = productIndexPages.map(
+  ([, canonicalPath]) => `https://www.isecure.fi${canonicalPath}`,
+);
+for (const [
+  relativeFile,
+  canonicalPath,
+  htmlLang,
+  heading,
+  sectionHeading,
+  connectivityName,
+  requiredAccessLabels,
+] of productIndexPages) {
+  const file = join(dist, relativeFile);
+  if (!existsSync(file)) {
+    failures.push(`Product index: missing ${relativeFile}`);
+    continue;
+  }
+  const html = readFileSync(file, "utf8");
+  if (!html.includes(`<html lang="${htmlLang}"`)) {
+    failures.push(`${relativeFile}: wrong product-index document language`);
+  }
+  if (
+    !html.includes(
+      `rel="canonical" href="https://www.isecure.fi${canonicalPath}"`,
+    )
+  ) {
+    failures.push(`${relativeFile}: wrong product-index canonical URL`);
+  }
+  if (!new RegExp(`<h1[^>]*>${heading}`, "u").test(html)) {
+    failures.push(`${relativeFile}: localized product-index H1 is missing`);
+  }
+  if (
+    !new RegExp(`<section[^>]*aria-label="${sectionHeading}"[^>]*>`, "u").test(
+      html,
+    )
+  ) {
+    failures.push(`${relativeFile}: accessible catalog label is missing`);
+  }
+  if (/<h2[^>]*>Products<\/h2>/iu.test(html)) {
+    failures.push(
+      `${relativeFile}: redundant visible Products heading remains`,
+    );
+  }
+  if (count(html, /data-catalog-entry="[^"]+"/gu) !== 3) {
+    failures.push(
+      `${relativeFile}: expected three entries in one catalog grid`,
+    );
+  }
+  if (
+    count(
+      html,
+      /<article\b[^>]*data-catalog-entry="[^"]+"[^>]*>[\s\S]*?<h3[\s\S]*?<\/h3>[\s\S]*?data-card-labels="true"[\s\S]*?data-card-content[\s\S]*?data-card-access="true"[\s\S]*?<\/article>/gu,
+    ) !== 3
+  ) {
+    failures.push(
+      `${relativeFile}: card order must be product name and right-side label, then content and access`,
+    );
+  }
+  if (
+    /Available and testable products|Developer surfaces|Products and APIs|Tuotteet ja API:t|Produkter och API:er/iu.test(
+      html,
+    )
+  ) {
+    failures.push(`${relativeFile}: obsolete split catalog headings remain`);
+  }
+  for (const indexUrl of productIndexUrls) {
+    if (!html.includes(indexUrl)) {
+      failures.push(
+        `${relativeFile}: reciprocal product-index hreflang is incomplete`,
+      );
+      break;
+    }
+  }
+  const routePrefix =
+    htmlLang === "fi" ? "" : htmlLang === "sv" ? "/se" : "/en";
+  for (const requiredLink of [
+    `${routePrefix}/web-services/`,
+    `${routePrefix}/bank-simulator/`,
+    `${routePrefix}/processing-api/`,
+  ]) {
+    if (!html.includes(`href="${requiredLink}"`)) {
+      failures.push(`${relativeFile}: missing catalog link ${requiredLink}`);
+    }
+  }
+  if (/href="\/(?:en\/|se\/)?(?:daily-cash|invoicing)\//u.test(html)) {
+    failures.push(
+      `${relativeFile}: draft product leaked into the public catalog`,
+    );
+  }
+  for (const requiredName of [connectivityName, "Processing API"]) {
+    if (!html.includes(requiredName)) {
+      failures.push(`${relativeFile}: missing API boundary ${requiredName}`);
+    }
+  }
+  if (html.includes('data-catalog-entry="file-exchange-api"')) {
+    failures.push(
+      `${relativeFile}: File Exchange duplicates the Bank Connectivity product`,
+    );
+  }
+  for (const requiredLabel of requiredAccessLabels) {
+    if (!html.includes(requiredLabel)) {
+      failures.push(
+        `${relativeFile}: missing product stage or access label ${requiredLabel}`,
+      );
+    }
+  }
+}
+
+const processingApiPages = [
+  [
+    "processing-api/index.html",
+    "/processing-api/",
+    "fi",
+    "Testiympäristö",
+    "Rekisteröinti vaaditaan",
+    "Maksullinen tilaus vaaditaan",
+    "Pyydä käyttöoikeus",
+  ],
+  [
+    "en/processing-api/index.html",
+    "/en/processing-api/",
+    "en",
+    "Test environment",
+    "Registration required",
+    "Paid subscription required",
+    "Request access",
+  ],
+  [
+    "se/processing-api/index.html",
+    "/se/processing-api/",
+    "sv",
+    "Testmiljö",
+    "Registrering krävs",
+    "Betald prenumeration krävs",
+    "Begär åtkomst",
+  ],
+];
+const processingApiUrls = processingApiPages.map(
+  ([, canonicalPath]) => `https://www.isecure.fi${canonicalPath}`,
+);
+const processingExampleUrl =
+  "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-manual-upload/README.md";
+for (const [
+  relativeFile,
+  canonicalPath,
+  htmlLang,
+  environmentLabel,
+  registrationLabel,
+  subscriptionLabel,
+  admissionLabel,
+] of processingApiPages) {
+  const file = join(dist, relativeFile);
+  if (!existsSync(file)) {
+    failures.push(`Processing API: missing ${relativeFile}`);
+    continue;
+  }
+  const html = readFileSync(file, "utf8");
+  if (!html.includes(`<html lang="${htmlLang}"`)) {
+    failures.push(`${relativeFile}: wrong Processing API document language`);
+  }
+  if (
+    !html.includes(
+      `rel="canonical" href="https://www.isecure.fi${canonicalPath}"`,
+    )
+  ) {
+    failures.push(`${relativeFile}: wrong Processing API canonical URL`);
+  }
+  for (const url of processingApiUrls) {
+    if (!html.includes(url)) {
+      failures.push(
+        `${relativeFile}: reciprocal Processing API hreflang is incomplete`,
+      );
+      break;
+    }
+  }
+  for (const marker of [
+    'data-catalog-record="processing-api"',
+    'data-catalog-kind="api"',
+    'data-catalog-stage="experimental"',
+    'data-catalog-visibility="soft-launch"',
+    "Experimental",
+    environmentLabel,
+    registrationLabel,
+    subscriptionLabel,
+    admissionLabel,
+    "ISECure REST API — File Exchange",
+    "pain.001.001.09",
+    "API Gateway",
+    processingExampleUrl,
+  ]) {
+    if (!html.includes(marker)) {
+      failures.push(
+        `${relativeFile}: missing Processing API boundary ${marker}`,
+      );
+    }
+  }
+}
+
+for (const retiredPath of [
+  "data-api/index.html",
+  "en/data-api/index.html",
+  "se/data-api/index.html",
+]) {
+  if (existsSync(join(dist, retiredPath))) {
+    failures.push(`Retired Banking Data API page still exists: ${retiredPath}`);
+  }
+}
+
+for (const [relativeFile, recordId, stage, visibility] of [
+  ["web-services/index.html", "bank-connectivity", "ga", "promoted"],
+  ["bank-simulator/index.html", "bank-simulation", "beta", "soft-launch"],
+  ["daily-cash/index.html", "daily-cash", "planned", "draft"],
+  ["invoicing/index.html", "invoicing", "planned", "draft"],
+]) {
+  const html = readFileSync(join(dist, relativeFile), "utf8");
+  for (const marker of [
+    `data-catalog-record="${recordId}"`,
+    `data-catalog-stage="${stage}"`,
+    `data-catalog-visibility="${visibility}"`,
+  ]) {
+    if (!html.includes(marker)) {
+      failures.push(`${relativeFile}: missing registry marker ${marker}`);
+    }
+  }
+}
+
+for (const [relativeFile, providerId] of [
+  ["nordea/index.html", "nordea"],
+  ["op/index.html", "op"],
+]) {
+  const html = readFileSync(join(dist, relativeFile), "utf8");
+  if (
+    !html.includes(`data-catalog-record="${providerId}"`) ||
+    !html.includes(`data-provider-id="${providerId}"`)
+  ) {
+    failures.push(
+      `${relativeFile}: registry-backed provider detail is missing`,
+    );
+  }
+}
+
 const sitemapFiles = findFiles(dist, ".xml").filter((file) =>
   file.includes("sitemap"),
 );
@@ -311,6 +678,24 @@ for (const guideUrl of simulatorGuideUrls) {
     failures.push(`Sitemap: missing Bank Simulator URL ${guideUrl}`);
   }
 }
+for (const productIndexUrl of productIndexUrls) {
+  if (!sitemapText.includes(productIndexUrl)) {
+    failures.push(`Sitemap: missing product index URL ${productIndexUrl}`);
+  }
+}
+for (const processingApiUrl of processingApiUrls) {
+  if (!sitemapText.includes(processingApiUrl)) {
+    failures.push(`Sitemap: missing Processing API URL ${processingApiUrl}`);
+  }
+}
+if (sitemapText.includes("/data-api/")) {
+  failures.push("Sitemap: retired Banking Data API route remains public");
+}
+
+const astroConfigSource = readFileSync(join(root, "astro.config.mjs"), "utf8");
+if (!astroConfigSource.includes("getDraftCatalogPaths")) {
+  failures.push("Sitemap exclusions are not derived from the product registry");
+}
 
 const llmsText = readFileSync(join(dist, "llms.txt"), "utf8");
 if (llmsText.includes("github.com/dforsber/isecure-ts-client")) {
@@ -325,6 +710,26 @@ if (!llmsText.includes("github.com/isecurefi/isecure-ts-client")) {
 }
 if (!llmsText.includes("https://www.isecure.fi/en/bank-simulator/")) {
   failures.push("llms.txt does not link to the Bank Simulator guide");
+}
+if (!llmsText.includes("https://www.isecure.fi/en/products/")) {
+  failures.push("llms.txt does not link to the product index");
+}
+if (!llmsText.includes("https://www.isecure.fi/en/processing-api/")) {
+  failures.push("llms.txt does not link to the Processing API guide");
+}
+for (const requiredAccessStatement of [
+  "Beta test-environment enrollment",
+  "Experimental payment workflow",
+  "registration, a paid subscription, and an access request are required",
+]) {
+  if (!llmsText.includes(requiredAccessStatement)) {
+    failures.push(
+      `llms.txt is missing product stage or access: ${requiredAccessStatement}`,
+    );
+  }
+}
+if (/gpgtest|Banking Data API|\/data-api\//iu.test(llmsText)) {
+  failures.push("llms.txt exposes an internal or retired API name");
 }
 
 const docsPath = join(dist, "wsapi_v2", "index.html");

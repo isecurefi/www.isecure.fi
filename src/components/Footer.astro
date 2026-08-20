@@ -15,6 +15,7 @@ const t = {
     docs: "Dokumentaatio",
     sdks: "SDK:t",
     pricing: "Hinnat",
+    catalog: "Tuotteet",
     company: "Yritys",
     about: "Tietoa meistä",
     privacy: "Tietosuojaseloste",
@@ -22,7 +23,7 @@ const t = {
     solutions: "Ratkaisut",
     guides: [
       { slug: "iso-20022", label: "ISO 20022 -sanomaopas" },
-      { slug: "data-api", label: "Banking Data API (varhainen pääsy)" },
+      { slug: "processing-api", label: "Processing API (Experimental)" },
       { slug: "pankkiyhteys", label: "Pankkiyhteysohjelma: rakenna vai osta" },
       { slug: "web-services", label: "Web Services -kanava" },
       { slug: "camt-053", label: "Konekielinen tiliote (camt.053)" },
@@ -38,6 +39,7 @@ const t = {
     docs: "Documentation",
     sdks: "SDKs",
     pricing: "Pricing",
+    catalog: "Products",
     company: "Company",
     about: "About us",
     privacy: "Privacy policy",
@@ -45,7 +47,7 @@ const t = {
     solutions: "Solutions",
     guides: [
       { slug: "iso-20022", label: "ISO 20022 message guide" },
-      { slug: "data-api", label: "Banking Data API (early access)" },
+      { slug: "processing-api", label: "Processing API (Experimental)" },
       { slug: "pankkiyhteys", label: "Bank connectivity: build vs buy" },
       { slug: "web-services", label: "Web Services channel" },
       { slug: "camt-053", label: "Bank statements (camt.053)" },
@@ -61,6 +63,7 @@ const t = {
     docs: "Dokumentation",
     sdks: "SDK:er",
     pricing: "Priser",
+    catalog: "Produkter",
     company: "Företag",
     about: "Om oss",
     privacy: "Integritetspolicy",
@@ -68,7 +71,7 @@ const t = {
     solutions: "Lösningar",
     guides: [
       { slug: "iso-20022", label: "ISO 20022-meddelandeguide" },
-      { slug: "data-api", label: "Banking Data API (tidig tillgång)" },
+      { slug: "processing-api", label: "Processing API (Experimental)" },
       { slug: "pankkiyhteys", label: "Bankförbindelse: bygga eller köpa" },
       { slug: "web-services", label: "Web Services-kanalen" },
       { slug: "camt-053", label: "Kontoutdrag (camt.053)" },
@@ -110,6 +113,7 @@ const t = {
         <div class="footer-col">
           <p class="footer-col-title">{t.product}</p>
           <ul>
+            <li><a href={`${base}products/`}>{t.catalog}</a></li>
             <li>
               <a href="/wsapi_v2/">{t.docs}</a>
             </li>
