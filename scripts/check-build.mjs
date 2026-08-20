@@ -157,6 +157,86 @@ for (const extension of [".html", ".json", ".js", ".txt", ".xml"]) {
   }
 }
 
+const searchIntentPages = [
+  [
+    "camt-053/index.html",
+    "Mikä on camt.053? ISO 20022 -tiliote",
+    "camt053",
+    "camt.053",
+  ],
+  [
+    "en/camt-053/index.html",
+    "What is camt.053? An ISO 20022 bank statement",
+    "camt053",
+    "camt.053",
+  ],
+  [
+    "se/camt-053/index.html",
+    "Vad är camt.053? Ett ISO 20022-kontoutdrag",
+    "camt053",
+    "camt.053",
+  ],
+  [
+    "camt-054/index.html",
+    "Mikä on camt.054? Veloitus- ja hyvitysilmoitus",
+    "camt054",
+    "camt.054",
+  ],
+  [
+    "en/camt-054/index.html",
+    "What is camt.054? A debit and credit notification",
+    "camt054",
+    "camt.054",
+  ],
+  [
+    "se/camt-054/index.html",
+    "Vad är camt.054? En debet- och kreditavisering",
+    "camt054",
+    "camt.054",
+  ],
+  [
+    "pain-002/index.html",
+    "Mikä on pain.002? Maksun statusraportti",
+    "pain002",
+    "pain.002",
+  ],
+  [
+    "en/pain-002/index.html",
+    "What is pain.002? A payment status report",
+    "pain002",
+    "pain.002",
+  ],
+  [
+    "se/pain-002/index.html",
+    "Vad är pain.002? En statusrapport för betalningar",
+    "pain002",
+    "pain.002",
+  ],
+];
+for (const [
+  relativeFile,
+  heading,
+  compactSpelling,
+  messageId,
+] of searchIntentPages) {
+  const file = join(dist, relativeFile);
+  if (!existsSync(file)) {
+    failures.push(`Search intent: missing ${relativeFile}`);
+    continue;
+  }
+  const html = readFileSync(file, "utf8");
+  if (!html.includes(`>${heading}</h1>`)) {
+    failures.push(`${relativeFile}: answer-first H1 is missing`);
+  }
+  if (!html.includes(compactSpelling)) {
+    failures.push(`${relativeFile}: common compact spelling is missing`);
+  }
+  const officialSource = `https://www.iso20022.org/iso-20022-message-definitions?search=${messageId}`;
+  if (!html.includes(`href="${officialSource}"`)) {
+    failures.push(`${relativeFile}: official ISO 20022 source is missing`);
+  }
+}
+
 const dailyCashPages = [
   ["daily-cash/index.html", "/daily-cash/", "fi"],
   ["en/daily-cash/index.html", "/en/daily-cash/", "en"],

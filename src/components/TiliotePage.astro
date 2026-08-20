@@ -6,12 +6,12 @@ const { lang } = Astro.props;
 
 const content = {
   fi: {
-    title: "Mikä on camt.053? Konekielinen tiliote API | ISECure",
+    title: "Mikä on camt.053? ISO 20022 -tiliote | ISECure",
     description:
-      "Nouda ISO 20022 camt.053 -tiliotteet suomalaisista pankeista yhdellä API:lla. Saldot, kirjatut tapahtumat ja viitetiedot ohjelmistoosi.",
-    h1: "camt.053 API konekielisten tiliotteiden noutamiseen",
+      "camt.053 on ISO 20022 -tiliote, joka sisältää tilin saldot ja kirjatut tapahtumat. Katso mitä camt053 tarkoittaa ja miten aineisto noudetaan.",
+    h1: "Mikä on camt.053? ISO 20022 -tiliote",
     intro:
-      "Konekielinen tiliote tuo pankkitilin tapahtumat rakenteisessa muodossa suoraan taloushallinnon tai ERP-ohjelmistoon, jolloin täsmäytys ja kirjaukset voidaan automatisoida. Nykyään tiliote noudetaan camt.053-muodossa Web Services -kanavan kautta.",
+      "camt.053 on pankin tilinomistajalle tai valtuutetulle osapuolelle toimittama konekielinen tiliote. Se tuo tilin saldot ja kirjatut tapahtumat rakenteisena XML:nä taloushallinto- tai ERP-ohjelmistoon täsmäytystä ja kirjaamista varten.",
     sections: [
       {
         h2: "Mikä camt.053 on",
@@ -51,6 +51,12 @@ const content = {
         ],
       },
     ],
+    sources: [
+      {
+        href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.053",
+        label: "ISO 20022 -sanomaluettelo: camt.053 BankToCustomerStatement",
+      },
+    ],
     cta: {
       title: "Tuo camt.053-tiliotteet ohjelmistoosi",
       text: "Kerro pankit, tiliotemäärät ja käyttämäsi camt.053-versiot. Suunnittelemme tiedostonoudon ja käyttöönoton kanssasi.",
@@ -58,12 +64,12 @@ const content = {
     },
   },
   en: {
-    title: "What Is camt.053? Bank Statement API | ISECure",
+    title: "What Is camt.053? ISO 20022 Bank Statement | ISECure",
     description:
-      "Retrieve ISO 20022 camt.053 statements from Finnish banks through one API. Bring balances, booked entries, and references into your software.",
-    h1: "camt.053 API for retrieving bank statements",
+      "camt.053 is an ISO 20022 bank statement containing account balances and booked entries. Learn what camt053 means and how the file is retrieved.",
+    h1: "What is camt.053? An ISO 20022 bank statement",
     intro:
-      "A machine-readable statement brings a bank account's transactions in structured form straight into accounting or ERP software, so reconciliation and bookings can be automated. Today the statement is retrieved in camt.053 format over the Web Services channel.",
+      "camt.053 is a machine-readable statement sent by an account servicer to the account owner or an authorized party. It brings account balances and booked entries into accounting or ERP software as structured XML for reconciliation and posting.",
     sections: [
       {
         h2: "What camt.053 is",
@@ -103,6 +109,12 @@ const content = {
         ],
       },
     ],
+    sources: [
+      {
+        href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.053",
+        label: "ISO 20022 message catalogue: camt.053 BankToCustomerStatement",
+      },
+    ],
     cta: {
       title: "Bring camt.053 statements into your product",
       text: "Tell us the banks, statement volumes, and camt.053 versions you use. We will plan retrieval and production onboarding with you.",
@@ -110,12 +122,12 @@ const content = {
     },
   },
   se: {
-    title: "Vad är camt.053? API för kontoutdrag | ISECure",
+    title: "Vad är camt.053? ISO 20022-kontoutdrag | ISECure",
     description:
-      "Hämta ISO 20022 camt.053-kontoutdrag från finländska banker via ett API. För in saldon, bokförda poster och referenser i programvaran.",
-    h1: "camt.053-API för att hämta kontoutdrag",
+      "camt.053 är ett ISO 20022-kontoutdrag med kontosaldon och bokförda poster. Läs vad camt053 betyder och hur filen hämtas.",
+    h1: "Vad är camt.053? Ett ISO 20022-kontoutdrag",
     intro:
-      "Ett maskinläsbart kontoutdrag för in ett bankkontos transaktioner i strukturerad form direkt i ekonomi- eller ERP-programvara, så att avstämning och bokföring kan automatiseras. I dag hämtas kontoutdraget i camt.053-format via Web Services-kanalen.",
+      "camt.053 är ett maskinläsbart kontoutdrag som kontoföraren skickar till kontoinnehavaren eller en behörig part. Det för in kontosaldon och bokförda poster som strukturerad XML i ekonomi- eller ERP-programvara för avstämning och bokföring.",
     sections: [
       {
         h2: "Vad camt.053 är",
@@ -153,6 +165,12 @@ const content = {
         paras: [
           "ISECure hämtar camt.053-kontoutdrag från de finländska banker vi stöder via ett REST-API. Vi sköter certifikaten och signeringen, så din programvara får kontoutdragen från ett ställe med samma integration.",
         ],
+      },
+    ],
+    sources: [
+      {
+        href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.053",
+        label: "ISO 20022-meddelandekatalog: camt.053 BankToCustomerStatement",
       },
     ],
     cta: {
