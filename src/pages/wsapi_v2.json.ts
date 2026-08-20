@@ -30,6 +30,7 @@ const HTTP_METHODS = new Set([
 ]);
 
 const TYPESCRIPT_SDK_URL = "https://github.com/isecurefi/isecure-ts-client";
+const BANK_SIMULATOR_GUIDE_URL = "https://www.isecure.fi/en/bank-simulator/";
 const TYPESCRIPT_SDK_SAMPLES: Record<string, string> = {
   InitRegister: `// register() retrieves and answers the registration challenge.
 const registration = await client.register();`,
@@ -105,10 +106,13 @@ export const GET: APIRoute = () => {
   publishedSpec.info.contact.email = "support@isecure.fi";
   publishedSpec.info["x-logo"].url =
     "https://www.isecure.fi/images/isecure-small-logo.png";
-  publishedSpec.info.description = publishedSpec.info.description.replace(
+  const baseDescription = publishedSpec.info.description.replace(
     "Browser-compatible TypeScript SDK is available on GitHub [dforsber/isecure-ts-client](https://github.com/dforsber/isecure-ts-client).",
     `The [official ISECure TypeScript SDK](${TYPESCRIPT_SDK_URL}) supports Node.js and modern browser bundlers. Install it with \`npm install isecure-ts-client\`.`,
   );
+  publishedSpec.info.description = `${baseDescription}
+
+The test-only bank identifier \`simulator\` is available at \`https://ws-api.test.isecure.fi/v2\`. See the [Bank Simulator guide](${BANK_SIMULATOR_GUIDE_URL}) for enrollment, initial statement download, and signed file upload examples.`;
   publishedSpec.externalDocs = {
     description: "Official ISECure TypeScript SDK",
     url: TYPESCRIPT_SDK_URL,

@@ -1,0 +1,260 @@
+---
+import { bankSimulatorContent } from "../data/bankSimulator";
+import Layout from "../layouts/Layout.astro";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const content = bankSimulatorContent[lang];
+const origin = "https://www.isecure.fi";
+const path = lang === "fi" ? "/bank-simulator/" : `/${lang}/bank-simulator/`;
+const canonicalUrl = `${origin}${path}`;
+const alternateLinks = [
+  { hreflang: "fi", href: `${origin}/bank-simulator/` },
+  { hreflang: "en", href: `${origin}/en/bank-simulator/` },
+  { hreflang: "sv", href: `${origin}/se/bank-simulator/` },
+  { hreflang: "x-default", href: `${origin}/en/bank-simulator/` },
+];
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: content.title,
+  description: content.meta.description,
+  url: canonicalUrl,
+  inLanguage: lang === "fi" ? "fi-FI" : lang === "en" ? "en-US" : "sv-SE",
+  author: {
+    "@type": "Organization",
+    name: "ISECure Oy",
+    url: origin,
+  },
+  about: {
+    "@type": "SoftwareApplication",
+    name: "ISECure Bank Simulator",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Cloud",
+  },
+};
+const sdkExampleUrl =
+  "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/bank-simulator/README.md";
+---
+
+<Layout
+  title={content.meta.title}
+  lang={lang}
+  description={content.meta.description}
+  socialDescription={content.meta.description}
+  canonicalUrl={canonicalUrl}
+  alternateLinks={alternateLinks}
+  structuredData={structuredData}
+>
+  <article class="simulator-guide container">
+    <header class="simulator-header">
+      <p class="simulator-eyebrow">{content.eyebrow}</p>
+      <h1>{content.title}</h1>
+      <p class="simulator-intro">{content.intro}</p>
+      <dl class="simulator-facts">
+        <div>
+          <dt>Base URL</dt>
+          <dd><code>https://ws-api.test.isecure.fi/v2</code></dd>
+        </div>
+        <div>
+          <dt>Bank</dt>
+          <dd><code>simulator</code></dd>
+        </div>
+      </dl>
+    </header>
+
+    <div class="simulator-sections">
+      {
+        content.sections.map((section) => (
+          <section>
+            <h2>{section.title}</h2>
+            {section.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+            {section.items && (
+              <ul>
+                {section.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))
+      }
+    </div>
+
+    <aside class="simulator-example">
+      <h2>{content.exampleTitle}</h2>
+      <p>{content.exampleText}</p>
+      <div class="simulator-actions">
+        <a class="simulator-link simulator-link-primary" href="/wsapi_v2/">
+          {content.apiLink}
+        </a>
+        <a
+          class="simulator-link"
+          href={sdkExampleUrl}
+          target="_blank"
+          rel="noopener"
+        >
+          {content.sdkLink}
+        </a>
+      </div>
+    </aside>
+  </article>
+</Layout>
+
+<style>
+  .simulator-guide {
+    margin: 3rem auto;
+    max-width: 900px;
+  }
+
+  .simulator-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2rem;
+  }
+
+  .simulator-eyebrow {
+    color: #087f72;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .simulator-header h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .simulator-intro {
+    font-size: 1.15rem;
+    line-height: 1.75;
+    max-width: 760px;
+  }
+
+  .simulator-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.75rem 0 0;
+  }
+
+  .simulator-facts div {
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    min-width: min(100%, 260px);
+    padding: 0.85rem 1rem;
+  }
+
+  .simulator-facts dt {
+    color: var(--secondary-color);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .simulator-facts dd {
+    margin: 0.25rem 0 0;
+  }
+
+  .simulator-sections {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .simulator-sections section {
+    max-width: 780px;
+  }
+
+  .simulator-sections h2,
+  .simulator-example h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .simulator-sections p,
+  .simulator-example p {
+    line-height: 1.75;
+    margin-bottom: 0.75rem;
+  }
+
+  .simulator-sections ul {
+    line-height: 1.75;
+    padding-left: 1.25rem;
+  }
+
+  .simulator-sections li + li {
+    margin-top: 0.35rem;
+  }
+
+  code {
+    overflow-wrap: anywhere;
+  }
+
+  .simulator-example {
+    background: #eef8f6;
+    border: 1px solid #b9ddd6;
+    border-radius: 12px;
+    margin-top: 3rem;
+    padding: 1.5rem;
+  }
+
+  .simulator-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .simulator-link {
+    border: 1px solid #087f72;
+    border-radius: 8px;
+    color: #087f72;
+    display: inline-block;
+    font-weight: 700;
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+  }
+
+  .simulator-link-primary {
+    background: #087f72;
+    color: #fff;
+  }
+
+  .simulator-link:hover {
+    background: #d9efeb;
+    color: #066b61;
+  }
+
+  .simulator-link-primary:hover {
+    background: #066b61;
+    color: #fff;
+  }
+
+  .simulator-link:focus-visible {
+    outline: 3px solid #212529;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 576px) {
+    .simulator-guide {
+      margin: 2rem auto;
+    }
+
+    .simulator-link {
+      text-align: center;
+      width: 100%;
+    }
+  }
+</style>

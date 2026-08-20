@@ -192,7 +192,81 @@ for (const [
   }
 }
 
-for (const entryPage of ["index.html", "en/index.html", "se/index.html"]) {
+const bankSimulatorPages = [
+  ["bank-simulator/index.html", "/bank-simulator/", "fi", "Pankkisimulaattori"],
+  [
+    "en/bank-simulator/index.html",
+    "/en/bank-simulator/",
+    "en",
+    "Bank Simulator",
+  ],
+  [
+    "se/bank-simulator/index.html",
+    "/se/bank-simulator/",
+    "sv",
+    "Banksimulator",
+  ],
+];
+const simulatorGuideUrls = [
+  "https://www.isecure.fi/bank-simulator/",
+  "https://www.isecure.fi/en/bank-simulator/",
+  "https://www.isecure.fi/se/bank-simulator/",
+];
+const simulatorExampleUrl =
+  "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/bank-simulator/README.md";
+for (const [
+  relativeFile,
+  canonicalPath,
+  htmlLang,
+  heading,
+] of bankSimulatorPages) {
+  const file = join(dist, relativeFile);
+  if (!existsSync(file)) {
+    failures.push(`Bank Simulator: missing ${relativeFile}`);
+    continue;
+  }
+  const html = readFileSync(file, "utf8");
+  if (
+    !html.includes(
+      `rel="canonical" href="https://www.isecure.fi${canonicalPath}"`,
+    )
+  ) {
+    failures.push(`${relativeFile}: wrong Bank Simulator canonical URL`);
+  }
+  if (!html.includes(`<html lang="${htmlLang}"`)) {
+    failures.push(`${relativeFile}: wrong document language`);
+  }
+  if (!new RegExp(`<h1[^>]*>${heading}</h1>`, "u").test(html)) {
+    failures.push(`${relativeFile}: localized Bank Simulator H1 is missing`);
+  }
+  for (const guideUrl of simulatorGuideUrls) {
+    if (!html.includes(`rel="alternate"`) || !html.includes(guideUrl)) {
+      failures.push(
+        `${relativeFile}: reciprocal Bank Simulator language links are incomplete`,
+      );
+      break;
+    }
+  }
+  for (const requiredText of [
+    "https://ws-api.test.isecure.fi/v2",
+    "simulator",
+    "camt.053.001.02",
+    "pain.001.001.09",
+    "pain.002.001.10",
+    "camt.054.001.02",
+    simulatorExampleUrl,
+  ]) {
+    if (!html.includes(requiredText)) {
+      failures.push(`${relativeFile}: missing simulator fact ${requiredText}`);
+    }
+  }
+}
+
+for (const [entryPage, simulatorPath] of [
+  ["index.html", "/bank-simulator/"],
+  ["en/index.html", "/en/bank-simulator/"],
+  ["se/index.html", "/se/bank-simulator/"],
+]) {
   const html = readFileSync(join(dist, entryPage), "utf8");
   if (/href="\/(?:en\/|se\/)?daily-cash\//u.test(html)) {
     failures.push(
@@ -204,11 +278,20 @@ for (const entryPage of ["index.html", "en/index.html", "se/index.html"]) {
       `${entryPage}: Invoicing must remain outside public navigation`,
     );
   }
+  if (!html.includes(`href="${simulatorPath}"`)) {
+    failures.push(
+      `${entryPage}: localized Bank Simulator guide link is missing`,
+    );
+  }
+  if (!html.includes("camt.053.001.02")) {
+    failures.push(`${entryPage}: fresh-user simulator statement is missing`);
+  }
 }
 
-for (const sitemapFile of findFiles(dist, ".xml").filter((file) =>
+const sitemapFiles = findFiles(dist, ".xml").filter((file) =>
   file.includes("sitemap"),
-)) {
+);
+for (const sitemapFile of sitemapFiles) {
   if (readFileSync(sitemapFile, "utf8").includes("/daily-cash/")) {
     failures.push(
       `${relative(dist, sitemapFile)}: Daily Cash preview must remain outside sitemaps`,
@@ -219,6 +302,29 @@ for (const sitemapFile of findFiles(dist, ".xml").filter((file) =>
       `${relative(dist, sitemapFile)}: Invoicing preview must remain outside sitemaps`,
     );
   }
+}
+const sitemapText = sitemapFiles
+  .map((file) => readFileSync(file, "utf8"))
+  .join("\n");
+for (const guideUrl of simulatorGuideUrls) {
+  if (!sitemapText.includes(guideUrl)) {
+    failures.push(`Sitemap: missing Bank Simulator URL ${guideUrl}`);
+  }
+}
+
+const llmsText = readFileSync(join(dist, "llms.txt"), "utf8");
+if (llmsText.includes("github.com/dforsber/isecure-ts-client")) {
+  failures.push(
+    "llms.txt still links to the retired TypeScript SDK repository",
+  );
+}
+if (!llmsText.includes("github.com/isecurefi/isecure-ts-client")) {
+  failures.push(
+    "llms.txt does not link to the official TypeScript SDK repository",
+  );
+}
+if (!llmsText.includes("https://www.isecure.fi/en/bank-simulator/")) {
+  failures.push("llms.txt does not link to the Bank Simulator guide");
 }
 
 const docsPath = join(dist, "wsapi_v2", "index.html");
@@ -295,6 +401,17 @@ if (!rawSpec.info?.description?.includes(typescriptSdkUrl)) {
 }
 if (rawSpec.info?.description?.includes("dforsber/isecure-ts-client")) {
   failures.push("API introduction still links to the retired SDK repository");
+}
+if (
+  !rawSpec.info?.description?.includes(
+    "https://www.isecure.fi/en/bank-simulator/",
+  ) ||
+  !rawSpec.info?.description?.includes("https://ws-api.test.isecure.fi/v2") ||
+  !rawSpec.info?.description?.includes("`simulator`")
+) {
+  failures.push(
+    "API introduction is missing the test-only Bank Simulator documentation",
+  );
 }
 
 const httpMethods = new Set([

@@ -20,7 +20,7 @@ const meta = {
     faqSdk:
       "ISECure sisältää PHP SDK:n, TypeScript SDK:n, Python SDK:n ja wscli-työkalun REST API:n rinnalle.",
     faqTest:
-      "Voit aloittaa testirajapinnalla ja OpenAPI-dokumentaatiolla. Tuotantokäyttöön tarvitaan pankin yritysasiakassopimus, tunnukset ja varmenteet.",
+      "Voit aloittaa testirajapinnalla, OpenAPI-dokumentaatiolla ja simulator-pankilla. Tuore simulator-rekisteröinti luo ensimmäisen camt.053.001.02-tiliotteen listattavaksi ja ladattavaksi. Tuotantokäyttöön tarvitaan pankin yritysasiakassopimus, tunnukset ja varmenteet.",
   },
   en: {
     title: "Banking API and SDKs",
@@ -32,7 +32,7 @@ const meta = {
     faqSdk:
       "ISECure includes PHP SDK, TypeScript SDK, Python SDK, and wscli tooling alongside the REST API.",
     faqTest:
-      "You can start with the test API and OpenAPI documentation. Production use still requires the bank's corporate agreement, credentials, and certificates.",
+      "You can start with the test API, OpenAPI documentation, and bank simulator. A fresh simulator enrollment creates the first camt.053.001.02 statement for listing and download. Production use still requires the bank's corporate agreement, credentials, and certificates.",
   },
   se: {
     title: "Bank API och SDK:er",
@@ -44,7 +44,7 @@ const meta = {
     faqSdk:
       "ISECure innehåller PHP SDK, TypeScript SDK, Python SDK och wscli-verktyg bredvid REST API:t.",
     faqTest:
-      "Ni kan börja med test-API:t och OpenAPI-dokumentationen. Produktion kräver fortfarande bankens företagsavtal, konton och certifikat.",
+      "Ni kan börja med test-API:t, OpenAPI-dokumentationen och banken simulator. En ny simulatorregistrering skapar det första camt.053.001.02-kontoutdraget för listning och hämtning. Produktion kräver fortfarande bankens företagsavtal, konton och certifikat.",
   },
 };
 
@@ -53,7 +53,7 @@ const structuredFaqs = {
   fi: [
     {
       q: "Mitä ISECuren testaukseen ja tuotantoon siirtymiseen tarvitaan?",
-      a: "Testauksen voi aloittaa testiympäristöllä, OpenAPI-kuvauksella ja SDK:lla. Tuotantoon tarvitaan pankin yritysasiakassopimus, pankin tunnukset ja varmenteet; ISECure hoitaa teknisen rajapinnan, varmenneprosessin ja käyttöönoton.",
+      a: "Testauksen voi aloittaa testiympäristöllä, OpenAPI-kuvauksella ja simulator-pankilla. Tuore simulator-rekisteröinti luo ensimmäisen camt.053.001.02-tiliotteen listattavaksi ja ladattavaksi. Tuotantoon tarvitaan pankin yritysasiakassopimus, pankin tunnukset ja varmenteet; ISECure hoitaa teknisen rajapinnan, varmenneprosessin ja käyttöönoton.",
     },
     {
       q: "Mitä pankkiaineistojen tiedostotyyppejä ISECure tukee?",
@@ -79,7 +79,7 @@ const structuredFaqs = {
   en: [
     {
       q: "What do we need for ISECure testing and production?",
-      a: "You can start with the test environment, OpenAPI description, and SDKs. Production still requires the bank's corporate agreement, bank credentials, and certificates; ISECure handles the technical API, certificate process, and onboarding.",
+      a: "You can start with the test environment, OpenAPI description, and bank simulator. A fresh simulator enrollment creates the first camt.053.001.02 statement for listing and download. Production still requires the bank's corporate agreement, credentials, and certificates; ISECure handles the technical API, certificate process, and onboarding.",
     },
     {
       q: "Which bank file types does ISECure support?",
@@ -105,7 +105,7 @@ const structuredFaqs = {
   se: [
     {
       q: "Vad behövs för ISECure-testning och produktion?",
-      a: "Ni kan börja med testmiljön, OpenAPI-beskrivningen och SDK:erna. Produktion kräver fortfarande bankens företagsavtal, bankkonton och certifikat; ISECure hanterar det tekniska API:t, certifikatprocessen och onboardingen.",
+      a: "Ni kan börja med testmiljön, OpenAPI-beskrivningen och banken simulator. En ny simulatorregistrering skapar det första camt.053.001.02-kontoutdraget för listning och hämtning. Produktion kräver fortfarande bankens företagsavtal, bankkonton och certifikat; ISECure hanterar det tekniska API:t, certifikatprocessen och onboardingen.",
     },
     {
       q: "Vilka bankfiltyper stöder ISECure?",

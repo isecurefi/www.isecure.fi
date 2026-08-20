@@ -21,7 +21,7 @@ const data = new WSChannel({
   Phone: "+358401234567",
   PublicKey: process.env.ISECURE_PUBLIC_KEY_PEM!,
   BaseUrl: "https://ws-api.test.isecure.fi/v2",
-  Bank: "nordea",
+  Bank: "simulator",
   Mode: "data",
   Password: process.env.ISECURE_DATA_PASSWORD!,
 });
@@ -31,9 +31,10 @@ if (session.status !== "authenticated") {
   throw new Error(\`Login failed: \${session.status}\`);
 }
 
-const files = await data.listFiles({ 
-  FileType: "CAMT", 
-  Status: "NEW" 
+// A fresh simulator enrollment creates this opening statement.
+const files = await data.listFiles({
+  FileType: "camt.053.001.02",
+  Status: "NEW",
 });
 
 const [statement] = files.FileDescriptors;
@@ -76,7 +77,7 @@ const content = {
     quickstartEyebrow: "Käyttöönotto",
     quickstartTitle: "Ensimmäinen testikutsu, vain kolme askelta",
     quickstartLead:
-      "Testiympäristö on suunniteltu kehittäjän etenemistä varten: tarkista rajapinta, luo testitili ja tee ensimmäinen listaus tai lataus ennen tuotannon pankkisopimuksia.",
+      "Testiympäristössä voit luoda testitilin, rekisteröidä simulator-pankin ja ladata valmiin camt.053.001.02-tiliotteen ennen tuotannon pankkisopimuksia.",
     quickstart: [
       {
         title: "1. Avaa OpenAPI tai asenna SDK",
@@ -87,8 +88,8 @@ const content = {
         text: "SDK:n rekisteröinti testipuolen API:iin luo tilin ja palauttaa integraattorin API-avaimen jatkokutsuja varten.",
       },
       {
-        title: "3. Tee ensimmäinen aineistokutsu",
-        text: "Kirjaudu data-tilillä ja kutsu esimerkiksi listFiles- tai downloadFile-operaatiota testiaineistoilla.",
+        title: "3. Rekisteröi simulaattori ja lataa tiliote",
+        text: "Rekisteröi simulator-varmenne, kirjaudu data-tilillä, listaa NEW-tilassa oleva camt.053.001.02 ja lataa palautettu tiedostoviite.",
       },
     ],
     tsLabel: "TypeScript SDK",
@@ -212,7 +213,7 @@ const content = {
     faqs: [
       {
         q: "Mitä testaukseen ja tuotantoon siirtymiseen tarvitaan?",
-        a: "Testauksen voi aloittaa testiympäristöllä, OpenAPI-kuvauksella ja SDK:lla. Tuotantoon tarvitaan pankin yritysasiakassopimus, pankin tunnukset ja varmenteet; ISECure hoitaa teknisen rajapinnan, varmenneprosessin ja käyttöönoton.",
+        a: "Testauksen voi aloittaa testiympäristöllä, OpenAPI-kuvauksella ja simulator-pankilla. Tuore simulator-rekisteröinti luo ensimmäisen camt.053.001.02-tiliotteen listattavaksi ja ladattavaksi. Tuotantoon tarvitaan pankin yritysasiakassopimus, pankin tunnukset ja varmenteet; ISECure hoitaa teknisen rajapinnan, varmenneprosessin ja käyttöönoton.",
       },
       {
         q: "Mitä aineistotyyppejä tuetaan?",
@@ -236,6 +237,7 @@ const content = {
       },
     ],
     docsCta: "WSAPI v2 dokumentaatio",
+    simulatorCta: "Pankkisimulaattorin ohje",
     openApiCta: "OpenAPI JSON",
   },
   en: {
@@ -268,7 +270,7 @@ const content = {
     quickstartEyebrow: "Get started",
     quickstartTitle: "First test call in three steps",
     quickstartLead:
-      "The test environment is built for developer evaluation: inspect the API, create a test account, and make the first list or download call before production bank agreements are finalized.",
+      "In the test environment, create a test account, enroll bank simulator, and download the seeded camt.053.001.02 statement before production bank agreements are finalized.",
     quickstart: [
       {
         title: "1. Open the API or install an SDK",
@@ -279,8 +281,8 @@ const content = {
         text: "SDK registration against the test endpoint creates the account and returns the integrator API key for later calls.",
       },
       {
-        title: "3. Make the first file call",
-        text: "Log in with the data account and call listFiles or downloadFile against test material.",
+        title: "3. Enroll the simulator and download a statement",
+        text: "Enroll the simulator certificate, log in with the data account, list the NEW camt.053.001.02, and download its returned file reference.",
       },
     ],
     tsLabel: "TypeScript SDK",
@@ -404,7 +406,7 @@ const content = {
     faqs: [
       {
         q: "What do we need for testing and production?",
-        a: "You can start with the test environment, OpenAPI description, and SDKs. Production still requires the bank's corporate agreement, bank credentials, and certificates; ISECure handles the technical API, certificate process, and onboarding.",
+        a: "You can start with the test environment, OpenAPI description, and bank simulator. A fresh simulator enrollment creates the first camt.053.001.02 statement for listing and download. Production still requires the bank's corporate agreement, bank credentials, and certificates; ISECure handles the technical API, certificate process, and onboarding.",
       },
       {
         q: "Which file types are supported?",
@@ -428,6 +430,7 @@ const content = {
       },
     ],
     docsCta: "WSAPI v2 documentation",
+    simulatorCta: "Bank Simulator guide",
     openApiCta: "OpenAPI JSON",
   },
   se: {
@@ -460,7 +463,7 @@ const content = {
     quickstartEyebrow: "Kom igång",
     quickstartTitle: "Första testanropet i tre steg",
     quickstartLead:
-      "Testmiljön är byggd för utvecklarutvärdering: kontrollera API:t, skapa ett testkonto och gör första listningen eller hämtningen före produktionsavtalen med banken är klara.",
+      "I testmiljön kan ni skapa ett testkonto, registrera banken simulator och hämta det förberedda camt.053.001.02-kontoutdraget innan produktionsavtalen med banken är klara.",
     quickstart: [
       {
         title: "1. Öppna API:t eller installera ett SDK",
@@ -471,8 +474,8 @@ const content = {
         text: "SDK-registrering mot testmiljön skapar kontot och returnerar integratörens API-nyckel för kommande anrop.",
       },
       {
-        title: "3. Gör första filanropet",
-        text: "Logga in med data-kontot och anropa listFiles eller downloadFile mot testmaterial.",
+        title: "3. Registrera simulatorn och hämta kontoutdraget",
+        text: "Registrera simulatorcertifikatet, logga in med datakontot, lista camt.053.001.02 med status NEW och hämta den returnerade filreferensen.",
       },
     ],
     tsLabel: "TypeScript SDK",
@@ -596,7 +599,7 @@ const content = {
     faqs: [
       {
         q: "Vad behövs för testning och produktion?",
-        a: "Ni kan börja med testmiljön, OpenAPI-beskrivningen och SDK:erna. Produktion kräver fortfarande bankens företagsavtal, bankkonton och certifikat; ISECure hanterar det tekniska API:t, certifikatprocessen och onboardingen.",
+        a: "Ni kan börja med testmiljön, OpenAPI-beskrivningen och banken simulator. En ny simulatorregistrering skapar det första camt.053.001.02-kontoutdraget för listning och hämtning. Produktion kräver fortfarande bankens företagsavtal, bankkonton och certifikat; ISECure hanterar det tekniska API:t, certifikatprocessen och onboardingen.",
       },
       {
         q: "Vilka filtyper stöds?",
@@ -620,11 +623,14 @@ const content = {
       },
     ],
     docsCta: "WSAPI v2 dokumentation",
+    simulatorCta: "Guide för banksimulatorn",
     openApiCta: "OpenAPI JSON",
   },
 };
 
 const t = content[lang];
+const simulatorHref =
+  lang === "fi" ? "/bank-simulator/" : `/${lang}/bank-simulator/`;
 ---
 
 <article class="banking-landing">
@@ -676,6 +682,9 @@ const t = content[lang];
       <p>{t.quickstartLead}</p>
       <div class="doc-actions">
         <a class="button button-primary" href="/wsapi_v2/">{t.docsCta}</a>
+        <a class="button button-secondary" href={simulatorHref}
+          >{t.simulatorCta}</a
+        >
         <a
           class="button button-secondary"
           href="https://github.com/isecurefi/isecure-ts-client"

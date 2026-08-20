@@ -17,6 +17,7 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [Home (English)](https://www.isecure.fi/en/): product overview, supported banks, pricing, and FAQ
 - [Home (Finnish)](https://www.isecure.fi/): Finnish-language product overview
 - [Home (Swedish)](https://www.isecure.fi/se/): Swedish-language product overview
+- [Bank Simulator](https://www.isecure.fi/en/bank-simulator/): gpgtest enrollment, initial camt.053 download, and signed pain.001 file workflow
 - [ISO 20022 Banking Data API](https://www.isecure.fi/en/data-api/): early access for normalized bank data with source evidence
 - [ISO 20022 message guide](https://www.isecure.fi/en/iso-20022/): comparison of pain.001, pain.002, camt.053, and camt.054 in bank integrations
 - [Bank integration for software products](https://www.isecure.fi/en/pankkiyhteys/): adding Finnish bank connectivity to a software product, build vs. buy
@@ -36,7 +37,7 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 
 ## SDKs and tooling
 
-- [TypeScript SDK](https://github.com/dforsber/isecure-ts-client): official TypeScript client library
+- [TypeScript SDK](https://github.com/isecurefi/isecure-ts-client): official TypeScript client library
 
 Python and PHP SDKs and the `wscli` command-line tool are also available.
 
