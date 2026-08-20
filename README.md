@@ -61,6 +61,8 @@ Useful commands:
 | `corepack yarn api:validate`      | Check the OpenAPI contract, security schemes, operations, responses, and source metadata |
 | `corepack yarn api:sync`          | Explicitly update the bundled API specification from its authoritative repository        |
 | `corepack yarn verify:production` | Check production pages, redirects, headers, protected paths, and API documentation       |
+| `corepack yarn growth:report`     | Compare the latest complete 28-day GSC and GA4 windows and write an ignored local report |
+| `corepack yarn gsc:reconcile`     | Read sitemap and selected URL indexing state without changing Search Console             |
 | `corepack yarn publish:plan`      | Show the committed release and current CloudFront predecessor without changing AWS       |
 | `corepack yarn publish:rollback`  | Restore the predecessor recorded for the active immutable release                        |
 
@@ -130,6 +132,43 @@ corepack yarn npm audit --all --recursive
 Also inspect the built sitemap, check internal links, and test the API reference
 at desktop and mobile widths. Production verification should run only after the
 CloudFront deployment and legacy redirect migration are complete.
+
+## Growth measurement
+
+The site loads Google Analytics only after explicit consent. Rejecting analytics makes no Google
+Analytics request; a visitor can reopen the choice from the footer. Events contain stable product,
+surface, language, and path identifiers only. Form values, query strings, customer identifiers,
+bank data, and task IDs must never be analytics parameters. `generate_lead` is emitted only after
+successful form delivery. `select_content` measures the documented product, access, and developer
+resource links.
+
+For the read-only monthly report, configure `.env` from `.env.example`:
+
+- grant the service account Search Console access;
+- grant the same account **Analytics Viewer** access to the ISECure GA4 property; and
+- set `GA4_PROPERTY_ID` to the numeric property ID, not the public `G-` measurement ID.
+
+Then run:
+
+```sh
+corepack yarn growth:report
+corepack yarn gsc:reconcile
+corepack yarn verify:production
+```
+
+The first command compares two adjacent 28-day windows behind a three-day reporting delay, so fresh
+Search Console data is not mistaken for a decline, and writes `.growth-data/latest.{json,md}`. Both
+`.growth-data/` and raw `.gsc-data/` are ignored because search queries are review data, not website
+content. The report covers organic clicks, impressions, CTR, position, low-CTR and
+striking-distance queries, legacy results, consented sessions/page views, product or resource
+selections, successful contacts, and session-to-contact conversion. Missing GA4 access is reported
+as unavailable, never as zero.
+
+Review the report with the production/build checks, Search Console indexing state, current claim
+evidence, and short buyer observations. A metric may justify investigation but never approves a
+claim, homepage promotion, redirect, or retirement. Admit each concrete change as its own task in
+`bankfiles-platform/TASKS.md`; compare the following complete period after the change rather than
+crediting normal traffic noise.
 
 ## Production architecture
 

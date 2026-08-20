@@ -4,7 +4,36 @@ const checks = [
     url: "https://www.isecure.fi/wsapi_v2/",
     status: 200,
     contentType: "text/html",
-    contains: ['data-renderer="scalar"', 'data-reference-only="true"'],
+    contains: [
+      'data-renderer="scalar"',
+      'data-reference-only="true"',
+      "data-analytics-consent",
+      "data-analytics-settings",
+    ],
+    excludes: ['src="https://www.googletagmanager.com'],
+  },
+  {
+    name: "Homepage analytics is consent controlled",
+    url: "https://www.isecure.fi/",
+    status: 200,
+    contentType: "text/html",
+    contains: [
+      "data-analytics-consent",
+      "data-analytics-accept",
+      "data-analytics-reject",
+      'data-analytics-item-id="bank-connectivity-quickstart"',
+    ],
+    excludes: ['src="https://www.googletagmanager.com'],
+  },
+  {
+    name: "Privacy policy explains consent-based measurement",
+    url: "https://www.isecure.fi/en/privacy/",
+    status: 200,
+    contentType: "text/html",
+    contains: [
+      "Google Analytics starts only if you consent",
+      "never send form contents to analytics",
+    ],
   },
   {
     name: "OpenAPI document is available",

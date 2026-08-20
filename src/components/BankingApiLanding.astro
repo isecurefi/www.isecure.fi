@@ -637,9 +637,19 @@ const t = content[lang];
         <p class="lead">{t.lead}</p>
         <p class="hero-icp">{t.icp}</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="#quickstart">{t.primaryCta}</a>
-          <a class="button button-secondary" href="/wsapi_v2/"
-            >{t.secondaryCta}</a
+          <a
+            class="button button-primary"
+            href="#quickstart"
+            data-analytics-content-type="product_action"
+            data-analytics-item-id="bank-connectivity-quickstart"
+            data-analytics-source="homepage-hero">{t.primaryCta}</a
+          >
+          <a
+            class="button button-secondary"
+            href="/wsapi_v2/"
+            data-analytics-content-type="developer_resource"
+            data-analytics-item-id="file-exchange-api-reference"
+            data-analytics-source="homepage-hero">{t.secondaryCta}</a
           >
         </div>
         <div class="proof-strip" aria-label="ISECure proof points">
@@ -676,12 +686,21 @@ const t = content[lang];
       <h2>{t.quickstartTitle}</h2>
       <p>{t.quickstartLead}</p>
       <div class="doc-actions">
-        <a class="button button-primary" href="/wsapi_v2/">{t.docsCta}</a>
+        <a
+          class="button button-primary"
+          href="/wsapi_v2/"
+          data-analytics-content-type="developer_resource"
+          data-analytics-item-id="file-exchange-api-reference"
+          data-analytics-source="homepage-quickstart">{t.docsCta}</a
+        >
         <a
           class="button button-secondary"
           href="https://github.com/isecurefi/isecure-ts-client"
           target="_blank"
           rel="noopener"
+          data-analytics-content-type="developer_resource"
+          data-analytics-item-id="typescript-sdk"
+          data-analytics-source="homepage-quickstart"
         >
           TypeScript SDK
         </a>
@@ -735,9 +754,19 @@ const t = content[lang];
         <h2>{t.architectureTitle}</h2>
         <p>{t.architectureLead}</p>
         <div class="doc-actions architecture-actions">
-          <a class="button button-primary" href="/wsapi_v2/">{t.docsCta}</a>
-          <a class="button button-secondary" href="/wsapi_v2.json"
-            >{t.openApiCta}</a
+          <a
+            class="button button-primary"
+            href="/wsapi_v2/"
+            data-analytics-content-type="developer_resource"
+            data-analytics-item-id="file-exchange-api-reference"
+            data-analytics-source="homepage-architecture">{t.docsCta}</a
+          >
+          <a
+            class="button button-secondary"
+            href="/wsapi_v2.json"
+            data-analytics-content-type="developer_resource"
+            data-analytics-item-id="file-exchange-openapi"
+            data-analytics-source="homepage-architecture">{t.openApiCta}</a
           >
         </div>
       </div>
@@ -782,7 +811,12 @@ const t = content[lang];
             ))
           }
         </div>
-        <a class="button button-primary" href="#contact"
+        <a
+          class="button button-primary"
+          href="#contact"
+          data-analytics-content-type="product_access"
+          data-analytics-item-id="bank-connectivity"
+          data-analytics-source="homepage-management-app"
           >{t.managementApp.cta}</a
         >
       </div>
@@ -834,9 +868,19 @@ const t = content[lang];
           {t.pricingIncluded.map((item) => <li>{item}</li>)}
         </ul>
         <div class="doc-actions">
-          <a class="button button-primary" href="#quickstart">{t.primaryCta}</a>
-          <a class="button button-secondary" href="#contact"
-            >{t.pricingContactCta}</a
+          <a
+            class="button button-primary"
+            href="#quickstart"
+            data-analytics-content-type="product_action"
+            data-analytics-item-id="bank-connectivity-quickstart"
+            data-analytics-source="homepage-pricing">{t.primaryCta}</a
+          >
+          <a
+            class="button button-secondary"
+            href="#contact"
+            data-analytics-content-type="product_access"
+            data-analytics-item-id="bank-connectivity"
+            data-analytics-source="homepage-pricing">{t.pricingContactCta}</a
           >
         </div>
       </div>

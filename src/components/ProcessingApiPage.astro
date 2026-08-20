@@ -149,7 +149,14 @@ const copy = {
       </div>
       <div class="status-copy">
         <p>{copy.statusText}</p>
-        <a href={record.cta.href[lang]}>{record.cta.label[lang]}</a>
+        <a
+          href={record.cta.href[lang]}
+          data-analytics-content-type="product_access"
+          data-analytics-item-id={record.id}
+          data-analytics-source="product-status"
+        >
+          {record.cta.label[lang]}
+        </a>
       </div>
     </section>
 
@@ -189,10 +196,20 @@ const copy = {
       <h2>{copy.exampleTitle}</h2>
       <p>{copy.exampleText}</p>
       <div>
-        <a href={exampleUrl} target="_blank" rel="noopener"
-          >{copy.exampleLabel}</a
+        <a
+          href={exampleUrl}
+          target="_blank"
+          rel="noopener"
+          data-analytics-content-type="developer_resource"
+          data-analytics-item-id="processing-api-sdk-example"
+          data-analytics-source="processing-api-example">{copy.exampleLabel}</a
         >
-        <a href="/wsapi_v2/">{copy.docsLabel}</a>
+        <a
+          href="/wsapi_v2/"
+          data-analytics-content-type="developer_resource"
+          data-analytics-item-id="file-exchange-api-reference"
+          data-analytics-source="processing-api-example">{copy.docsLabel}</a
+        >
       </div>
     </aside>
   </article>

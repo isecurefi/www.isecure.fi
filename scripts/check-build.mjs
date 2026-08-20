@@ -82,6 +82,31 @@ for (const file of htmlFiles) {
     if (internalTaskId) {
       failures.push(`${page}: internal task ID is public: ${internalTaskId}`);
     }
+    if (!html.includes("data-analytics-consent")) {
+      failures.push(`${page}: analytics consent control is missing`);
+    }
+  }
+
+  if (
+    /<script\b[^>]*\bsrc="https:\/\/www\.googletagmanager\.com/iu.test(html)
+  ) {
+    failures.push(`${page}: Google Analytics loads before consent`);
+  }
+
+  for (const match of html.matchAll(
+    /<a\b[^>]*data-analytics-item-id[^>]*>/giu,
+  )) {
+    const tag = match[0];
+    for (const attribute of [
+      "data-analytics-content-type",
+      "data-analytics-item-id",
+      "data-analytics-source",
+    ]) {
+      const value = tag.match(new RegExp(`${attribute}="([^"]+)`, "u"))?.[1];
+      if (!value || !/^[a-z0-9_-]+$/u.test(value)) {
+        failures.push(`${page}: unsafe or incomplete ${attribute}`);
+      }
+    }
   }
 
   if (
@@ -106,13 +131,19 @@ for (const file of htmlFiles) {
     /<(script|img)\b[^>]*\bsrc="(https?:\/\/[^"]+)"|<link\b[^>]*\brel="(?:stylesheet|preload)"[^>]*\bhref="(https?:\/\/[^"]+)"/giu,
   )) {
     const remoteUrl = match[2] ?? match[3];
-    if (
-      remoteUrl &&
-      !remoteUrl.startsWith("https://www.googletagmanager.com/gtag/js")
-    ) {
+    if (remoteUrl) {
       failures.push(`${page}: remote runtime asset ${remoteUrl}`);
     }
   }
+}
+
+const analyticsBundles = findFiles(dist, ".js").filter((file) =>
+  readFileSync(file, "utf8").includes("www.googletagmanager.com/gtag/js"),
+);
+if (analyticsBundles.length !== 1) {
+  failures.push(
+    `analytics: expected one consent-controlled loader bundle, found ${analyticsBundles.length}`,
+  );
 }
 
 for (const extension of [".html", ".json", ".js", ".txt", ".xml"]) {

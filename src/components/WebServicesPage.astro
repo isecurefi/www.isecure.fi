@@ -229,7 +229,14 @@ const relatedHref = (slug: string) =>
       </div>
       <div class="status-copy">
         <p>{record.qualification.scope[lang]}</p>
-        <a href={record.cta.href[lang]}>{record.cta.label[lang]}</a>
+        <a
+          href={record.cta.href[lang]}
+          data-analytics-content-type="product_access"
+          data-analytics-item-id={record.id}
+          data-analytics-source="product-status"
+        >
+          {record.cta.label[lang]}
+        </a>
       </div>
     </section>
 
@@ -265,7 +272,12 @@ const relatedHref = (slug: string) =>
         <h2>{t.simulatorTitle}</h2>
         <p>{t.simulatorText}</p>
       </div>
-      <a href={simulatorRecord.routes[lang]}>{t.simulatorLink}</a>
+      <a
+        href={simulatorRecord.routes[lang]}
+        data-analytics-content-type="product"
+        data-analytics-item-id={simulatorRecord.id}
+        data-analytics-source="bank-connectivity-simulator">{t.simulatorLink}</a
+      >
     </aside>
 
     <CapabilityDirectionTable {lang} {record} />

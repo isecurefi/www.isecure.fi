@@ -65,7 +65,13 @@ const sdkExampleUrl =
       <h2>{content.exampleTitle}</h2>
       <p>{content.exampleText}</p>
       <div class="simulator-actions">
-        <a class="simulator-link simulator-link-primary" href="/wsapi_v2/">
+        <a
+          class="simulator-link simulator-link-primary"
+          href="/wsapi_v2/"
+          data-analytics-content-type="developer_resource"
+          data-analytics-item-id="file-exchange-api-reference"
+          data-analytics-source="bank-simulator-example"
+        >
           {content.apiLink}
         </a>
         <a
@@ -73,6 +79,9 @@ const sdkExampleUrl =
           href={sdkExampleUrl}
           target="_blank"
           rel="noopener"
+          data-analytics-content-type="developer_resource"
+          data-analytics-item-id="bank-simulator-sdk-example"
+          data-analytics-source="bank-simulator-example"
         >
           {content.sdkLink}
         </a>

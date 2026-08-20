@@ -48,6 +48,7 @@ package-lock.json
 
 # Search Console pull: raw data dump + service-account key (never commit the key)
 .gsc-data/
+.growth-data/
 gsc-key*.json
 
 # Local tooling workspace

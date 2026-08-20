@@ -1,5 +1,6 @@
 ---
 import "../styles/api-docs.css";
+import AnalyticsConsent from "../components/AnalyticsConsent.astro";
 
 interface Props {
   title: string;
@@ -62,20 +63,13 @@ const structuredData = JSON.stringify({
     <meta name="twitter:description" content={description} />
     <script type="application/ld+json" set:html={structuredData} />
     <title>{title}</title>
-
-    <script async is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-BJ6B7H7K8E");
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"
-    ></script>
   </head>
-  <body>
+  <body data-analytics-language="en">
     <a class="skip-link" href="#api-reference">Skip to API reference</a>
     <slot />
+    <button class="api-analytics-settings" type="button" data-analytics-settings
+      >Analytics settings</button
+    >
+    <AnalyticsConsent lang="en" />
   </body>
 </html>

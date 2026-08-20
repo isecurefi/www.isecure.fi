@@ -18,7 +18,13 @@ const records = getPublicProductRecords();
 ---
 
 <nav class="catalog-navigation" aria-label={ui.products}>
-  <a href={indexHref} aria-current={!current ? "page" : undefined}>
+  <a
+    href={indexHref}
+    aria-current={!current ? "page" : undefined}
+    data-analytics-content-type="product_navigation"
+    data-analytics-item-id="product-index"
+    data-analytics-source="catalog-navigation"
+  >
     {ui.products}
   </a>
   {
@@ -26,6 +32,9 @@ const records = getPublicProductRecords();
       <a
         href={record.routes[lang]}
         aria-current={record.id === current?.id ? "page" : undefined}
+        data-analytics-content-type="product_navigation"
+        data-analytics-item-id={record.id}
+        data-analytics-source="catalog-navigation"
       >
         {record.name[lang]}
       </a>

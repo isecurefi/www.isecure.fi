@@ -3,6 +3,7 @@ import "../styles/index.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
 import Contact from "../components/Contact.astro";
+import AnalyticsConsent from "../components/AnalyticsConsent.astro";
 
 import type { Lang } from "../types";
 export interface Props {
@@ -215,14 +216,6 @@ const fullTitle = titleAlreadyBranded
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={structuredData} />
 
-    <!-- Analytics resource hints -->
-    <link
-      rel="preconnect"
-      href="https://www.googletagmanager.com"
-      crossorigin
-    />
-    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-
     <!-- Preload critical local assets -->
     <link
       rel="preload"
@@ -278,26 +271,19 @@ const fullTitle = titleAlreadyBranded
         padding: 0;
       }
     </style>
-
-    <!-- Analytics -->
-    <script async is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-BJ6B7H7K8E");
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ6B7H7K8E"
-    ></script>
   </head>
-  <body class={bodyClass} data-isecure-theme={htmlClass ? "light" : undefined}>
+  <body
+    class={bodyClass}
+    data-isecure-theme={htmlClass ? "light" : undefined}
+    data-analytics-language={lang}
+  >
     <Navigation lang={lang} showLanguageSwitcher={showLanguageSwitcher} />
     <main class:list={["main-content", { "main-content--wide": fullWidth }]}>
       <slot />
       <Contact lang={lang} />
     </main>
     <Footer lang={lang} />
+    <AnalyticsConsent lang={lang} />
     <script is:inline>
       (() => {
         if (!document.body.classList.contains("banking-theme-page")) return;

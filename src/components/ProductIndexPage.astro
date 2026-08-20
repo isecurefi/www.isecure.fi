@@ -96,7 +96,14 @@ const structuredData = {
                 card
               >
                 <h3 slot="title">
-                  <a href={entry.routes[lang]}>{entry.name[lang]}</a>
+                  <a
+                    href={entry.routes[lang]}
+                    data-analytics-content-type="product"
+                    data-analytics-item-id={entry.id}
+                    data-analytics-source="product-index"
+                  >
+                    {entry.name[lang]}
+                  </a>
                 </h3>
                 <div class="product-card-content" data-card-content>
                   <p>{entry.buyerJob[lang]}</p>

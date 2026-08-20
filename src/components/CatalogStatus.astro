@@ -24,6 +24,9 @@ const externalCta = /^https?:\/\//u.test(record.cta.href[lang]);
       href={record.cta.href[lang]}
       target={externalCta ? "_blank" : undefined}
       rel={externalCta ? "noopener" : undefined}
+      data-analytics-content-type="product_access"
+      data-analytics-item-id={record.id}
+      data-analytics-source="product-status"
     >
       {record.cta.label[lang]}
     </a>

@@ -1,0 +1,131 @@
+---
+import type { Lang } from "../types";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "en" } = Astro.props;
+const copy = {
+  fi: {
+    heading: "Sivuston analytiikka",
+    text: "Voimmeko käyttää Google Analyticsia sivuston käytön ja onnistuneiden yhteydenottojen mittaamiseen? Analytiikka käynnistyy vain suostumuksellasi. Lomakkeiden sisältöä ei lähetetä analytiikkaan.",
+    accept: "Salli analytiikka",
+    reject: "Jatka ilman analytiikkaa",
+    privacy: "Tietosuojaseloste",
+    privacyHref: "/privacy/",
+  },
+  en: {
+    heading: "Website analytics",
+    text: "May we use Google Analytics to measure site use and successful contact requests? Analytics starts only with your consent. Form contents are never sent to analytics.",
+    accept: "Allow analytics",
+    reject: "Continue without analytics",
+    privacy: "Privacy policy",
+    privacyHref: "/en/privacy/",
+  },
+  se: {
+    heading: "Webbplatsanalys",
+    text: "Får vi använda Google Analytics för att mäta användningen av webbplatsen och lyckade kontaktförfrågningar? Analysen startar endast med ditt samtycke. Formulärinnehåll skickas aldrig till analysen.",
+    accept: "Tillåt analys",
+    reject: "Fortsätt utan analys",
+    privacy: "Integritetspolicy",
+    privacyHref: "/se/privacy/",
+  },
+}[lang];
+---
+
+<aside
+  class="analytics-consent"
+  role="region"
+  aria-labelledby="analytics-consent-heading"
+  data-analytics-consent
+  hidden
+>
+  <div>
+    <h2
+      id="analytics-consent-heading"
+      tabindex="-1"
+      data-analytics-consent-heading
+    >
+      {copy.heading}
+    </h2>
+    <p>{copy.text} <a href={copy.privacyHref}>{copy.privacy}</a>.</p>
+  </div>
+  <div class="analytics-consent-actions">
+    <button type="button" data-analytics-reject>{copy.reject}</button>
+    <button type="button" class="analytics-consent-accept" data-analytics-accept
+      >{copy.accept}</button
+    >
+  </div>
+</aside>
+
+<script>
+  import { initAnalyticsConsent } from "../utils/analytics";
+
+  initAnalyticsConsent();
+</script>
+
+<style>
+  .analytics-consent {
+    align-items: center;
+    background: #fff;
+    border: 1px solid #9ba9af;
+    border-radius: 10px;
+    bottom: 1rem;
+    box-shadow: 0 10px 32px rgb(7 17 22 / 22%);
+    color: #17252b;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    left: max(1rem, calc((100vw - 1040px) / 2));
+    max-width: min(1040px, calc(100vw - 2rem));
+    padding: 1rem 1.1rem;
+    position: fixed;
+    right: 1rem;
+    z-index: 1100;
+  }
+
+  .analytics-consent[hidden] {
+    display: none;
+  }
+
+  .analytics-consent h2 {
+    font-size: 1.05rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .analytics-consent p {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .analytics-consent-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .analytics-consent button {
+    background: #fff;
+    border: 1px solid #087f72;
+    border-radius: 6px;
+    color: #075d54;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .analytics-consent .analytics-consent-accept {
+    background: #087f72;
+    color: #fff;
+  }
+
+  @media (max-width: 720px) {
+    .analytics-consent {
+      align-items: stretch;
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
