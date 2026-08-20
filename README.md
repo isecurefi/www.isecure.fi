@@ -61,6 +61,8 @@ Useful commands:
 | `corepack yarn api:validate`      | Check the OpenAPI contract, security schemes, operations, responses, and source metadata |
 | `corepack yarn api:sync`          | Explicitly update the bundled API specification from its authoritative repository        |
 | `corepack yarn verify:production` | Check production pages, redirects, headers, protected paths, and API documentation       |
+| `corepack yarn publish:plan`      | Show the committed release and current CloudFront predecessor without changing AWS       |
+| `corepack yarn publish:rollback`  | Restore the predecessor recorded for the active immutable release                        |
 
 Normal development and production builds do not access the network. The
 OpenAPI sync is intentionally separate so a build is deterministic and remains
@@ -143,16 +145,23 @@ the ALB maintains one-to-one permanent redirects to CloudFront.
 
 ## Deployment
 
-The existing AWS workflow publishes `dist/` to `s3://www2.isecure.fi/`, uploads
-the directory-index aliases, and invalidates CloudFront distribution
-`E2OQLWDIQMPMBP`:
+The existing AWS workflow publishes a clean committed build under the immutable
+`s3://www2.isecure.fi/_releases/<git-revision>/` prefix, uploads directory-index aliases, and then
+switches CloudFront distribution `E2OQLWDIQMPMBP` to that complete release. It records the previous
+origin path before the switch, invalidates the cache, and verifies production against the exact
+release manifest. A failed verification automatically restores and verifies the predecessor.
 
 ```sh
 corepack yarn deploy
 ```
 
-The deploy script deliberately uses recursive copy instead of destructive S3
-sync. After the new API documentation is healthy on CloudFront, run
+The deploy script refuses a dirty worktree, scans the static output for high-confidence secret
+shapes, and never uses destructive S3 synchronization. Preview the intended switch with
+`corepack yarn publish:plan`. Restore the recorded predecessor with
+`corepack yarn publish:rollback`; use `--to <full-git-revision>` only for a release whose immutable
+manifest already exists.
+
+After the new API documentation is healthy on CloudFront, run
 `scripts/legacy-redirects.sh` to reconcile the apex redirects and edge security
 configuration. The script verifies the replacement before changing the ALB.
 

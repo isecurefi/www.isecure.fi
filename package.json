@@ -35,7 +35,7 @@
   "scripts": {
     "dev": "yarn api:validate && yarn astro dev",
     "start": "yarn dev",
-    "build": "yarn api:validate && yarn astro build && yarn verify:build && yarn test:redirects",
+    "build": "yarn api:validate && yarn astro build && yarn verify:build && yarn test:redirects && yarn test:publish",
     "preview": "yarn astro preview",
     "api:sync": "node scripts/sync-openapi.mjs",
     "api:validate": "node scripts/validate-openapi.mjs",
@@ -43,10 +43,14 @@
     "gsc:reconcile": "node --env-file=.env scripts/gsc-manage.mjs",
     "lint": "yarn eslint \"src/**/*.{js,ts,astro}\" \"scripts/**/*.{js,mjs}\"",
     "format": "yarn prettier --plugin=prettier-plugin-astro --write \"**/*.{astro,css,html,js,json,md,mjs,ts}\"",
+    "format:check": "yarn prettier --plugin=prettier-plugin-astro --check \"**/*.{astro,css,html,js,json,md,mjs,ts}\"",
     "verify:build": "node scripts/check-build.mjs",
     "verify:production": "node scripts/check-production.mjs",
+    "publish:plan": "node scripts/publish-site.mjs plan",
+    "publish:rollback": "node scripts/publish-site.mjs rollback",
+    "test:publish": "node --test scripts/publish-site.test.mjs",
     "test:redirects": "node scripts/test-cloudfront-redirects.mjs",
-    "deploy": "yarn lint && yarn format && yarn build && aws s3 cp --cache-control \"public, max-age=86400\" --recursive dist/ s3://www2.isecure.fi/ && node scripts/upload-directory-indexes.mjs s3://www2.isecure.fi/ && aws cloudfront create-invalidation --distribution-id E2OQLWDIQMPMBP --paths \"/*\""
+    "deploy": "yarn lint && yarn format:check && yarn build && node scripts/publish-site.mjs publish"
   },
   "repository": {
     "type": "git",

@@ -56,6 +56,8 @@ interface CatalogRecordBase {
     readonly scope: LocalizedText;
     readonly evidenceDate: string;
     readonly evidenceSource: string;
+    readonly reviewOwner: string;
+    readonly reviewAfter: string;
   };
   readonly limitations: Readonly<Record<Lang, readonly string[]>>;
   readonly cta: {
@@ -195,6 +197,8 @@ const plannedQualification = {
   evidenceDate: "2026-08-20",
   evidenceSource:
     "bankfiles-platform TASKS.md and public website product-launch design",
+  reviewOwner: "ISECure product owner",
+  reviewAfter: "2026-11-20",
 } as const;
 
 const plannedProduct = (
@@ -287,6 +291,8 @@ export const catalogRecords: readonly CatalogRecord[] = [
       evidenceDate: "2026-08-20",
       evidenceSource:
         "Current WebServices offer and published File Exchange API reference",
+      reviewOwner: "ISECure product owner",
+      reviewAfter: "2026-11-20",
     },
     limitations: localizedLists(
       [
@@ -397,7 +403,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
       ),
       evidenceDate: "2026-08-20",
       evidenceSource:
-        "SIMBANK-007 and deployed Bank Simulator end-to-end example",
+        "Deployed Bank Simulator qualification and customer end-to-end example",
+      reviewOwner: "ISECure product owner",
+      reviewAfter: "2026-11-20",
     },
     limitations: localizedLists(
       [
@@ -529,6 +537,8 @@ export const catalogRecords: readonly CatalogRecord[] = [
       evidenceDate: "2026-08-20",
       evidenceSource:
         "Processing API implementation and TypeScript client example",
+      reviewOwner: "ISECure product owner",
+      reviewAfter: "2026-11-20",
     },
     limitations: localizedLists(
       [
@@ -638,6 +648,8 @@ export const catalogRecords: readonly CatalogRecord[] = [
       evidenceDate: "2026-08-20",
       evidenceSource:
         "Bankfiles platform Daily Cash candidate and synthetic preview",
+      reviewOwner: "ISECure product owner",
+      reviewAfter: "2026-11-20",
     },
     limitations: localizedLists(
       dailyCashContent.fi.status.excludedItems,
@@ -733,6 +745,8 @@ export const catalogRecords: readonly CatalogRecord[] = [
       evidenceDate: "2026-08-20",
       evidenceSource:
         "Bankfiles platform Invoicing target design and synthetic preview",
+      reviewOwner: "ISECure product owner",
+      reviewAfter: "2026-11-20",
     },
     limitations: localizedLists(
       invoicingContent.fi.status.excludedItems,
@@ -974,6 +988,8 @@ export const catalogRecords: readonly CatalogRecord[] = [
       ),
       evidenceDate: "2026-08-20",
       evidenceSource: "Current public Nordea WebServices offer",
+      reviewOwner: "ISECure product owner",
+      reviewAfter: "2026-11-20",
     },
     limitations: localizedLists(
       [
@@ -1050,6 +1066,8 @@ export const catalogRecords: readonly CatalogRecord[] = [
       ),
       evidenceDate: "2026-08-20",
       evidenceSource: "Current public OP WebServices offer",
+      reviewOwner: "ISECure product owner",
+      reviewAfter: "2026-11-20",
     },
     limitations: localizedLists(
       [
@@ -1264,6 +1282,21 @@ for (const record of catalogRecords) {
   recordById.set(record.id, record);
   if (!/^\d{4}-\d{2}-\d{2}$/u.test(record.qualification.evidenceDate)) {
     throw new Error(`Invalid catalog evidence date: ${record.id}`);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/u.test(record.qualification.reviewAfter)) {
+    throw new Error(`Invalid catalog review date: ${record.id}`);
+  }
+  if (
+    record.qualification.reviewAfter < record.qualification.evidenceDate ||
+    record.qualification.reviewOwner.trim() === "" ||
+    record.qualification.evidenceSource.trim() === ""
+  ) {
+    throw new Error(`Incomplete catalog claim review: ${record.id}`);
+  }
+  if (
+    /\b[A-Z]{3,}[A-Z0-9]*-\d{3}\b/u.test(record.qualification.evidenceSource)
+  ) {
+    throw new Error(`Internal task ID in catalog claim source: ${record.id}`);
   }
   validateAccess(record.id, record.stage, record.access);
   if (record.visibility === "none") continue;

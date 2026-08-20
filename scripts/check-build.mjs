@@ -326,11 +326,7 @@ for (const [
   }
 }
 
-for (const [entryPage, simulatorPath] of [
-  ["index.html", "/bank-simulator/"],
-  ["en/index.html", "/en/bank-simulator/"],
-  ["se/index.html", "/se/bank-simulator/"],
-]) {
+for (const entryPage of ["index.html", "en/index.html", "se/index.html"]) {
   const html = readFileSync(join(dist, entryPage), "utf8");
   if (/href="\/(?:en\/|se\/)?daily-cash\//u.test(html)) {
     failures.push(
@@ -342,10 +338,8 @@ for (const [entryPage, simulatorPath] of [
       `${entryPage}: Invoicing must remain outside public navigation`,
     );
   }
-  if (!html.includes(`href="${simulatorPath}"`)) {
-    failures.push(
-      `${entryPage}: localized Bank Simulator guide link is missing`,
-    );
+  if (/href="\/(?:en\/|se\/)?bank-simulator\//u.test(html)) {
+    failures.push(`${entryPage}: soft-launched Bank Simulator is on homepage`);
   }
   if (!html.includes("camt.053.001.02")) {
     failures.push(`${entryPage}: fresh-user simulator statement is missing`);

@@ -166,8 +166,11 @@ Production uses the existing S3/CloudFront workflow, not OpenAI Sites:
   `ELBSecurityPolicy-TLS13-1-2-Res-2021-06`; do not weaken it when changing
   legacy routing.
 
-Build first, upload `dist/`, run `scripts/upload-directory-indexes.mjs`, and
-invalidate CloudFront. Verify the new API documentation on `www` before running
+Build from a clean commit and use `yarn deploy`; it uploads one immutable revision prefix, records
+the predecessor, switches the CloudFront origin path, invalidates caches, verifies the exact release
+manifest, and automatically restores the predecessor on failure. Use `yarn publish:plan` for the
+read-only preflight and `yarn publish:rollback` to restore the recorded predecessor. Do not bypass
+this release switch with a direct live-root upload. Verify the new API documentation on `www` before running
 `scripts/legacy-redirects.sh`; that script must refuse the ALB migration if the
 replacement is unhealthy. Do not use destructive S3 synchronization. Preserve
 the recoverable legacy documentation files, unrelated EC2 content, and existing

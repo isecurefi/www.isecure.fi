@@ -11,7 +11,10 @@ const RETIRED_SITEMAPS = [
   "https://isecure.fi/sitemap.xml",
   "http://isecure.fi/sitemap.xml",
 ];
-const NEW_LANDING_PAGES = [
+const INSPECTION_URLS = [
+  "https://www.isecure.fi/bank-simulator/",
+  "https://www.isecure.fi/en/bank-simulator/",
+  "https://www.isecure.fi/se/bank-simulator/",
   "https://www.isecure.fi/camt-053/",
   "https://www.isecure.fi/en/camt-053/",
   "https://www.isecure.fi/se/camt-053/",
@@ -101,8 +104,8 @@ async function main() {
     );
   }
 
-  console.log("\nNew landing-page index status:");
-  for (const url of NEW_LANDING_PAGES) {
+  console.log("\nPublic landing-page index status:");
+  for (const url of INSPECTION_URLS) {
     const status = await inspectUrl(url);
     console.log(
       `  ${status.verdict} | ${status.coverageState} | last crawl ${status.lastCrawlTime ?? "-"} | ${url}`,

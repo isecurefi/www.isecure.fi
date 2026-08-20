@@ -21,6 +21,49 @@ const checks = [
     contains: "customer- or partner-specific",
   },
   {
+    name: "Finnish Bank Simulator soft launch is available",
+    url: "https://www.isecure.fi/bank-simulator/",
+    status: 200,
+    contentType: "text/html",
+    contains: [">Pankkisimulaattori</h1>", "Maksullinen tilaus vaaditaan"],
+  },
+  {
+    name: "English Bank Simulator soft launch is available",
+    url: "https://www.isecure.fi/en/bank-simulator/",
+    status: 200,
+    contentType: "text/html",
+    contains: [">Bank Simulator</h1>", "Paid subscription required"],
+  },
+  {
+    name: "Swedish Bank Simulator soft launch is available",
+    url: "https://www.isecure.fi/se/bank-simulator/",
+    status: 200,
+    contentType: "text/html",
+    contains: [">Banksimulator</h1>", "Betald prenumeration krävs"],
+  },
+  {
+    name: "Sitemap exposes every Bank Simulator locale",
+    url: "https://www.isecure.fi/sitemap-0.xml",
+    status: 200,
+    contentType: "application/xml",
+    contains: [
+      "https://www.isecure.fi/bank-simulator/",
+      "https://www.isecure.fi/en/bank-simulator/",
+      "https://www.isecure.fi/se/bank-simulator/",
+    ],
+  },
+  {
+    name: "Bank Simulator remains off the homepage",
+    url: "https://www.isecure.fi/",
+    status: 200,
+    contentType: "text/html",
+    excludes: [
+      'href="/bank-simulator/"',
+      'href="/en/bank-simulator/"',
+      'href="/se/bank-simulator/"',
+    ],
+  },
+  {
     name: "Legacy HTML API documentation redirects to www",
     url: "https://isecure.fi/wsapi_v2/index.html?source=production-check",
     status: 301,
@@ -77,6 +120,17 @@ const checks = [
 
 let failures = 0;
 
+const expectedRelease = process.env.EXPECTED_RELEASE;
+if (expectedRelease) {
+  checks.push({
+    name: "Expected immutable website release is active",
+    url: "https://www.isecure.fi/release-manifest.json",
+    status: 200,
+    contentType: "application/json",
+    contains: `"revision": "${expectedRelease}"`,
+  });
+}
+
 for (const check of checks) {
   try {
     const response = await fetch(check.url, { redirect: "manual" });
@@ -93,16 +147,28 @@ for (const check of checks) {
       : check.contains === undefined
         ? []
         : [check.contains];
-    const body = expectedContents.length === 0 ? "" : await response.text();
+    const excludedContents = Array.isArray(check.excludes)
+      ? check.excludes
+      : check.excludes === undefined
+        ? []
+        : [check.excludes];
+    const body =
+      expectedContents.length === 0 && excludedContents.length === 0
+        ? ""
+        : await response.text();
     const bodyMatches =
       expectedContents.length === 0 ||
       expectedContents.every((expected) => body.includes(expected));
+    const bodyExcludes = excludedContents.every(
+      (excluded) => !body.includes(excluded),
+    );
 
     if (
       !statusMatches ||
       !locationMatches ||
       !contentTypeMatches ||
-      !bodyMatches
+      !bodyMatches ||
+      !bodyExcludes
     ) {
       failures += 1;
       console.error(

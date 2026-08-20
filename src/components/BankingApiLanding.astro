@@ -237,7 +237,6 @@ const content = {
       },
     ],
     docsCta: "WSAPI v2 dokumentaatio",
-    simulatorCta: "Pankkisimulaattorin ohje",
     openApiCta: "OpenAPI JSON",
   },
   en: {
@@ -430,7 +429,6 @@ const content = {
       },
     ],
     docsCta: "WSAPI v2 documentation",
-    simulatorCta: "Bank Simulator guide",
     openApiCta: "OpenAPI JSON",
   },
   se: {
@@ -623,14 +621,11 @@ const content = {
       },
     ],
     docsCta: "WSAPI v2 dokumentation",
-    simulatorCta: "Guide för banksimulatorn",
     openApiCta: "OpenAPI JSON",
   },
 };
 
 const t = content[lang];
-const simulatorHref =
-  lang === "fi" ? "/bank-simulator/" : `/${lang}/bank-simulator/`;
 ---
 
 <article class="banking-landing">
@@ -682,9 +677,6 @@ const simulatorHref =
       <p>{t.quickstartLead}</p>
       <div class="doc-actions">
         <a class="button button-primary" href="/wsapi_v2/">{t.docsCta}</a>
-        <a class="button button-secondary" href={simulatorHref}
-          >{t.simulatorCta}</a
-        >
         <a
           class="button button-secondary"
           href="https://github.com/isecurefi/isecure-ts-client"
