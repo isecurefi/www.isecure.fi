@@ -667,7 +667,7 @@ const t = content[lang];
 
       <div class="terminal-panel" aria-label={t.tsLabel}>
         <section class="code-sample">
-          <h3>{t.tsLabel}</h3>
+          <h2>{t.tsLabel}</h2>
           <pre><code class="hljs language-typescript" set:html={highlightedTsCode} /></pre>
         </section>
       </div>
@@ -984,7 +984,7 @@ const t = content[lang];
     --landing-code-title: #9a5b00;
     --landing-code-property: #006f6a;
     --landing-code-number: #a33b00;
-    --landing-code-comment: #687789;
+    --landing-code-comment: #647386;
   }
 
   .banking-landing {
@@ -1105,6 +1105,7 @@ const t = content[lang];
     --contact-input: var(--landing-bg);
     --contact-accent: var(--landing-primary-bg);
     --contact-accent-ink: var(--landing-primary-ink);
+    --contact-kicker: var(--landing-accent);
     --contact-badge-bg: rgba(255, 255, 255, 0.04);
     background: var(--landing-card) !important;
     border: 1px solid var(--landing-line);
@@ -1126,7 +1127,8 @@ const t = content[lang];
   }
 
   :global(body.banking-theme-page .footer strong),
-  :global(body.banking-theme-page .footer a) {
+  :global(body.banking-theme-page .footer a),
+  :global(body.banking-theme-page .footer button) {
     color: var(--landing-ink) !important;
   }
 
@@ -1315,7 +1317,7 @@ const t = content[lang];
     min-width: 0;
   }
 
-  .code-sample h3 {
+  .code-sample h2 {
     background: var(--landing-code-head);
     color: var(--landing-code-ink);
     font-size: 0.86rem;

@@ -8,6 +8,7 @@
   --contact-input: #ffffff;
   --contact-accent: var(--primary-color);
   --contact-accent-ink: #ffffff;
+  --contact-kicker: var(--contact-accent);
   --contact-badge-bg: rgba(255, 255, 255, 0.55);
 
   background:
@@ -60,7 +61,7 @@
 }
 
 .contact-kicker {
-  color: var(--contact-accent);
+  color: var(--contact-kicker);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0;

@@ -57,5 +57,8 @@ gsc-key*.json
 # Development tools
 .aider*
 
+# Repository-local agent worktrees
+.private/
+
 # Local backups of deleted S3 objects (not for the repo)
 .s3-backups/
