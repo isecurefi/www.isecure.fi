@@ -177,6 +177,8 @@ const description =
 
             .light-mode {
               --scalar-color-accent: #087f72;
+              --scalar-color-2: #666666;
+              --scalar-color-3: #666666;
               --scalar-background-2: #f4f8f7;
               --scalar-background-3: #e8f1ef;
               --scalar-background-accent: rgb(8 127 114 / 12%);
@@ -189,8 +191,22 @@ const description =
               --scalar-sidebar-color-active: #066b61;
             }
 
+            .light-mode .hljs-string,
+            .light-mode .hljs-built_in {
+              color: #006aa8;
+            }
+
+            .light-mode .hljs-title.function_ {
+              color: #b33d00;
+            }
+
+            .light-mode .hljs-literal {
+              color: #007447;
+            }
+
             .dark-mode {
               --scalar-color-accent: #67dbc9;
+              --scalar-color-3: #929a9d;
               --scalar-background-1: #0e171b;
               --scalar-background-2: #152227;
               --scalar-background-3: #1c2c32;
@@ -202,6 +218,11 @@ const description =
               --scalar-sidebar-item-hover-background: #17272c;
               --scalar-sidebar-item-active-background: #1b3335;
               --scalar-sidebar-color-active: #8ce8dc;
+            }
+
+            .t-doc__sidebar [data-sidebar-id] button {
+              min-height: 24px;
+              min-width: 24px;
             }
           `,
           onLoaded: () => {
