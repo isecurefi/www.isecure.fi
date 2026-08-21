@@ -137,6 +137,50 @@ for (const file of htmlFiles) {
   }
 }
 
+const contactSource = readFileSync(
+  join(root, "src", "components", "Contact.astro"),
+  "utf8",
+);
+const translationSource = readFileSync(
+  join(root, "src", "store", "translations.ts"),
+  "utf8",
+);
+for (const [behavior, pattern] of [
+  [
+    "invalid fields expose aria-invalid",
+    /setAttribute\("aria-invalid", "true"\)/u,
+  ],
+  ["editing clears stale aria-invalid", /removeAttribute\("aria-invalid"\)/u],
+  [
+    "invalid submission announces the localized summary",
+    /result\.textContent = getText\(\s*"contactForm\.validation\.required"/u,
+  ],
+  [
+    "invalid submission focuses the first invalid field",
+    /querySelector<[^>]+>\(\s*"#contactForm \.is-invalid"[\s\S]*?\?\.focus\(\)/u,
+  ],
+]) {
+  if (!pattern.test(contactSource)) {
+    failures.push(`Contact form: ${behavior} guard is missing`);
+  }
+}
+
+for (const [relativeFile, requiredSummary] of [
+  ["index.html", "Anna nimi, sähköposti ja viesti."],
+  ["en/index.html", "Please provide name, email and message."],
+  ["se/index.html", "Ange namn, e-post och meddelande."],
+]) {
+  const html = readFileSync(join(dist, relativeFile), "utf8");
+  if (
+    !html.includes('id="result" role="status" aria-live="polite"') ||
+    !translationSource.includes(requiredSummary)
+  ) {
+    failures.push(
+      `${relativeFile}: localized accessible contact validation is incomplete`,
+    );
+  }
+}
+
 const analyticsBundles = findFiles(dist, ".js").filter((file) =>
   readFileSync(file, "utf8").includes("www.googletagmanager.com/gtag/js"),
 );

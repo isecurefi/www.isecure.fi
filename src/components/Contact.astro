@@ -254,6 +254,7 @@ const copy = {
       return false;
     }
     input.classList.remove("is-invalid", "is-valid");
+    input.removeAttribute("aria-invalid");
 
     const value = input.value.trim();
 
@@ -274,6 +275,9 @@ const copy = {
     }
 
     input.classList.add(isValid ? "is-valid" : "is-invalid");
+    if (!isValid) {
+      input.setAttribute("aria-invalid", "true");
+    }
     return isValid;
   }
 
@@ -316,6 +320,7 @@ const copy = {
     if (element) {
       element.addEventListener("input", () => {
         element.classList.remove("is-invalid", "is-valid");
+        element.removeAttribute("aria-invalid");
         const result = document.getElementById("result");
         if (result) {
           result.className = "";
@@ -330,7 +335,20 @@ const copy = {
     ?.addEventListener("submit", async (event) => {
       event.preventDefault();
 
+      const result = document.getElementById("result");
       if (!validateForm()) {
+        if (result) {
+          result.className = "error";
+          result.textContent = getText(
+            "contactForm.validation.required",
+            lang as Lang,
+          );
+        }
+        document
+          .querySelector<HTMLInputElement | HTMLTextAreaElement>(
+            "#contactForm .is-invalid",
+          )
+          ?.focus();
         return;
       }
       const msg = (
@@ -347,8 +365,6 @@ const copy = {
       )?.value.trim();
       const topic = (document.getElementById("topic") as HTMLSelectElement)
         ?.value;
-      const result = document.getElementById("result");
-
       const button = document.getElementById("sendButton");
       const spinner = button?.querySelector(".spinner-border");
       const buttonText = button?.querySelector(".button-text");
