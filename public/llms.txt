@@ -18,7 +18,7 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [Home (Finnish)](https://www.isecure.fi/): Finnish-language product overview
 - [Home (Swedish)](https://www.isecure.fi/se/): Swedish-language product overview
 - [Products](https://www.isecure.fi/en/products/): current products with exact stage and customer access
-- [Bank Simulator](https://www.isecure.fi/en/bank-simulator/): Beta test-environment enrollment, initial camt.053 download, and signed pain.001 file workflow; registration, a paid subscription, and an access request are required
+- [Bank Simulator](https://www.isecure.fi/en/bank-simulator/): Beta test-environment enrollment, initial camt.053 download, signed pain.001 upload, and synthetic pain.002/camt.054/updated-camt.053 feedback; registration, a paid subscription, and an access request are required
 - [Processing API](https://www.isecure.fi/en/processing-api/): separate Experimental payment workflow in the ISECure test environment for creating, approving, generating, and downloading exact pain.001; registration, a paid subscription, and an access request are required
 - [ISO 20022 message guide](https://www.isecure.fi/en/iso-20022/): comparison of pain.001, pain.002, camt.053, and camt.054 in bank integrations
 - [Bank integration for software products](https://www.isecure.fi/en/pankkiyhteys/): adding Finnish bank connectivity to a software product, build vs. buy
@@ -35,6 +35,12 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 
 - [ISECure REST API — File Exchange documentation](https://www.isecure.fi/wsapi_v2/): production API reference for authentication, certificates, bank file upload, listing, and download
 - [OpenAPI specification](https://www.isecure.fi/wsapi_v2.json): machine-readable OpenAPI 2.0 description of the REST API
+
+## Test before bank onboarding
+
+An integrator can start while the real bank agreement and production certificates are still in progress. Processing API prepares and releases exact pain.001.001.09 bytes through a separate session; the customer's application verifies and signs those bytes locally; Bank Simulator accepts the signed synthetic file through the existing File Exchange API and returns synthetic feedback. Bank Simulator runs through the exact real-bank connection API: when onboarding is ready, that same File Exchange API contract targets a separately configured and qualified real-bank connection, while the simulator remains available for testing.
+
+The current Processing and Bank Simulator examples run separately and do not correlate feedback automatically or retry an uncertain upload. The current simulator account, opening balance, and deterministic default scenario are fixed; customers cannot yet configure simulated banks, accounts, WebServices authorizations, scenarios, faults, or virtual time. Simulator evidence is not real-bank acceptance, settlement, channel qualification, or production support.
 
 ## SDKs and tooling
 

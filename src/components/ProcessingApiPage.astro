@@ -10,13 +10,17 @@ interface Props {
 
 const { lang } = Astro.props;
 const record = getCatalogRecord("processing-api");
+const simulatorRecord = getCatalogRecord("bank-simulation");
+if (simulatorRecord.visibility === "none") {
+  throw new Error("Bank Simulator must have a public route");
+}
 const exampleUrl =
   "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-manual-upload/README.md";
 const copy = {
   fi: {
     eyebrow: "Processing API",
     heading: "Valmistele pankin maksuaineistot hallitusti",
-    lead: "Processing API auttaa ohjelmistoasi muodostamaan pankille lähetettävän maksuaineiston hallitulla työnkululla. Se tarkistaa maksutiedot, lukitsee hyväksytyn version ja antaa sovelluksesi ladata täsmälleen saman tiedoston allekirjoitusta ja pankkiin lähettämistä varten.",
+    lead: "Processing API auttaa ohjelmistoasi muodostamaan pankille lähetettävän maksuaineiston hallitulla työnkululla jo ennen oikean pankkisopimuksen ja tuotantovarmenteiden valmistumista. Se tarkistaa maksutiedot, lukitsee hyväksytyn version ja antaa sovelluksesi ladata täsmälleen saman tiedoston paikallista allekirjoitusta varten.",
     statusTitle: "Tuotevaihe ja käyttöoikeus",
     statusText:
       "Processing API on saatavilla ISECuren testiympäristössä tilausasiakkaille pyynnöstä. Tuote on Experimental-vaiheessa, ja pankki- ja maakohtaisten maksuaineistojen pätevöinti jatkuu. Tuotantokäyttöä, pankkitukea tai palvelutasoa ei vielä luvata.",
@@ -34,28 +38,36 @@ const copy = {
       "Asiakkaan yksityinen allekirjoitusavain säilyy omassa sovelluksessa. Processing API ei vastaanota avainta eikä lähetä maksua pankkiin.",
       "ISECuren työnkulussa annettu hyväksyntä koskee valmisteltua tiedostoa. Se ei ole pankin hyväksyntä eikä todiste toteutuneesta maksusta.",
     ],
-    relationshipTitle:
-      "Miten Processing API ja Bank Connectivity toimivat yhdessä",
+    relationshipTitle: "Valitse allekirjoituksen jälkeen testi tai tuotanto",
     processingLabel: "Processing API",
     processing: "Luo ja vapauttaa tarkistetun maksuaineiston.",
     localLabel: "Asiakkaan sovellus",
     local:
       "Tarkistaa ja allekirjoittaa ladatun tiedoston asiakkaan hallinnassa.",
-    exchangeLabel: "Bank Connectivity",
+    exchangeLabel: "Valitse kohde",
     exchange:
-      "Siirtää allekirjoitetun tiedoston pankkiin erillisen käyttöoikeuden ja pankkisopimuksen rajoissa.",
+      "Käytä samaa File Exchange API:a nyt Pankkisimulaattorin ja myöhemmin erikseen pätevöidyn oikean pankkikohteen kanssa.",
+    testPathTitle: "Testipolku · Pankkisimulaattori",
+    testPath:
+      "Lähetä allekirjoitettu synteettinen tiedosto pankille simulator erillisellä File Exchange -istunnolla ja nouda pain.002-, camt.054- ja päivitetty camt.053-aineisto.",
+    testPathLimit:
+      "Nykyiset Processing- ja Pankkisimulaattori-esimerkit ajetaan erikseen. Ne eivät vielä täsmäytä palautetta automaattisesti tai turvallisesti toista epävarmaa lähetystä.",
+    testPathLink: "Avaa Pankkisimulaattori",
+    productionPathTitle: "Tuotantopolku · Bank Connectivity",
+    productionPath:
+      "Lähetä allekirjoitettu tiedosto tuettuun pankkiin vasta, kun asiakkaalla on erillinen Bank Connectivity -käyttöoikeus, pankkisopimus, tuotantotunnukset ja pätevöity yhteys.",
     transport:
-      "Pankkiin lähettäminen edellyttää erillistä Bank Connectivity -käyttöoikeutta, asiakkaan pankkisopimusta ja tuettua pankkiyhteyttä.",
-    exampleTitle: "Aja valmis TypeScript-esimerkki",
+      "Simulaattorin palaute on synteettistä eikä todista oikean pankin hyväksyntää, toteutunutta maksua tai tuotantokelpoisuutta.",
+    exampleTitle: "Aja nykyinen Processing-esimerkki",
     exampleText:
-      "Esimerkki valmistelee ja lataa tarkistetun maksuaineiston, allekirjoittaa sen asiakkaan sovelluksessa ja lähettää sen pankkiin vasta erillisen vahvistuksen jälkeen.",
+      "Esimerkki valmistelee ja lataa tarkistetun maksuaineiston, allekirjoittaa sen asiakkaan sovelluksessa ja lähettää sen kerran erillisen vahvistuksen jälkeen. Se ei nouda tai täsmäytä pankin tai simulaattorin palautetta.",
     exampleLabel: "Avaa Processing API -esimerkki",
     docsLabel: "Avaa Bank Connectivity -rajapinnan dokumentaatio",
   },
   en: {
     eyebrow: "Processing API",
     heading: "Prepare bank payment files with control and approval",
-    lead: "Processing API helps your software prepare bank payment files through a controlled workflow. It checks the payment details, locks the approved version, and lets your application download the exact same file for signing and delivery to the bank.",
+    lead: "Processing API helps your software prepare bank payment files through a controlled workflow before the real bank agreement and production certificates are ready. It checks the payment details, locks the approved version, and lets your application download the exact same file for local signing.",
     statusTitle: "Product stage and access",
     statusText:
       "Processing API is available in the ISECure test environment to subscribed customers by request. The product is Experimental, and qualification of bank- and country-specific payment files is still in progress. Production use, bank support, and service levels are not yet promised.",
@@ -73,27 +85,36 @@ const copy = {
       "The customer's private signing key stays in their own application. Processing API never receives the key and does not submit a payment to a bank.",
       "Approval in the ISECure workflow applies to the prepared file. It is not bank authorization or proof of a completed payment.",
     ],
-    relationshipTitle: "How Processing API works with Bank Connectivity",
+    relationshipTitle: "Choose test or production after signing",
     processingLabel: "Processing API",
     processing: "Creates and releases the checked payment file.",
     localLabel: "Customer application",
     local:
       "Verifies and signs the downloaded file under the customer's control.",
-    exchangeLabel: "Bank Connectivity",
+    exchangeLabel: "Choose destination",
     exchange:
-      "Sends the signed file to the bank under separate access rights and the customer's bank agreement.",
+      "Use the same File Exchange API with Bank Simulator now and a separately qualified real-bank destination later.",
+    testPathTitle: "Test path · Bank Simulator",
+    testPath:
+      "Upload the signed synthetic file to bank simulator through a separate File Exchange session, then retrieve pain.002, camt.054, and the updated camt.053.",
+    testPathLimit:
+      "The current Processing and Bank Simulator examples run separately. They do not yet correlate feedback automatically or safely retry an uncertain upload.",
+    testPathLink: "Open Bank Simulator",
+    productionPathTitle: "Production path · Bank Connectivity",
+    productionPath:
+      "Upload the signed file to a supported bank only after the customer has separate Bank Connectivity access, a bank agreement, production credentials, and a qualified connection.",
     transport:
-      "Sending to a bank requires separate Bank Connectivity access, the customer's bank agreement, and a supported bank connection.",
-    exampleTitle: "Run the complete TypeScript example",
+      "Simulator feedback is synthetic; it does not prove real-bank acceptance, a completed payment, or production qualification.",
+    exampleTitle: "Run the current Processing example",
     exampleText:
-      "The example prepares and downloads a checked payment file, signs it in the customer's application, and sends it to the bank only after separate confirmation.",
+      "The example prepares and downloads a checked payment file, signs it in the customer's application, and uploads it once after separate confirmation. It does not retrieve or correlate bank or simulator feedback.",
     exampleLabel: "Open the Processing API example",
     docsLabel: "Open the Bank Connectivity API documentation",
   },
   se: {
     eyebrow: "Processing API",
     heading: "Förbered bankens betalningsfiler med kontroll och godkännande",
-    lead: "Processing API hjälper er programvara att skapa betalningsfiler för banken i ett kontrollerat flöde. Det kontrollerar betalningsuppgifterna, låser den godkända versionen och låter er applikation hämta exakt samma fil för signering och överföring till banken.",
+    lead: "Processing API hjälper er programvara att skapa betalningsfiler för banken i ett kontrollerat flöde innan det riktiga bankavtalet och produktionscertifikaten är klara. Det kontrollerar betalningsuppgifterna, låser den godkända versionen och låter er applikation hämta exakt samma fil för lokal signering.",
     statusTitle: "Produktfas och åtkomst",
     statusText:
       "Processing API är tillgängligt i ISECures testmiljö för prenumerationskunder på begäran. Produkten är i Experimental-fasen och kvalificeringen av bank- och landsspecifika betalningsfiler pågår. Detta är ännu inget löfte om produktion, bankstöd eller servicenivå.",
@@ -111,19 +132,28 @@ const copy = {
       "Kundens privata signeringsnyckel stannar i den egna applikationen. Processing API tar aldrig emot nyckeln och skickar inte en betalning till banken.",
       "Godkännandet i ISECures flöde gäller den förberedda filen. Det är inte bankens auktorisering eller bevis på en genomförd betalning.",
     ],
-    relationshipTitle: "Så samverkar Processing API med Bank Connectivity",
+    relationshipTitle: "Välj test eller produktion efter signeringen",
     processingLabel: "Processing API",
     processing: "Skapar och frigör den kontrollerade betalningsfilen.",
     localLabel: "Kundens applikation",
     local: "Verifierar och signerar den hämtade filen under kundens kontroll.",
-    exchangeLabel: "Bank Connectivity",
+    exchangeLabel: "Välj destination",
     exchange:
-      "Skickar den signerade filen till banken med separat åtkomst och inom kundens bankavtal.",
+      "Använd samma File Exchange API med Banksimulatorn nu och en separat kvalificerad riktig bankdestination senare.",
+    testPathTitle: "Testflöde · Banksimulator",
+    testPath:
+      "Ladda upp den signerade syntetiska filen till banken simulator via en separat File Exchange-session och hämta sedan pain.002, camt.054 och den uppdaterade camt.053-filen.",
+    testPathLimit:
+      "De nuvarande Processing- och Banksimulator-exemplen körs separat. De korrelerar ännu inte respons automatiskt och upprepar inte en osäker uppladdning säkert.",
+    testPathLink: "Öppna Banksimulatorn",
+    productionPathTitle: "Produktionsflöde · Bank Connectivity",
+    productionPath:
+      "Ladda upp den signerade filen till en bank som stöds först när kunden har separat åtkomst till Bank Connectivity, bankavtal, produktionsuppgifter och en kvalificerad anslutning.",
     transport:
-      "Överföring till banken kräver separat åtkomst till Bank Connectivity, kundens bankavtal och en bankanslutning som stöds.",
-    exampleTitle: "Kör det fullständiga TypeScript-exemplet",
+      "Simulatorresponsen är syntetisk; den bevisar inte en riktig banks godkännande, en genomförd betalning eller produktionskvalificering.",
+    exampleTitle: "Kör det nuvarande Processing-exemplet",
     exampleText:
-      "Exemplet förbereder och hämtar en kontrollerad betalningsfil, signerar den i kundens applikation och skickar den till banken först efter en separat bekräftelse.",
+      "Exemplet förbereder och hämtar en kontrollerad betalningsfil, signerar den i kundens applikation och laddar upp den en gång efter separat bekräftelse. Det hämtar eller korrelerar inte bankens eller simulatorns respons.",
     exampleLabel: "Öppna Processing API-exemplet",
     docsLabel: "Öppna dokumentationen för Bank Connectivity API",
   },
@@ -188,6 +218,25 @@ const copy = {
         <p role="listitem">
           <strong>{copy.exchangeLabel}</strong><span>{copy.exchange}</span>
         </p>
+      </div>
+      <div class="destination-grid">
+        <article>
+          <h3>{copy.testPathTitle}</h3>
+          <p>{copy.testPath}</p>
+          <p class="destination-limit">{copy.testPathLimit}</p>
+          <a
+            href={simulatorRecord.routes[lang]}
+            data-analytics-content-type="product"
+            data-analytics-item-id={simulatorRecord.id}
+            data-analytics-source="processing-api-test-path"
+          >
+            {copy.testPathLink}
+          </a>
+        </article>
+        <article>
+          <h3>{copy.productionPathTitle}</h3>
+          <p>{copy.productionPath}</p>
+        </article>
       </div>
       <p class="transport-note">{copy.transport}</p>
     </section>
@@ -341,6 +390,42 @@ const copy = {
     padding-left: 1rem;
   }
 
+  .destination-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 1rem;
+  }
+
+  .destination-grid article {
+    background: var(--background-light);
+    border: 1px solid #d6e0e2;
+    border-radius: 10px;
+    padding: 1rem;
+  }
+
+  .destination-grid h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .destination-grid p {
+    margin: 0;
+  }
+
+  .destination-grid .destination-limit {
+    color: #53636a;
+    font-size: 0.94rem;
+    margin-top: 0.65rem;
+  }
+
+  .destination-grid a {
+    color: #075d75;
+    display: inline-block;
+    font-weight: 700;
+    margin-top: 0.85rem;
+  }
+
   .example {
     background: #eef8f6;
     border: 1px solid #b9ddd6;
@@ -376,7 +461,8 @@ const copy = {
 
   @media (max-width: 760px) {
     .status,
-    .relationship {
+    .relationship,
+    .destination-grid {
       grid-template-columns: 1fr;
     }
 

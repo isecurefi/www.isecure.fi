@@ -435,6 +435,36 @@ for (const [
       failures.push(`${relativeFile}: missing simulator fact ${requiredText}`);
     }
   }
+  const processingPath =
+    htmlLang === "fi"
+      ? "/processing-api/"
+      : htmlLang === "sv"
+        ? "/se/processing-api/"
+        : "/en/processing-api/";
+  if (!html.includes(`href="${processingPath}"`)) {
+    failures.push(`${relativeFile}: Processing API cross-link is missing`);
+  }
+  if (
+    !/Mitä et voi vielä määrittää|What you cannot configure yet|Vad ni ännu inte kan konfigurera/u.test(
+      html,
+    ) ||
+    !/Nykyiset Processing- ja Pankkisimulaattori-esimerkit|current Processing and Bank Simulator examples|nuvarande Processing- och Banksimulator-exemplen/u.test(
+      html,
+    )
+  ) {
+    failures.push(
+      `${relativeFile}: current simulator configuration or manual-journey boundary is missing`,
+    );
+  }
+  if (
+    !/täsmälleen sama File Exchange API|exact same File Exchange API|exakt samma File Exchange API/iu.test(
+      html,
+    )
+  ) {
+    failures.push(
+      `${relativeFile}: same File Exchange API test-to-bank boundary is missing`,
+    );
+  }
 }
 
 for (const entryPage of ["index.html", "en/index.html", "se/index.html"]) {
@@ -625,6 +655,34 @@ for (const [
       );
     }
   }
+  if (
+    !html.includes('id="test-journey-title"') ||
+    !/Nykyiset esimerkit ajetaan erikseen|current examples run separately|nuvarande exemplen körs separat/iu.test(
+      html,
+    )
+  ) {
+    failures.push(
+      `${relativeFile}: test-before-bank journey or its current limitation is missing`,
+    );
+  }
+  if (
+    !/sama File Exchange API|same File Exchange API|samma File Exchange API/iu.test(
+      html,
+    )
+  ) {
+    failures.push(
+      `${relativeFile}: test and real-bank destinations must use the same File Exchange API`,
+    );
+  }
+  if (
+    /Korvaa simulaattorin|Replaces the simulator|Ersätter simulatorn/iu.test(
+      html,
+    )
+  ) {
+    failures.push(
+      `${relativeFile}: real-bank copy must not imply replacement of the simulator integration`,
+    );
+  }
 }
 
 const processingApiPages = [
@@ -722,6 +780,24 @@ for (const [
         `${relativeFile}: missing Processing API boundary ${marker}`,
       );
     }
+  }
+  const simulatorPath =
+    htmlLang === "fi"
+      ? "/bank-simulator/"
+      : htmlLang === "sv"
+        ? "/se/bank-simulator/"
+        : "/en/bank-simulator/";
+  if (!html.includes(`href="${simulatorPath}"`)) {
+    failures.push(`${relativeFile}: Bank Simulator test-path link is missing`);
+  }
+  if (
+    !/Nykyiset Processing- ja Pankkisimulaattori-esimerkit ajetaan erikseen|current Processing and Bank Simulator examples run separately|nuvarande Processing- och Banksimulator-exemplen körs separat/iu.test(
+      html,
+    )
+  ) {
+    failures.push(
+      `${relativeFile}: separate-example and feedback-reconciliation boundary is missing`,
+    );
   }
 }
 

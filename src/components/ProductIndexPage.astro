@@ -1,5 +1,9 @@
 ---
-import { catalogUi, getPublicProductRecords } from "../data/productRegistry";
+import {
+  catalogUi,
+  getCatalogRecord,
+  getPublicProductRecords,
+} from "../data/productRegistry";
 import Layout from "../layouts/Layout.astro";
 import type { Lang } from "../types";
 import CatalogNavigation from "./CatalogNavigation.astro";
@@ -21,6 +25,20 @@ const copy = {
     eyebrow: "ISECure-tuotteet",
     heading: "Valitse työnkulkuusi sopiva tuote",
     lead: "Vertaa tuotteiden kypsyyttä, saatavilla olevaa ympäristöä, rekisteröinti- ja tilausvaatimuksia sekä käyttöönpääsyä.",
+    journeyEyebrow: "Aloita ennen pankkisopimusta",
+    journeyTitle:
+      "Testaa maksuaineistopolku nyt, kohdista sama API oikeaan pankkiin myöhemmin",
+    journeyLead:
+      "Tuotteet säilyvät erillisinä: Processing API valmistelee tiedoston, sovelluksesi allekirjoittaa sen ja Pankkisimulaattori testaa File Exchange -palautepolun. Kun sopimus ja tuotantovarmenteet ovat valmiit, sama File Exchange API kohdistetaan erikseen pätevöityyn oikeaan pankkiyhteyteen.",
+    localLabel: "Oma sovelluksesi",
+    localText:
+      "Tarkistaa ja allekirjoittaa täsmälleen samat tavut paikallisesti.",
+    simulatorText:
+      "Palauttaa synteettiset pain.002-, camt.054- ja camt.053-aineistot.",
+    connectivityText:
+      "Kohdistaa saman File Exchange API:n erikseen pätevöityyn oikeaan pankkiyhteyteen.",
+    journeyLimit:
+      "Nykyiset esimerkit ajetaan erikseen. Simulaattorievidenssi ei ole pankin hyväksyntä tai tuotantopätevyys.",
   },
   en: {
     title: "Products | ISECure",
@@ -29,6 +47,18 @@ const copy = {
     eyebrow: "ISECure products",
     heading: "Choose the product that fits your workflow",
     lead: "Compare each product’s maturity, available environment, registration and subscription requirements, and how to get access.",
+    journeyEyebrow: "Start before the bank agreement",
+    journeyTitle:
+      "Test the payment-file path now, point the same API at a real bank later",
+    journeyLead:
+      "The products stay separate: Processing API prepares the file, your application signs it, and Bank Simulator tests the File Exchange feedback path. Once the agreement and production certificates are ready, the same File Exchange API targets the separately qualified real-bank connection.",
+    localLabel: "Your application",
+    localText: "Verifies and signs the exact same bytes locally.",
+    simulatorText: "Returns synthetic pain.002, camt.054, and camt.053 files.",
+    connectivityText:
+      "Targets a separately qualified real-bank connection through the same File Exchange API.",
+    journeyLimit:
+      "The current examples run separately. Simulator evidence is not bank acceptance or production qualification.",
   },
   se: {
     title: "Produkter | ISECure",
@@ -36,6 +66,19 @@ const copy = {
     eyebrow: "ISECure-produkter",
     heading: "Välj produkten som passar ert arbetsflöde",
     lead: "Jämför produkternas mognad, tillgängliga miljö, krav på registrering och prenumeration samt hur ni får åtkomst.",
+    journeyEyebrow: "Börja före bankavtalet",
+    journeyTitle:
+      "Testa betalningsfilflödet nu, rikta samma API mot en riktig bank senare",
+    journeyLead:
+      "Produkterna förblir separata: Processing API förbereder filen, er applikation signerar den och Banksimulatorn testar File Exchange-responsflödet. När avtalet och produktionscertifikaten är klara riktas samma File Exchange API mot den separat kvalificerade riktiga bankanslutningen.",
+    localLabel: "Er applikation",
+    localText: "Verifierar och signerar exakt samma byte lokalt.",
+    simulatorText:
+      "Returnerar syntetiska pain.002-, camt.054- och camt.053-filer.",
+    connectivityText:
+      "Riktar samma File Exchange API mot en separat kvalificerad riktig bankanslutning.",
+    journeyLimit:
+      "De nuvarande exemplen körs separat. Simulatorevidens är inte bankens godkännande eller produktionskvalificering.",
   },
 }[lang];
 const alternateLinks = [
@@ -46,6 +89,9 @@ const alternateLinks = [
 ];
 const products = getPublicProductRecords();
 const entries = products;
+const processing = getCatalogRecord("processing-api");
+const simulator = getCatalogRecord("bank-simulation");
+const connectivity = getCatalogRecord("bank-connectivity");
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
@@ -82,6 +128,49 @@ const structuredData = {
       <h1>{copy.heading}</h1>
       <p>{copy.lead}</p>
     </header>
+
+    <section class="test-journey" aria-labelledby="test-journey-title">
+      <p class="test-journey-eyebrow">{copy.journeyEyebrow}</p>
+      <h2 id="test-journey-title">{copy.journeyTitle}</h2>
+      <p>{copy.journeyLead}</p>
+      <ol>
+        <li>
+          <a
+            href={processing.routes[lang]}
+            data-analytics-content-type="product"
+            data-analytics-item-id={processing.id}
+            data-analytics-source="product-index-test-journey"
+            >{processing.name[lang]}</a
+          >
+          <span>{processing.buyerJob[lang]}</span>
+        </li>
+        <li>
+          <strong>{copy.localLabel}</strong>
+          <span>{copy.localText}</span>
+        </li>
+        <li>
+          <a
+            href={simulator.routes[lang]}
+            data-analytics-content-type="product"
+            data-analytics-item-id={simulator.id}
+            data-analytics-source="product-index-test-journey"
+            >{simulator.name[lang]}</a
+          >
+          <span>{copy.simulatorText}</span>
+        </li>
+        <li>
+          <a
+            href={connectivity.routes[lang]}
+            data-analytics-content-type="product"
+            data-analytics-item-id={connectivity.id}
+            data-analytics-source="product-index-test-journey"
+            >{connectivity.name[lang]}</a
+          >
+          <span>{copy.connectivityText}</span>
+        </li>
+      </ol>
+      <small>{copy.journeyLimit}</small>
+    </section>
 
     <section aria-label={ui.catalogEntries}>
       <div class="product-grid">
@@ -151,6 +240,62 @@ const structuredData = {
     margin-top: 3rem;
   }
 
+  .test-journey {
+    background: #eef8f6;
+    border: 1px solid #b9ddd6;
+    border-radius: 12px;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .test-journey-eyebrow {
+    color: #087f72;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.4rem;
+    text-transform: uppercase;
+  }
+
+  .test-journey h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin: 0;
+  }
+
+  .test-journey > p:not(.test-journey-eyebrow) {
+    line-height: 1.65;
+    max-width: 800px;
+  }
+
+  .test-journey ol {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    list-style: none;
+    margin: 1.25rem 0;
+    padding: 0;
+  }
+
+  .test-journey li {
+    background: #fff;
+    border: 1px solid #cde2dd;
+    border-radius: 8px;
+    padding: 0.9rem;
+  }
+
+  .test-journey li a,
+  .test-journey li strong {
+    color: #075d75;
+    display: block;
+    font-weight: 750;
+    margin-bottom: 0.35rem;
+  }
+
+  .test-journey li span,
+  .test-journey small {
+    color: #53636a;
+    line-height: 1.5;
+  }
+
   .product-grid {
     display: grid;
     column-gap: clamp(2rem, 5vw, 4rem);
@@ -199,7 +344,8 @@ const structuredData = {
   }
 
   @media (max-width: 900px) {
-    .product-grid {
+    .product-grid,
+    .test-journey ol {
       grid-template-columns: 1fr;
     }
   }

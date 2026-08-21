@@ -14,6 +14,10 @@ interface Props {
 const { lang } = Astro.props;
 const content = bankSimulatorContent[lang];
 const record = getCatalogRecord("bank-simulation");
+const processingRecord = getCatalogRecord("processing-api");
+if (processingRecord.visibility === "none") {
+  throw new Error("Processing API must have a public route");
+}
 const sdkExampleUrl =
   "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/bank-simulator/README.md";
 ---
@@ -60,6 +64,22 @@ const sdkExampleUrl =
 
     <CapabilityDirectionTable {lang} {record} />
     <CatalogFaqGlossary {lang} {record} />
+
+    <aside class="simulator-processing">
+      <div>
+        <h2>{content.processingTitle}</h2>
+        <p>{content.processingText}</p>
+      </div>
+      <a
+        class="simulator-link simulator-link-primary"
+        href={processingRecord.routes[lang]}
+        data-analytics-content-type="product"
+        data-analytics-item-id={processingRecord.id}
+        data-analytics-source="bank-simulator-processing"
+      >
+        {content.processingLink}
+      </a>
+    </aside>
 
     <aside class="simulator-example">
       <h2>{content.exampleTitle}</h2>
@@ -139,7 +159,7 @@ const sdkExampleUrl =
   }
 
   .simulator-facts dt {
-    color: var(--secondary-color);
+    color: #5f6870;
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -148,6 +168,10 @@ const sdkExampleUrl =
 
   .simulator-facts dd {
     margin: 0.25rem 0 0;
+  }
+
+  .simulator-facts code {
+    color: #b42369;
   }
 
   .simulator-sections {
@@ -161,12 +185,14 @@ const sdkExampleUrl =
   }
 
   .simulator-sections h2,
+  .simulator-processing h2,
   .simulator-example h2 {
     font-size: 1.4rem;
     margin-bottom: 0.75rem;
   }
 
   .simulator-sections p,
+  .simulator-processing p,
   .simulator-example p {
     line-height: 1.75;
     margin-bottom: 0.75rem;
@@ -185,12 +211,24 @@ const sdkExampleUrl =
     overflow-wrap: anywhere;
   }
 
+  .simulator-processing,
   .simulator-example {
     background: #eef8f6;
     border: 1px solid #b9ddd6;
     border-radius: 12px;
     margin-top: 3rem;
     padding: 1.5rem;
+  }
+
+  .simulator-processing {
+    align-items: center;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .simulator-processing p {
+    margin-bottom: 0;
   }
 
   .simulator-actions {
@@ -238,6 +276,10 @@ const sdkExampleUrl =
     .simulator-link {
       text-align: center;
       width: 100%;
+    }
+
+    .simulator-processing {
+      grid-template-columns: 1fr;
     }
   }
 </style>

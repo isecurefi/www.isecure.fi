@@ -20,21 +20,31 @@ interface SimulatorContent {
   exampleText: string;
   apiLink: string;
   sdkLink: string;
+  processingTitle: string;
+  processingText: string;
+  processingLink: string;
 }
 
 export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
   fi: {
     meta: {
       description:
-        "Testaa ISECure REST API:n varmenteita, tiedostolistausta, latausta ja allekirjoitettua pain.001-lähetystä pankkisimulaattorilla.",
+        "Aloita File Exchange -integraation varmenteiden, tiedostojen ja allekirjoitetun pain.001-polun testaus jo ennen pankkisopimusta ja tuotantovarmenteita.",
     },
     eyebrow: "ISECure REST API · testiympäristö",
     title: "Pankkisimulaattori",
     intro:
-      "Pankkisimulaattorilla voit testata nykyistä File Exchange API:a ja TypeScript SDK:ta ilman oikeaa pankkiyhteyttä. Käytä testiympäristössä pankkitunnistetta simulator.",
+      "Aloita koko maksuaineistopolun testaus jo sillä aikaa, kun oikea pankkisopimus ja tuotantovarmenteet ovat vielä työn alla. Pankkisimulaattori käyttää nykyistä File Exchange API:a ja TypeScript SDK:ta pankkitunnisteella simulator.",
     baseUrlLabel: "Perusosoite",
     bankLabel: "Pankki",
     sections: [
+      {
+        title: "Mitä voit testata nyt",
+        paragraphs: [
+          "Voit rekisteröidä testivarmenteen, ladata alkutiliotteen, lähettää paikallisesti allekirjoitetun pain.001.001.09-aineiston ja noutaa synteettiset pain.002-, camt.054- ja päivitetyt camt.053-aineistot ennen oikean pankkiyhteyden valmistumista.",
+          "Kun pankkisopimus, tunnukset ja tuotantovarmenteet ovat valmiit, täsmälleen sama File Exchange API kohdistetaan erikseen määritettyyn ja pätevöityyn oikeaan pankkiyhteyteen. Pankkisimulaattori säilyy testikohteena; korvattavaa toista pankkiyhteysintegraatiota ei ole.",
+        ],
+      },
       {
         title: "Ympäristö ja rajapinta",
         paragraphs: [
@@ -78,25 +88,47 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
           "Simulaattorin yhteys, tiedostoviitteet ja aineistot kuuluvat vain ne luoneelle ISECure-tenantille. Toinen asiakas ei voi listata, ladata tai muuttaa niitä.",
         ],
       },
+      {
+        title: "Mitä et voi vielä määrittää",
+        paragraphs: [
+          "Nykyinen Beta-versio käyttää yhtä kiinteää synteettistä tiliä, alkusaldoa ja determinististä oletusskenaariota.",
+        ],
+        items: [
+          "Ei asiakkaan määrittämiä simulaattoripankkeja, tilejä tai alkusaldoja",
+          "Ei WebServices-käyttäjien, tiedostotyyppien, suuntien tai profiilien valtuutusasetuksia",
+          "Ei asiakkaan skenaarioita, virheitä, katkoaikoja, virtuaaliaikaa tai haaroja",
+        ],
+      },
     ],
     exampleTitle: "Aja valmis TypeScript-esimerkki",
     exampleText:
       "Valmis esimerkki hoitaa testikäyttäjien rekisteröinnin ja kirjautumisen, varmenteen rekisteröinnin, PGP-avaimet, allekirjoitetun lähetyksen sekä kaikkien palautetiedostojen listauksen ja latauksen.",
     apiLink: "REST API -dokumentaatio",
     sdkLink: "TypeScript-esimerkki GitHubissa",
+    processingTitle: "Valmistele aineisto Processing API:lla",
+    processingText:
+      "Processing API voi valmistella ja vapauttaa tarkistetun pain.001.001.09-aineiston erillisessä istunnossa. Sovelluksesi tarkistaa ja allekirjoittaa täsmälleen samat tavut paikallisesti ennen simulaattorilähetystä. Nykyiset Processing- ja Pankkisimulaattori-esimerkit ajetaan erikseen, eikä palaute täsmäydy automaattisesti.",
+    processingLink: "Tutustu Processing API:in",
   },
   en: {
     meta: {
       description:
-        "Test ISECure REST API certificates, file listing, downloads, and signed pain.001 uploads with Bank Simulator.",
+        "Start testing File Exchange certificates, files, and the signed pain.001 path before the bank agreement and production certificates are ready.",
     },
     eyebrow: "ISECure REST API · test environment",
     title: "Bank Simulator",
     intro:
-      "Use Bank Simulator to test the existing File Exchange API and TypeScript SDK without a real bank connection. Select the bank identifier simulator in the test environment.",
+      "Start testing the complete payment-file path while the real bank agreement and production certificates are still in progress. Bank Simulator uses the existing File Exchange API and TypeScript SDK with bank identifier simulator.",
     baseUrlLabel: "Base URL",
     bankLabel: "Bank",
     sections: [
+      {
+        title: "What you can test today",
+        paragraphs: [
+          "You can enroll a test certificate, download an opening statement, upload a locally signed pain.001.001.09, and retrieve synthetic pain.002, camt.054, and updated camt.053 files before the real bank connection is ready.",
+          "When the bank agreement, credentials, and production certificates are ready, point the exact same File Exchange API contract at the separately configured and qualified real-bank connection. Bank Simulator remains available as the test destination; there is no second bank-connection integration to replace it.",
+        ],
+      },
       {
         title: "Environment and interface",
         paragraphs: [
@@ -140,25 +172,47 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
           "The simulator connection, file references, and artifacts belong only to the ISECure tenant that created them. Another customer cannot list, download, or change them.",
         ],
       },
+      {
+        title: "What you cannot configure yet",
+        paragraphs: [
+          "The current Beta product uses one fixed synthetic account, opening balance, and deterministic default scenario.",
+        ],
+        items: [
+          "No customer-defined simulator banks, accounts, or opening balances",
+          "No WebServices user, file-type, direction, or profile authorization configuration",
+          "No customer-authored scenarios, faults, cutoffs, virtual time, or branches",
+        ],
+      },
     ],
     exampleTitle: "Run the complete TypeScript example",
     exampleText:
       "The existing example handles test-user registration and login, certificate enrollment, PGP keys, signed upload, and listing and downloading every response file.",
     apiLink: "REST API documentation",
     sdkLink: "TypeScript example on GitHub",
+    processingTitle: "Prepare the file with Processing API",
+    processingText:
+      "Processing API can prepare and release the checked pain.001.001.09 through a separate session. Your application verifies and signs those exact bytes locally before the simulator upload. The current Processing and Bank Simulator examples run separately and do not correlate feedback automatically.",
+    processingLink: "Explore Processing API",
   },
   se: {
     meta: {
       description:
-        "Testa certifikat, fillistning, hämtning och signerad pain.001-uppladdning i ISECure REST API med banksimulatorn.",
+        "Börja testa File Exchange-certifikat, filer och det signerade pain.001-flödet innan bankavtalet och produktionscertifikaten är klara.",
     },
     eyebrow: "ISECure REST API · testmiljö",
     title: "Banksimulator",
     intro:
-      "Använd banksimulatorn för att testa det befintliga File Exchange API:t och TypeScript SDK:t utan en riktig bankförbindelse. Välj bankidentifieraren simulator i testmiljön.",
+      "Börja testa hela betalningsfilflödet medan det riktiga bankavtalet och produktionscertifikaten fortfarande är under arbete. Banksimulatorn använder det befintliga File Exchange API:t och TypeScript SDK:t med bankidentifieraren simulator.",
     baseUrlLabel: "Basadress",
     bankLabel: "Bank",
     sections: [
+      {
+        title: "Vad ni kan testa i dag",
+        paragraphs: [
+          "Ni kan registrera ett testcertifikat, hämta ett första kontoutdrag, ladda upp en lokalt signerad pain.001.001.09 och hämta syntetiska pain.002-, camt.054- och uppdaterade camt.053-filer innan den riktiga bankanslutningen är klar.",
+          "När bankavtalet, inloggningsuppgifterna och produktionscertifikaten är klara riktas exakt samma File Exchange API-kontrakt mot den separat konfigurerade och kvalificerade riktiga bankanslutningen. Banksimulatorn finns kvar som testdestination; det finns ingen andra bankanslutningsintegration att ersätta.",
+        ],
+      },
       {
         title: "Miljö och gränssnitt",
         paragraphs: [
@@ -202,11 +256,26 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
           "Simulatoranslutningen, filreferenserna och filerna tillhör endast den ISECure-tenant som skapade dem. En annan kund kan inte lista, hämta eller ändra dem.",
         ],
       },
+      {
+        title: "Vad ni ännu inte kan konfigurera",
+        paragraphs: [
+          "Den nuvarande Beta-produkten använder ett fast syntetiskt konto, startsaldo och deterministiskt standardscenario.",
+        ],
+        items: [
+          "Inga kunddefinierade simulatorbanker, konton eller startsaldon",
+          "Ingen konfiguration av WebServices-användare eller behörighet för filtyp, riktning eller profil",
+          "Inga kundskapade scenarier, fel, bryttider, virtuell tid eller grenar",
+        ],
+      },
     ],
     exampleTitle: "Kör det fullständiga TypeScript-exemplet",
     exampleText:
       "Det befintliga exemplet hanterar registrering och inloggning av testanvändare, certifikatregistrering, PGP-nycklar, signerad uppladdning samt listning och hämtning av alla responsfiler.",
     apiLink: "REST API-dokumentation",
     sdkLink: "TypeScript-exempel på GitHub",
+    processingTitle: "Förbered filen med Processing API",
+    processingText:
+      "Processing API kan förbereda och frigöra den kontrollerade pain.001.001.09-filen i en separat session. Er applikation verifierar och signerar exakt dessa byte lokalt före simulatoruppladdningen. De nuvarande Processing- och Banksimulator-exemplen körs separat och korrelerar inte respons automatiskt.",
+    processingLink: "Utforska Processing API",
   },
 };

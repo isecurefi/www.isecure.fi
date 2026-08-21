@@ -348,9 +348,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
     category: text("Pankkisimulaatio", "Bank Simulation", "Banksimulering"),
     name: text("Pankkisimulaattori", "Bank Simulator", "Banksimulator"),
     buyerJob: text(
-      "Testaa koko tiedostopolku ilman oikeaa pankkiyhteyttä.",
-      "Test the complete file flow without a real bank connection.",
-      "Testa hela filflödet utan en riktig bankanslutning.",
+      "Aloita koko tiedostopolun testaus jo ennen oikeaa pankkisopimusta ja tuotantovarmenteita.",
+      "Start testing the complete file flow before the real bank agreement and production certificates are ready.",
+      "Börja testa hela filflödet innan det riktiga bankavtalet och produktionscertifikaten är klara.",
     ),
     summary: text(
       "Tenanttikohtainen testipankki tuottaa synteettiset tiliotteet ja maksupalautteet nykyisen ISECure REST API:n File Exchange -toiminnoilla.",
@@ -411,14 +411,17 @@ export const catalogRecords: readonly CatalogRecord[] = [
       [
         "Vain synteettinen testidata.",
         "Ei pankkisopimusta, tuotantokanavaa tai oikeaa maksua.",
+        "Nykyinen tili, alkusaldo ja oletusskenaario ovat kiinteitä; asiakas ei vielä määritä pankkeja, tilejä, valtuutuksia tai skenaarioita.",
       ],
       [
         "Synthetic test data only.",
         "No bank agreement, production channel, or real payment.",
+        "The current account, opening balance, and default scenario are fixed; customers cannot yet configure banks, accounts, authorizations, or scenarios.",
       ],
       [
         "Endast syntetiska testdata.",
         "Inget bankavtal, ingen produktionskanal och ingen riktig betalning.",
+        "Det nuvarande kontot, startsaldot och standardscenariot är fasta; kunder kan ännu inte konfigurera banker, konton, behörigheter eller scenarier.",
       ],
     ),
     cta: {
@@ -444,6 +447,18 @@ export const catalogRecords: readonly CatalogRecord[] = [
       },
       {
         question: text(
+          "Voinko käyttää Processing API:a ennen simulaattoria?",
+          "Can I use Processing API before the simulator?",
+          "Kan jag använda Processing API före simulatorn?",
+        ),
+        answer: text(
+          "Kyllä. Processing API voi valmistella tarkistetun pain.001-aineiston erillisessä istunnossa. Sovelluksesi tarkistaa ja allekirjoittaa sen paikallisesti ennen lähetystä pankille simulator. Nykyiset esimerkit ovat erillisiä eikä palaute täsmäydy automaattisesti.",
+          "Yes. Processing API can prepare the checked pain.001 file in a separate session. Your application verifies and signs it locally before uploading to bank simulator. The current examples are separate and feedback is not correlated automatically.",
+          "Ja. Processing API kan förbereda den kontrollerade pain.001-filen i en separat session. Er applikation verifierar och signerar den lokalt före uppladdning till banken simulator. De nuvarande exemplen är separata och responsen korreleras inte automatiskt.",
+        ),
+      },
+      {
+        question: text(
           "Voivatko asiakkaat nähdä toistensa tiedostot?",
           "Can customers see each other's files?",
           "Kan kunder se varandras filer?",
@@ -465,9 +480,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
         "Banksimulator för testfiler | ISECure",
       ),
       description: text(
-        "Testaa File Exchange API:n listaus-, lataus- ja allekirjoitettu lähetyspolku synteettisesti.",
-        "Test File Exchange API listing, download, and signed upload with synthetic data.",
-        "Testa listning, hämtning och signerad uppladdning i File Exchange API med syntetiska data.",
+        "Aloita File Exchange -integraation testaus synteettisesti jo ennen pankkisopimusta ja tuotantovarmenteita.",
+        "Start testing File Exchange with synthetic data before the bank agreement and production certificates are ready.",
+        "Börja testa File Exchange med syntetiska data innan bankavtalet och produktionscertifikaten är klara.",
       ),
     },
   },
@@ -545,16 +560,19 @@ export const catalogRecords: readonly CatalogRecord[] = [
         "Processing API ei lähetä maksua pankkiin.",
         "Hyväksyntä koskee valmisteltua tiedostoa eikä ole pankin hyväksyntä tai toteutunut maksu.",
         "Asiakkaan yksityinen allekirjoitusavain säilyy omassa sovelluksessa.",
+        "Processing API ja File Exchange käyttävät erillisiä istuntoja; nykyinen esimerkki lähettää kerran mutta ei nouda tai täsmäytä pankin palautetta.",
       ],
       [
         "Processing API does not submit a payment to a bank.",
         "Approval applies to the prepared file; it is not bank authorization or a completed payment.",
         "The customer's private signing key stays in their own application.",
+        "Processing API and File Exchange use separate sessions; the current example uploads once but does not retrieve or correlate bank feedback.",
       ],
       [
         "Processing API skickar inte en betalning till banken.",
         "Godkännandet gäller den förberedda filen; det är inte bankens auktorisering eller en genomförd betalning.",
         "Kundens privata signeringsnyckel stannar i den egna applikationen.",
+        "Processing API och File Exchange använder separata sessioner; det nuvarande exemplet laddar upp en gång men hämtar eller korrelerar inte bankrespons.",
       ],
     ),
     cta: {
@@ -566,6 +584,18 @@ export const catalogRecords: readonly CatalogRecord[] = [
       href: contactHref,
     },
     faq: [
+      {
+        question: text(
+          "Voinko testata ennen pankkisopimusta?",
+          "Can I test before the bank agreement is ready?",
+          "Kan jag testa innan bankavtalet är klart?",
+        ),
+        answer: text(
+          "Kyllä. Valmistele aineisto Processing API:ssa, tarkista ja allekirjoita se omassa sovelluksessa ja lähetä se erillisellä File Exchange -istunnolla Pankkisimulaattoriin. Simulaattoripalaute on synteettistä eikä todista oikean pankin hyväksyntää.",
+          "Yes. Prepare the file with Processing API, verify and sign it in your application, then upload it to Bank Simulator through a separate File Exchange session. Simulator feedback is synthetic and does not prove real-bank acceptance.",
+          "Ja. Förbered filen med Processing API, verifiera och signera den i er applikation och ladda sedan upp den till Banksimulatorn via en separat File Exchange-session. Simulatorresponsen är syntetisk och bevisar inte en riktig banks godkännande.",
+        ),
+      },
       {
         question: text(
           "Lähettääkö Processing API aineiston pankkiin?",
