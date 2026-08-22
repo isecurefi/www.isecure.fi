@@ -17,6 +17,14 @@ const DEFAULT_DISTRIBUTION = "E2OQLWDIQMPMBP";
 const DEFAULT_ORIGIN = "S3-www2.isecure.fi";
 const RELEASE_ROOT = "_releases";
 const DEPLOYMENT_ROOT = "_deployments";
+const IMMUTABLE_CACHE_CONTROL = "public, max-age=31536000, immutable";
+const REVALIDATED_OPENAPI_CACHE_CONTROL = "public, max-age=0, must-revalidate";
+
+export function releaseCacheControl(relativePath) {
+  return relativePath === "wsapi_v2.json"
+    ? REVALIDATED_OPENAPI_CACHE_CONTROL
+    : IMMUTABLE_CACHE_CONTROL;
+}
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -217,7 +225,21 @@ function uploadRelease(bucket, prefix, distDirectory) {
     destination,
     "--recursive",
     "--cache-control",
-    "public, max-age=31536000, immutable",
+    releaseCacheControl(""),
+    "--checksum-algorithm",
+    "SHA256",
+    "--no-progress",
+    "--only-show-errors",
+  ]);
+  run("aws", [
+    "s3",
+    "cp",
+    join(distDirectory, "wsapi_v2.json"),
+    `${destination}wsapi_v2.json`,
+    "--cache-control",
+    releaseCacheControl("wsapi_v2.json"),
+    "--content-type",
+    "application/json; charset=utf-8",
     "--checksum-algorithm",
     "SHA256",
     "--no-progress",

@@ -40,6 +40,7 @@ const checks = [
     url: "https://www.isecure.fi/wsapi_v2.json",
     status: 200,
     contentType: "application/json",
+    cacheControl: "public, max-age=0, must-revalidate",
     contains: '"version": "v2.8.0"',
   },
   {
@@ -171,6 +172,9 @@ for (const check of checks) {
     const contentTypeMatches =
       check.contentType === undefined ||
       contentType.includes(check.contentType);
+    const cacheControl = response.headers.get("cache-control") ?? "";
+    const cacheControlMatches =
+      check.cacheControl === undefined || cacheControl === check.cacheControl;
     const expectedContents = Array.isArray(check.contains)
       ? check.contains
       : check.contains === undefined
@@ -196,12 +200,13 @@ for (const check of checks) {
       !statusMatches ||
       !locationMatches ||
       !contentTypeMatches ||
+      !cacheControlMatches ||
       !bodyMatches ||
       !bodyExcludes
     ) {
       failures += 1;
       console.error(
-        `FAIL ${check.name}: status=${response.status}, location=${location ?? "-"}, content-type=${contentType || "-"}`,
+        `FAIL ${check.name}: status=${response.status}, location=${location ?? "-"}, content-type=${contentType || "-"}, cache-control=${cacheControl || "-"}`,
       );
       continue;
     }

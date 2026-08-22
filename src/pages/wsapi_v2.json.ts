@@ -226,7 +226,7 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Content-Disposition": 'inline; filename="isecure-ws-channel-v2.json"',
-      "Cache-Control": "public, max-age=3600",
+      "Cache-Control": "public, max-age=0, must-revalidate",
     },
   });
 };

@@ -1,5 +1,6 @@
 ---
 import sourceSpec from "../../data/wsapi_v2.json";
+import sourceMetadata from "../../data/wsapi_v2.source.json";
 import ApiDocsLayout from "../../layouts/ApiDocsLayout.astro";
 
 const HTTP_METHODS = new Set([
@@ -49,6 +50,7 @@ const serializedLegacyHashMap = JSON.stringify(legacyHashMap).replace(
   "\\u003c",
 );
 const schemaCount = Object.keys(sourceSpec.definitions).length;
+const specUrl = `/wsapi_v2.json?revision=${sourceMetadata.commit}`;
 const description =
   "Complete API reference for the ISECure WS Channel API: authentication, Finnish bank file exchange, certificates, MFA, integrator workflows, code examples, and schemas.";
 ---
@@ -64,6 +66,7 @@ const description =
     tabindex="-1"
     data-renderer="scalar"
     data-reference-only="true"
+    data-spec-url={specUrl}
     aria-busy="true"
   >
     <div class="docs-loading" role="status">
@@ -124,10 +127,14 @@ const description =
       if (errorMessage) errorMessage.hidden = false;
     } else {
       container.replaceChildren();
+      const specUrl = container.dataset.specUrl;
 
       try {
+        if (!specUrl) {
+          throw new Error("Versioned OpenAPI URL is missing");
+        }
         createApiReference(container, {
-          url: "/wsapi_v2.json",
+          url: specUrl,
           layout: "modern",
           theme: "default",
           showSidebar: true,

@@ -1049,6 +1049,15 @@ if (/forceDarkModeState:/.test(docsSource)) {
 }
 
 const rawSpec = JSON.parse(readFileSync(join(dist, "wsapi_v2.json"), "utf8"));
+const sourceMetadata = JSON.parse(
+  readFileSync(join(root, "src/data/wsapi_v2.source.json"), "utf8"),
+);
+const expectedVersionedSpecUrl = `/wsapi_v2.json?revision=${sourceMetadata.commit}`;
+if (!docs.includes(`data-spec-url="${expectedVersionedSpecUrl}"`)) {
+  failures.push(
+    "API docs: OpenAPI fetch URL is not pinned to its source revision",
+  );
+}
 if (rawSpec.info?.termsOfService !== "https://www.isecure.fi/ws-api-terms/") {
   failures.push("Published OpenAPI document has the wrong Terms URL");
 }

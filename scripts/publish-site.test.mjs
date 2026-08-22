@@ -9,10 +9,22 @@ import {
   assertReleaseId,
   createReleaseManifest,
   detectSecret,
+  releaseCacheControl,
   releaseNeedsUpload,
   validateDeploymentRecord,
   withOriginPath,
 } from "./publish-site.mjs";
+
+test("the stable OpenAPI URL revalidates while release assets stay immutable", () => {
+  assert.equal(
+    releaseCacheControl("wsapi_v2.json"),
+    "public, max-age=0, must-revalidate",
+  );
+  assert.equal(
+    releaseCacheControl("_astro/index.content-hash.js"),
+    "public, max-age=31536000, immutable",
+  );
+});
 
 test("release IDs must be Git revisions", () => {
   assert.equal(assertReleaseId("0123456789abcdef"), "0123456789abcdef");
