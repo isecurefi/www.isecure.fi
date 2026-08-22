@@ -1065,6 +1065,18 @@ if (!rawSpec.info?.description?.includes(typescriptSdkUrl)) {
 if (rawSpec.info?.description?.includes("dforsber/isecure-ts-client")) {
   failures.push("API introduction still links to the retired SDK repository");
 }
+let previousIntroductionHeadingLevel = 1;
+for (const match of rawSpec.info?.description?.matchAll(
+  /^(#{1,6})\s+(.+)$/gmu,
+) ?? []) {
+  const [, markers = "", heading = ""] = match;
+  if (markers.length > previousIntroductionHeadingLevel + 1) {
+    failures.push(
+      `API introduction heading jumps from H${previousIntroductionHeadingLevel} to H${markers.length}: ${heading}`,
+    );
+  }
+  previousIntroductionHeadingLevel = markers.length;
+}
 if (
   !rawSpec.info?.description?.includes(
     "https://www.isecure.fi/en/bank-simulator/",
