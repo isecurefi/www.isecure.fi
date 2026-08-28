@@ -82,15 +82,9 @@ for (const file of htmlFiles) {
     if (internalTaskId) {
       failures.push(`${page}: internal task ID is public: ${internalTaskId}`);
     }
-    if (!html.includes("data-analytics-consent")) {
-      failures.push(`${page}: analytics consent control is missing`);
+    if (!html.includes('<meta name="isecure-analytics" content="automatic">')) {
+      failures.push(`${page}: automatic analytics marker is missing`);
     }
-  }
-
-  if (
-    /<script\b[^>]*\bsrc="https:\/\/www\.googletagmanager\.com/iu.test(html)
-  ) {
-    failures.push(`${page}: Google Analytics loads before consent`);
   }
 
   for (const match of html.matchAll(
@@ -186,7 +180,7 @@ const analyticsBundles = findFiles(dist, ".js").filter((file) =>
 );
 if (analyticsBundles.length !== 1) {
   failures.push(
-    `analytics: expected one consent-controlled loader bundle, found ${analyticsBundles.length}`,
+    `analytics: expected one automatic loader bundle, found ${analyticsBundles.length}`,
   );
 }
 

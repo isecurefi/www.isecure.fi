@@ -135,12 +135,12 @@ CloudFront deployment and legacy redirect migration are complete.
 
 ## Growth measurement
 
-The site loads Google Analytics only after explicit consent. Rejecting analytics makes no Google
-Analytics request; a visitor can reopen the choice from the footer. Events contain stable product,
-surface, language, and path identifiers only. Form values, query strings, customer identifiers,
-bank data, and task IDs must never be analytics parameters. `generate_lead` is emitted only after
-successful form delivery. `select_content` measures the documented product, access, and developer
-resource links.
+The site loads Google Analytics automatically on the canonical `www.isecure.fi` hostname. It does
+not load analytics on localhost, raw CloudFront hostnames, or other preview hosts. Events contain
+stable product, surface, language, and path identifiers only. Form values, query strings, customer
+identifiers, bank data, and task IDs must never be analytics parameters. `generate_lead` is emitted
+only after successful form delivery. `select_content` measures the documented product, access, and
+developer resource links.
 
 For the read-only monthly report, configure `.env` from `.env.example`:
 
@@ -160,15 +160,15 @@ The first command compares two adjacent 28-day windows behind a three-day report
 Search Console data is not mistaken for a decline, and writes `.growth-data/latest.{json,md}`. Both
 `.growth-data/` and raw `.gsc-data/` are ignored because search queries are review data, not website
 content. The report covers organic clicks, impressions, CTR, position, low-CTR and
-striking-distance queries, legacy results, consented sessions/page views, product or resource
+striking-distance queries, legacy results, GA4 sessions/page views, product or resource
 selections, successful contacts, and session-to-contact conversion. Missing GA4 access is reported
 as unavailable, never as zero.
 
-Consent-based collection starts on 21 August 2026. GA data from before and after that boundary uses
-different collection rules and is not a like-for-like trend. Treat the first complete post-change
-window as a new baseline, and make a growth comparison only when both adjacent 28-day windows are
-fully after the boundary. With the three-day reporting delay, the first such comparison is available
-on 18 October 2026.
+GA collection changed to explicit consent on 21 August 2026 and back to automatic collection on
+28 August 2026. Data spanning either boundary is not a like-for-like trend. Treat the first complete
+post-change window as a new baseline, and make a growth comparison only when both adjacent 28-day
+windows are fully after the latest boundary. With the three-day reporting delay, the first such
+comparison is available on 25 October 2026.
 
 Review the report with the production/build checks, Search Console indexing state, current claim
 evidence, and short buyer observations. A metric may justify investigation but never approves a

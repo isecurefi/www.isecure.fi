@@ -5,7 +5,7 @@ import { JWT } from "google-auth-library";
 import {
   buildComparisonWindows,
   buildFollowUpActions,
-  CONSENT_MEASUREMENT_START,
+  ANALYTICS_METHOD_BOUNDARIES,
   findSearchOpportunities,
   renderGrowthMarkdown,
 } from "./growth-metrics.mjs";
@@ -162,7 +162,7 @@ async function main() {
   const report = {
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
-    consentMeasurementStart: CONSENT_MEASUREMENT_START,
+    analyticsMethodBoundaries: ANALYTICS_METHOD_BOUNDARIES,
     window,
     search: {
       property: siteUrl,

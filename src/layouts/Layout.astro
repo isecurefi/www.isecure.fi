@@ -3,7 +3,7 @@ import "../styles/index.css";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
 import Contact from "../components/Contact.astro";
-import AnalyticsConsent from "../components/AnalyticsConsent.astro";
+import Analytics from "../components/Analytics.astro";
 
 import type { Lang } from "../types";
 export interface Props {
@@ -212,6 +212,7 @@ const fullTitle = titleAlreadyBranded
       ))
     }
     <title>{fullTitle}</title>
+    <Analytics />
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={structuredData} />
@@ -283,7 +284,6 @@ const fullTitle = titleAlreadyBranded
       <Contact lang={lang} />
     </main>
     <Footer lang={lang} />
-    <AnalyticsConsent lang={lang} />
     <script is:inline>
       (() => {
         if (!document.body.classList.contains("banking-theme-page")) return;

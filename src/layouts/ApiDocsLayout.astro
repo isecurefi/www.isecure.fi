@@ -1,6 +1,6 @@
 ---
 import "../styles/api-docs.css";
-import AnalyticsConsent from "../components/AnalyticsConsent.astro";
+import Analytics from "../components/Analytics.astro";
 
 interface Props {
   title: string;
@@ -63,13 +63,10 @@ const structuredData = JSON.stringify({
     <meta name="twitter:description" content={description} />
     <script type="application/ld+json" set:html={structuredData} />
     <title>{title}</title>
+    <Analytics />
   </head>
   <body data-analytics-language="en">
     <a class="skip-link" href="#api-reference">Skip to API reference</a>
     <slot />
-    <button class="api-analytics-settings" type="button" data-analytics-settings
-      >Analytics settings</button
-    >
-    <AnalyticsConsent lang="en" />
   </body>
 </html>
