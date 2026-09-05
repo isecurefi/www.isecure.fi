@@ -42,6 +42,7 @@
     "gsc": "node --env-file=.env scripts/gsc-pull.mjs",
     "gsc:reconcile": "node --env-file=.env scripts/gsc-manage.mjs",
     "growth:report": "node --env-file=.env scripts/growth-report.mjs",
+    "analytics:configure": "node --env-file=.env scripts/analytics-configure.mjs",
     "lint": "yarn eslint \"src/**/*.{js,ts,astro}\" \"scripts/**/*.{js,mjs}\"",
     "format": "yarn prettier --plugin=prettier-plugin-astro --write \"**/*.{astro,css,html,js,json,md,mjs,ts}\"",
     "format:check": "yarn prettier --plugin=prettier-plugin-astro --check \"**/*.{astro,css,html,js,json,md,mjs,ts}\"",

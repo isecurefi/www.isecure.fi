@@ -16,6 +16,13 @@ const siteUrl = process.env.GSC_SITE_URL || "sc-domain:isecure.fi";
 const ga4PropertyId = process.env.GA4_PROPERTY_ID;
 const days = Number(process.argv[2]) || 28;
 const window = buildComparisonWindows(new Date(), days);
+const analyticsHostname = "www.isecure.fi";
+const hostnameFilter = {
+  filter: {
+    fieldName: "hostName",
+    stringFilter: { matchType: "EXACT", value: analyticsHostname },
+  },
+};
 
 if (!keyFile) {
   throw new Error(
@@ -86,6 +93,7 @@ async function queryAnalytics(dateRange) {
       method: "POST",
       data: {
         dateRanges: [dateRange],
+        dimensionFilter: hostnameFilter,
         metrics: [
           { name: "sessions" },
           { name: "screenPageViews" },
@@ -101,11 +109,18 @@ async function queryAnalytics(dateRange) {
         dimensions: [{ name: "eventName" }],
         metrics: [{ name: "eventCount" }],
         dimensionFilter: {
-          filter: {
-            fieldName: "eventName",
-            inListFilter: {
-              values: ["generate_lead", "select_content"],
-            },
+          andGroup: {
+            expressions: [
+              hostnameFilter,
+              {
+                filter: {
+                  fieldName: "eventName",
+                  inListFilter: {
+                    values: ["generate_lead", "select_content"],
+                  },
+                },
+              },
+            ],
           },
         },
       },
@@ -172,6 +187,7 @@ async function main() {
     },
     analytics: {
       property: ga4PropertyId ?? null,
+      hostname: analyticsHostname,
       status: currentAnalytics.status,
       reason: currentAnalytics.reason,
       current:

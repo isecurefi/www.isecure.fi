@@ -142,6 +142,12 @@ identifiers, bank data, and task IDs must never be analytics parameters. `genera
 only after successful form delivery. `select_content` measures the documented product, access, and
 developer resource links.
 
+The tag blocks automatic user-provided-data detection with a Google tag policy before loading
+Google's script, clears `user_data`, and denies advertising storage, advertising user data, and
+ad personalization. Keep that policy even when automatic collection is disabled in the account:
+account configuration must not cause the website to scan contact details or submitted values.
+Automatic analytics remains enabled without a consent prompt under the current site policy.
+
 For the read-only monthly report, configure `.env` from `.env.example`:
 
 - grant the service account Search Console access;
@@ -165,10 +171,30 @@ selections, successful contacts, and session-to-contact conversion. Missing GA4 
 as unavailable, never as zero.
 
 GA collection changed to explicit consent on 21 August 2026 and back to automatic collection on
-28 August 2026. Data spanning either boundary is not a like-for-like trend. Treat the first complete
-post-change window as a new baseline, and make a growth comparison only when both adjacent 28-day
-windows are fully after the latest boundary. With the three-day reporting delay, the first such
-comparison is available on 25 October 2026.
+28 August 2026. These dates describe the intended collection policy. An audit on 5 September 2026
+found that the shared tag wrapper queued arrays instead of Google's required `arguments` objects:
+the live tag loaded but did not send page views. GA4 recorded no page views from 24 August through
+4 September, so the automatic-collection period is not a valid baseline. Record the actual repair
+deployment on 5 September 2026 after verifying collection; 6 September is the first complete day
+for the new baseline. The growth report filters GA4 data to `www.isecure.fi` so historical apex and
+preview traffic is excluded. Compare only windows fully after the repair. With
+the three-day reporting delay, two complete adjacent 28-day windows are required for comparison.
+
+When checking analytics, verify a real browser `page_view` request to Google's collection endpoint
+with the expected measurement ID. A loaded script or the `isecure-analytics` HTML marker alone does
+not prove collection. Keep the wrapper's `arguments` object: replacing it with a rest-parameter array
+silently breaks Google's command protocol. `scripts/analytics.test.mjs` covers this regression.
+
+Use `corepack yarn analytics:configure` to inspect the account changes needed for lead key events,
+custom dimensions, email redaction, and limiting automatic measurement to events without arbitrary
+link URLs or search/form parameters. Append `--apply` to apply the plan with an Analytics Editor
+service account. Existing settings are saved to `.growth-data/analytics-settings-plan.json` first.
+The account's user-provided-data switch is read-only in the Admin API and must be disabled in
+Google tag settings; the website's detection policy also enforces this boundary locally.
+
+Stable public HTML, directory aliases, sitemap/robots files, and JSON resources revalidate on each
+visit. Astro's content-hashed assets retain their one-year immutable cache. CloudFront invalidation
+cannot evict HTML already stored under the old cache policy in a visitor's browser.
 
 Review the report with the production/build checks, Search Console indexing state, current claim
 evidence, and short buyer observations. A metric may justify investigation but never approves a

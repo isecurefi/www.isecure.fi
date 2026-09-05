@@ -73,5 +73,10 @@ test("Markdown states the evidence boundary and missing analytics setup", () => 
   assert.match(markdown, /not approval for a public claim/u);
   assert.match(markdown, /explicit-consent collection starts 2026-08-21/u);
   assert.match(markdown, /automatic collection starts 2026-08-28/u);
+  assert.match(
+    markdown,
+    /first complete day after the 5 September tag repair starts 2026-09-06/u,
+  );
+  assert.match(markdown, /GA4 hostname: www\.isecure\.fi/u);
   assert.match(markdown, /GA4_PROPERTY_ID is not set/u);
 });

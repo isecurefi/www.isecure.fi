@@ -6,7 +6,7 @@ type Gtag = (...args: unknown[]) => void;
 
 declare global {
   interface Window {
-    dataLayer?: unknown[][];
+    dataLayer?: unknown[];
     gtag?: Gtag;
   }
 }
@@ -36,13 +36,32 @@ function loadAnalytics(): void {
   if (typeof globalThis.window.gtag === "function") return;
 
   globalThis.window.dataLayer = globalThis.window.dataLayer ?? [];
-  globalThis.window.gtag = (...args: unknown[]): void => {
-    globalThis.window.dataLayer?.push(args);
+  globalThis.window.gtag = function (..._args: unknown[]): void {
+    // gtag.js interprets Arguments objects as commands; arrays use a different
+    // data-layer protocol and silently leave config/event commands unprocessed.
+    // eslint-disable-next-line prefer-rest-params -- Google's command protocol requires Arguments.
+    globalThis.window.dataLayer?.push(arguments);
   };
+  // Block Google's automatic DOM/data-layer scanning even if the account's
+  // user-provided-data setting is enabled. Keep this before tag initialization.
+  globalThis.window.gtag(
+    "policy",
+    "detect_user_provided_data",
+    (): boolean => false,
+  );
+  // Advertising and user-provided-data collection stay disabled independently
+  // of the site's automatic analytics policy. This does not display a prompt.
+  globalThis.window.gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+  });
+  globalThis.window.gtag("set", "user_data", null);
   globalThis.window.gtag("js", new Date());
   globalThis.window.gtag("config", ANALYTICS_MEASUREMENT_ID, {
     allow_ad_personalization_signals: false,
     allow_google_signals: false,
+    user_data: null,
     page_location: sanitizedLocation(),
     page_path: globalThis.location.pathname,
     page_referrer: sanitizedReferrer(),

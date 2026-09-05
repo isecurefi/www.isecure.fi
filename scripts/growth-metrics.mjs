@@ -4,6 +4,10 @@ const EXPECTED_CTR = [
 export const ANALYTICS_METHOD_BOUNDARIES = [
   { date: "2026-08-21", method: "explicit-consent collection" },
   { date: "2026-08-28", method: "automatic collection" },
+  {
+    date: "2026-09-06",
+    method: "first complete day after the 5 September tag repair",
+  },
 ];
 
 function isoDate(date) {
@@ -207,6 +211,8 @@ export function renderGrowthMarkdown(report) {
     legacyTable(search.opportunities.legacyPages.slice(0, 10)),
     "",
     "## Journey measurement",
+    "",
+    `GA4 hostname: ${report.analytics.hostname ?? "www.isecure.fi"}. Historical apex and preview-host traffic is excluded.`,
     "",
   ];
 

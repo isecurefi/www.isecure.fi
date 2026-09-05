@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
+import { releaseCacheControl } from "./cache-policy.mjs";
 
 const dryRun = process.argv.includes("--dry-run");
 const args = process.argv.slice(2).filter((arg) => arg !== "--dry-run");
@@ -40,7 +41,9 @@ for (const indexFile of indexFiles) {
   const key = `${keyPrefix ? `${keyPrefix}/` : ""}${relativeDir}/`;
   const destination = `s3://${bucketName}/${key}`;
   if (dryRun) {
-    console.log(`${indexFile} -> ${destination}`);
+    console.log(
+      `${indexFile} -> ${destination} (${releaseCacheControl(`${relativeDir}/`)})`,
+    );
     continue;
   }
 
@@ -58,9 +61,7 @@ for (const indexFile of indexFiles) {
       "--content-type",
       "text/html; charset=utf-8",
       "--cache-control",
-      keyPrefix
-        ? "public, max-age=31536000, immutable"
-        : "public, max-age=3600",
+      releaseCacheControl(`${relativeDir}/`),
     ],
     { encoding: "utf8", stdio: "pipe" },
   );

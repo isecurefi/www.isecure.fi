@@ -11,7 +11,7 @@ const checks = [
     ],
   },
   {
-    name: "Homepage analytics loads automatically",
+    name: "Homepage includes automatic analytics wiring",
     url: "https://www.isecure.fi/",
     status: 200,
     contentType: "text/html",
@@ -144,6 +144,26 @@ const checks = [
 ];
 
 let failures = 0;
+
+// Older rollback targets intentionally keep their original cache policy. New
+// releases declare this policy in their manifest so verification covers both
+// root HTML and the separately uploaded directory aliases.
+const manifestResponse = await fetch(
+  "https://www.isecure.fi/release-manifest.json",
+);
+const deployedManifest = manifestResponse.ok
+  ? await manifestResponse.json()
+  : {};
+if (deployedManifest.cachePolicy === "revalidate-stable-urls-v1") {
+  for (const check of checks) {
+    if (
+      check.status === 200 &&
+      ["text/html", "application/xml"].includes(check.contentType)
+    ) {
+      check.cacheControl = "public, max-age=0, must-revalidate";
+    }
+  }
+}
 
 const expectedRelease = process.env.EXPECTED_RELEASE;
 if (expectedRelease) {

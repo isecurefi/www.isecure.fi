@@ -11,20 +11,15 @@ import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { basename, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { releaseCacheControl } from "./cache-policy.mjs";
+
+export { releaseCacheControl } from "./cache-policy.mjs";
 
 const DEFAULT_BUCKET = "www2.isecure.fi";
 const DEFAULT_DISTRIBUTION = "E2OQLWDIQMPMBP";
 const DEFAULT_ORIGIN = "S3-www2.isecure.fi";
 const RELEASE_ROOT = "_releases";
 const DEPLOYMENT_ROOT = "_deployments";
-const IMMUTABLE_CACHE_CONTROL = "public, max-age=31536000, immutable";
-const REVALIDATED_OPENAPI_CACHE_CONTROL = "public, max-age=0, must-revalidate";
-
-export function releaseCacheControl(relativePath) {
-  return relativePath === "wsapi_v2.json"
-    ? REVALIDATED_OPENAPI_CACHE_CONTROL
-    : IMMUTABLE_CACHE_CONTROL;
-}
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -91,6 +86,7 @@ export function createReleaseManifest(distDirectory, revision, sourceDate) {
     });
   return {
     schemaVersion: 1,
+    cachePolicy: "revalidate-stable-urls-v1",
     revision,
     sourceDate,
     files,
@@ -226,6 +222,19 @@ function uploadRelease(bucket, prefix, distDirectory) {
     "--recursive",
     "--cache-control",
     releaseCacheControl(""),
+    "--checksum-algorithm",
+    "SHA256",
+    "--no-progress",
+    "--only-show-errors",
+  ]);
+  run("aws", [
+    "s3",
+    "cp",
+    `${join(distDirectory, "_astro")}/`,
+    `${destination}_astro/`,
+    "--recursive",
+    "--cache-control",
+    releaseCacheControl("_astro/"),
     "--checksum-algorithm",
     "SHA256",
     "--no-progress",

@@ -15,11 +15,25 @@ import {
   withOriginPath,
 } from "./publish-site.mjs";
 
-test("the stable OpenAPI URL revalidates while release assets stay immutable", () => {
-  assert.equal(
-    releaseCacheControl("wsapi_v2.json"),
-    "public, max-age=0, must-revalidate",
-  );
+test("stable public URLs revalidate while content-hashed assets stay immutable", () => {
+  for (const path of [
+    "",
+    "index.html",
+    "en/index.html",
+    "en/",
+    "wsapi_v2/",
+    "wsapi_v2.json",
+    "sitemap-index.xml",
+    "sitemap-0.xml",
+    "robots.txt",
+    "release-manifest.json",
+  ]) {
+    assert.equal(
+      releaseCacheControl(path),
+      "public, max-age=0, must-revalidate",
+      path,
+    );
+  }
   assert.equal(
     releaseCacheControl("_astro/index.content-hash.js"),
     "public, max-age=31536000, immutable",
@@ -157,6 +171,7 @@ test("directory aliases support absolute build paths under a release prefix", ()
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /s3:\/\/site\/_releases\/0123456\/en\//u);
     assert.match(result.stdout, /Prepared 1 directory index aliases/u);
+    assert.match(result.stdout, /public, max-age=0, must-revalidate/u);
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
