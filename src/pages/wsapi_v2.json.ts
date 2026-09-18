@@ -246,6 +246,15 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
     });
   }
   publishedSpec.definitions.LoginMFAResp.example.SecretCode = "EXAMPLESECRET";
+  // ponytail: upstream typo, stray ")" after "`admin` mode"; drop when fixed there.
+  for (const property of Object.values(
+    publishedSpec.definitions.LoginResp.properties,
+  )) {
+    property.description = property.description.replace(
+      "i.e. `admin` mode)",
+      "i.e. `admin` mode",
+    );
+  }
   publishedSpec.definitions.RegisterResp.example.ApiKey =
     "example-integrator-api-key";
   publishedSpec.definitions.VerifyEmailReq.example.AccessToken =
