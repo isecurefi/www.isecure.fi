@@ -1050,6 +1050,16 @@ const hasLiteralNewline = (value) =>
 if (hasLiteralNewline(rawSpec)) {
   failures.push("Published OpenAPI document contains double-escaped newlines");
 }
+for (const [path, pathItem] of Object.entries(rawSpec.paths ?? {})) {
+  for (const [method, operation] of Object.entries(pathItem)) {
+    const bank = operation?.parameters?.find((p) => p.name === "Bank");
+    if (bank && !bank.description?.includes("`omasp`")) {
+      failures.push(
+        `${method.toUpperCase()} ${path}: Bank parameter omits omasp`,
+      );
+    }
+  }
+}
 const sourceMetadata = JSON.parse(
   readFileSync(join(root, "src/data/wsapi_v2.source.json"), "utf8"),
 );

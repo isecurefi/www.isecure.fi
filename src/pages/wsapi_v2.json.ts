@@ -12,6 +12,7 @@ type PublishedSpec = typeof sourceSpec & {
 
 type PublishedOperation = {
   operationId?: string;
+  parameters?: Array<{ name: string; description?: string }>;
   "x-code-samples"?: Array<{
     lang?: string;
     label?: string;
@@ -187,6 +188,15 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
       if (!HTTP_METHODS.has(method) || typeof operation !== "object") continue;
 
       const publishedOperation = operation as PublishedOperation;
+      for (const parameter of publishedOperation.parameters ?? []) {
+        // ponytail: upstream bank list omits omasp; drop once wsapi-v2 adds it.
+        if (parameter.name === "Bank" && parameter.description) {
+          parameter.description = parameter.description.replace(
+            "`spankki`, ",
+            "`spankki`, `omasp`, ",
+          );
+        }
+      }
       const operationId = publishedOperation.operationId;
       const example = operationId
         ? TYPESCRIPT_SDK_SAMPLES[operationId]
