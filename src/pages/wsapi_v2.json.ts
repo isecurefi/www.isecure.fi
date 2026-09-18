@@ -100,8 +100,29 @@ if (state.status === "authenticated") {
 );`,
 };
 
+// ponytail: upstream JSON-escapes some descriptions and code samples twice, so
+// the web renderer shows literal "\\n". Decode one level where that happened.
+function unescapeDoubleEncoded(value: unknown): unknown {
+  if (typeof value === "string") {
+    return value.includes("\\n")
+      ? value.replace(/\\([nt"\\])/g, (_, c) =>
+          c === "n" ? "\n" : c === "t" ? "\t" : c,
+        )
+      : value;
+  }
+  if (Array.isArray(value)) return value.map(unescapeDoubleEncoded);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, unescapeDoubleEncoded(v)]),
+    );
+  }
+  return value;
+}
+
 export const GET: APIRoute = () => {
-  const publishedSpec = structuredClone(sourceSpec) as PublishedSpec;
+  const publishedSpec = unescapeDoubleEncoded(
+    structuredClone(sourceSpec),
+  ) as PublishedSpec;
   publishedSpec.info.termsOfService = "https://www.isecure.fi/ws-api-terms/";
   publishedSpec.info.contact.email = "support@isecure.fi";
   publishedSpec.info["x-logo"].url =

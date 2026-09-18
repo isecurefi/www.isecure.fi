@@ -1043,6 +1043,13 @@ if (/forceDarkModeState:/.test(docsSource)) {
 }
 
 const rawSpec = JSON.parse(readFileSync(join(dist, "wsapi_v2.json"), "utf8"));
+const hasLiteralNewline = (value) =>
+  typeof value === "string"
+    ? value.includes("\\n")
+    : Object.values(value ?? {}).some(hasLiteralNewline);
+if (hasLiteralNewline(rawSpec)) {
+  failures.push("Published OpenAPI document contains double-escaped newlines");
+}
 const sourceMetadata = JSON.parse(
   readFileSync(join(root, "src/data/wsapi_v2.source.json"), "utf8"),
 );
