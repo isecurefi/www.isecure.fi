@@ -36,7 +36,7 @@ const checks = [
     status: 200,
     contentType: "application/json",
     cacheControl: "public, max-age=0, must-revalidate",
-    contains: '"version": "v2.8.0"',
+    contains: ['"version": "v2.9.0"', '"operationId": "DeleteAccount"'],
   },
   {
     name: "API service terms are available",

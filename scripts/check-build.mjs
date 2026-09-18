@@ -994,7 +994,7 @@ const packageManifest = JSON.parse(
   readFileSync(join(root, "package.json"), "utf8"),
 );
 const dependencyLock = readFileSync(join(root, "yarn.lock"), "utf8");
-const expectedOperations = 26;
+const expectedOperations = 29;
 const rendererVersion =
   packageManifest.dependencies?.["@scalar/api-reference"] ?? "";
 if (!/^\d+\.\d+\.\d+$/.test(rendererVersion)) {

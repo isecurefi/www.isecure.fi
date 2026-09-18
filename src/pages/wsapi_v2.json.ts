@@ -95,6 +95,17 @@ if (state.status === "authenticated") {
   console.log("Session ready");
 }`,
   LoginMFA: `const state = await client.submitMfaCode("123456");`,
+  SelectMFA: `// After login() resolves to needs_mfa_selection, pick the factor.
+const state = await client.selectMfaType("totp");`,
+  RetireCert: `// Retires the active certificate for client's Bank; the integrator
+// owner may pass Account to retire a customer's certificate instead.
+const result = await client.retireCert({ Account: "customer@example.com" });`,
+  DeleteAccount: `// Permanent deletion. Requires an admin login with MFA at most
+// 10 minutes old and the exact email repeated as confirmation.
+const result = await client.deleteAccount(
+  "customer@example.com",
+  "customer@example.com",
+);`,
   VerifyTOTP: `const state = await client.verifyTotp(
   accessToken,
   codeFromAuthenticatorApp,
