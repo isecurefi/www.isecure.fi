@@ -46,7 +46,9 @@ The current Processing and Bank Simulator examples run separately and do not cor
 
 - [TypeScript SDK](https://github.com/isecurefi/isecure-ts-client): official TypeScript client library
 
-Python and PHP SDKs and the `wscli` command-line tool are also available.
+- [Python SDK](https://github.com/isecurefi/isecure-py-client): Python client library; see its README for current API coverage.
+
+The PHP SDK and the `wscli` command-line tool are also available.
 
 ## Contact
 

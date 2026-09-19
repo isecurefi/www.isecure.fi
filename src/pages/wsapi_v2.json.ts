@@ -145,6 +145,8 @@ export const GET: APIRoute = () => {
   );
   publishedSpec.info.description = `${baseDescription}
 
+The [ISECure Python SDK](https://github.com/isecurefi/isecure-py-client) is also available. See its README for installation and current API coverage.
+
 The test-only bank identifier \`simulator\` is available at \`https://ws-api.test.isecure.fi/v2\`. See the [Bank Simulator guide](${BANK_SIMULATOR_GUIDE_URL}) for enrollment, initial statement download, and signed file upload examples.`;
   publishedSpec.externalDocs = {
     description: "Official ISECure TypeScript SDK",
