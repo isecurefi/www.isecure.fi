@@ -1,3 +1,5 @@
+import { validateOpenApi } from "./openapi-utils.mjs";
+
 const checks = [
   {
     name: "HTML API documentation is available",
@@ -32,12 +34,13 @@ const checks = [
   },
   {
     name: "OpenAPI document is available",
+    validateOpenApi: true,
     url: "https://www.isecure.fi/wsapi_v2.json",
     status: 200,
     contentType: "application/json",
     cacheControl: "public, max-age=0, must-revalidate",
     contains: [
-      '"version": "v2.10.0"',
+      '"swagger": "2.0"',
       '"operationId": "DeleteAccount"',
       "SessionAccountDescriptor",
     ],
@@ -208,6 +211,10 @@ for (const check of checks) {
       expectedContents.length === 0 && excludedContents.length === 0
         ? ""
         : await response.text();
+    if (check.validateOpenApi) {
+      const errors = validateOpenApi(JSON.parse(body));
+      if (errors.length > 0) throw new Error(errors.join("; "));
+    }
     const bodyMatches =
       expectedContents.length === 0 ||
       expectedContents.every((expected) => body.includes(expected));
