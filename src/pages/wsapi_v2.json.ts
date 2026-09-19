@@ -12,6 +12,7 @@ type PublishedSpec = typeof sourceSpec & {
 
 type PublishedOperation = {
   operationId?: string;
+  description?: string;
   parameters?: Array<{ name: string; description?: string }>;
   "x-code-samples"?: Array<{
     lang?: string;
@@ -81,6 +82,16 @@ for (const connection of Connections) {
   "file-reference",
 );`,
   ListAccounts: `const accounts = await client.listAccounts();`,
+  ListAuditEvents: `// WS API 2.11.0: currently deployed to the test environment.
+// Integrators see their tenant; customers see only their own account.
+const query = { Limit: 50 };
+const first = await client.listAuditEvents(query);
+console.log(first.Events);
+if (first.NextToken) {
+  // Fetch another page on demand, even if the previous page was empty.
+  const next = await client.listAuditEvents({ ...query, NextToken: first.NextToken });
+  console.log(next.Events);
+}`,
   DeleteKey: `const result = await client.deleteKey("DBCBE671");`,
   ListKeys: `const keys = await client.listKeys();`,
   UploadKey: `const result = await client.uploadPgpKey(
@@ -180,6 +191,11 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
         "Manage the PGP public keys used for protected certificate exports.",
     },
     {
+      name: "Audit",
+      description:
+        "Read sanitized account-management evidence, newest first. Integrators see their tenant; customers see only their own account. Available in the test environment; production rollout is separate.",
+    },
+    {
       name: "Integrator",
       description:
         "Manage the customer accounts associated with an integrator API key.",
@@ -193,6 +209,7 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
       tags: ["Account", "Certs", "Pgp"],
     },
     { name: "Integrator accounts", tags: ["Integrator"] },
+    { name: "Audit history", tags: ["Audit"] },
     { name: "Data models", tags: ["Schemas"] },
   ];
 
@@ -211,6 +228,9 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
         }
       }
       const operationId = publishedOperation.operationId;
+      if (operationId === "ListAuditEvents") {
+        publishedOperation.description = `Availability: deployed to the test environment at https://ws-api.test.isecure.fi/v2. Production rollout is separate.\n\n${publishedOperation.description ?? ""}`;
+      }
       const example = operationId
         ? TYPESCRIPT_SDK_SAMPLES[operationId]
         : undefined;
