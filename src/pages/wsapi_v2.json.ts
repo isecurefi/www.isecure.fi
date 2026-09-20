@@ -83,7 +83,7 @@ for (const connection of Connections) {
   ExportCert: `const exported = await client.exportCert("3A3A59B2");`,
   EnrollCert: `// Real-bank enrollment uses credentials issued by that bank.
 // For the separately enabled test-only simulator, use the caller-generated
-// values shown in this operation's "Simulator enrollment on gpgtest" example.
+// values shown in this operation's "Simulator enrollment in the test environment" example.
 const certificate = await client.enrollCert({
   Code: process.env.BANK_ENROLLMENT_CODE!,
   Company: "EXAMPLE COMPANY OY",
