@@ -20,6 +20,8 @@ if (processingRecord.visibility === "none") {
 }
 const sdkExampleUrl =
   "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/bank-simulator/README.md";
+const csharpExampleUrl =
+  "https://github.com/isecurefi/isecure-cs-client/blob/main/examples/FileExchange/README.md";
 ---
 
 <CatalogPageLayout lang={lang} description={content.meta.description} {record}>
@@ -106,6 +108,18 @@ const sdkExampleUrl =
           {content.sdkLink}
         </a>
       </div>
+      <p>{content.csharpExampleText}</p>
+      <a
+        class="simulator-link"
+        href={csharpExampleUrl}
+        target="_blank"
+        rel="noopener"
+        data-analytics-content-type="developer_resource"
+        data-analytics-item-id="bank-simulator-csharp-example"
+        data-analytics-source="bank-simulator-example"
+      >
+        {content.csharpLink}
+      </a>
     </aside>
   </article>
 </CatalogPageLayout>
@@ -196,6 +210,10 @@ const sdkExampleUrl =
   .simulator-example p {
     line-height: 1.75;
     margin-bottom: 0.75rem;
+  }
+
+  .simulator-actions + p {
+    margin-top: 1.25rem;
   }
 
   .simulator-sections ul {

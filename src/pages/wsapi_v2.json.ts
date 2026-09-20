@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 
 import { sourceSpec } from "../lib/api-docs-source";
+import { CSHARP_SDK_SAMPLES, CSHARP_SDK_URL } from "../lib/csharp-sdk-samples";
 
 export const prerender = true;
 
@@ -198,9 +199,14 @@ export const GET: APIRoute = () => {
     "Browser-compatible TypeScript SDK is available on GitHub [dforsber/isecure-ts-client](https://github.com/dforsber/isecure-ts-client).",
     `The [official ISECure TypeScript SDK](${TYPESCRIPT_SDK_URL}) supports Node.js and modern browser bundlers. Install it with \`npm install isecure-ts-client\`.`,
   );
-  publishedSpec.info.description = `${baseDescription}
+  const sdkDescription = `The TypeScript SDK is the preferred official client. Other SDKs:
 
-The [ISECure Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client) is also available. See its README for installation and current API coverage.
+- [Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client): see its README for installation and current API coverage.
+- [C# / .NET 10 SDK (Experimental)](${CSHARP_SDK_URL}): registration, SMS/TOTP authentication, certificate discovery, and signed file exchange. Follow the [C# quickstart](${CSHARP_SDK_URL}#tldr-make-your-first-api-call) to install from source; no NuGet release is published. See [preview coverage](${CSHARP_SDK_URL}/blob/main/docs/preview-scope.md) for the supported operations. Certificate enrollment and administration, password reset, and the separate Processing API are outside this preview.
+
+C# operation samples assume a configured \`ISECureClient\` and application-supplied inputs. Authentication samples use \`AuthResult.Status\` to determine the next step; only \`Authenticated\` permits protected operations. Authentication refusals return \`Failed\`; transport/protocol errors and protected-operation refusals throw typed SDK exceptions. See the [C# authentication guide](${CSHARP_SDK_URL}/blob/main/docs/authentication.md) and [error handling](${CSHARP_SDK_URL}/blob/main/docs/errors.md).`;
+  // Keep SDK discovery beside the existing SDK links, before the first example.
+  publishedSpec.info.description = `${baseDescription.replace("\n\n~~~ts", `\n\n${sdkDescription}\n\n~~~ts`)}
 
 The test-only bank identifier \`simulator\` is available at \`https://ws-api.test.isecure.fi/v2\`. See the [Bank Simulator guide](${BANK_SIMULATOR_GUIDE_URL}) for enrollment, initial statement download, and signed file upload examples.`;
   publishedSpec.externalDocs = {
@@ -295,6 +301,14 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
         },
         ...existingSamples,
       ];
+      const csharpExample = CSHARP_SDK_SAMPLES[operationId];
+      if (csharpExample) {
+        publishedOperation["x-code-samples"].push({
+          lang: "csharp",
+          label: "C# SDK (Experimental)",
+          source: `// client is a configured ISECureClient; see the C# quickstart in Introduction.\nusing ISECure;\nusing ISECure.Authentication;\n\n${csharpExample}`,
+        });
+      }
     }
   }
 

@@ -20,6 +20,8 @@ interface SimulatorContent {
   exampleText: string;
   apiLink: string;
   sdkLink: string;
+  csharpExampleText: string;
+  csharpLink: string;
   processingTitle: string;
   processingText: string;
   processingLink: string;
@@ -105,6 +107,9 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
       "Valmis esimerkki hoitaa testikäyttäjien rekisteröinnin ja kirjautumisen, varmenteen rekisteröinnin, PGP-avaimet, allekirjoitetun lähetyksen sekä kaikkien palautetiedostojen listauksen ja latauksen.",
     apiLink: "REST API -dokumentaatio",
     sdkLink: "TypeScript-esimerkki GitHubissa",
+    csharpExampleText:
+      "C# / .NET 10 SDK (Experimental) sisältää myös tiedostonsiirtoesimerkin. Simulaattorin käyttöoikeus on aktivoitava erikseen ja varmenne rekisteröitävä etukäteen esimerkiksi TypeScript SDK:lla. C#-esiversio ei sisällä varmenteen rekisteröintiä. Valitse testiympäristön osoite ja pankiksi simulator.",
+    csharpLink: "C#-tiedostonsiirtoesimerkki (Experimental)",
     processingTitle: "Valmistele aineisto Processing API:lla",
     processingText:
       "Processing API voi valmistella ja vapauttaa tarkistetun pain.001.001.09-aineiston erillisessä istunnossa. Sovelluksesi tarkistaa ja allekirjoittaa täsmälleen samat tavut paikallisesti ennen simulaattorilähetystä. Nykyiset Processing- ja Pankkisimulaattori-esimerkit ajetaan erikseen, eikä palaute täsmäydy automaattisesti.",
@@ -189,6 +194,9 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
       "The existing example handles test-user registration and login, certificate enrollment, PGP keys, signed upload, and listing and downloading every response file.",
     apiLink: "REST API documentation",
     sdkLink: "TypeScript example on GitHub",
+    csharpExampleText:
+      "The C# / .NET 10 SDK (Experimental) also includes a file exchange example. Simulator access must be enabled separately and the certificate enrolled beforehand, for example with the TypeScript SDK. The C# preview does not enroll certificates. Configure the test environment URL and bank simulator.",
+    csharpLink: "C# file exchange example (Experimental)",
     processingTitle: "Prepare the file with Processing API",
     processingText:
       "Processing API can prepare and release the checked pain.001.001.09 through a separate session. Your application verifies and signs those exact bytes locally before the simulator upload. The current Processing and Bank Simulator examples run separately and do not correlate feedback automatically.",
@@ -273,6 +281,9 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
       "Det befintliga exemplet hanterar registrering och inloggning av testanvändare, certifikatregistrering, PGP-nycklar, signerad uppladdning samt listning och hämtning av alla responsfiler.",
     apiLink: "REST API-dokumentation",
     sdkLink: "TypeScript-exempel på GitHub",
+    csharpExampleText:
+      "C# / .NET 10 SDK (Experimental) innehåller också ett filöverföringsexempel. Simulatoråtkomst måste aktiveras separat och certifikatet registreras i förväg, till exempel med TypeScript SDK. C#-förhandsversionen registrerar inte certifikat. Ange testmiljöns URL och simulator som bank.",
+    csharpLink: "C#-filöverföringsexempel (Experimental)",
     processingTitle: "Förbered filen med Processing API",
     processingText:
       "Processing API kan förbereda och frigöra den kontrollerade pain.001.001.09-filen i en separat session. Er applikation verifierar och signerar exakt dessa byte lokalt före simulatoruppladdningen. De nuvarande Processing- och Banksimulator-exemplen körs separat och korrelerar inte respons automatiskt.",
