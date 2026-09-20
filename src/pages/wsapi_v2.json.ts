@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-import sourceSpec from "../data/wsapi_v2.json";
+import { sourceSpec } from "../lib/api-docs-source";
 
 export const prerender = true;
 
@@ -36,17 +36,43 @@ const BANK_SIMULATOR_GUIDE_URL = "https://www.isecure.fi/en/bank-simulator/";
 const TYPESCRIPT_SDK_SAMPLES: Record<string, string> = {
   InitRegister: `// register() retrieves and answers the registration challenge.
 const registration = await client.register();`,
-  VerifyEmail: `const state = await client.verifyEmail("123456");`,
+  VerifyEmail: `// After needs_email_verification; the client retains its AccessToken.
+const result = await client.verifyEmail("123456");
+if (result.status === "verification_accepted") {
+  const next = await client.login(); // Fresh login; complete admin MFA again.
+}`,
   Register: `const registration = await client.register();
 console.log(registration.ApiKey);`,
-  InitPasswordReset: `const challenge = await client.initPasswordReset();`,
-  PasswordReset: `const { Challenge } = await client.initPasswordReset();
+  InitPasswordReset: `// Requests the recovery code; this does not return an encryption challenge.
+const result = await client.initPasswordReset();
+if (result.ResponseCode !== "00") throw new Error(result.ResponseText);`,
+  PasswordReset: `import { AxiosTransport, type InitLoginResponse } from "isecure-ts-client";
+
+// First call initPasswordReset() and ask the user for the recovery code.
+// Then request a fresh InitLogin challenge for password encryption.
+const { BaseUrl, Email, Mode } = client.props;
+const base = BaseUrl.replace(/\\/+$/, "");
+const { data } = await new AxiosTransport().request<InitLoginResponse>({
+  method: "GET",
+  url: base + "/session/" + encodeURIComponent(Email) + "/" + Mode,
+});
+if (data.ResponseCode !== "00" || !data.Challenge) {
+  throw new Error(data.ResponseText || "Missing password encryption challenge");
+}
+const newPassword = process.env.ISECURE_NEW_PASSWORD!;
 const result = await client.passwordReset(
   "123456",
-  process.env.ISECURE_NEW_PASSWORD!,
-  Challenge,
-);`,
-  VerifyPhone: `const state = await client.verifyPhone("123456");`,
+  newPassword,
+  data.Challenge,
+);
+if (result.ResponseCode !== "00") throw new Error(result.ResponseText);
+client.updateProps({ Password: newPassword });
+const state = await client.login(); // Complete any returned MFA challenge.`,
+  VerifyPhone: `// Use the registration SMS code, not a login MFA code.
+const result = await client.verifyPhone("123456");
+if (result.status === "verification_accepted") {
+  const next = await client.login(); // The login SMS is a different code.
+}`,
   ListCerts: `const { Connections = [] } = await client.listCerts();
 for (const connection of Connections) {
   console.log(connection.Bank, connection.Access, connection.Certificates);
@@ -105,9 +131,20 @@ const state = await client.login();`,
 if (state.status === "authenticated") {
   console.log("Session ready");
 }`,
-  LoginMFA: `const state = await client.submitMfaCode("123456");`,
-  SelectMFA: `// After login() resolves to needs_mfa_selection, pick the factor.
-const state = await client.selectMfaType("totp");`,
+  LoginMFA: `// After needs_mfa; the client retains Session and ChallengeName.
+const state = await client.submitMfaCode("123456");
+if (state.status === "needs_email_verification") {
+  // Prompt for the email code, then call client.verifyEmail(code).
+  // After verification, start a fresh login and complete MFA again.
+} else if (state.status === "authenticated") {
+  console.log("Session ready");
+}`,
+  SelectMFA: `// After needs_mfa_selection, choose a method offered in state.methods.
+const state = await client.selectMfaType("totp");
+if (state.status === "needs_mfa") {
+  // Prompt for the selected factor's code, then call submitMfaCode(code).
+  // The client retains the new Session and ChallengeName.
+}`,
   RetireCert: `// Retires the active certificate for client's Bank; the integrator
 // owner may pass Account to retire a customer's certificate instead.
 const result = await client.retireCert({ Account: "customer@example.com" });`,
@@ -120,7 +157,11 @@ const result = await client.deleteAccount(
   VerifyTOTP: `const state = await client.verifyTotp(
   accessToken,
   codeFromAuthenticatorApp,
-);`,
+);
+if (state.status !== "verification_accepted") {
+  throw new Error("TOTP enrollment was not confirmed");
+}
+// On the next login, follow the returned MFA challenge or factor selection.`,
 };
 
 // ponytail: upstream JSON-escapes some descriptions and code samples twice, so
@@ -272,13 +313,18 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
     publishedSpec.definitions.LoginMFAResp,
     publishedSpec.definitions.LoginResp,
   ]) {
-    Object.assign(definition.example, {
+    const replacements = {
       AccessToken: "example-access-token",
       ApiKey: "example-integrator-api-key",
       IdToken: "example-id-token",
-    });
+      SecretCode: "EXAMPLESECRET",
+    };
+    const example = definition.example as Record<string, unknown>;
+    // Preserve the upstream response state; sanitizing must not add tokens.
+    for (const [key, value] of Object.entries(replacements)) {
+      if (Object.hasOwn(example, key)) example[key] = value;
+    }
   }
-  publishedSpec.definitions.LoginMFAResp.example.SecretCode = "EXAMPLESECRET";
   // ponytail: upstream typo, stray ")" after "`admin` mode"; drop when fixed there.
   for (const property of Object.values(
     publishedSpec.definitions.LoginResp.properties,

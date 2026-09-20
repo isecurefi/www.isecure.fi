@@ -1,6 +1,5 @@
 ---
-import sourceSpec from "../../data/wsapi_v2.json";
-import sourceMetadata from "../../data/wsapi_v2.source.json";
+import { sourceSpec, sourceRevision } from "../../lib/api-docs-source";
 import ApiDocsLayout from "../../layouts/ApiDocsLayout.astro";
 
 const HTTP_METHODS = new Set([
@@ -50,7 +49,7 @@ const serializedLegacyHashMap = JSON.stringify(legacyHashMap).replace(
   "\\u003c",
 );
 const schemaCount = Object.keys(sourceSpec.definitions).length;
-const specUrl = `/wsapi_v2.json?revision=${sourceMetadata.commit}`;
+const specUrl = `/wsapi_v2.json?revision=${sourceRevision}`;
 const description =
   "Complete API reference for the ISECure WS Channel API: authentication, Finnish bank file exchange, certificates, MFA, integrator workflows, code examples, and schemas.";
 ---
