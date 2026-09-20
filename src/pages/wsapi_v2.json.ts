@@ -82,7 +82,7 @@ for (const connection of Connections) {
   "file-reference",
 );`,
   ListAccounts: `const accounts = await client.listAccounts();`,
-  ListAuditEvents: `// WS API 2.11.0: currently deployed to the test environment.
+  ListAuditEvents: `// WS API 2.12.0: available in production and the test environment.
 // Integrators see their tenant; customers see only their own account.
 const query = { Limit: 50 };
 const first = await client.listAuditEvents(query);
@@ -193,7 +193,7 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
     {
       name: "Audit",
       description:
-        "Read sanitized account-management evidence, newest first. Integrators see their tenant; customers see only their own account. Available in the test environment; production rollout is separate.",
+        "Read sanitized account-management evidence, newest first. Integrators see their tenant; customers see only their own account. Available in production and the test environment.",
     },
     {
       name: "Integrator",
@@ -229,7 +229,7 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
       }
       const operationId = publishedOperation.operationId;
       if (operationId === "ListAuditEvents") {
-        publishedOperation.description = `Availability: deployed to the test environment at https://ws-api.test.isecure.fi/v2. Production rollout is separate.\n\n${publishedOperation.description ?? ""}`;
+        publishedOperation.description = `Availability: deployed to production at https://ws-api.isecure.fi/v2 and the test environment at https://ws-api.test.isecure.fi/v2.\n\n${publishedOperation.description ?? ""}`;
       }
       const example = operationId
         ? TYPESCRIPT_SDK_SAMPLES[operationId]
