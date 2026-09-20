@@ -91,7 +91,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
         ],
       },
       {
-        title: "Mitä et voi vielä määrittää",
+        title: "Kiinteän File Exchange -esimerkin rajat",
         paragraphs: [
           "Nykyinen Beta-versio käyttää yhtä kiinteää synteettistä tiliä, alkusaldoa ja determinististä oletusskenaariota.",
         ],
@@ -138,7 +138,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
         title: "Environment and interface",
         paragraphs: [
           "The test base URL is https://ws-api.test.isecure.fi/v2. Bank Simulator is available only in the ISECure test environment.",
-          'Use the same registration, login, certificate, and file operations as for other banks. The TypeScript SDK has no simulator-specific methods; select Bank: "simulator" in the client configuration.',
+          'Use the same registration, login, certificate, and file operations as for other banks. The root File Exchange SDK has no simulator-specific methods; select Bank: "simulator" in the client configuration.',
         ],
       },
       {
@@ -178,14 +178,14 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
         ],
       },
       {
-        title: "What you cannot configure yet",
+        title: "Limits of the fixed File Exchange example",
         paragraphs: [
           "The current Beta product uses one fixed synthetic account, opening balance, and deterministic default scenario.",
         ],
         items: [
-          "No customer-defined simulator banks, accounts, or opening balances",
+          "No custom banks, accounts or opening balances in this fixed example",
           "No WebServices user, file-type, direction, or profile authorization configuration",
-          "No customer-authored scenarios, faults, cutoffs, virtual time, or branches",
+          "Custom scenarios, faults, cutoffs, time and branches use the separate control API",
         ],
       },
     ],
@@ -265,7 +265,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
         ],
       },
       {
-        title: "Vad ni ännu inte kan konfigurera",
+        title: "Begränsningar i det fasta File Exchange-exemplet",
         paragraphs: [
           "Den nuvarande Beta-produkten använder ett fast syntetiskt konto, startsaldo och deterministiskt standardscenario.",
         ],

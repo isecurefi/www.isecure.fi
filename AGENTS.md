@@ -175,3 +175,24 @@ this release switch with a direct live-root upload. Verify the new API documenta
 replacement is unhealthy. Do not use destructive S3 synchronization. Preserve
 the recoverable legacy documentation files, unrelated EC2 content, and existing
 user changes.
+
+## Additional public API references
+
+Processing and Bank Simulator have separate customer references at
+`/apis/processing/` and `/apis/bank-simulator/`, each with an `openapi.json`
+export in OpenAPI 3.0.3. Reuse `ApiReferenceScript.astro` and `ApiDocsLayout.astro`
+for all three references. Keep the existing File Exchange contract and legacy
+anchors compatible.
+
+The new references describe only the pinned, deployed test surface. Never publish
+the full generated platform contract as available. Follow the explicit sync and
+review procedure in README.md; normal builds remain offline and reject drift.
+Registration, initial authentication and account management must link to the live
+File Exchange reference. Processing session exchange and product authorization
+remain separately documented. The canonical test server is
+`https://processing-api.test.isecure.fi`; do not substitute an API Gateway URL.
+
+The user authorized public product discovery on the homepage: the primary
+navigation uses Products instead of Home, and the concise overview reuses public
+catalog records. Draft/unlisted products remain excluded. This promotion does not
+change product maturity or grant access.

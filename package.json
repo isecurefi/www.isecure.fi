@@ -18,6 +18,7 @@
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@eslint/js": "^10.0.1",
+    "ajv": "^6.14.0",
     "astro": "^7.1.6",
     "autoprefixer": "^10.5.4",
     "cssnano": "^8.0.2",
@@ -38,7 +39,7 @@
     "build": "yarn api:validate && yarn astro build && yarn verify:build && yarn test:redirects && yarn test",
     "preview": "yarn astro preview",
     "api:sync": "node scripts/sync-openapi.mjs",
-    "api:validate": "node scripts/validate-openapi.mjs",
+    "api:validate": "node scripts/validate-openapi.mjs && node scripts/validate-platform-openapi.mjs",
     "gsc": "node --env-file=.env scripts/gsc-pull.mjs",
     "gsc:reconcile": "node --env-file=.env scripts/gsc-manage.mjs",
     "growth:report": "node --env-file=.env scripts/growth-report.mjs",
@@ -54,7 +55,9 @@
     "test:publish": "node --test scripts/publish-site.test.mjs",
     "test:growth": "node --test scripts/growth-metrics.test.mjs",
     "test:redirects": "node scripts/test-cloudfront-redirects.mjs",
-    "deploy": "yarn lint && yarn format:check && yarn build && node scripts/publish-site.mjs publish"
+    "deploy": "yarn lint && yarn format:check && yarn build && node scripts/publish-site.mjs publish",
+    "api:sync:products": "node scripts/sync-platform-openapi.mjs",
+    "api:generate:products": "node scripts/platform-api-docs.mjs"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,61 @@
+---
+import type { Lang } from "../types";
+interface Props {
+  lang: Lang;
+  kind: "processing" | "bank-simulator";
+}
+const { lang, kind } = Astro.props;
+const copy = {
+  en: {
+    title: "API documentation",
+    text: "Read the operation reference, authentication guide and TypeScript examples. Both APIs use the existing ISECure registration and login, followed by a separate Processing session.",
+    reference: "Open API reference (English)",
+    json: "Download OpenAPI 3.0",
+    simulator:
+      "The Experimental control API configures synthetic banks, accounts, opening balances, scenarios and runs. It is separate from the fixed Beta File Exchange example below and requires its own access and permissions.",
+  },
+  fi: {
+    title: "API-dokumentaatio",
+    text: "Tutustu toimintoihin, tunnistautumiseen ja TypeScript-esimerkkeihin. Molemmat rajapinnat käyttävät nykyistä ISECure-rekisteröintiä ja kirjautumista sekä erillistä Processing-istuntoa.",
+    reference: "Avaa API-dokumentaatio (englanniksi)",
+    json: "Lataa OpenAPI 3.0",
+    simulator:
+      "Experimental-hallintarajapinnalla voit määrittää synteettisiä pankkeja, tilejä, alkusaldoja, skenaarioita ja testiajoja. Se on erillinen alla kuvatusta kiinteästä Beta File Exchange -esimerkistä ja vaatii omat käyttöoikeudet.",
+  },
+  se: {
+    title: "API-dokumentation",
+    text: "Läs om funktioner, autentisering och TypeScript-exempel. Båda API:erna använder befintlig ISECure-registrering och inloggning samt en separat Processing-session.",
+    reference: "Öppna API-referensen (engelska)",
+    json: "Hämta OpenAPI 3.0",
+    simulator:
+      "Det experimentella kontroll-API:t konfigurerar syntetiska banker, konton, ingående saldon, scenarier och testkörningar. Det är separat från det fasta Beta-exemplet för File Exchange nedan och kräver egen åtkomst och behörighet.",
+  },
+}[lang];
+---
+
+<section class="product-api-links">
+  <h2>{copy.title}</h2>{kind === "bank-simulator" && <p>{copy.simulator}</p>}<p>
+    {copy.text}
+  </p><div>
+    <a href={`/apis/${kind}/`}>{copy.reference}</a><a
+      href={`/apis/${kind}/openapi.json`}>{copy.json}</a
+    >
+  </div>
+</section>
+<style>
+  .product-api-links {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color, #cfddda);
+    border-radius: 12px;
+  }
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+</style>

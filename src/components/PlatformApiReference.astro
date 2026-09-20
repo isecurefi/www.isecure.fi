@@ -1,0 +1,67 @@
+---
+import ApiDocsLayout from "../layouts/ApiDocsLayout.astro";
+import ApiReferenceScript from "./ApiReferenceScript.astro";
+import processing from "../data/processing.openapi.json";
+import simulator from "../data/bank-simulator.openapi.json";
+import metadata from "../data/platform-api.source-metadata.json";
+interface Props {
+  kind: "processing" | "bank-simulator";
+}
+const { kind } = Astro.props;
+const spec = kind === "processing" ? processing : simulator;
+const title = `${spec.info.title} documentation`;
+const description =
+  kind === "processing"
+    ? "Prepare, validate, approve and download payment files. Experimental test API reference with authentication, TypeScript examples and OpenAPI 3.0 schemas."
+    : "Configure synthetic bank accounts and scenarios, run tests and inspect results. Experimental test API reference with authentication, TypeScript examples and OpenAPI 3.0 schemas.";
+const specPath = `/apis/${kind}/openapi.json`;
+const specUrl = `${specPath}?revision=${metadata.repositoryRevision}`;
+const operationCount = Object.keys(spec.paths).length;
+---
+
+<ApiDocsLayout
+  {title}
+  {description}
+  version={spec.info.version}
+  {operationCount}
+  canonicalPath={`/apis/${kind}/`}
+  {specPath}
+  apiName={spec.info.title}
+>
+  <main
+    id="api-reference"
+    tabindex="-1"
+    data-renderer="scalar"
+    data-reference-only="true"
+    data-spec-url={specUrl}
+    data-api-name={spec.info.title}
+    aria-busy="true"
+  >
+    <div class="docs-loading" role="status">
+      <span aria-hidden="true"></span><div>
+        <strong>Loading API reference</strong><small
+          >{operationCount} operations · {
+            Object.keys(spec.components.schemas).length
+          } schemas</small
+        >
+      </div>
+    </div>
+    <noscript
+      ><section class="noscript-message">
+        <h1>{title}</h1><p>
+          JavaScript is required for the browsable reference. Download the
+          complete <a href={specPath}>OpenAPI 3.0 JSON document</a>.
+        </p>
+      </section></noscript
+    >
+  </main>
+  <section class="reference-error" id="reference-error" role="alert" hidden>
+    <strong>The API reference could not be loaded.</strong><span
+      >The complete contract remains available as <a href={specPath}
+        >OpenAPI JSON</a
+      >, or contact <a href="mailto:support@isecure.fi">developer support</a
+      >.</span
+    >
+  </section>
+  <ApiReferenceScript />
+</ApiDocsLayout>

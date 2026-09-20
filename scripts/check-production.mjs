@@ -1,6 +1,32 @@
 import { validateOpenApi } from "./openapi-utils.mjs";
 
 const checks = [
+  ...["processing", "bank-simulator"].flatMap((kind) => [
+    {
+      name: `${kind} API reference is published`,
+      url: `https://www.isecure.fi/apis/${kind}/`,
+      status: 200,
+      contentType: "text/html",
+      contains: [
+        'data-renderer="scalar"',
+        'data-reference-only="true"',
+        `https://www.isecure.fi/apis/${kind}/`,
+      ],
+    },
+    {
+      name: `${kind} OpenAPI 3.0 is published`,
+      url: `https://www.isecure.fi/apis/${kind}/openapi.json`,
+      status: 200,
+      contentType: "application/json",
+      contains: [
+        '"openapi":"3.0.3"',
+        "https://www.isecure.fi/wsapi_v2/#operation/Register",
+        "https://www.isecure.fi/wsapi_v2/#operation/Login",
+        '"/session"',
+        '"processingSession"',
+      ],
+    },
+  ]),
   {
     name: "HTML API documentation is available",
     url: "https://www.isecure.fi/wsapi_v2/",
@@ -85,14 +111,15 @@ const checks = [
     ],
   },
   {
-    name: "Bank Simulator remains off the homepage",
+    name: "Homepage links to the product catalog and public products",
     url: "https://www.isecure.fi/",
     status: 200,
     contentType: "text/html",
-    excludes: [
+    contains: [
+      'href="/products/"',
+      'id="products"',
       'href="/bank-simulator/"',
-      'href="/en/bank-simulator/"',
-      'href="/se/bank-simulator/"',
+      'href="/processing-api/"',
     ],
   },
   {

@@ -1,4 +1,5 @@
 ---
+import ProductApiLinks from "./ProductApiLinks.astro";
 import { getCatalogRecord } from "../data/productRegistry";
 import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import type { Lang } from "../types";
@@ -167,6 +168,8 @@ const copy = {
       <h1>{copy.heading}</h1>
       <p class="lead">{copy.lead}</p>
     </header>
+
+    <ProductApiLinks {lang} kind="processing" />
 
     <section class="status" aria-labelledby="processing-status">
       <div>

@@ -61,3 +61,6 @@ The PHP SDK and the `wscli` command-line tool are also available.
 - [Privacy policy (Finnish)](https://www.isecure.fi/privacy/)
 - [Privacy policy (English)](https://www.isecure.fi/en/privacy/)
 - [Privacy policy (Swedish)](https://www.isecure.fi/se/privacy/)
+
+- [Processing API reference](https://www.isecure.fi/apis/processing/): Experimental payment-file workflow in the test environment; shared ISECure identity, separate Processing session, OpenAPI 3.1 and TypeScript examples
+- [Bank Simulator API reference](https://www.isecure.fi/apis/bank-simulator/): Experimental synthetic workspace, account, scenario and run control; separate from File Exchange file transfers

@@ -1,4 +1,5 @@
 ---
+import ProductApiLinks from "./ProductApiLinks.astro";
 import { bankSimulatorContent } from "../data/bankSimulator";
 import { getCatalogRecord } from "../data/productRegistry";
 import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
@@ -43,6 +44,8 @@ const csharpExampleUrl =
     </header>
 
     <CatalogStatus {lang} {record} />
+
+    <ProductApiLinks {lang} kind="bank-simulator" />
 
     <div class="simulator-sections">
       {

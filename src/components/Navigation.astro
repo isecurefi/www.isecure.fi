@@ -1,4 +1,5 @@
 ---
+import { catalogUi } from "../data/productRegistry";
 import { getText } from "../store/translations";
 import type { Lang } from "../types";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
@@ -17,7 +18,7 @@ const themeLabels = {
 
 const landingBase = lang === "fi" ? "/" : `/${lang}/`;
 const navItems = [
-  { href: landingBase, text: getText("nav.home", lang) },
+  { href: `${landingBase}products/`, text: catalogUi[lang].products },
   { href: `${landingBase}#api`, text: getText("nav.api", lang) },
   { href: `${landingBase}#sdks`, text: getText("nav.sdk", lang) },
   { href: `${landingBase}#banks`, text: getText("nav.banks", lang) },

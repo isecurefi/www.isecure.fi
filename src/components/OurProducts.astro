@@ -1,0 +1,132 @@
+---
+import { catalogUi, getPublicProductRecords } from "../data/productRegistry";
+import CatalogAccessSummary from "./CatalogAccessSummary.astro";
+import type { Lang } from "../types";
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = {
+  en: {
+    title: "Our products",
+    all: "Explore all products",
+    descriptions: [
+      "Exchange bank files and manage certificates.",
+      "Prepare, validate and approve payment files.",
+      "Test bank-file workflows with synthetic accounts and payment feedback.",
+    ],
+  },
+  fi: {
+    title: "Tuotteemme",
+    all: "Tutustu kaikkiin tuotteisiin",
+    descriptions: [
+      "Lähetä ja nouda pankkiaineistoja sekä hallitse varmenteita.",
+      "Luo, tarkista ja hyväksy maksuaineistoja.",
+      "Testaa pankkiaineistojen käsittelyä synteettisillä tileillä ja maksupalautteilla.",
+    ],
+  },
+  se: {
+    title: "Våra produkter",
+    all: "Utforska alla produkter",
+    descriptions: [
+      "Skicka och hämta bankfiler och hantera certifikat.",
+      "Skapa, kontrollera och godkänn betalningsfiler.",
+      "Testa bankfilflöden med syntetiska konton och betalningsrespons.",
+    ],
+  },
+}[lang];
+const order = ["bank-connectivity", "processing-api", "bank-simulation"];
+const products = getPublicProductRecords()
+  .filter((p) => order.includes(p.id))
+  .sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+const indexHref = lang === "fi" ? "/products/" : `/${lang}/products/`;
+---
+
+<section class="our-products" id="products" aria-labelledby="products-title">
+  <div class="products-heading">
+    <h2 id="products-title">{copy.title}</h2><a href={indexHref}>{copy.all} →</a
+    >
+  </div>
+  <div class="products-grid" aria-label={catalogUi[lang].products}>
+    {
+      products.map((product, i) => (
+        <article data-catalog-entry={product.id}>
+          <CatalogAccessSummary
+            {lang}
+            stage={product.stage}
+            access={product.access}
+            compact
+            card
+          >
+            <h3 slot="title">
+              <a
+                href={product.routes[lang]}
+                data-analytics-content-type="product"
+                data-analytics-item-id={product.id}
+                data-analytics-source="homepage-products"
+              >
+                {product.name[lang]}
+              </a>
+            </h3>
+            <p>{copy.descriptions[i]}</p>
+          </CatalogAccessSummary>
+        </article>
+      ))
+    }
+  </div>
+</section>
+<style>
+  .our-products {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.25rem;
+  }
+  .products-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  article {
+    padding: 1.4rem;
+    background: #fff;
+    border: 1px solid #cfddda;
+    border-radius: 12px;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  p {
+    margin: 1rem 0;
+  }
+  a {
+    color: #087f72;
+    text-underline-offset: 0.2em;
+  }
+  :global(body.banking-theme-page[data-isecure-theme="dark"]) article {
+    background: #152227;
+    border-color: #2b4047;
+  }
+  :global(body.banking-theme-page[data-isecure-theme="dark"]) a {
+    color: #8ce8dc;
+  }
+  @media (max-width: 760px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+    .products-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

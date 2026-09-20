@@ -210,7 +210,14 @@ C# operation samples assume a configured \`ISECureClient\` and application-suppl
   // Keep SDK discovery beside the existing SDK links, before the first example.
   publishedSpec.info.description = `${baseDescription.replace("\n\n~~~ts", `\n\n${sdkDescription}\n\n~~~ts`)}
 
-The test-only bank identifier \`simulator\` is available at \`https://ws-api.test.isecure.fi/v2\`. See the [Bank Simulator guide](${BANK_SIMULATOR_GUIDE_URL}) for enrollment, initial statement download, and signed file upload examples.`;
+The test-only bank identifier \`simulator\` is available at \`https://ws-api.test.isecure.fi/v2\`. See the [Bank Simulator guide](${BANK_SIMULATOR_GUIDE_URL}) for enrollment, initial statement download, and signed file upload examples.
+
+## Related API references
+
+- [Processing API documentation](https://www.isecure.fi/apis/processing/): prepare, validate, approve and download payment files before local signing and File Exchange upload.
+- [Bank Simulator API documentation](https://www.isecure.fi/apis/bank-simulator/): configure synthetic banks and accounts, define scenarios, start runs and inspect results. Its control API is separate from the fixed File Exchange simulator example.
+
+Both APIs are Experimental and available in the test environment by request. Use the registration, initial login, MFA and account-management operations documented here for all three APIs. Processing and Bank Simulator then exchange the completed login for a separate [Processing session](https://www.isecure.fi/apis/processing/#operation/processing_session.exchange), with their own subscription and permission checks. File uploads and downloads continue through this File Exchange API.`;
   publishedSpec.externalDocs = {
     description: "Official ISECure TypeScript SDK",
     url: TYPESCRIPT_SDK_URL,

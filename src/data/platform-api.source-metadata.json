@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "processing-2fb9a78a9ef95b7405a4537d",
+  "repositoryRevision": "e24fc78ffd2c6c3cb564433b910a27da930dfd41",
+  "sourceDateEpoch": 1788180328,
+  "sourceFile": "generated/processing/openapi.json",
+  "sourceSha256": "5b6fa8753178e8f66fcb1bc9b9bae52d1cff591dab655276e673019cc8223057",
+  "snapshotSha256": "1c63cded07d5355eb0268c02d972993aebe0de5a32111cb0724983421f299e77",
+  "lambdaVersion": "230",
+  "verifiedAt": "2026-09-20",
+  "baseUrl": "https://processing-api.test.isecure.fi",
+  "audience": "isecure-processing-gpgtest-v1",
+  "sdkVersion": "2.7.0",
+  "operationCount": 47
+}

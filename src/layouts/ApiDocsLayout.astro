@@ -7,10 +7,21 @@ interface Props {
   description: string;
   version: string;
   operationCount: number;
+  canonicalPath?: string;
+  specPath?: string;
+  apiName?: string;
 }
 
-const { title, description, version, operationCount } = Astro.props;
-const canonicalUrl = "https://www.isecure.fi/wsapi_v2/";
+const {
+  title,
+  description,
+  version,
+  operationCount,
+  canonicalPath = "/wsapi_v2/",
+  specPath = "/wsapi_v2.json",
+  apiName = "ISECure WS Channel API",
+} = Astro.props;
+const canonicalUrl = `https://www.isecure.fi${canonicalPath}`;
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "TechArticle",
@@ -25,7 +36,7 @@ const structuredData = JSON.stringify({
   },
   about: {
     "@type": "SoftwareApplication",
-    name: "ISECure WS Channel API",
+    name: apiName,
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Cloud",
   },
@@ -48,7 +59,7 @@ const structuredData = JSON.stringify({
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="alternate" type="application/json" href="/wsapi_v2.json" />
+    <link rel="alternate" type="application/json" href={specPath} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ISECure" />
     <meta property="og:url" content={canonicalUrl} />

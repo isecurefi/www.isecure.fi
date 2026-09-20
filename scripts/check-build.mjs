@@ -187,7 +187,18 @@ if (analyticsBundles.length !== 1) {
 for (const extension of [".html", ".json", ".js", ".txt", ".xml"]) {
   for (const file of findFiles(dist, extension)) {
     const content = readFileSync(file, "utf8");
-    if (/gpgtest/iu.test(content)) {
+    // Technical references must give the exact server URL and authentication audience.
+    // Keep internal stage names out of all marketing pages and other public assets.
+    const technicalSpec = [
+      "apis/processing/openapi.json",
+      "apis/bank-simulator/openapi.json",
+    ].includes(relative(dist, file).split(sep).join("/"));
+    const reviewedContent = technicalSpec
+      ? content
+          .replaceAll("https://processing-api.test.isecure.fi", "TEST_SERVER")
+          .replaceAll("isecure-processing-gpgtest-v1", "TEST_AUDIENCE")
+      : content;
+    if (/gpgtest/iu.test(reviewedContent)) {
       failures.push(
         `${relative(dist, file)}: internal API Gateway stage name is public`,
       );
@@ -483,7 +494,7 @@ for (const [
     failures.push(`${relativeFile}: Processing API cross-link is missing`);
   }
   if (
-    !/Mitä et voi vielä määrittää|What you cannot configure yet|Vad ni ännu inte kan konfigurera/u.test(
+    !/Kiinteän File Exchange -esimerkin rajat|Limits of the fixed File Exchange example|Begränsningar i det fasta File Exchange-exemplet/u.test(
       html,
     ) ||
     !/Nykyiset Processing- ja Pankkisimulaattori-esimerkit|current Processing and Bank Simulator examples|nuvarande Processing- och Banksimulator-exemplen/u.test(
@@ -517,8 +528,14 @@ for (const entryPage of ["index.html", "en/index.html", "se/index.html"]) {
       `${entryPage}: Invoicing must remain outside public navigation`,
     );
   }
-  if (/href="\/(?:en\/|se\/)?bank-simulator\//u.test(html)) {
-    failures.push(`${entryPage}: soft-launched Bank Simulator is on homepage`);
+  if (
+    !/href="\/(?:en\/|se\/)?products\//u.test(html) ||
+    !html.includes('id="products"') ||
+    !html.includes('data-catalog-entry="bank-simulation"')
+  ) {
+    failures.push(
+      `${entryPage}: product navigation or homepage product overview is missing`,
+    );
   }
   if (!html.includes("camt.053.001.02")) {
     failures.push(`${entryPage}: fresh-user simulator statement is missing`);
@@ -984,10 +1001,38 @@ if (/gpgtest|Banking Data API|\/data-api\//iu.test(llmsText)) {
   failures.push("llms.txt exposes an internal or retired API name");
 }
 
+for (const [kind, count] of [
+  ["processing", 28],
+  ["bank-simulator", 23],
+]) {
+  const route = `apis/${kind}`;
+  const html = readFileSync(join(dist, route, "index.html"), "utf8");
+  const spec = JSON.parse(
+    readFileSync(join(dist, route, "openapi.json"), "utf8"),
+  );
+  if (
+    !html.includes(`https://www.isecure.fi/${route}/`) ||
+    !html.includes('data-renderer="scalar"') ||
+    !html.includes('data-reference-only="true"')
+  )
+    failures.push(`${route}: canonical reference renderer missing`);
+  if (spec.openapi !== "3.0.3" || Object.keys(spec.paths).length !== count)
+    failures.push(`${route}: incorrect published OpenAPI contract`);
+  for (const locale of ["", "en/", "se/"]) {
+    const product = kind === "processing" ? "processing-api" : "bank-simulator";
+    if (
+      !readFileSync(join(dist, locale, product, "index.html"), "utf8").includes(
+        `href="/${route}/"`,
+      )
+    )
+      failures.push(`${locale}${product}: API reference link missing`);
+  }
+}
+
 const docsPath = join(dist, "wsapi_v2", "index.html");
 const docs = readFileSync(docsPath, "utf8");
 const docsSource = readFileSync(
-  join(root, "src", "pages", "wsapi_v2", "index.astro"),
+  join(root, "src", "components", "ApiReferenceScript.astro"),
   "utf8",
 );
 const packageManifest = JSON.parse(
@@ -1043,6 +1088,35 @@ if (/forceDarkModeState:/.test(docsSource)) {
 }
 
 const rawSpec = JSON.parse(readFileSync(join(dist, "wsapi_v2.json"), "utf8"));
+const publishedApiReferences = [
+  ["/wsapi_v2/", rawSpec],
+  ...["processing", "bank-simulator"].map((kind) => [
+    `/apis/${kind}/`,
+    JSON.parse(readFileSync(join(dist, "apis", kind, "openapi.json"), "utf8")),
+  ]),
+];
+for (const [route, spec] of publishedApiReferences) {
+  for (const [otherRoute] of publishedApiReferences) {
+    if (
+      otherRoute !== route &&
+      !spec.info.description.includes(`https://www.isecure.fi${otherRoute}`)
+    )
+      failures.push(`${route}: missing reciprocal API reference ${otherRoute}`);
+  }
+  for (const match of JSON.stringify(spec).matchAll(
+    /https:\/\/www\.isecure\.fi(\/wsapi_v2\/|\/apis\/(?:processing|bank-simulator)\/)#operation\/([A-Za-z0-9_.-]+)/g,
+  )) {
+    const target = publishedApiReferences.find(
+      ([path]) => path === match[1],
+    )?.[1];
+    const operations = Object.values(target?.paths ?? {})
+      .flatMap((item) => Object.values(item))
+      .map((operation) => operation.operationId);
+    if (!operations.includes(match[2]))
+      failures.push(`${route}: broken operation link ${match[0]}`);
+  }
+}
+
 const hasLiteralNewline = (value) =>
   typeof value === "string"
     ? value.includes("\\n")

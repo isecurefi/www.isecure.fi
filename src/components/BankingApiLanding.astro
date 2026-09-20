@@ -3,6 +3,7 @@ import hljs from "highlight.js/lib/core";
 import typescript from "highlight.js/lib/languages/typescript";
 import type { Lang } from "../types";
 import BankLogos from "./BankLogos.astro";
+import OurProducts from "./OurProducts.astro";
 import References from "./References.astro";
 
 interface Props {
@@ -175,7 +176,7 @@ const content = {
     banks:
       "ISECure yhdistää samaan integraatiomalliin pankit kuten Nordea, OP, Danske Bank, S-Pankki/LähiTapiola ja Ålandsbanken sekä Samlink- ja Crosskey-yhteyksien kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSP:n. Pankkiaineistot kulkevat palvelun läpi ilman aineistotyyppikohtaista suodatusta tai prosessointia.",
     pricingEyebrow: "Hinnoittelu",
-    pricingTitle: "Yksinkertainen hinnoittelu",
+    pricingTitle: "Pankkiyhteyden hinnoittelu",
     pricingLead:
       "Kiinteä perusmaksu ja pankkitilikohtaiset lisenssit. Ei transaktio- eikä volyymimaksuja.",
     pricingFromLabel: "Alkaen",
@@ -368,7 +369,7 @@ const content = {
     banks:
       "ISECure connects the same integration model to banks such as Nordea, OP, Danske Bank, S-Bank/LähiTapiola, and Ålandsbanken, plus Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections. Bank files pass through the service without file-type-specific filtering or processing.",
     pricingEyebrow: "Pricing",
-    pricingTitle: "Simple pricing",
+    pricingTitle: "Bank Connectivity pricing",
     pricingLead:
       "A fixed base fee plus per-bank-account licenses. No transaction or volume fees.",
     pricingFromLabel: "From",
@@ -561,7 +562,7 @@ const content = {
     banks:
       "ISECure kopplar samma integrationsmodell till banker som Nordea, OP, Danske Bank, S-Bank/LähiTapiola och Ålandsbanken samt Handelsbanken, Aktia, POP Banken, Sparbanken och OmaSP via Samlink- och Crosskey-förbindelser. Bankfiler passerar genom tjänsten utan filtypsspecifik filtrering eller bearbetning.",
     pricingEyebrow: "Prissättning",
-    pricingTitle: "Enkel prissättning",
+    pricingTitle: "Priser för bankanslutning",
     pricingLead:
       "Fast grundavgift och licenser per bankkonto. Inga transaktions- eller volymavgifter.",
     pricingFromLabel: "Från",
@@ -682,6 +683,8 @@ const t = content[lang];
       <References lang={lang} />
     </div>
   </section>
+
+  <OurProducts {lang} />
 
   <section class="landing-section quickstart-section" id="quickstart">
     <div class="landing-inner section-heading">

@@ -239,3 +239,64 @@ configuration. The script verifies the replacement before changing the ALB.
 AWS and Google credentials belong in local profiles or the untracked `.env`
 file. Never commit API keys, OAuth tokens, submitted lead data, or customer bank
 files.
+
+## Processing and Bank Simulator references
+
+The public references at `/apis/processing/` and `/apis/bank-simulator/` use the
+same self-hosted Scalar renderer as File Exchange. Each has an OpenAPI 3.0.3
+export at `openapi.json` below its route. Their published scope is the reviewed
+test deployment, not the complete generated platform model. Both explain the
+shared ISECure identity and link to the live File Exchange registration, login,
+MFA and account-management operations. The separate Processing session and
+product permissions remain explicit.
+
+`src/data/platform-api.source-metadata.json` pins the exact platform source
+revision and original artifact digest. `platform-api.source.json` retains only
+reviewed deployed operations, SDK input shapes and their schema dependencies.
+Source examples and private infrastructure extensions are not imported. Numeric
+representation extensions are retained. No build fetches a floating upstream
+contract.
+
+To admit another deployed release, export that exact API Gateway stage and use
+its existing release manifest with `yarn api:sync:products`:
+
+```sh
+corepack yarn api:sync:products \
+  --repository=/absolute/path/to/bankfiles-platform \
+  --manifest=/absolute/path/to/processing-release-manifest.json \
+  --gateway-export=/absolute/path/to/deployed-openapi.json
+corepack yarn api:generate:products
+corepack yarn prettier --write src/data/*.json
+corepack yarn api:validate
+```
+
+The sync checks the manifest's source digest against the exact Git commit and
+matches every published operation to the deployed gateway. Review the allowed
+product operation counts, operation copy, SDK parity and schemas before accepting
+a new release. The generator fails when a newly admitted operation lacks reviewed
+wording. Host authentication, session and streaming details are maintained in
+`scripts/platform-api-docs.mjs`; verify them against the same deployed host source
+when updating. Identical generated `oneOf` error alternatives are deduplicated so
+the published error schema can actually match a response.
+
+Edit introductory guides under `src/content/api/`, then regenerate. Operation
+samples use the official TypeScript SDK and can be checked against its installed
+package with:
+
+```sh
+node scripts/check-api-sdk-samples.mjs /absolute/path/to/isecure-ts-client
+```
+
+This checks all 49 distinct session, notification and product-operation samples,
+plus the worked simulator workflow. Normal validation rejects generated drift,
+missing references, unreviewed operations and loss of authentication requirements.
+Both products use `https://processing-api.test.isecure.fi`; the existing Processing
+audience stays unchanged. DNS/TLS and API mapping are managed by the separate
+`isecure-processing-test-domain` CloudFormation stack in the test AWS account.
+
+The authoritative platform model stays in OpenAPI 3.1. The public publisher
+converts its `const` constraints to equivalent one-value `enum` constraints for
+OpenAPI 3.0.3 and preserves schema-reference annotations with `allOf`. It rejects
+unreviewed 3.1-only constructs rather than silently dropping their meaning.
+Public references omit AWS integrations; use the separately generated deployment
+contract for API Gateway imports, which have additional AWS-specific limitations.
