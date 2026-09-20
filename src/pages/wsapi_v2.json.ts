@@ -199,8 +199,9 @@ export const GET: APIRoute = () => {
     "Browser-compatible TypeScript SDK is available on GitHub [dforsber/isecure-ts-client](https://github.com/dforsber/isecure-ts-client).",
     `The [official ISECure TypeScript SDK](${TYPESCRIPT_SDK_URL}) supports Node.js and modern browser bundlers. Install it with \`npm install isecure-ts-client\`.`,
   );
-  const sdkDescription = `The TypeScript SDK is the preferred official client. Other SDKs:
+  const sdkDescription = `Client SDKs:
 
+- [TypeScript SDK (GA)](${TYPESCRIPT_SDK_URL}): supports Node.js and modern browser bundlers. Install with \`npm install isecure-ts-client\`.
 - [Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client): see its README for installation and current API coverage.
 - [C# / .NET 10 SDK (Experimental)](${CSHARP_SDK_URL}): registration, SMS/TOTP authentication, certificate discovery, and signed file exchange. Follow the [C# quickstart](${CSHARP_SDK_URL}#tldr-make-your-first-api-call) to install from source; no NuGet release is published. See [preview coverage](${CSHARP_SDK_URL}/blob/main/docs/preview-scope.md) for the supported operations. Certificate enrollment and administration, password reset, and the separate Processing API are outside this preview.
 
