@@ -73,6 +73,13 @@ await client.LogoutAsync();
 var certificates = await client.ListCertificatesAsync();
 foreach (var connection in certificates.Connections ?? [])
     Console.WriteLine(connection.Bank);`,
+  EnrollCert: `// Requires an authenticated admin client configured for the desired bank.
+// company, wsUserId and code are application inputs from bank onboarding.
+await client.EnrollCertificateAsync(company, wsUserId, code);
+var certificates = await client.ListCertificatesAsync();
+// For simulator, separately enable access and generate synthetic enrollment values
+// as shown in the Bank Simulator guide; use the registered test company name.
+// If the enrollment response is lost, check certificates before retrying.`,
   UploadKey: `// Requires an authenticated admin client; publicKeyFile is a caller-chosen path.
 // Register only the PUBLIC half of the key used for detached file signatures.
 var publicKey = await File.ReadAllTextAsync(publicKeyFile);
