@@ -81,7 +81,10 @@ for (const connection of Connections) {
   UnshareCerts: `const result = await client.unshareCerts("customer@example.com");`,
   ShareCerts: `const result = await client.shareCerts("customer@example.com");`,
   ExportCert: `const exported = await client.exportCert("3A3A59B2");`,
-  EnrollCert: `const certificate = await client.enrollCert({
+  EnrollCert: `// Real-bank enrollment uses credentials issued by that bank.
+// For the separately enabled test-only simulator, use the caller-generated
+// values shown in this operation's "Simulator enrollment on gpgtest" example.
+const certificate = await client.enrollCert({
   Code: process.env.BANK_ENROLLMENT_CODE!,
   Company: "EXAMPLE COMPANY OY",
   WsUserId: process.env.BANK_WS_USER_ID!,
