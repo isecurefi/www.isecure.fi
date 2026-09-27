@@ -483,7 +483,7 @@ function publish(options) {
   const app = JSON.parse(
     readFileSync(resolve("src/data/admin-app-release.json"), "utf8"),
   );
-  for (const url of [app.macOS, app.windows]) {
+  for (const url of app.available === true ? [app.macOS, app.windows] : []) {
     if (
       typeof url !== "string" ||
       !url.startsWith("https://www.isecure.fi/app/")

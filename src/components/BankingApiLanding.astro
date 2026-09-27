@@ -136,11 +136,20 @@ const content = {
       text: "Rajapinta toimii serverless AWS -arkkitehtuurissa, API Gatewayn ja WAF:n takana. Asiakaskohtaiset käyttörajat suojaavat palvelua ruuhkapiikeiltä ja estävät muiden integraatioiden häiriöitä vaikuttamasta omaan käyttöön.",
     },
     managementApp: {
-      eyebrow: "ISECure Admin on saatavilla",
+      eyebrow: "ISECure Admin — tulossa",
       title: "Hallintasovellus integraattoreille",
       text: "Hallitse asiakastilejä, seuraa varmenteiden voimassaoloa ja näe laskutuksen perusteena olevat käyttö- ja lisenssimäärät. Kirjaudu omalla ISECure-ylläpitotunnuksellasi.",
       cta: "Lataa",
+      comingSoon: "Tulossa pian",
       platformsLabel: "Työpöytäsovellus",
+      macSigning:
+        "macOS-julkaisu allekirjoitetaan ISECure Oy:n varmenteella ja notaarisoidaan Applella ennen jakelua.",
+      windowsSigning:
+        "Windows-asennusohjelmalla ei vielä ole julkaisija-allekirjoitusta, joten Windows voi näyttää tuntemattoman julkaisijan varoituksen. Automaattiset päivitykset tarkistetaan digitaalisella allekirjoituksella.",
+      accountsCaption: "Asiakastilit ja lisenssimäärät",
+      certificatesCaption: "Pankkivarmenteiden voimassaolo",
+      screenshotsNote:
+        "Kuvat sovelluksen näkymistä esimerkkitiedoilla. Ei oikeita asiakastietoja. Avaa kuva suurempana napsauttamalla.",
     },
     sdkTitle: "Clientit eri integraatiopoluille",
     sdkEyebrow: "SDK:t ja työkalut",
@@ -329,11 +338,20 @@ const content = {
       text: "The API runs on a serverless AWS architecture behind API Gateway and WAF. Customer-specific rate limits protect the service from traffic spikes and keep other integrations from becoming noisy neighbours.",
     },
     managementApp: {
-      eyebrow: "ISECure Admin is available",
+      eyebrow: "ISECure Admin — coming soon",
       title: "Administration app for integrators",
       text: "Manage customer accounts, monitor certificate expiry, and see the usage and license figures behind billing. Sign in with your ISECure administrator account.",
       cta: "Download",
+      comingSoon: "Coming soon",
       platformsLabel: "Desktop application",
+      macSigning:
+        "The macOS release will be signed by ISECure Oy and notarised by Apple before distribution.",
+      windowsSigning:
+        "The Windows installer is not yet publisher-signed, so Windows may show an unknown publisher warning. Automatic updates are verified with a digital signature.",
+      accountsCaption: "Customer accounts and licenses",
+      certificatesCaption: "Bank certificate validity",
+      screenshotsNote:
+        "Application views with synthetic example data. No real customer information. Select an image to enlarge it.",
     },
     sdkTitle: "Clients for different integration paths",
     sdkEyebrow: "SDK coverage",
@@ -522,11 +540,20 @@ const content = {
       text: "API:t körs på en serverless AWS-arkitektur bakom API Gateway och WAF. Kundspecifika användningsgränser skyddar tjänsten mot trafiktoppar och hindrar andra integrationer från att störa er användning.",
     },
     managementApp: {
-      eyebrow: "ISECure Admin är tillgänglig",
+      eyebrow: "ISECure Admin — kommer snart",
       title: "Administrationsapp för integratörer",
       text: "Hantera kundkonton, följ certifikatens giltighet och se användnings- och licensantal som ligger till grund för faktureringen. Logga in med ditt administratörskonto hos ISECure.",
       cta: "Ladda ner",
+      comingSoon: "Kommer snart",
       platformsLabel: "Datorapplikation",
+      macSigning:
+        "macOS-versionen signeras av ISECure Oy och notariseras av Apple före distribution.",
+      windowsSigning:
+        "Installationsprogrammet för Windows är ännu inte utgivarsignerat, så Windows kan visa en varning om okänd utgivare. Automatiska uppdateringar verifieras med en digital signatur.",
+      accountsCaption: "Kundkonton och licenser",
+      certificatesCaption: "Bankcertifikatens giltighet",
+      screenshotsNote:
+        "Applikationsvyer med syntetiska exempeldata. Inga riktiga kunduppgifter. Välj en bild för att förstora den.",
     },
     sdkTitle: "Klienter för olika integrationsvägar",
     sdkEyebrow: "SDK:er och verktyg",
@@ -822,26 +849,83 @@ const t = content[lang];
         <p>{t.managementApp.text}</p>
       </div>
       <div class="management-app-meta">
-        <p>{t.managementApp.platformsLabel} · {adminAppRelease.version}</p>
-        <a
-          class="button button-primary"
-          href={adminAppRelease.macOS}
-          data-analytics-content-type="download"
-          data-analytics-item-id="isecure-admin-macos"
-          data-analytics-source="homepage-management-app"
-        >
-          {t.managementApp.cta} — macOS (Apple Silicon)
-        </a>
-        <a
-          class="button button-primary"
-          href={adminAppRelease.windows}
-          data-analytics-content-type="download"
-          data-analytics-item-id="isecure-admin-windows"
-          data-analytics-source="homepage-management-app"
-        >
-          {t.managementApp.cta} — Windows (64-bit)
-        </a>
+        <p>{t.managementApp.platformsLabel}</p>
+        {
+          adminAppRelease.available ? (
+            <a
+              class="button button-primary"
+              href={adminAppRelease.macOS}
+              data-analytics-content-type="download"
+              data-analytics-item-id="isecure-admin-macos"
+              data-analytics-source="homepage-management-app"
+            >
+              {t.managementApp.cta} — macOS (Apple Silicon)
+            </a>
+          ) : (
+            <button class="button button-primary" type="button" disabled>
+              macOS (Apple Silicon) — {t.managementApp.comingSoon}
+            </button>
+          )
+        }
+
+        <p class="management-app-signing">{t.managementApp.macSigning}</p>
+        {
+          adminAppRelease.available ? (
+            <a
+              class="button button-primary"
+              href={adminAppRelease.windows}
+              data-analytics-content-type="download"
+              data-analytics-item-id="isecure-admin-windows"
+              data-analytics-source="homepage-management-app"
+            >
+              {t.managementApp.cta} — Windows (64-bit)
+            </a>
+          ) : (
+            <button class="button button-primary" type="button" disabled>
+              Windows (64-bit) — {t.managementApp.comingSoon}
+            </button>
+          )
+        }
+
+        <p class="management-app-signing">{t.managementApp.windowsSigning}</p>
       </div>
+    </div>
+    <div class="landing-inner management-app-screenshots">
+      <p class="management-app-screenshots-note">
+        {t.managementApp.screenshotsNote}
+      </p>
+      <figure>
+        <a
+          href="/images/admin-app/accounts.png"
+          aria-label={t.managementApp.accountsCaption}
+        >
+          <img
+            src="/images/admin-app/accounts.png"
+            alt={t.managementApp.accountsCaption}
+            width="2880"
+            height="1460"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <figcaption>{t.managementApp.accountsCaption}</figcaption>
+      </figure>
+      <figure>
+        <a
+          href="/images/admin-app/certificates.png"
+          aria-label={t.managementApp.certificatesCaption}
+        >
+          <img
+            src="/images/admin-app/certificates.png"
+            alt={t.managementApp.certificatesCaption}
+            width="2880"
+            height="848"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <figcaption>{t.managementApp.certificatesCaption}</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -1550,6 +1634,54 @@ const t = content[lang];
     gap: 18px;
   }
 
+  .management-app-meta button:disabled {
+    cursor: default;
+    opacity: 0.65;
+  }
+
+  .management-app-signing {
+    color: var(--landing-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: -8px 0 0;
+    max-width: 340px;
+  }
+
+  .management-app-screenshots {
+    display: grid;
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  .management-app-screenshots-note {
+    color: var(--landing-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .management-app-screenshots figure {
+    margin: 0;
+  }
+
+  .management-app-screenshots a {
+    display: block;
+    border: 1px solid var(--landing-line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .management-app-screenshots img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .management-app-screenshots figcaption {
+    color: var(--landing-muted);
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+
   .platform-list {
     display: flex;
     flex-wrap: wrap;
@@ -1837,6 +1969,54 @@ const t = content[lang];
 
     .management-app-meta {
       align-items: flex-start;
+    }
+
+    .management-app-meta button:disabled {
+      cursor: default;
+      opacity: 0.65;
+    }
+
+    .management-app-signing {
+      color: var(--landing-muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin: -8px 0 0;
+      max-width: 340px;
+    }
+
+    .management-app-screenshots {
+      display: grid;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .management-app-screenshots-note {
+      color: var(--landing-muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .management-app-screenshots figure {
+      margin: 0;
+    }
+
+    .management-app-screenshots a {
+      display: block;
+      border: 1px solid var(--landing-line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .management-app-screenshots img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .management-app-screenshots figcaption {
+      color: var(--landing-muted);
+      font-size: 0.9rem;
+      margin-top: 10px;
     }
 
     .platform-list {
