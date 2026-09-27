@@ -1,0 +1,212 @@
+---
+interface Props {
+  accountsCaption: string;
+  certificatesCaption: string;
+  note: string;
+  closeLabel: string;
+}
+const { accountsCaption, certificatesCaption, note, closeLabel } = Astro.props;
+const screenshots = [
+  {
+    src: "/images/admin-app/accounts.png",
+    caption: accountsCaption,
+    height: 1460,
+  },
+  {
+    src: "/images/admin-app/certificates.png",
+    caption: certificatesCaption,
+    height: 848,
+  },
+];
+---
+
+<div class="admin-screenshots" data-admin-screenshots>
+  <div class="screenshot-cards">
+    {
+      screenshots.map(({ src, caption, height }) => (
+        <button
+          type="button"
+          class="screenshot-card"
+          aria-haspopup="dialog"
+          data-screenshot
+        >
+          <img
+            src={src}
+            alt=""
+            width="2880"
+            height={height}
+            loading="lazy"
+            decoding="async"
+          />
+          <span>{caption}</span>
+        </button>
+      ))
+    }
+  </div>
+  <p class="screenshot-note">{note}</p>
+  <dialog class="screenshot-dialog" aria-labelledby="admin-screenshot-title">
+    <div class="screenshot-heading">
+      <h3 id="admin-screenshot-title"></h3>
+      <button type="button" class="screenshot-close"
+        >{closeLabel} <span aria-hidden="true">×</span></button
+      >
+    </div>
+    <div
+      class="screenshot-viewport"
+      tabindex="0"
+      role="region"
+      aria-labelledby="admin-screenshot-title"
+    >
+      <img data-expanded-image alt="" />
+    </div>
+  </dialog>
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>(
+    "[data-admin-screenshots]",
+  )) {
+    const dialog = root.querySelector("dialog");
+    const image = root.querySelector<HTMLImageElement>("[data-expanded-image]");
+    const title = root.querySelector("h3");
+    const close = root.querySelector<HTMLButtonElement>(".screenshot-close");
+    if (!dialog || !image || !title || !close) continue;
+    let opener: HTMLButtonElement | undefined;
+    let previousOverflow = "";
+    for (const button of root.querySelectorAll<HTMLButtonElement>(
+      "[data-screenshot]",
+    )) {
+      button.addEventListener("click", () => {
+        const thumbnail = button.querySelector("img");
+        if (!thumbnail || dialog.open) return;
+        opener = button;
+        title.textContent = button.textContent?.trim() ?? "";
+        image.alt = title.textContent;
+        image.src = thumbnail.src;
+        image.width = Number(thumbnail.getAttribute("width"));
+        image.height = Number(thumbnail.getAttribute("height"));
+        previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        dialog.showModal();
+        close.focus();
+      });
+    }
+    close.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target !== dialog) return;
+      const bounds = dialog.getBoundingClientRect();
+      if (
+        event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom
+      )
+        dialog.close();
+    });
+    dialog.addEventListener("close", () => {
+      document.body.style.overflow = previousOverflow;
+      image.removeAttribute("src");
+      opener?.focus();
+    });
+  }
+</script>
+
+<style>
+  .admin-screenshots {
+    margin-top: 24px;
+  }
+  .screenshot-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    max-width: 480px;
+  }
+  .screenshot-card {
+    appearance: none;
+    padding: 0;
+    text-align: left;
+    cursor: zoom-in;
+    border: 1px solid var(--landing-line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--landing-card);
+    color: var(--landing-ink);
+    font: inherit;
+  }
+  .screenshot-card:hover {
+    border-color: var(--landing-ink);
+  }
+  .screenshot-card:focus-visible,
+  .screenshot-close:focus-visible,
+  .screenshot-viewport:focus-visible {
+    outline: 2px solid var(--landing-ink);
+    outline-offset: 3px;
+  }
+  .screenshot-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    background: #f3f5f9;
+  }
+  .screenshot-card span {
+    display: block;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  .screenshot-note {
+    color: var(--landing-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 10px 0 0;
+    max-width: 480px;
+  }
+  .screenshot-dialog {
+    box-sizing: border-box;
+    width: min(1600px, calc(100vw - 32px));
+    max-width: none;
+    max-height: 92dvh;
+    margin: auto;
+    padding: 16px;
+    border: 1px solid var(--landing-line);
+    border-radius: 10px;
+    color: var(--landing-ink);
+    background: var(--landing-card);
+  }
+  .screenshot-dialog::backdrop {
+    background: rgb(0 0 0 / 65%);
+  }
+  .screenshot-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .screenshot-heading h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .screenshot-close {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border: 1px solid var(--landing-line);
+    border-radius: 6px;
+    font: inherit;
+    color: inherit;
+    background: var(--landing-soft);
+    cursor: pointer;
+  }
+  .screenshot-viewport {
+    overflow: auto;
+    max-height: calc(92dvh - 100px);
+  }
+  .screenshot-viewport img {
+    display: block;
+    width: 100%;
+    min-width: 1000px;
+    height: auto;
+  }
+</style>

@@ -5,6 +5,7 @@ import type { Lang } from "../types";
 import BankLogos from "./BankLogos.astro";
 import OurProducts from "./OurProducts.astro";
 import References from "./References.astro";
+import AdminAppScreenshots from "./AdminAppScreenshots.astro";
 import adminAppRelease from "../data/admin-app-release.json";
 
 interface Props {
@@ -145,7 +146,10 @@ const content = {
       macSigning:
         "macOS-julkaisu allekirjoitetaan ISECure Oy:n varmenteella ja notaarisoidaan Applella ennen jakelua.",
       windowsSigning:
-        "Windows-asennusohjelmalla ei vielä ole julkaisija-allekirjoitusta, joten Windows voi näyttää tuntemattoman julkaisijan varoituksen. Automaattiset päivitykset tarkistetaan digitaalisella allekirjoituksella.",
+        "Windows-asennusohjelmalla ei vielä ole julkaisija-allekirjoitusta, joten Windows voi näyttää tuntemattoman julkaisijan varoituksen.",
+      updateSigning:
+        "macOS- ja Windows-sovellusten automaattiset päivitykset tarkistetaan digitaalisella allekirjoituksella.",
+      closeScreenshot: "Sulje",
       accountsCaption: "Asiakastilit ja lisenssimäärät",
       certificatesCaption: "Pankkivarmenteiden voimassaolo",
       screenshotsNote:
@@ -347,7 +351,10 @@ const content = {
       macSigning:
         "The macOS release will be signed by ISECure Oy and notarised by Apple before distribution.",
       windowsSigning:
-        "The Windows installer is not yet publisher-signed, so Windows may show an unknown publisher warning. Automatic updates are verified with a digital signature.",
+        "The Windows installer is not yet publisher-signed, so Windows may show an unknown publisher warning.",
+      updateSigning:
+        "Automatic updates on both macOS and Windows are verified with a digital signature.",
+      closeScreenshot: "Close",
       accountsCaption: "Customer accounts and licenses",
       certificatesCaption: "Bank certificate validity",
       screenshotsNote:
@@ -549,7 +556,10 @@ const content = {
       macSigning:
         "macOS-versionen signeras av ISECure Oy och notariseras av Apple före distribution.",
       windowsSigning:
-        "Installationsprogrammet för Windows är ännu inte utgivarsignerat, så Windows kan visa en varning om okänd utgivare. Automatiska uppdateringar verifieras med en digital signatur.",
+        "Installationsprogrammet för Windows är ännu inte utgivarsignerat, så Windows kan visa en varning om okänd utgivare.",
+      updateSigning:
+        "Automatiska uppdateringar på både macOS och Windows verifieras med en digital signatur.",
+      closeScreenshot: "Stäng",
       accountsCaption: "Kundkonton och licenser",
       certificatesCaption: "Bankcertifikatens giltighet",
       screenshotsNote:
@@ -847,6 +857,12 @@ const t = content[lang];
         <p class="eyebrow">{t.managementApp.eyebrow}</p>
         <h2>{t.managementApp.title}</h2>
         <p>{t.managementApp.text}</p>
+        <AdminAppScreenshots
+          accountsCaption={t.managementApp.accountsCaption}
+          certificatesCaption={t.managementApp.certificatesCaption}
+          note={t.managementApp.screenshotsNote}
+          closeLabel={t.managementApp.closeScreenshot}
+        />
       </div>
       <div class="management-app-meta">
         <p>{t.managementApp.platformsLabel}</p>
@@ -889,43 +905,9 @@ const t = content[lang];
 
         <p class="management-app-signing">{t.managementApp.windowsSigning}</p>
       </div>
-    </div>
-    <div class="landing-inner management-app-screenshots">
-      <p class="management-app-screenshots-note">
-        {t.managementApp.screenshotsNote}
+      <p class="management-app-update-signing">
+        {t.managementApp.updateSigning}
       </p>
-      <figure>
-        <a
-          href="/images/admin-app/accounts.png"
-          aria-label={t.managementApp.accountsCaption}
-        >
-          <img
-            src="/images/admin-app/accounts.png"
-            alt={t.managementApp.accountsCaption}
-            width="2880"
-            height="1460"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-        <figcaption>{t.managementApp.accountsCaption}</figcaption>
-      </figure>
-      <figure>
-        <a
-          href="/images/admin-app/certificates.png"
-          aria-label={t.managementApp.certificatesCaption}
-        >
-          <img
-            src="/images/admin-app/certificates.png"
-            alt={t.managementApp.certificatesCaption}
-            width="2880"
-            height="848"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-        <figcaption>{t.managementApp.certificatesCaption}</figcaption>
-      </figure>
     </div>
   </section>
 
@@ -1619,7 +1601,7 @@ const t = content[lang];
     margin: 0;
   }
 
-  .management-app-panel > div:first-child > p:last-child {
+  .management-app-panel > div:first-child > p:not(.eyebrow) {
     color: var(--landing-muted);
     font-size: 1.02rem;
     line-height: 1.7;
@@ -1647,39 +1629,14 @@ const t = content[lang];
     max-width: 340px;
   }
 
-  .management-app-screenshots {
-    display: grid;
-    gap: 24px;
-    margin-top: 32px;
-  }
-
-  .management-app-screenshots-note {
+  .management-app-update-signing {
+    grid-column: 1 / -1;
     color: var(--landing-muted);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
     margin: 0;
-  }
-
-  .management-app-screenshots figure {
-    margin: 0;
-  }
-
-  .management-app-screenshots a {
-    display: block;
-    border: 1px solid var(--landing-line);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .management-app-screenshots img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .management-app-screenshots figcaption {
-    color: var(--landing-muted);
-    font-size: 0.9rem;
-    margin-top: 10px;
+    padding-top: 16px;
+    border-top: 1px solid var(--landing-line);
   }
 
   .platform-list {
@@ -1969,54 +1926,6 @@ const t = content[lang];
 
     .management-app-meta {
       align-items: flex-start;
-    }
-
-    .management-app-meta button:disabled {
-      cursor: default;
-      opacity: 0.65;
-    }
-
-    .management-app-signing {
-      color: var(--landing-muted);
-      font-size: 0.85rem;
-      line-height: 1.5;
-      margin: -8px 0 0;
-      max-width: 340px;
-    }
-
-    .management-app-screenshots {
-      display: grid;
-      gap: 24px;
-      margin-top: 32px;
-    }
-
-    .management-app-screenshots-note {
-      color: var(--landing-muted);
-      font-size: 0.9rem;
-      margin: 0;
-    }
-
-    .management-app-screenshots figure {
-      margin: 0;
-    }
-
-    .management-app-screenshots a {
-      display: block;
-      border: 1px solid var(--landing-line);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .management-app-screenshots img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .management-app-screenshots figcaption {
-      color: var(--landing-muted);
-      font-size: 0.9rem;
-      margin-top: 10px;
     }
 
     .platform-list {

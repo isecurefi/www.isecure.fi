@@ -7,6 +7,10 @@ The Finnish platform label remains **Työpöytäsovellus**.
 
 The public release serves integrator administrators with accounts, bank certificate status and
 billing/license figures. It does not advertise plugins, Agents, reconciliation or mobile apps.
+The widget contains two compact screenshot cards. Each opens a native modal with a readable,
+scrollable image, Close button, Escape/backdrop dismissal and focus return to the card.
+The automatic-update signature note applies jointly to macOS and Windows.
+
 The screenshot fixture imports the actual application components and provides invented `.example`
 identities. It never signs in or reads production/test customer accounts. See
 [the capture instructions](../scripts/admin-screenshots/README.md).
@@ -22,6 +26,6 @@ the installer URLs before offering downloads. Follow the existing clean-commit w
 which preserves the separate `/app/` origin. Preparing these files does not publish either product.
 
 Review (2026-09-27): functionality covers all three locales, disabled downloads, image enlargement
-and desktop/mobile layout. Privacy review confirms six invented accounts, no external capture
+and desktop/mobile layout, including popup keyboard and focus behavior in all three locales. Privacy review confirms six invented accounts, no external capture
 requests and no customer images. Simplicity review retains the existing landing-page component and
 release metadata; screenshots render shared app components instead of recreating their interface.
