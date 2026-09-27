@@ -353,9 +353,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
       "Börja testa hela filflödet innan det riktiga bankavtalet och produktionscertifikaten är klara.",
     ),
     summary: text(
-      "Tenanttikohtainen testipankki tuottaa synteettiset tiliotteet ja maksupalautteet nykyisen ISECure REST API:n File Exchange -toiminnoilla.",
-      "A tenant-specific test bank produces synthetic statements and payment feedback through the existing ISECure REST API File Exchange operations.",
-      "En tenantspecifik testbank skapar syntetiska kontoutdrag och betalningsrespons via File Exchange-funktionerna i det befintliga ISECure REST API:t.",
+      "Tenanttikohtainen testipankki tuottaa synteettiset tiliotteet ja maksupalautteet nykyisen ISECure REST API:n File Exchange -toiminnoilla. Ohjaa skenaarioita ja simulaatioajoja Bank Simulator API:lla.",
+      "A tenant-specific test bank produces synthetic statements and payment feedback through the existing ISECure REST API File Exchange operations. Control scenarios and simulation runs through the Bank Simulator API.",
+      "En tenantspecifik testbank skapar syntetiska kontoutdrag och betalningsrespons via File Exchange-funktionerna i det befintliga ISECure REST API:t. Styr scenarier och simuleringskörningar via Bank Simulator API.",
     ),
     stage: "beta",
     access: subscribedTestAccess,
@@ -501,7 +501,7 @@ export const catalogRecords: readonly CatalogRecord[] = [
       "An API for checking payment details, locking the approved version, and downloading the payment file for bank delivery.",
       "Ett API för att kontrollera betalningsuppgifter, låsa den godkända versionen och hämta betalningsfilen för överföring till banken.",
     ),
-    stage: "experimental",
+    stage: "beta",
     access: subscribedTestAccess,
     visibility: "soft-launch",
     routes: routeSet("processing-api"),
@@ -543,17 +543,21 @@ export const catalogRecords: readonly CatalogRecord[] = [
       },
     ],
     qualification: {
-      label: text("Testiympäristö", "Test environment", "Testmiljö"),
-      scope: text(
-        "Saatavilla ISECuren testiympäristössä tilausasiakkaille pyynnöstä. Pankki- ja maakohtaisten maksuaineistojen pätevöinti jatkuu; tuotantokäyttöä, pankkitukea tai palvelutasoa ei vielä luvata.",
-        "Available in the ISECure test environment to subscribed customers by request. Qualification of bank- and country-specific payment files is still in progress; production use, bank support, and service levels are not yet promised.",
-        "Tillgängligt i ISECures testmiljö för prenumerationskunder på begäran. Kvalificeringen av bank- och landsspecifika betalningsfiler pågår; produktion, bankstöd och servicenivå utlovas ännu inte.",
+      label: text(
+        "Nordea / XMLdation",
+        "Nordea / XMLdation",
+        "Nordea / XMLdation",
       ),
-      evidenceDate: "2026-08-20",
+      scope: text(
+        "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiileja on validoitu XMLdationilla Suomen, Ruotsin, Norjan ja Tanskan osalta. Saatavilla ISECuren testiympäristössä tilausasiakkaille pyynnöstä.",
+        "Processing API is in Beta. Nordea Corporate Access payment-file profiles have been validated using XMLdation for Finland, Sweden, Norway and Denmark. Available in the ISECure test environment to subscribed customers by request.",
+        "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access har validerats med XMLdation för Finland, Sverige, Norge och Danmark. Tillgängligt i ISECures testmiljö för prenumerationskunder på begäran.",
+      ),
+      evidenceDate: "2026-09-27",
       evidenceSource:
-        "Processing API implementation and TypeScript client example",
+        "Product owner Beta decision; bankfiles-platform docs/compatibility.md and Nordea profile XMLdation evidence for FI/SE/NO/DK",
       reviewOwner: "ISECure product owner",
-      reviewAfter: "2026-11-20",
+      reviewAfter: "2026-12-20",
     },
     limitations: localizedLists(
       [

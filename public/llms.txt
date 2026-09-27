@@ -19,7 +19,7 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [Home (Swedish)](https://www.isecure.fi/se/): Swedish-language product overview
 - [Products](https://www.isecure.fi/en/products/): current products with exact stage and customer access
 - [Bank Simulator](https://www.isecure.fi/en/bank-simulator/): Beta test-environment enrollment, initial camt.053 download, signed pain.001 upload, and synthetic pain.002/camt.054/updated-camt.053 feedback; registration, a paid subscription, and an access request are required
-- [Processing API](https://www.isecure.fi/en/processing-api/): separate Experimental payment workflow in the ISECure test environment for creating, approving, generating, and downloading exact pain.001; registration, a paid subscription, and an access request are required
+- [Processing API](https://www.isecure.fi/en/processing-api/): separate Beta payment workflow with Nordea payment-file profiles validated using XMLdation for Finland, Sweden, Norway and Denmark in the ISECure test environment for creating, approving, generating, and downloading exact pain.001; registration, a paid subscription, and an access request are required
 - [ISO 20022 message guide](https://www.isecure.fi/en/iso-20022/): comparison of pain.001, pain.002, camt.053, and camt.054 in bank integrations
 - [Bank integration for software products](https://www.isecure.fi/en/pankkiyhteys/): adding Finnish bank connectivity to a software product, build vs. buy
 - [Finnish bank Web Services channel](https://www.isecure.fi/en/web-services/): how the corporate Web Services (WS) channel works
@@ -62,5 +62,5 @@ The PHP SDK and the `wscli` command-line tool are also available.
 - [Privacy policy (English)](https://www.isecure.fi/en/privacy/)
 - [Privacy policy (Swedish)](https://www.isecure.fi/se/privacy/)
 
-- [Processing API reference](https://www.isecure.fi/apis/processing/): Experimental payment-file workflow in the test environment; shared ISECure identity, separate Processing session, OpenAPI 3.1 and TypeScript examples
+- [Processing API reference](https://www.isecure.fi/apis/processing/): Beta payment-file workflow with Nordea payment-file profiles validated using XMLdation for Finland, Sweden, Norway and Denmark; reference for the test environment; shared ISECure identity, separate Processing session, OpenAPI 3.1 and TypeScript examples
 - [Bank Simulator API reference](https://www.isecure.fi/apis/bank-simulator/): Experimental synthetic workspace, account, scenario and run control; separate from File Exchange file transfers

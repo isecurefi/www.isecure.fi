@@ -560,7 +560,6 @@ const productIndexPages = [
     "Tuotteet",
     "Pankkiyhteydet",
     [
-      "Experimental",
       "Beta",
       "GA",
       "Testiympäristö",
@@ -580,7 +579,6 @@ const productIndexPages = [
     "Products",
     "Bank Connectivity",
     [
-      "Experimental",
       "Beta",
       "GA",
       "Test environment",
@@ -600,7 +598,6 @@ const productIndexPages = [
     "Produkter",
     "Bankförbindelser",
     [
-      "Experimental",
       "Beta",
       "GA",
       "Testmiljö",
@@ -828,9 +825,11 @@ for (const [
   for (const marker of [
     'data-catalog-record="processing-api"',
     'data-catalog-kind="product"',
-    'data-catalog-stage="experimental"',
+    'data-catalog-stage="beta"',
     'data-catalog-visibility="soft-launch"',
-    "Experimental",
+    "Beta",
+    "Nordea",
+    "XMLdation",
     environmentLabel,
     registrationLabel,
     subscriptionLabel,
@@ -997,7 +996,7 @@ if (!llmsText.includes("https://www.isecure.fi/en/processing-api/")) {
 }
 for (const requiredAccessStatement of [
   "Beta test-environment enrollment",
-  "Experimental payment workflow",
+  "Beta payment workflow",
   "registration, a paid subscription, and an access request are required",
 ]) {
   if (!llmsText.includes(requiredAccessStatement)) {

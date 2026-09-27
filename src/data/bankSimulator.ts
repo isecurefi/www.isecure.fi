@@ -37,7 +37,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     title: "Pankkisimulaattori",
     intro:
       "Aloita koko maksuaineistopolun testaus jo sillä aikaa, kun oikea pankkisopimus ja tuotantovarmenteet ovat vielä työn alla. Pankkisimulaattori käyttää nykyistä File Exchange API:a ja TypeScript SDK:ta pankkitunnisteella simulator.",
-    baseUrlLabel: "Perusosoite",
+    baseUrlLabel: "File Exchange -perusosoite",
     bankLabel: "Pankki",
     sections: [
       {
@@ -48,10 +48,16 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
         ],
       },
       {
+        title: "Ohjaa testejä Bank Simulator API:lla",
+        paragraphs: [
+          "Bank Simulator API:lla voit määrittää testityötiloja, synteettisiä tilejä ja skenaarioita, käynnistää simulaatioita sekä lukea niiden tapahtumia ja tuloksia. Rajapinta soveltuu oman testiautomaation ohjaukseen. Pankkitiedostot lähetetään ja noudetaan erillisellä File Exchange API:lla.",
+        ],
+      },
+      {
         title: "Ympäristö ja rajapinta",
         paragraphs: [
           "Testiympäristön osoite on https://ws-api.test.isecure.fi/v2. Simulaattori on käytettävissä vain ISECuren testiympäristössä.",
-          'Käytä samoja rekisteröinti-, kirjautumis-, varmenne- ja tiedosto-operaatioita kuin muille pankeille. TypeScript SDK:ssa ei ole simulaattorikohtaisia metodeja; valitse asiakasasetuksissa Bank: "simulator".',
+          'Käytä samoja rekisteröinti-, kirjautumis-, varmenne- ja tiedosto-operaatioita kuin muille pankeille. File Exchange -toiminnot käyttävät samoja SDK-metodeja kuin oikeat pankit; valitse asiakasasetuksissa Bank: "simulator".',
         ],
       },
       {
@@ -124,7 +130,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     title: "Bank Simulator",
     intro:
       "Start testing the complete payment-file path while the real bank agreement and production certificates are still in progress. Bank Simulator uses the existing File Exchange API and TypeScript SDK with bank identifier simulator.",
-    baseUrlLabel: "Base URL",
+    baseUrlLabel: "File Exchange base URL",
     bankLabel: "Bank",
     sections: [
       {
@@ -135,10 +141,16 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
         ],
       },
       {
+        title: "Drive tests with the Bank Simulator API",
+        paragraphs: [
+          "Use the Bank Simulator API to configure test workspaces, synthetic accounts and scenarios, start simulations, and inspect their events and results. Drive it from your own automated tests. Bank-file uploads and downloads use the separate File Exchange API.",
+        ],
+      },
+      {
         title: "Environment and interface",
         paragraphs: [
           "The test base URL is https://ws-api.test.isecure.fi/v2. Bank Simulator is available only in the ISECure test environment.",
-          'Use the same registration, login, certificate, and file operations as for other banks. The root File Exchange SDK has no simulator-specific methods; select Bank: "simulator" in the client configuration.',
+          'Use the same registration, login, certificate, and file operations as for other banks. File Exchange uses the same SDK methods as real banks; select Bank: "simulator" in the client configuration.',
         ],
       },
       {
@@ -211,7 +223,7 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
     title: "Banksimulator",
     intro:
       "Börja testa hela betalningsfilflödet medan det riktiga bankavtalet och produktionscertifikaten fortfarande är under arbete. Banksimulatorn använder det befintliga File Exchange API:t och TypeScript SDK:t med bankidentifieraren simulator.",
-    baseUrlLabel: "Basadress",
+    baseUrlLabel: "File Exchange-basadress",
     bankLabel: "Bank",
     sections: [
       {
@@ -222,10 +234,16 @@ export const bankSimulatorContent: Record<Lang, SimulatorContent> = {
         ],
       },
       {
+        title: "Styr tester med Bank Simulator API",
+        paragraphs: [
+          "Använd Bank Simulator API för att konfigurera testarbetsytor, syntetiska konton och scenarier, starta simuleringar och granska deras händelser och resultat. Styr det från era egna automatiserade tester. Bankfiler skickas och hämtas via det separata File Exchange API:t.",
+        ],
+      },
+      {
         title: "Miljö och gränssnitt",
         paragraphs: [
           "Testmiljöns basadress är https://ws-api.test.isecure.fi/v2. Banksimulatorn är tillgänglig endast i ISECures testmiljö.",
-          'Använd samma registrerings-, inloggnings-, certifikat- och filoperationer som för andra banker. TypeScript SDK:t har inga simulatorspecifika metoder; välj Bank: "simulator" i klientkonfigurationen.',
+          'Använd samma registrerings-, inloggnings-, certifikat- och filoperationer som för andra banker. File Exchange använder samma SDK-metoder som riktiga banker; välj Bank: "simulator" i klientkonfigurationen.',
         ],
       },
       {
