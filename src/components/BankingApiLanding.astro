@@ -5,6 +5,7 @@ import type { Lang } from "../types";
 import BankLogos from "./BankLogos.astro";
 import OurProducts from "./OurProducts.astro";
 import References from "./References.astro";
+import adminAppRelease from "../data/admin-app-release.json";
 
 interface Props {
   lang: Lang;
@@ -135,11 +136,11 @@ const content = {
       text: "Rajapinta toimii serverless AWS -arkkitehtuurissa, API Gatewayn ja WAF:n takana. Asiakaskohtaiset käyttörajat suojaavat palvelua ruuhkapiikeiltä ja estävät muiden integraatioiden häiriöitä vaikuttamasta omaan käyttöön.",
     },
     managementApp: {
-      eyebrow: "Kehitteillä",
-      title: "Pankkiyhteyksien hallinta työpöydältä ja mobiilista",
-      text: "Kehitämme integraattoreille hallintasovellusta, jolla ylläpitäjät voivat hallita asiakastilejä, tarkastella tapahtumalokeja ja seurata varmenteiden voimassaoloa macOS-, Windows-, iOS- ja Android-laitteilla.",
-      cta: "Kiinnostuitko pilottikäytöstä?",
-      platformsLabel: "Suunnitellut alustat",
+      eyebrow: "ISECure Admin on saatavilla",
+      title: "Hallintasovellus integraattoreille",
+      text: "Hallitse asiakastilejä, seuraa varmenteiden voimassaoloa ja näe laskutuksen perusteena olevat käyttö- ja lisenssimäärät. Kirjaudu omalla ISECure-ylläpitotunnuksellasi.",
+      cta: "Lataa",
+      platformsLabel: "Työpöytäsovellus",
     },
     sdkTitle: "Clientit eri integraatiopoluille",
     sdkEyebrow: "SDK:t ja työkalut",
@@ -328,11 +329,11 @@ const content = {
       text: "The API runs on a serverless AWS architecture behind API Gateway and WAF. Customer-specific rate limits protect the service from traffic spikes and keep other integrations from becoming noisy neighbours.",
     },
     managementApp: {
-      eyebrow: "In development",
-      title: "Manage bank connectivity from desktop and mobile",
-      text: "We are developing a management application for integrators, enabling administrators to manage customer accounts, inspect activity logs, and monitor certificate lifetimes on macOS, Windows, iOS, and Android devices.",
-      cta: "Interested in joining the pilot?",
-      platformsLabel: "Planned platforms",
+      eyebrow: "ISECure Admin is available",
+      title: "Administration app for integrators",
+      text: "Manage customer accounts, monitor certificate expiry, and see the usage and license figures behind billing. Sign in with your ISECure administrator account.",
+      cta: "Download",
+      platformsLabel: "Desktop application",
     },
     sdkTitle: "Clients for different integration paths",
     sdkEyebrow: "SDK coverage",
@@ -521,11 +522,11 @@ const content = {
       text: "API:t körs på en serverless AWS-arkitektur bakom API Gateway och WAF. Kundspecifika användningsgränser skyddar tjänsten mot trafiktoppar och hindrar andra integrationer från att störa er användning.",
     },
     managementApp: {
-      eyebrow: "Under utveckling",
-      title: "Hantera bankförbindelser från dator och mobil",
-      text: "Vi utvecklar en hanteringsapplikation för integratörer där administratörer kan hantera kundkonton, granska aktivitetsloggar och följa certifikatens giltighet på macOS-, Windows-, iOS- och Android-enheter.",
-      cta: "Intresserad av att delta i piloten?",
-      platformsLabel: "Planerade plattformar",
+      eyebrow: "ISECure Admin är tillgänglig",
+      title: "Administrationsapp för integratörer",
+      text: "Hantera kundkonton, följ certifikatens giltighet och se användnings- och licensantal som ligger till grund för faktureringen. Logga in med ditt administratörskonto hos ISECure.",
+      cta: "Ladda ner",
+      platformsLabel: "Datorapplikation",
     },
     sdkTitle: "Klienter för olika integrationsvägar",
     sdkEyebrow: "SDK:er och verktyg",
@@ -821,21 +822,25 @@ const t = content[lang];
         <p>{t.managementApp.text}</p>
       </div>
       <div class="management-app-meta">
-        <div class="platform-list" aria-label={t.managementApp.platformsLabel}>
-          {
-            ["macOS", "Windows", "iOS", "Android"].map((platform) => (
-              <span>{platform}</span>
-            ))
-          }
-        </div>
+        <p>{t.managementApp.platformsLabel} · {adminAppRelease.version}</p>
         <a
           class="button button-primary"
-          href="#contact"
-          data-analytics-content-type="product_access"
-          data-analytics-item-id="bank-connectivity"
+          href={adminAppRelease.macOS}
+          data-analytics-content-type="download"
+          data-analytics-item-id="isecure-admin-macos"
           data-analytics-source="homepage-management-app"
-          >{t.managementApp.cta}</a
         >
+          {t.managementApp.cta} — macOS (Apple Silicon)
+        </a>
+        <a
+          class="button button-primary"
+          href={adminAppRelease.windows}
+          data-analytics-content-type="download"
+          data-analytics-item-id="isecure-admin-windows"
+          data-analytics-source="homepage-management-app"
+        >
+          {t.managementApp.cta} — Windows (64-bit)
+        </a>
       </div>
     </div>
   </section>

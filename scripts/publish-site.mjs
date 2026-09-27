@@ -479,6 +479,20 @@ function plan(options) {
 
 function publish(options) {
   assertCleanWorktree();
+  // The website must never announce installers that are not yet published.
+  const app = JSON.parse(
+    readFileSync(resolve("src/data/admin-app-release.json"), "utf8"),
+  );
+  for (const url of [app.macOS, app.windows]) {
+    if (
+      typeof url !== "string" ||
+      !url.startsWith("https://www.isecure.fi/app/")
+    )
+      throw new Error("Unexpected administration installer origin");
+    run("curl", ["--fail", "--silent", "--show-error", "--head", url], {
+      capture: true,
+    });
+  }
   const revision = currentRevision();
   const distDirectory = resolve("dist");
   if (!statSync(distDirectory).isDirectory()) {

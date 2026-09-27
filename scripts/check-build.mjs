@@ -4,6 +4,14 @@ import { join, relative, resolve, sep } from "node:path";
 const root = process.cwd();
 const dist = resolve(root, "dist");
 const failures = [];
+// Installers are served by the dedicated /app/ CDN origin, outside the Astro release.
+const adminAppRelease = JSON.parse(
+  readFileSync(join(root, "src/data/admin-app-release.json"), "utf8"),
+);
+const adminAppDownloads = new Set([
+  adminAppRelease.macOS,
+  adminAppRelease.windows,
+]);
 
 if (!existsSync(dist)) {
   throw new Error("dist/ does not exist; run the Astro build first");
@@ -44,6 +52,7 @@ function localTargetExists(target, sourceFile) {
   }
 
   if (url.hostname !== "www.isecure.fi") return true;
+  if (adminAppDownloads.has(url.href)) return true;
   const pathname = decodeURIComponent(url.pathname);
   const relativePath = pathname.replace(/^\//, "");
   const candidates = pathname.endsWith("/")
