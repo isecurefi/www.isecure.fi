@@ -33,15 +33,15 @@ const tagNames = {
 const copy = {
   "payment_capabilities.list": [
     "List account capabilities",
-    "Find the account capabilities visible to your user before creating a payment draft.",
+    "List the payment types, currencies, destinations and limits available for accounts visible to your user. Use resolve to match the proposed payment before creating a draft.",
   ],
   "payment_capabilities.get": [
     "Read an account capability",
-    "Read the exact capability selected for an account. The server checks authority again when you use it.",
+    "Read the payment options and limits for one exact account capability. Its reference does not grant approval; the server checks authority again when you use it.",
   ],
   "payment_capabilities.resolve": [
     "Select a matching capability",
-    "Resolve your payment requirements to an available account capability. Review the result before creating a draft.",
+    "Match the paying account and payment requirements to an available capability. Continue only when outcome is resolved and selected is present; ambiguous, unsupported, not-ready, expired or uncertain results must be resolved before drafting.",
   ],
   "payment_capabilities.explain": [
     "Explain an account capability",
@@ -49,15 +49,15 @@ const copy = {
   ],
   "payment_export_profile_catalog.list": [
     "List available export profiles",
-    "Discover formats available in this deployment. Listing a profile does not enable it for your tenant.",
+    "List bank- and country-specific payment-file rules admitted for your tenant by this deployment. Check payment type, availability and qualification status. Listing a profile does not configure it or authorize a payment.",
   ],
   "payment_export_profiles.get": [
     "Read the configured export profile",
-    "Read the current tenant export configuration before preparing or approving a payment file.",
+    "Read the current tenant configuration: the selected bank-file profile, paying account and required company/bank-agreement details.",
   ],
   "payment_export_profiles.configure": [
     "Configure an export profile",
-    "Select an available bank-file profile and its required settings for your tenant. This requires approval authority.",
+    "Select an admitted bank/country profile and supply the paying account, company and bank-agreement details. This requires approval authority; it does not create a bank agreement or approve a payment.",
   ],
   "payment_export_profiles.revoke": [
     "Revoke an export profile",

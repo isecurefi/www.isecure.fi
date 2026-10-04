@@ -1,46 +1,33 @@
-Prepare payment files through a controlled review and approval process. This API creates and releases an exact file for your application to download. Your application signs it locally and uses the separate [File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile) to upload it.
+Create, review and approve a payment file, then download it. Your application verifies and signs the file locally and sends it through the separate [File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile). Processing does not send payments to a bank.
 
-**Experimental · Test environment · Paid subscription and access approval required.** This reference covers 26 payment operations plus session exchange and notifications. It does not offer a production Processing endpoint or promise that a bank will accept a file.
+**Experimental · Test environment · Paid subscription and access approval required.**
+
+This reference covers 26 payment operations, session exchange and notifications on the test server. Production plugin discovery and download are a separate, narrower service; they do not make payment processing available in production.
 
 ## Prepare a payment file
 
-1. **Discover the available profiles and account capabilities.** `paymentExportProfiles.list()` lists formats available to this deployment. An authorized administrator configures a profile; `paymentCapabilities.list()` and `resolve()` identify what an account may use.
-2. **Create a draft.** `paymentBatches.createDraft()` selects an exact account capability. Add, update or remove payments while the draft is open. Amounts use decimal strings, not floating-point numbers.
-3. **Check the draft.** `validate()` reports input and business-rule issues. `simulate()` evaluates the proposed payment order; it is separate from running the [Bank Simulator](https://www.isecure.fi/apis/bank-simulator/).
-4. **Finalize and request review.** `finalize()` locks a revision and `submitForReview()` submits that exact revision. Keep the resource versions returned at each step.
-5. **Approve with an authorized, distinct identity.** `paymentApprovalRequests.decide()` records the decision. File Exchange admin/data mode does not itself grant approval. The server's assignment and separation-of-duties rules apply.
-6. **Release and download.** `paymentExports.release()` creates the export after the required approval. `paymentExports.get()` supplies the artifact identity, digest, byte length and media type. Pass that authority to `paymentExports.download()`; the SDK checks the returned bytes against it.
-7. **Sign and transfer separately.** Keep the private signing key in your application. [Upload through File Exchange](https://www.isecure.fi/wsapi_v2/#operation/UploadFile) only after verifying the exact file and intended destination. An uncertain upload must not be retried automatically.
+1. **Choose the bank format and check the paying account.** Select file rules for your bank and country, then check whether the account you will pay from supports the intended payment. See the explanation below.
+2. **Create a draft.** Pass the selected account capability to `paymentBatches.createDraft()` and add payments. Use decimal strings for amounts, not floating-point numbers.
+3. **Check it.** `validate()` checks the draft; `simulate()` evaluates the proposed payment without sending it. This is separate from a [Bank Simulator](https://www.isecure.fi/apis/bank-simulator/) run.
+4. **Request review.** `finalize()` locks a revision; `submitForReview()` submits it. Keep the returned resource versions. Changes may need a new revision and fresh approval.
+5. **Approve separately.** An authorized, distinct reviewer calls `paymentApprovalRequests.decide()`. File Exchange admin/data mode alone grants no approval authority.
+6. **Release and download.** Call `paymentExports.release()`, then `get()` for the file's identity, digest, length and media type. Pass that result to `download()`; the SDK checks the bytes against it.
+7. **Sign and send.** Sign the verified bytes with your locally held private key and upload through File Exchange. Never automatically retry an upload whose outcome is unknown.
 
-Approval of a file is not bank authorization, bank acceptance or a completed payment. A correction is a new revision and may need fresh approval. Discover profile availability at runtime; an ISO format name alone does not prove bank or country qualification.
+### What does the first step mean?
 
-### Discover the export profiles
+An **export profile** defines how to write payment XML for a particular bank and country. An **account capability** describes the payment types, currencies, destinations and limits available for one paying account. Supporting a file format does not establish what that account may do.
 
-After creating the authenticated `client` shown below:
+- **Find the format:** `paymentExportProfiles.list()` returns profiles admitted for your tenant. Check their bank, country, payment type, availability and qualification—not just the XML format name.
+- **Configure the account:** `paymentExportProfiles.get()` reads your current setup. If setup or a change is needed, an administrator with approval permission calls `configure()` with the profile, debtor account, company and bank-agreement details.
+- **Check the payment:** `paymentCapabilities.list()` shows visible capabilities; `resolve()` matches the account and payment requirements. Continue only with outcome `resolved` and a `selected` reference. Pass that exact reference to the draft; do not guess when no unique match is returned.
 
-```ts
-const catalog = await client.paymentExportProfiles.list();
-const configured = await client.paymentExportProfiles.get();
-```
+Neither configuration nor selection creates a bank agreement or approves a payment. The server checks current authority on use.
 
-### Download verified bytes
+The [complete SDK example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-manual-upload) shows these calls, separate logins, verified download, local signing and one confirmed upload. The [simulator example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-simulator-journey) also verifies synthetic feedback and recovery against its recorded test releases.
 
-Use the export ID and artifact authority returned by the completed release/read workflow:
+## What success means
 
-```ts
-// `exportResource` is the payment export resource returned by your read.
-const downloaded = await client.paymentExports.download(
-  { payment_export_id: exportResource.payment_export_id },
-  exportResource,
-  { idempotencyKey: savedDownloadCommandKey },
-);
-// downloaded.bytes contains the verified file. Sign these exact bytes locally.
-```
+The export path returns `pain.001.001.09` XML, not JSON. Approval and download do not prove bank acceptance or payment completion.
 
-See the [complete payment-file SDK example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-manual-upload) for profile configuration, separate submitter/approver logins, local signing and an explicitly confirmed upload. The [Processing-to-simulator example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-simulator-journey) also follows synthetic feedback; its recorded release qualification does not imply production readiness.
-
-## Files and real-bank boundaries
-
-The published payment-export path produces `pain.001.001.09` for the selected available profile. The content-download operation returns file bytes, not a JSON success object. Follow its documented response media type and integrity headers. The SDK refuses a download that does not match the authorized digest, length, identity or media type.
-
-[Bank Simulator](https://www.isecure.fi/apis/bank-simulator/) can return synthetic `pain.002`, `camt.054` and `camt.053` files through [File Exchange](https://www.isecure.fi/wsapi_v2/#operation/DownloadFile). Using a real bank requires a separate bank agreement, Bank Connectivity access, production credentials and a qualified bank/profile connection. Processing access grants none of these automatically.
+The Bank Simulator returns synthetic `pain.002`, `camt.054` and `camt.053` feedback through File Exchange. Real-bank use separately requires a bank agreement, Bank Connectivity access, production credentials and a qualified bank/profile connection.
