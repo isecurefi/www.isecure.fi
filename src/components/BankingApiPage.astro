@@ -13,36 +13,36 @@ const meta = {
   fi: {
     title: "Pankki API ja SDK:t",
     description:
-      "Yhdistä ohjelmistosi tukemiimme suomalaisiin pankkeihin ISECure Banking API:lla. REST API, OpenAPI sekä TypeScript-, Python- ja PHP-SDK:t pankkiaineistoille.",
+      "Yhdistä ohjelmistosi tukemiimme suomalaisiin pankkeihin ISECure Banking API:lla. REST API, OpenAPI sekä TypeScript-, Python-, C#- ja PHP-SDK:t pankkiaineistoille.",
     keywords:
-      "pankki API, banking API, TypeScript SDK, Python SDK, PHP SDK, WS-Kanava API, pankki-integraatio, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
+      "pankki API, banking API, TypeScript SDK, Python SDK, C# SDK, PHP SDK, WS-Kanava API, pankki-integraatio, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
     breadcrumb: "Pankki API ja SDK:t",
     faqSdk:
-      "ISECure sisältää PHP SDK:n, TypeScript SDK:n, Python SDK:n ja wscli-työkalun REST API:n rinnalle.",
+      "ISECure sisältää PHP SDK:n, TypeScript SDK:n, Python SDK:n, C# SDK:n ja wscli-työkalun REST API:n rinnalle.",
     faqTest:
       "Voit aloittaa testirajapinnalla, OpenAPI-dokumentaatiolla ja simulator-pankilla. Tuore simulator-rekisteröinti luo ensimmäisen camt.053.001.02-tiliotteen listattavaksi ja ladattavaksi. Tuotantokäyttöön tarvitaan pankin yritysasiakassopimus, tunnukset ja varmenteet.",
   },
   en: {
     title: "Banking API and SDKs",
     description:
-      "Connect your software to supported Finnish banks with ISECure Banking API. REST API, OpenAPI, and TypeScript, Python, and PHP SDKs for bank files.",
+      "Connect your software to supported Finnish banks with ISECure Banking API. REST API, OpenAPI, and TypeScript, Python, C#, and PHP SDKs for bank files.",
     keywords:
-      "banking API, TypeScript SDK, Python SDK, PHP SDK, WS-Channel API, bank integration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
+      "banking API, TypeScript SDK, Python SDK, C# SDK, PHP SDK, WS-Channel API, bank integration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
     breadcrumb: "Banking API and SDKs",
     faqSdk:
-      "ISECure includes PHP SDK, TypeScript SDK, Python SDK, and wscli tooling alongside the REST API.",
+      "ISECure includes PHP SDK, TypeScript SDK, Python SDK, C# SDK, and wscli tooling alongside the REST API.",
     faqTest:
       "You can start with the test API, OpenAPI documentation, and bank simulator. A fresh simulator enrollment creates the first camt.053.001.02 statement for listing and download. Production use still requires the bank's corporate agreement, credentials, and certificates.",
   },
   se: {
     title: "Bank API och SDK:er",
     description:
-      "Anslut din programvara till finländska banker som stöds med ISECure Banking API. REST API, OpenAPI samt SDK:er för TypeScript, Python och PHP.",
+      "Anslut din programvara till finländska banker som stöds med ISECure Banking API. REST API, OpenAPI samt SDK:er för TypeScript, Python, C# och PHP.",
     keywords:
-      "bank API, TypeScript SDK, Python SDK, PHP SDK, WS-Kanal API, bankintegration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
+      "bank API, TypeScript SDK, Python SDK, C# SDK, PHP SDK, WS-Kanal API, bankintegration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
     breadcrumb: "Bank API och SDK:er",
     faqSdk:
-      "ISECure innehåller PHP SDK, TypeScript SDK, Python SDK och wscli-verktyg bredvid REST API:t.",
+      "ISECure innehåller PHP SDK, TypeScript SDK, Python SDK, C# SDK och wscli-verktyg bredvid REST API:t.",
     faqTest:
       "Ni kan börja med test-API:t, OpenAPI-dokumentationen och banken simulator. En ny simulatorregistrering skapar det första camt.053.001.02-kontoutdraget för listning och hämtning. Produktion kräver fortfarande bankens företagsavtal, konton och certifikat.",
   },
@@ -60,8 +60,8 @@ const structuredFaqs = {
       a: "ISECure ei suodata tai prosessoi pankkiaineistoja aineistotyypin perusteella. Sama malli tukee pankin sallimia aineistoja, kuten pain.001-maksuja, camt.053-tiliotteita ja muita pankkikohtaisia WS-kanavan tiedostotyyppejä.",
     },
     {
-      q: "Sisältääkö ISECure TypeScript-, Python- ja PHP-clientit?",
-      a: "ISECure sisältää PHP SDK:n, TypeScript SDK:n, Python SDK:n ja wscli-työkalun REST API:n rinnalle.",
+      q: "Sisältääkö ISECure TypeScript-, Python-, C#- ja PHP-clientit?",
+      a: "ISECure sisältää PHP SDK:n, TypeScript SDK:n, Python SDK:n, C# SDK:n ja wscli-työkalun REST API:n rinnalle.",
     },
     {
       q: "Kuinka ISECure hoitaa varmenteiden uusinnan?",
@@ -86,8 +86,8 @@ const structuredFaqs = {
       a: "ISECure does not filter or process bank files by file type. The same model supports material allowed by the bank, including pain.001 payments, camt.053 statements, and other bank-specific WS-channel file types.",
     },
     {
-      q: "Does ISECure include TypeScript, Python, and PHP clients?",
-      a: "ISECure includes PHP SDK, TypeScript SDK, Python SDK, and wscli tooling alongside the REST API.",
+      q: "Does ISECure include TypeScript, Python, C#, and PHP clients?",
+      a: "ISECure includes PHP SDK, TypeScript SDK, Python SDK, C# SDK, and wscli tooling alongside the REST API.",
     },
     {
       q: "How does ISECure handle certificate renewal?",
@@ -112,8 +112,8 @@ const structuredFaqs = {
       a: "ISECure filtrerar eller bearbetar inte bankfiler enligt filtyp. Samma modell stöder det material banken tillåter, inklusive pain.001-betalningar, camt.053-kontoutdrag och andra bankspecifika WS-kanalens filtyper.",
     },
     {
-      q: "Innehåller ISECure TypeScript-, Python- och PHP-klienter?",
-      a: "ISECure innehåller PHP SDK, TypeScript SDK, Python SDK och wscli-verktyg bredvid REST API:t.",
+      q: "Innehåller ISECure TypeScript-, Python-, C#- och PHP-klienter?",
+      a: "ISECure innehåller PHP SDK, TypeScript SDK, Python SDK, C# SDK och wscli-verktyg bredvid REST API:t.",
     },
     {
       q: "Hur hanterar ISECure certifikatförnyelser?",
@@ -208,6 +208,7 @@ const structuredData = {
         "Test API access for developer evaluation",
         "TypeScript SDK",
         "Python SDK",
+        "C# SDK",
         "PHP SDK",
         "OpenAPI documentation",
         "PKI certificate lifecycle management",

@@ -30,6 +30,10 @@ const sdkLinks = [
     title: "Python SDK (Beta)",
     href: "https://github.com/isecurefi/isecure-py-client",
   },
+  {
+    title: "C# SDK (Beta)",
+    href: "https://github.com/isecurefi/isecure-cs-client",
+  },
   { title: "PHP SDK / wscli", href: "https://isecurefi.github.io/wscli-php/" },
 ];
 
@@ -53,7 +57,7 @@ const content = {
     quickstart: [
       {
         title: "Avaa OpenAPI tai asenna SDK",
-        text: "Käytä OpenAPI-kuvausta suoraan tai aloita TypeScript-, Python- tai PHP-clientilla.",
+        text: "Käytä OpenAPI-kuvausta suoraan tai aloita TypeScript-, Python-, C#- tai PHP-clientilla.",
       },
       {
         title: "Luo testitili",
@@ -83,7 +87,7 @@ const content = {
       },
       {
         title: "SDK:t, OpenAPI ja PGP-turva",
-        text: "TypeScript-, Python- ja PHP-clientit nopeuttavat toteutusta. Aineistot voidaan vaatia PGP-allekirjoitettuina, ja asiakkaan avain voidaan viedä vain asiakkaan PGP-avaimelle.",
+        text: "TypeScript-, Python-, C#- ja PHP-clientit nopeuttavat toteutusta. Aineistot voidaan vaatia PGP-allekirjoitettuina, ja asiakkaan avain voidaan viedä vain asiakkaan PGP-avaimelle.",
       },
     ],
     architectureTitle: "Miten integraatio toimii",
@@ -208,7 +212,7 @@ const content = {
     quickstart: [
       {
         title: "Open the API or install an SDK",
-        text: "Use the OpenAPI description directly, or start with the TypeScript, Python, or PHP client.",
+        text: "Use the OpenAPI description directly, or start with the TypeScript, Python, C#, or PHP client.",
       },
       {
         title: "Create a test account",
@@ -238,7 +242,7 @@ const content = {
       },
       {
         title: "SDKs, OpenAPI, and PGP security",
-        text: "TypeScript, Python, and PHP clients speed up implementation. File material can require PGP signatures, and customer keys can be exported only to the customer's PGP key.",
+        text: "TypeScript, Python, C#, and PHP clients speed up implementation. File material can require PGP signatures, and customer keys can be exported only to the customer's PGP key.",
       },
     ],
     architectureTitle: "What happens in the integration",
@@ -363,7 +367,7 @@ const content = {
     quickstart: [
       {
         title: "Öppna API:t eller installera ett SDK",
-        text: "Använd OpenAPI-beskrivningen direkt eller börja med TypeScript-, Python- eller PHP-klienten.",
+        text: "Använd OpenAPI-beskrivningen direkt eller börja med TypeScript-, Python-, C#- eller PHP-klienten.",
       },
       {
         title: "Skapa ett testkonto",
@@ -393,7 +397,7 @@ const content = {
       },
       {
         title: "SDK:er, OpenAPI och PGP-säkerhet",
-        text: "TypeScript-, Python- och PHP-klienter snabbar upp implementationen. Filmaterial kan kräva PGP-signaturer, och kundnycklar kan exporteras endast till kundens PGP-nyckel.",
+        text: "TypeScript-, Python-, C#- och PHP-klienter snabbar upp implementationen. Filmaterial kan kräva PGP-signaturer, och kundnycklar kan exporteras endast till kundens PGP-nyckel.",
       },
     ],
     architectureTitle: "Vad som sker i integrationen",
@@ -571,6 +575,14 @@ const t = content[lang];
           data-analytics-content-type="developer_resource"
           data-analytics-item-id="python-sdk"
           data-analytics-source="homepage-quickstart">Python SDK (Beta)</Button
+        >
+        <Button
+          variant="secondary"
+          href="https://github.com/isecurefi/isecure-cs-client"
+          external
+          data-analytics-content-type="developer_resource"
+          data-analytics-item-id="csharp-sdk"
+          data-analytics-source="homepage-quickstart">C# SDK (Beta)</Button
         >
       </Actions>
     </SectionHeading>
