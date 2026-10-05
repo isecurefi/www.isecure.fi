@@ -1,5 +1,5 @@
 {
-  "available": false,
+  "available": true,
   "version": "1.0.15",
   "macOS": "https://www.isecure.fi/app/isecure-admin-1.0.15-aarch64.dmg",
   "windows": "https://www.isecure.fi/app/isecure-admin-1.0.15-x64-setup.exe"

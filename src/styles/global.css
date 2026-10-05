@@ -40,7 +40,7 @@ body {
   font-size: 16px;
   line-height: 1.6;
   color: var(--text-color);
-  padding-top: 76px;
+  padding-top: 56px;
   position: relative;
   height: 100%;
   margin: 0;
@@ -85,6 +85,8 @@ html.banking-theme-root body.banking-theme-page[data-isecure-theme="light"] {
 .navbar {
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
+  min-height: 56px;
+  padding-block: 6px;
   z-index: 1030;
 }
 
@@ -96,6 +98,20 @@ html.banking-theme-root body.banking-theme-page .navbar {
   background: var(--landing-bg) !important;
   border-bottom: 0 !important;
   box-shadow: none !important;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
+}
+
+/* On the landing page the bar blends into the hero until the page scrolls. */
+html.banking-theme-root
+  body.banking-theme-page:has(.landing-hero)
+  .navbar:not(.is-scrolled):not(:has(.navbar-collapse.show, .collapsing)) {
+  background: transparent !important;
+}
+
+html.banking-theme-root body.banking-theme-page .navbar.is-scrolled {
+  box-shadow: 0 1px 0 var(--landing-line) !important;
 }
 
 html.banking-theme-root body.banking-theme-page .contact-section {
@@ -116,11 +132,13 @@ html.banking-theme-root body.banking-theme-page .contact-section {
   color: var(--landing-ink) !important;
 }
 
+/* Footer carries the hero's teal/blue tint so the page opens and closes alike. */
 html.banking-theme-root body.banking-theme-page .footer {
-  background: var(--landing-card) !important;
-  border-top: 0;
+  background: var(--landing-footer-bg, var(--landing-card)) !important;
+  border-top: 1px solid var(--landing-line);
   box-shadow: none;
   color: var(--landing-muted);
+  margin-top: 64px;
 }
 
 .footer {

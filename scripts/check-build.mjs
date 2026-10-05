@@ -829,7 +829,6 @@ for (const [
     'data-catalog-visibility="soft-launch"',
     "Beta",
     "Nordea",
-    "XMLdation",
     environmentLabel,
     registrationLabel,
     subscriptionLabel,

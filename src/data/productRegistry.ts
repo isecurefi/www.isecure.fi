@@ -544,14 +544,14 @@ export const catalogRecords: readonly CatalogRecord[] = [
     ],
     qualification: {
       label: text(
-        "Nordea / XMLdation",
-        "Nordea / XMLdation",
-        "Nordea / XMLdation",
+        "Nordean validoima",
+        "Nordea validated",
+        "Validerad av Nordea",
       ),
       scope: text(
-        "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiileja on validoitu XMLdationilla Suomen, Ruotsin, Norjan ja Tanskan osalta. Saatavilla ISECuren testiympäristössä tilausasiakkaille pyynnöstä.",
-        "Processing API is in Beta. Nordea Corporate Access payment-file profiles have been validated using XMLdation for Finland, Sweden, Norway and Denmark. Available in the ISECure test environment to subscribed customers by request.",
-        "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access har validerats med XMLdation för Finland, Sverige, Norge och Danmark. Tillgängligt i ISECures testmiljö för prenumerationskunder på begäran.",
+        "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiilit ovat Nordean validoimia Suomen, Ruotsin, Norjan ja Tanskan osalta. Saatavilla ISECuren testiympäristössä tilausasiakkaille pyynnöstä.",
+        "Processing API is in Beta. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark. Available in the ISECure test environment to subscribed customers by request.",
+        "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access är validerade av Nordea för Finland, Sverige, Norge och Danmark. Tillgängligt i ISECures testmiljö för prenumerationskunder på begäran.",
       ),
       evidenceDate: "2026-09-27",
       evidenceSource:

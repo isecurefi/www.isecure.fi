@@ -595,7 +595,7 @@ export function buildSpec(kind) {
         url: metadata.baseUrl,
         description: simulator
           ? "ISECure test environment — Experimental; access by request"
-          : "ISECure test environment — Beta; Nordea certified; access by request",
+          : "ISECure test environment — Beta; Nordea validated; access by request",
       },
     ],
     tags: tags.map((name) => ({ name })),

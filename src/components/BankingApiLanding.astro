@@ -1,6 +1,4 @@
 ---
-import hljs from "highlight.js/lib/core";
-import typescript from "highlight.js/lib/languages/typescript";
 import type { Lang } from "../types";
 import BankLogos from "./BankLogos.astro";
 import OurProducts from "./OurProducts.astro";
@@ -13,47 +11,36 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-hljs.registerLanguage("typescript", typescript);
-
-const tsCode = `import { WSChannel } from "isecure-ts-client";
-
-const data = new WSChannel({
-  Company: "Example Company",
-  Name: "Example User",
-  Email: "finance@example.com",
-  Phone: "+358401234567",
-  PublicKey: process.env.ISECURE_PUBLIC_KEY_PEM!,
-  BaseUrl: "https://ws-api.test.isecure.fi/v2",
-  Bank: "simulator",
-  Mode: "data",
-  Password: process.env.ISECURE_DATA_PASSWORD!,
-});
-
-const session = await data.login();
-if (session.status !== "authenticated") {
-  throw new Error(\`Login failed: \${session.status}\`);
-}
-
-// A fresh simulator enrollment creates this opening statement.
-const files = await data.listFiles({
-  FileType: "camt.053.001.02",
-  Status: "NEW",
-});
-
-const [statement] = files.FileDescriptors;
-const downloaded = await data.downloadFile(
-  statement.FileType,
-  statement.FileReference,
-);`;
-const highlightedTsCode = hljs.highlight(tsCode, {
-  language: "typescript",
-}).value;
+const icon = (paths: string) =>
+  `<svg viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>`;
+const benefitIcons = [
+  icon('<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>'),
+  icon(
+    '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/>',
+  ),
+  icon(
+    '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>',
+  ),
+  icon('<path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 4l-4 16"/>'),
+];
+const sdkLinks = [
+  {
+    title: "TypeScript SDK",
+    href: "https://github.com/isecurefi/isecure-ts-client",
+  },
+  {
+    title: "Python SDK (Beta)",
+    href: "https://github.com/isecurefi/isecure-py-client",
+  },
+  { title: "PHP SDK / wscli", href: "https://isecurefi.github.io/wscli-php/" },
+];
 
 const content = {
   fi: {
-    eyebrow: "Säästä kuukausien pankkikohtainen integraatiotyö",
-    title: "Tuetut pankit yhden API:n takana",
-    lead: "ISECure tarjoaa rajapinnan maksuaineistoille, tiliotteille ja varmenteille: sinä lähetät ja noudat, me hoidamme pankkiyhteyden, tilit, sertifikaatit ja tietoturvan.",
+    eyebrow:
+      "Tekoäly kirjoittaa integraatiokoodin päivissä. Pankkien hyväksyntätestaus vie silti kuukausia.",
+    title: "Yksi API, kaikki pankit",
+    lead: "ISECure on jo tuotannossa tuettujen suomalaisten pankkien kanssa, joten tiimisi ei toista pankkikohtaista hyväksyntätestausta. Ohjelmistosi lähettää maksuaineistot ja noutaa tiliotteet yhden API:n kautta. Me hoidamme varmenteiden uusinnat, avaimet ja pankkiyhteyden suojatussa PCI DSS -tason ympäristössä, tuotteesi tietoturvarajan ulkopuolella.",
     icp: "Suunniteltu ohjelmistoyrityksille: taloushallinnon, ERP:n, laskutuksen ja rahoituksen tuotteille, jotka tarvitsevat pankkiyhteydet.",
     primaryCta: "Aloita testirajapinnalla",
     secondaryCta: "Katso OpenAPI-dokumentaatio",
@@ -61,21 +48,8 @@ const content = {
     darkLabel: "Tumma",
     lightLabel: "Vaalea",
     proof: [
-      {
-        value: "Tuhansien",
-        label: "suomalaisten yritysten",
-        text: "pankkiliikenne kulkee ISECuren kautta",
-      },
-      {
-        value: "10+ vuotta",
-        label: "luotettavasti tuotannossa",
-        text: "pankkiyhteyksiä, varmenteita ja aineistoliikennettä",
-      },
-      {
-        value: "Taloushallinto + ERP",
-        label: "ohjelmistot",
-        text: "käyttävät ISECurea pankkiyhteyksiin",
-      },
+      "Yli 600 yritystä käyttää API:a suoraan",
+      "Yli 10 vuotta tuotannossa",
     ],
     quickstartEyebrow: "Käyttöönotto",
     quickstartTitle: "Ensimmäinen testikutsu, vain kolme askelta",
@@ -83,19 +57,18 @@ const content = {
       "Testiympäristössä voit luoda testitilin, rekisteröidä simulator-pankin ja ladata valmiin camt.053.001.02-tiliotteen ennen tuotannon pankkisopimuksia.",
     quickstart: [
       {
-        title: "1. Avaa OpenAPI tai asenna SDK",
+        title: "Avaa OpenAPI tai asenna SDK",
         text: "Käytä OpenAPI-kuvausta suoraan tai aloita TypeScript-, Python- tai PHP-clientilla.",
       },
       {
-        title: "2. Luo testitili",
+        title: "Luo testitili",
         text: "SDK:n rekisteröinti testipuolen API:iin luo tilin ja palauttaa integraattorin API-avaimen jatkokutsuja varten.",
       },
       {
-        title: "3. Rekisteröi simulaattori ja lataa tiliote",
+        title: "Rekisteröi simulaattori ja lataa tiliote",
         text: "Rekisteröi simulator-varmenne, kirjaudu data-tilillä, listaa NEW-tilassa oleva camt.053.001.02 ja lataa palautettu tiedostoviite.",
       },
     ],
-    tsLabel: "TypeScript SDK",
     whyEyebrow: "Integraatiomalli",
     whyTitle: "Miksi tämä on helpompaa kuin pankkikohtaiset integraatiot",
     whyLead:
@@ -124,20 +97,16 @@ const content = {
       "Kehittäjä lähettää ja noutaa pankkiaineistoja API:n kautta. ISECure hoitaa pankkien WS-liikenteen, varmenteet, avainsäilytyksen ja operatiivisen valvonnan.",
     flow: [
       "Sovellus",
-      "TypeScript, Python tai PHP client",
+      "Client-SDK",
       "ISECure WS-Kanava API",
       "Pankit ja WS-kanava",
     ],
-    sftpOption: {
-      title: "Vaihtoehtoisesti: Luotettava SFTP/S3-synkronointi",
-      text: "Tiedostopohjaisissa työnkuluissa pankkiaineistoja voidaan synkronoida SFTP:n tai S3:n kautta ilman suoraa REST API -integraatiota. Sama ISECure-yhteys hoitaa pankkien WS-liikenteen taustalla.",
-    },
     infrastructureOption: {
       title: "AWS API Gateway, WAF ja asiakaskohtaiset rajat",
       text: "Rajapinta toimii serverless AWS -arkkitehtuurissa, API Gatewayn ja WAF:n takana. Asiakaskohtaiset käyttörajat suojaavat palvelua ruuhkapiikeiltä ja estävät muiden integraatioiden häiriöitä vaikuttamasta omaan käyttöön.",
     },
     managementApp: {
-      eyebrow: "ISECure Admin — tulossa",
+      eyebrow: "ISECure Admin",
       title: "Hallintasovellus integraattoreille",
       text: "Hallitse asiakastilejä, seuraa varmenteiden voimassaoloa ja näe laskutuksen perusteena olevat käyttö- ja lisenssimäärät. Kirjaudu omalla ISECure-ylläpitotunnuksellasi.",
       cta: "Lataa",
@@ -155,36 +124,6 @@ const content = {
       screenshotsNote:
         "Kuvat sovelluksen näkymistä esimerkkitiedoilla. Ei oikeita asiakastietoja. Avaa kuva suurempana napsauttamalla.",
     },
-    sdkTitle: "Clientit eri integraatiopoluille",
-    sdkEyebrow: "SDK:t ja työkalut",
-    sdkLead:
-      "Nykyinen PHP SDK ja wscli ovat edelleen käytössä komentoriville ja olemassa oleviin integraatioihin. TypeScript- ja Python-clientit tuovat saman mallin moderneihin palveluihin.",
-    sdks: [
-      {
-        title: "TypeScript SDK",
-        status: "Saatavilla",
-        href: "https://github.com/isecurefi/isecure-ts-client",
-        text: "Node.js- ja selainläheisiin palveluihin, joissa tarvitaan tyypitetty client, ennustettavat virhetyypit ja OpenAPI-malliin sopiva kehityskokemus.",
-      },
-      {
-        title: "Python SDK",
-        status: "Beta",
-        href: "https://github.com/isecurefi/isecure-py-client",
-        text: "Python-client rekisteröintiin, SMS-kirjautumiseen, PGP-allekirjoituksiin sekä tiedostojen lähetykseen ja listaukseen. Katso asennusohjeet ja nykyinen API-kattavuus GitHubista.",
-      },
-      {
-        title: "PHP SDK ja wscli",
-        status: "Saatavilla",
-        href: "https://isecurefi.github.io/wscli-php/",
-        text: "Nykyinen PHP-client ja komentorivityökalu tukevat olemassa olevia integraatioita, testiajoja ja käyttöönottoa.",
-      },
-      {
-        title: "OpenAPI",
-        status: "Saatavilla",
-        href: "/wsapi_v2.json",
-        text: "Avoin rajapintakuvaus, API-dokumentaatio ja komentorivityökalu tukevat testausta, käyttöönottoa ja CI/CD-työnkulkuja.",
-      },
-    ],
     banksTitle: "Tuetut pankit",
     banksEyebrow: "Kattavuus",
     banks:
@@ -256,51 +195,35 @@ const content = {
     openApiCta: "OpenAPI JSON",
   },
   en: {
-    eyebrow: "Save months of bank-by-bank integration work",
-    title: "Supported banks behind one API",
-    lead: "ISECure gives you one interface for payment files, statements, and certificates: your product sends and retrieves, we handle the bank connection, accounts, certificates, and security.",
+    eyebrow:
+      "AI writes integration code in days. Bank verification still takes months.",
+    title: "One API, all the banks",
+    lead: "ISECure is already in production with the supported Finnish banks, so your team doesn't repeat the bank-by-bank verification. Your product sends payment files and fetches statements through one API. We run certificate renewals, keys, and the bank connection in a hardened, PCI DSS level environment, outside your product's security boundary.",
     icp: "Built for software companies: accounting, ERP, invoicing, and finance products that need bank connectivity.",
     primaryCta: "Start with the test API",
     secondaryCta: "View OpenAPI docs",
     themeLabel: "Theme",
     darkLabel: "Dark",
     lightLabel: "Light",
-    proof: [
-      {
-        value: "Thousands",
-        label: "Finnish companies",
-        text: "bank traffic runs through ISECure",
-      },
-      {
-        value: "10+ years",
-        label: "in production",
-        text: "bank connectivity, certificates, and file traffic",
-      },
-      {
-        value: "Accounting + ERP",
-        label: "software platforms",
-        text: "use ISECure for production bank connectivity",
-      },
-    ],
+    proof: ["600+ companies use the API directly", "10+ years in production"],
     quickstartEyebrow: "Get started",
     quickstartTitle: "First test call in three steps",
     quickstartLead:
       "In the test environment, create a test account, enroll bank simulator, and download the seeded camt.053.001.02 statement before production bank agreements are finalized.",
     quickstart: [
       {
-        title: "1. Open the API or install an SDK",
+        title: "Open the API or install an SDK",
         text: "Use the OpenAPI description directly, or start with the TypeScript, Python, or PHP client.",
       },
       {
-        title: "2. Create a test account",
+        title: "Create a test account",
         text: "SDK registration against the test endpoint creates the account and returns the integrator API key for later calls.",
       },
       {
-        title: "3. Enroll the simulator and download a statement",
+        title: "Enroll the simulator and download a statement",
         text: "Enroll the simulator certificate, log in with the data account, list the NEW camt.053.001.02, and download its returned file reference.",
       },
     ],
-    tsLabel: "TypeScript SDK",
     whyEyebrow: "Integration model",
     whyTitle: "Why this is simpler than bank-by-bank integrations",
     whyLead:
@@ -329,20 +252,16 @@ const content = {
       "Developers send and retrieve bank files through the API. ISECure handles bank WS traffic, certificates, key storage, and operational monitoring.",
     flow: [
       "Application",
-      "TypeScript, Python, or PHP client",
+      "Client SDK",
       "ISECure WS-Channel API",
       "Banks and WS-channel",
     ],
-    sftpOption: {
-      title: "Reliable SFTP/S3 sync",
-      text: "For file-based workflows, bank files can be synchronized through SFTP or S3 without requiring a direct REST API integration. The same ISECure connection handles bank WS traffic underneath.",
-    },
     infrastructureOption: {
       title: "AWS API Gateway, WAF, and customer-specific limits",
       text: "The API runs on a serverless AWS architecture behind API Gateway and WAF. Customer-specific rate limits protect the service from traffic spikes and keep other integrations from becoming noisy neighbours.",
     },
     managementApp: {
-      eyebrow: "ISECure Admin — coming soon",
+      eyebrow: "ISECure Admin",
       title: "Administration app for integrators",
       text: "Manage customer accounts, monitor certificate expiry, and see the usage and license figures behind billing. Sign in with your ISECure administrator account.",
       cta: "Download",
@@ -360,36 +279,6 @@ const content = {
       screenshotsNote:
         "Application views with synthetic example data. No real customer information. Select an image to enlarge it.",
     },
-    sdkTitle: "Clients for different integration paths",
-    sdkEyebrow: "SDK coverage",
-    sdkLead:
-      "The current PHP SDK and wscli remain available for command-line workflows and existing integrations. The TypeScript and Python clients bring the same model to modern services.",
-    sdks: [
-      {
-        title: "TypeScript SDK",
-        status: "Available",
-        href: "https://github.com/isecurefi/isecure-ts-client",
-        text: "For Node.js and browser-adjacent services that need a typed client, predictable error types, and an OpenAPI-aligned developer experience.",
-      },
-      {
-        title: "Python SDK",
-        status: "Beta",
-        href: "https://github.com/isecurefi/isecure-py-client",
-        text: "Python client for registration, SMS login, PGP signatures, file upload, and file listing. See GitHub for installation and current API coverage.",
-      },
-      {
-        title: "PHP SDK and wscli",
-        status: "Available",
-        href: "https://isecurefi.github.io/wscli-php/",
-        text: "The existing PHP client and command-line tool support current integrations, test runs, and onboarding workflows.",
-      },
-      {
-        title: "OpenAPI",
-        status: "Available",
-        href: "/wsapi_v2.json",
-        text: "The API description, documentation, and command-line tool support testing, onboarding, and CI/CD workflows.",
-      },
-    ],
     banksTitle: "Supported banks",
     banksEyebrow: "Coverage",
     banks:
@@ -461,51 +350,35 @@ const content = {
     openApiCta: "OpenAPI JSON",
   },
   se: {
-    eyebrow: "Spara månader av bankvisa integrationsarbete",
-    title: "Bankintegrationer med ett API",
-    lead: "ISECure ger ett gränssnitt för betalningsfiler, kontoutdrag och certifikat: din produkt skickar och hämtar, vi hanterar bankförbindelsen, konton, certifikat och säkerhet.",
+    eyebrow:
+      "AI skriver integrationskoden på några dagar. Bankernas verifiering tar fortfarande månader.",
+    title: "Ett API, alla banker",
+    lead: "ISECure är redan i produktion med de finländska banker som stöds, så ert team behöver inte upprepa verifieringen bank för bank. Er produkt skickar betalningsfiler och hämtar kontoutdrag via ett API. Vi sköter certifikatförnyelser, nycklar och bankförbindelsen i en härdad miljö på PCI DSS-nivå, utanför er produkts säkerhetsgräns.",
     icp: "Byggt för mjukvarubolag: bokföring, ERP, fakturering och finansprodukter som behöver bankförbindelser.",
     primaryCta: "Börja med test-API:t",
     secondaryCta: "Visa OpenAPI-dokumentation",
     themeLabel: "Tema",
     darkLabel: "Mörk",
     lightLabel: "Ljus",
-    proof: [
-      {
-        value: "Tusentals",
-        label: "finländska företag",
-        text: "banktrafik går via ISECure",
-      },
-      {
-        value: "10+ år",
-        label: "i produktion",
-        text: "bankförbindelser, certifikat och filtrafik",
-      },
-      {
-        value: "Bokföring + ERP",
-        label: "mjukvaruplattformar",
-        text: "använder ISECure för bankförbindelser i produktion",
-      },
-    ],
+    proof: ["600+ företag använder API:t direkt", "10+ år i produktion"],
     quickstartEyebrow: "Kom igång",
     quickstartTitle: "Första testanropet i tre steg",
     quickstartLead:
       "I testmiljön kan ni skapa ett testkonto, registrera banken simulator och hämta det förberedda camt.053.001.02-kontoutdraget innan produktionsavtalen med banken är klara.",
     quickstart: [
       {
-        title: "1. Öppna API:t eller installera ett SDK",
+        title: "Öppna API:t eller installera ett SDK",
         text: "Använd OpenAPI-beskrivningen direkt eller börja med TypeScript-, Python- eller PHP-klienten.",
       },
       {
-        title: "2. Skapa ett testkonto",
+        title: "Skapa ett testkonto",
         text: "SDK-registrering mot testmiljön skapar kontot och returnerar integratörens API-nyckel för kommande anrop.",
       },
       {
-        title: "3. Registrera simulatorn och hämta kontoutdraget",
+        title: "Registrera simulatorn och hämta kontoutdraget",
         text: "Registrera simulatorcertifikatet, logga in med datakontot, lista camt.053.001.02 med status NEW och hämta den returnerade filreferensen.",
       },
     ],
-    tsLabel: "TypeScript SDK",
     whyEyebrow: "Integrationsmodell",
     whyTitle: "Varför detta är enklare än bankvisa integrationer",
     whyLead:
@@ -534,20 +407,16 @@ const content = {
       "Utvecklare skickar och hämtar bankfiler via API:t. ISECure hanterar bankernas WS-trafik, certifikat, nyckellagring och operativ övervakning.",
     flow: [
       "Applikation",
-      "TypeScript, Python eller PHP-klient",
+      "Klient-SDK",
       "ISECure WS-Kanal API",
       "Banker och WS-kanal",
     ],
-    sftpOption: {
-      title: "Tillförlitlig SFTP/S3-synkronisering",
-      text: "För filbaserade arbetsflöden kan bankfiler synkroniseras via SFTP eller S3 utan direkt REST API-integration. Samma ISECure-förbindelse hanterar bankernas WS-trafik i bakgrunden.",
-    },
     infrastructureOption: {
       title: "AWS API Gateway, WAF och kundspecifika gränser",
       text: "API:t körs på en serverless AWS-arkitektur bakom API Gateway och WAF. Kundspecifika användningsgränser skyddar tjänsten mot trafiktoppar och hindrar andra integrationer från att störa er användning.",
     },
     managementApp: {
-      eyebrow: "ISECure Admin — kommer snart",
+      eyebrow: "ISECure Admin",
       title: "Administrationsapp för integratörer",
       text: "Hantera kundkonton, följ certifikatens giltighet och se användnings- och licensantal som ligger till grund för faktureringen. Logga in med ditt administratörskonto hos ISECure.",
       cta: "Ladda ner",
@@ -565,36 +434,6 @@ const content = {
       screenshotsNote:
         "Applikationsvyer med syntetiska exempeldata. Inga riktiga kunduppgifter. Välj en bild för att förstora den.",
     },
-    sdkTitle: "Klienter för olika integrationsvägar",
-    sdkEyebrow: "SDK:er och verktyg",
-    sdkLead:
-      "Nuvarande PHP SDK och wscli är fortfarande tillgängliga för kommandorad och befintliga integrationer. TypeScript- och Python-klienterna tar samma modell till moderna tjänster.",
-    sdks: [
-      {
-        title: "TypeScript SDK",
-        status: "Tillgänglig",
-        href: "https://github.com/isecurefi/isecure-ts-client",
-        text: "För Node.js och browser-nära tjänster som behöver en typad klient, tydliga feltyper och en OpenAPI-anpassad utvecklarupplevelse.",
-      },
-      {
-        title: "Python SDK",
-        status: "Beta",
-        href: "https://github.com/isecurefi/isecure-py-client",
-        text: "Python-klient för registrering, SMS-inloggning, PGP-signaturer samt uppladdning och listning av filer. Se GitHub för installation och aktuell API-täckning.",
-      },
-      {
-        title: "PHP SDK och wscli",
-        status: "Tillgänglig",
-        href: "https://isecurefi.github.io/wscli-php/",
-        text: "Den befintliga PHP-klienten och kommandoradsverktyget stöder nuvarande integrationer, testkörningar och onboarding.",
-      },
-      {
-        title: "OpenAPI",
-        status: "Tillgänglig",
-        href: "/wsapi_v2.json",
-        text: "API-beskrivning, dokumentation och kommandoradsverktyg stöder testning, onboarding och CI/CD-arbetsflöden.",
-      },
-    ],
     banksTitle: "Stödda banker",
     banksEyebrow: "Täckning",
     banks:
@@ -672,7 +511,8 @@ const t = content[lang];
 
 <article class="banking-landing">
   <section class="landing-hero" id="overview">
-    <div class="landing-inner hero-grid">
+    <canvas class="hero-network" aria-hidden="true"></canvas>
+    <div class="landing-inner">
       <div class="hero-copy">
         <p class="eyebrow">{t.eyebrow}</p>
         <h1>{t.title}</h1>
@@ -694,24 +534,9 @@ const t = content[lang];
             data-analytics-source="homepage-hero">{t.secondaryCta}</a
           >
         </div>
-        <div class="proof-strip" aria-label="ISECure proof points">
-          {
-            t.proof.map((item) => (
-              <div class="proof-item">
-                <strong>{item.value}</strong>
-                <span>{item.label}</span>
-                <p>{item.text}</p>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-
-      <div class="terminal-panel" aria-label={t.tsLabel}>
-        <section class="code-sample">
-          <h2>{t.tsLabel}</h2>
-          <pre><code class="hljs language-typescript" set:html={highlightedTsCode} /></pre>
-        </section>
+        <ul class="proof-line" aria-label="ISECure proof points">
+          {t.proof.map((item) => <li>{item}</li>)}
+        </ul>
       </div>
     </div>
   </section>
@@ -763,8 +588,9 @@ const t = content[lang];
     </div>
     <div class="landing-inner quickstart-grid">
       {
-        t.quickstart.map((step) => (
-          <section class="quickstart-card">
+        t.quickstart.map((step, index) => (
+          <section class="quickstart-step">
+            <span class="step-number">{index + 1}</span>
             <h3>{step.title}</h3>
             <p>{step.text}</p>
           </section>
@@ -774,31 +600,34 @@ const t = content[lang];
   </section>
 
   <section class="landing-section bank-section" id="banks">
-    <div class="landing-inner bank-panel">
+    <div class="landing-inner section-heading is-centered">
       <p class="eyebrow">{t.banksEyebrow}</p>
       <h2>{t.banksTitle}</h2>
       <p>{t.banks}</p>
-      <div class="bank-logo-panel">
-        <BankLogos />
-      </div>
+    </div>
+    <div class="bank-logo-panel">
+      <BankLogos />
     </div>
   </section>
 
   <section class="landing-section" id="model">
-    <div class="landing-inner section-heading">
-      <p class="eyebrow">{t.whyEyebrow}</p>
-      <h2>{t.whyTitle}</h2>
-      <p>{t.whyLead}</p>
-    </div>
-    <div class="landing-inner benefit-grid">
-      {
-        t.benefits.map((benefit) => (
-          <section class="benefit-card">
-            <h3>{benefit.title}</h3>
-            <p>{benefit.text}</p>
-          </section>
-        ))
-      }
+    <div class="landing-inner split-sticky">
+      <div class="section-heading sticky-heading">
+        <p class="eyebrow">{t.whyEyebrow}</p>
+        <h2>{t.whyTitle}</h2>
+        <p>{t.whyLead}</p>
+      </div>
+      <div class="benefit-grid">
+        {
+          t.benefits.map((benefit, index) => (
+            <section class="benefit-card">
+              <span class="benefit-icon" set:html={benefitIcons[index]} />
+              <h3>{benefit.title}</h3>
+              <p>{benefit.text}</p>
+            </section>
+          ))
+        }
+      </div>
     </div>
   </section>
 
@@ -830,8 +659,25 @@ const t = content[lang];
           t.flow.map((step, index) => (
             <>
               <div class="flow-step">
-                <span>{index + 1}</span>
-                <strong>{step}</strong>
+                <span class="step-number">{index + 1}</span>
+                <div>
+                  <strong>{step}</strong>
+                  {index === 1 && (
+                    <p class="flow-links">
+                      {sdkLinks.map((sdk) => (
+                        <a
+                          href={sdk.href}
+                          target="_blank"
+                          rel="noopener"
+                          data-analytics-content-type="developer_resource"
+                          data-analytics-source="homepage-architecture"
+                        >
+                          {sdk.title}
+                        </a>
+                      ))}
+                    </p>
+                  )}
+                </div>
               </div>
               {index < t.flow.length - 1 && (
                 <div class="flow-line" aria-hidden="true" />
@@ -843,20 +689,69 @@ const t = content[lang];
           <h3>{t.infrastructureOption.title}</h3>
           <p>{t.infrastructureOption.text}</p>
         </aside>
-        <aside class="flow-callout">
-          <h3>{t.sftpOption.title}</h3>
-          <p>{t.sftpOption.text}</p>
-        </aside>
       </div>
     </div>
   </section>
 
   <section class="landing-section management-app-section" id="management-app">
-    <div class="landing-inner management-app-panel">
-      <div>
-        <p class="eyebrow">{t.managementApp.eyebrow}</p>
+    <div class="landing-inner admin-grid">
+      <div class="admin-copy">
+        <p class="eyebrow">
+          {t.managementApp.eyebrow}
+          <span class="admin-badge">
+            {
+              adminAppRelease.available
+                ? `v${adminAppRelease.version}`
+                : t.managementApp.comingSoon
+            }
+          </span>
+        </p>
         <h2>{t.managementApp.title}</h2>
-        <p>{t.managementApp.text}</p>
+        <p class="admin-lead">{t.managementApp.text}</p>
+        <div class="admin-downloads">
+          {
+            adminAppRelease.available ? (
+              <>
+                <a
+                  class="button button-primary"
+                  href={adminAppRelease.macOS}
+                  data-analytics-content-type="download"
+                  data-analytics-item-id="isecure-admin-macos"
+                  data-analytics-source="homepage-management-app"
+                >
+                  <strong>{t.managementApp.cta} macOS</strong>
+                  <small>Apple Silicon</small>
+                </a>
+                <a
+                  class="button button-secondary"
+                  href={adminAppRelease.windows}
+                  data-analytics-content-type="download"
+                  data-analytics-item-id="isecure-admin-windows"
+                  data-analytics-source="homepage-management-app"
+                >
+                  <strong>{t.managementApp.cta} Windows</strong>
+                  <small>64-bit</small>
+                </a>
+              </>
+            ) : (
+              <>
+                <span class="admin-platform">macOS (Apple Silicon)</span>
+                <span class="admin-platform">Windows (64-bit)</span>
+              </>
+            )
+          }
+        </div>
+        <ul class="admin-trust" aria-label={t.managementApp.platformsLabel}>
+          {
+            [
+              t.managementApp.macSigning,
+              t.managementApp.windowsSigning,
+              t.managementApp.updateSigning,
+            ].map((line) => <li>{line}</li>)
+          }
+        </ul>
+      </div>
+      <div class="admin-visual">
         <AdminAppScreenshots
           accountsCaption={t.managementApp.accountsCaption}
           certificatesCaption={t.managementApp.certificatesCaption}
@@ -864,84 +759,11 @@ const t = content[lang];
           closeLabel={t.managementApp.closeScreenshot}
         />
       </div>
-      <div class="management-app-meta">
-        <p>{t.managementApp.platformsLabel}</p>
-        {
-          adminAppRelease.available ? (
-            <a
-              class="button button-primary"
-              href={adminAppRelease.macOS}
-              data-analytics-content-type="download"
-              data-analytics-item-id="isecure-admin-macos"
-              data-analytics-source="homepage-management-app"
-            >
-              {t.managementApp.cta} — macOS (Apple Silicon)
-            </a>
-          ) : (
-            <button class="button button-primary" type="button" disabled>
-              macOS (Apple Silicon) — {t.managementApp.comingSoon}
-            </button>
-          )
-        }
-
-        <p class="management-app-signing">{t.managementApp.macSigning}</p>
-        {
-          adminAppRelease.available ? (
-            <a
-              class="button button-primary"
-              href={adminAppRelease.windows}
-              data-analytics-content-type="download"
-              data-analytics-item-id="isecure-admin-windows"
-              data-analytics-source="homepage-management-app"
-            >
-              {t.managementApp.cta} — Windows (64-bit)
-            </a>
-          ) : (
-            <button class="button button-primary" type="button" disabled>
-              Windows (64-bit) — {t.managementApp.comingSoon}
-            </button>
-          )
-        }
-
-        <p class="management-app-signing">{t.managementApp.windowsSigning}</p>
-      </div>
-      <p class="management-app-update-signing">
-        {t.managementApp.updateSigning}
-      </p>
-    </div>
-  </section>
-
-  <section class="landing-section sdk-section" id="sdks">
-    <div class="landing-inner section-heading">
-      <p class="eyebrow">{t.sdkEyebrow}</p>
-      <h2>{t.sdkTitle}</h2>
-      <p>{t.sdkLead}</p>
-    </div>
-    <div class="landing-inner sdk-grid">
-      {
-        t.sdks.map((sdk) => (
-          <section class="sdk-card">
-            <div>
-              <h3>
-                {sdk.href ? (
-                  <a href={sdk.href} target="_blank" rel="noopener">
-                    {sdk.title}
-                  </a>
-                ) : (
-                  sdk.title
-                )}
-              </h3>
-              <span>{sdk.status}</span>
-            </div>
-            <p>{sdk.text}</p>
-          </section>
-        ))
-      }
     </div>
   </section>
 
   <section class="landing-section pricing-section" id="pricing">
-    <div class="landing-inner section-heading">
+    <div class="landing-inner section-heading is-centered">
       <p class="eyebrow">{t.pricingEyebrow}</p>
       <h2>{t.pricingTitle}</h2>
       <p>{t.pricingLead}</p>
@@ -991,10 +813,13 @@ const t = content[lang];
   </section>
 
   <section class="landing-section faq-section" id="faq">
-    <div class="landing-inner">
-      <p class="eyebrow">{t.faqEyebrow}</p>
-      <h2>{t.faqTitle}</h2>
-      <div class="faq-grid">
+    <div class="landing-inner split-sticky">
+      <div class="section-heading sticky-heading">
+        <p class="eyebrow">{t.faqEyebrow}</p>
+        <h2>{t.faqTitle}</h2>
+        <a class="faq-contact" href="#contact">{t.pricingContactCta} →</a>
+      </div>
+      <div class="faq-list">
         {
           t.faqs.map((faq) => (
             <details>
@@ -1007,6 +832,225 @@ const t = content[lang];
     </div>
   </section>
 </article>
+
+<script>
+  // One API, all the banks: payment files flow from the secured hub to every
+  // bank, statements flow back, and lanes near the pointer light up.
+  // The navigation bar is transparent over the hero and solid once scrolled.
+  const navbar = document.querySelector(".navbar");
+  const syncNavbar = () =>
+    navbar?.classList.toggle("is-scrolled", window.scrollY > 24);
+  window.addEventListener("scroll", syncNavbar, { passive: true });
+  syncNavbar();
+
+  type Point = { x: number; y: number };
+  const canvas = document.querySelector<HTMLCanvasElement>(".hero-network");
+  const hero = canvas?.parentElement;
+  const ctx = canvas?.getContext("2d");
+  if (canvas && hero && ctx) {
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    const BANKS = 9;
+    const packets = Array.from({ length: BANKS * 2 }, (_, i) => ({
+      lane: i % BANKS,
+      outbound: i < BANKS,
+      t: (i * 0.37) % 1,
+      speed: 0.07 + ((i * 7) % 5) * 0.012,
+    }));
+    const flash = new Float32Array(BANKS);
+    const pointer = { y: 0.5, active: 0 };
+    const smooth = { y: 0.5, active: 0 };
+    let width = 0;
+    let height = 0;
+    let colors = { accent: "#4fd1c5", blue: "#8ab4ff" };
+    let frameId = 0;
+    let last = 0;
+    let elapsed = 0;
+    let visible = true;
+
+    const readColors = () => {
+      const style = getComputedStyle(hero);
+      colors = {
+        accent:
+          style.getPropertyValue("--landing-accent").trim() || colors.accent,
+        blue: style.getPropertyValue("--landing-blue").trim() || colors.blue,
+      };
+    };
+
+    const resize = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      width = hero.clientWidth;
+      height = hero.clientHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw(0);
+    };
+
+    const geometry = () => {
+      const wide = width >= 980;
+      const hub = { x: width * (wide ? 0.7 : 0.66), y: height * 0.5 };
+      const bankX = width * (wide ? 0.95 : 0.97);
+      const banks = Array.from({ length: BANKS }, (_, i) => ({
+        x: bankX - Math.abs(i - (BANKS - 1) / 2) * width * 0.012,
+        y: height * (0.1 + (0.8 * i) / (BANKS - 1)),
+      }));
+      return { hub, banks };
+    };
+
+    const point = (hub: Point, bank: Point, t: number): Point => {
+      // Cubic Bézier: leaves the hub horizontally, arrives at the bank horizontally.
+      const mx = hub.x + (bank.x - hub.x) * 0.5;
+      const u = 1 - t;
+      return {
+        x:
+          u * u * u * hub.x +
+          3 * u * u * t * mx +
+          3 * u * t * t * mx +
+          t * t * t * bank.x,
+        y:
+          u * u * u * hub.y +
+          3 * u * u * t * hub.y +
+          3 * u * t * t * bank.y +
+          t * t * t * bank.y,
+      };
+    };
+
+    const roundRect = (
+      x: number,
+      y: number,
+      w: number,
+      h: number,
+      r: number,
+    ) => {
+      ctx.beginPath();
+      ctx.roundRect(x - w / 2, y - h / 2, w, h, r);
+    };
+
+    function draw(delta: number) {
+      const { hub, banks } = geometry();
+      const blend = 1 - Math.exp(-delta / 180);
+      smooth.y += (pointer.y - smooth.y) * blend;
+      smooth.active += (pointer.active - smooth.active) * blend;
+      ctx.clearRect(0, 0, width, height);
+      ctx.lineCap = "round";
+
+      banks.forEach((bank, i) => {
+        const distance = (bank.y / height - smooth.y) * BANKS;
+        const glow = Math.exp((-distance * distance) / 2) * smooth.active;
+        flash[i] = Math.max(0, flash[i] - delta / 900);
+        const mx = hub.x + (bank.x - hub.x) * 0.5;
+        ctx.globalAlpha = 0.16 + glow * 0.5 + flash[i] * 0.3;
+        ctx.strokeStyle = colors.accent;
+        ctx.lineWidth = 1.2 + glow;
+        ctx.beginPath();
+        ctx.moveTo(hub.x, hub.y);
+        ctx.bezierCurveTo(mx, hub.y, mx, bank.y, bank.x, bank.y);
+        ctx.stroke();
+
+        ctx.globalAlpha = 0.45 + glow * 0.4 + flash[i] * 0.4;
+        ctx.fillStyle = colors.accent;
+        ctx.beginPath();
+        ctx.arc(bank.x, bank.y, 4.5 + flash[i] * 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      packets.forEach((packet) => {
+        packet.t += (packet.speed * delta) / 1000;
+        if (packet.t >= 1) {
+          packet.t -= 1;
+          if (packet.outbound) flash[packet.lane] = 1;
+        }
+        const t = packet.outbound ? packet.t : 1 - packet.t;
+        const { x, y } = point(hub, banks[packet.lane], t);
+        const fade = Math.min(1, packet.t * 8, (1 - packet.t) * 8);
+        ctx.globalAlpha = 0.85 * fade;
+        roundRect(x, y, 11, 8, 2);
+        if (packet.outbound) {
+          ctx.fillStyle = colors.accent;
+          ctx.fill();
+        } else {
+          ctx.strokeStyle = colors.blue;
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+        }
+      });
+
+      // Hardened hub: a shield that breathes slowly.
+      const pulse = (elapsed / 2600) % 1;
+      ctx.globalAlpha = 0.35 * (1 - pulse);
+      ctx.strokeStyle = colors.accent;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(hub.x, hub.y, 26 + pulse * 34, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = colors.accent;
+      ctx.beginPath();
+      ctx.moveTo(hub.x, hub.y - 20);
+      ctx.lineTo(hub.x + 16, hub.y - 13);
+      ctx.quadraticCurveTo(hub.x + 16, hub.y + 10, hub.x, hub.y + 20);
+      ctx.quadraticCurveTo(hub.x - 16, hub.y + 10, hub.x - 16, hub.y - 13);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(hub.x, hub.y - 3, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillRect(hub.x - 1.75, hub.y - 1, 3.5, 9);
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    const frame = (time: number) => {
+      const delta = last ? Math.min(time - last, 50) : 16;
+      last = time;
+      elapsed += delta;
+      draw(delta);
+      frameId = requestAnimationFrame(frame);
+    };
+
+    const sync = () => {
+      cancelAnimationFrame(frameId);
+      frameId = 0;
+      last = 0;
+      if (!reducedMotion.matches && visible && !document.hidden) {
+        frameId = requestAnimationFrame(frame);
+      } else {
+        pointer.active = smooth.active = 0;
+        draw(0);
+      }
+    };
+
+    document.addEventListener(
+      "pointermove",
+      (event) => {
+        const bounds = hero.getBoundingClientRect();
+        pointer.active = Number(
+          event.clientY >= bounds.top && event.clientY <= bounds.bottom,
+        );
+        pointer.y = (event.clientY - bounds.top) / bounds.height;
+      },
+      { passive: true },
+    );
+    new ResizeObserver(resize).observe(hero);
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    }).observe(hero);
+    new MutationObserver(() => {
+      readColors();
+      draw(0);
+    }).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-isecure-theme"],
+    });
+    reducedMotion.addEventListener("change", sync);
+    document.addEventListener("visibilitychange", sync);
+    readColors();
+    resize();
+    sync();
+  }
+</script>
 
 <style>
   :global(html.banking-theme-root),
@@ -1025,23 +1069,33 @@ const t = content[lang];
     --landing-card: #101c25;
     --landing-card-strong: #142633;
     --landing-hero-bg:
+      linear-gradient(180deg, transparent 60%, #071116),
       radial-gradient(
         circle at 18% 12%,
         rgba(79, 209, 197, 0.2),
         transparent 34%
       ),
+      radial-gradient(
+        circle at 80% 55%,
+        rgba(138, 180, 255, 0.12),
+        transparent 40%
+      ),
       linear-gradient(120deg, #071116 0%, #0c1825 54%, #071116 100%);
-    --landing-code-bg: #09131b;
-    --landing-code-ink: #d8f6f1;
-    --landing-code-muted: #a8b6c2;
-    --landing-code-line: rgba(255, 255, 255, 0.12);
-    --landing-code-head: rgba(255, 255, 255, 0.05);
-    --landing-code-keyword: #8ab4ff;
-    --landing-code-string: #8ee8c8;
-    --landing-code-title: #ffd166;
-    --landing-code-property: #c3e88d;
-    --landing-code-number: #ffb86c;
-    --landing-code-comment: #7a8794;
+    --landing-hero-grid: rgba(255, 255, 255, 0.05);
+    --landing-band: linear-gradient(
+      180deg,
+      var(--landing-bg),
+      var(--landing-soft) 140px,
+      var(--landing-soft) calc(100% - 140px),
+      var(--landing-bg)
+    );
+    --landing-footer-bg:
+      radial-gradient(
+        circle at 85% 0%,
+        rgba(79, 209, 197, 0.12),
+        transparent 45%
+      ),
+      linear-gradient(120deg, #0b1820 0%, #0e1d2b 100%);
   }
 
   :global(html.banking-theme-root[data-isecure-theme="light"]),
@@ -1049,7 +1103,7 @@ const t = content[lang];
     --landing-ink: #12212f;
     --landing-muted: #526173;
     --landing-line: #dce5ea;
-    --landing-soft: #f4f8f9;
+    --landing-soft: #edf3f5;
     --landing-accent: #006f6a;
     --landing-accent-strong: #005a56;
     --landing-primary-bg: #b8eee7;
@@ -1060,19 +1114,26 @@ const t = content[lang];
     --landing-card: #ffffff;
     --landing-card-strong: #f8fbfc;
     --landing-hero-bg:
-      linear-gradient(120deg, rgba(0, 111, 106, 0.12), rgba(23, 78, 166, 0.08)),
-      #f8fbfc;
-    --landing-code-bg: #f8fbfc;
-    --landing-code-ink: #13212d;
-    --landing-code-muted: #64748b;
-    --landing-code-line: #dce5ea;
-    --landing-code-head: #edf4f6;
-    --landing-code-keyword: #174ea6;
-    --landing-code-string: #007a5a;
-    --landing-code-title: #9a5b00;
-    --landing-code-property: #006f6a;
-    --landing-code-number: #a33b00;
-    --landing-code-comment: #647386;
+      linear-gradient(180deg, transparent 60%, #ffffff),
+      radial-gradient(
+        circle at 14% 16%,
+        rgba(0, 111, 106, 0.16),
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 80% 55%,
+        rgba(23, 78, 166, 0.12),
+        transparent 42%
+      ),
+      linear-gradient(120deg, #edf6f5 0%, #f6f9fc 55%, #edf2fb 100%);
+    --landing-hero-grid: rgba(18, 33, 47, 0.06);
+    --landing-footer-bg:
+      radial-gradient(
+        circle at 85% 0%,
+        rgba(23, 78, 166, 0.08),
+        transparent 45%
+      ),
+      linear-gradient(120deg, #e7f3f1 0%, #eef3fa 100%);
   }
 
   .banking-landing {
@@ -1201,23 +1262,23 @@ const t = content[lang];
     box-shadow: none;
   }
 
-  :global(body.banking-theme-page .footer) {
-    background: var(--landing-card) !important;
-    border-top: 0;
-    color: var(--landing-muted);
-    box-shadow: none;
-  }
-
-  :global(body.banking-theme-page .footer strong),
   :global(body.banking-theme-page .footer span),
   :global(body.banking-theme-page .footer p) {
     color: var(--landing-muted) !important;
+  }
+
+  :global(body.banking-theme-page .footer .footer-col-title) {
+    color: var(--landing-accent) !important;
   }
 
   :global(body.banking-theme-page .footer strong),
   :global(body.banking-theme-page .footer a),
   :global(body.banking-theme-page .footer button) {
     color: var(--landing-ink) !important;
+  }
+
+  :global(body.banking-theme-page .footer a:hover) {
+    color: var(--landing-accent) !important;
   }
 
   :global(body.banking-theme-page .footer-logo img) {
@@ -1235,10 +1296,36 @@ const t = content[lang];
   .landing-hero {
     background: var(--landing-hero-bg);
     border-bottom: 0;
-    padding: 72px 0 54px;
+    isolation: isolate;
+    overflow: hidden;
+    position: relative;
+    /* Extends up behind the fixed 56px navigation bar. */
+    margin-top: -56px;
+    padding: 128px 0 54px;
   }
 
-  .hero-grid,
+  .landing-hero::before {
+    background-image:
+      linear-gradient(var(--landing-hero-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--landing-hero-grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    content: "";
+    inset: 0;
+    mask-image: radial-gradient(ellipse at 75% 50%, #000, transparent 70%);
+    pointer-events: none;
+    position: absolute;
+    z-index: -2;
+  }
+
+  .hero-network {
+    height: 100%;
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+  }
+
   .split-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.04fr) minmax(360px, 0.96fr);
@@ -1246,7 +1333,8 @@ const t = content[lang];
     align-items: center;
   }
 
-  .eyebrow {
+  .eyebrow,
+  .banking-landing .eyebrow {
     color: var(--landing-accent);
     font-size: 0.78rem;
     font-weight: 800;
@@ -1279,10 +1367,10 @@ const t = content[lang];
 
   .lead {
     color: var(--landing-muted);
-    font-size: 1.16rem;
-    line-height: 1.72;
+    font-size: clamp(1.2rem, 1.55vw, 1.38rem);
+    line-height: 1.6;
     margin: 24px 0 0;
-    max-width: 740px;
+    max-width: 780px;
   }
 
   .hero-icp {
@@ -1336,152 +1424,57 @@ const t = content[lang];
     color: var(--landing-accent);
   }
 
-  .proof-strip {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0;
-    margin-top: 28px;
-    max-width: 720px;
-  }
-
-  .proof-item {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.04),
-        rgba(255, 255, 255, 0.01)
-      ),
-      var(--landing-card);
-    border: 1px solid var(--landing-line);
-    border-left: 0;
-    min-height: 158px;
-    min-width: 0;
-    padding: 20px 18px;
-  }
-
-  .proof-item:first-child {
-    border-left: 1px solid var(--landing-line);
-    border-radius: 8px 0 0 8px;
-  }
-
-  .proof-item:last-child {
-    border-radius: 0 8px 8px 0;
-  }
-
-  .proof-item strong {
-    color: var(--landing-accent);
-    display: block;
-    font-size: clamp(1.18rem, 1.55vw, 1.55rem);
-    line-height: 1.2;
-    overflow-wrap: normal;
-    word-break: normal;
-  }
-
-  .proof-item span {
-    color: var(--landing-ink);
-    display: block;
-    font-weight: 800;
-    line-height: 1.3;
-    margin-top: 6px;
-  }
-
-  .proof-item p {
+  .proof-line {
     color: var(--landing-muted);
-    font-size: 0.92rem;
-    line-height: 1.55;
-    margin: 10px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+    font-weight: 650;
+    gap: 6px 22px;
+    list-style: none;
+    margin: 28px 0 0;
+    max-width: 760px;
+    padding: 0;
   }
 
-  .terminal-panel {
-    background: var(--landing-code-bg);
-    border: 1px solid var(--landing-code-line);
-    border-radius: 8px;
-    box-shadow: 0 22px 70px rgba(16, 24, 32, 0.22);
-    color: var(--landing-code-ink);
-    overflow: hidden;
+  .proof-line li {
+    align-items: center;
+    display: inline-flex;
+    gap: 8px;
   }
 
-  .code-sample {
-    min-width: 0;
-  }
-
-  .code-sample h2 {
-    background: var(--landing-code-head);
-    color: var(--landing-code-ink);
-    font-size: 0.86rem;
-    margin: 0;
-    padding: 12px 22px;
-  }
-
-  pre {
-    margin: 0;
-    overflow: visible;
-    padding: 22px;
-  }
-
-  code {
-    color: var(--landing-code-ink);
-    font-size: 0.88rem;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  .code-sample :global(.hljs-keyword) {
-    color: var(--landing-code-keyword);
-    font-weight: 700;
-  }
-
-  .code-sample :global(.hljs-string) {
-    color: var(--landing-code-string);
-  }
-
-  .code-sample :global(.hljs-title),
-  .code-sample :global(.hljs-title.class_),
-  .code-sample :global(.hljs-title.function_) {
-    color: var(--landing-code-title);
-  }
-
-  .code-sample :global(.hljs-attr),
-  .code-sample :global(.hljs-property) {
-    color: var(--landing-code-property);
-  }
-
-  .code-sample :global(.hljs-number),
-  .code-sample :global(.hljs-literal) {
-    color: var(--landing-code-number);
-  }
-
-  .code-sample :global(.hljs-comment) {
-    color: var(--landing-code-comment);
+  .proof-line li::before {
+    background: var(--landing-accent);
+    border-radius: 50%;
+    content: "";
+    flex: none;
+    height: 6px;
+    width: 6px;
   }
 
   .landing-section {
     padding: 74px 0;
-    scroll-margin-top: 86px;
+    scroll-margin-top: 66px;
   }
 
   .landing-hero,
   :global(#contact) {
-    scroll-margin-top: 86px;
+    scroll-margin-top: 66px;
   }
 
-  .section-heading {
+  .section-heading > * {
     max-width: 780px;
   }
 
   .section-heading h2,
-  .split-grid h2,
-  .bank-panel h2,
-  .faq-section h2 {
+  .split-grid h2 {
     font-size: clamp(1.9rem, 3vw, 3rem);
     line-height: 1.08;
     margin: 0;
   }
 
-  .section-heading p,
-  .split-grid p,
-  .bank-panel p {
+  .section-heading p:not(.eyebrow),
+  .split-grid p:not(.eyebrow) {
     color: var(--landing-muted);
     font-size: 1.06rem;
     line-height: 1.75;
@@ -1489,16 +1482,13 @@ const t = content[lang];
   }
 
   .benefit-grid,
-  .quickstart-grid,
-  .sdk-grid,
-  .faq-grid {
+  .quickstart-grid {
     display: grid;
-    gap: 18px;
-    margin-top: 30px;
+    gap: 32px;
+    margin-top: 40px;
   }
 
-  .quickstart-grid,
-  .benefit-grid {
+  .quickstart-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -1506,60 +1496,114 @@ const t = content[lang];
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .quickstart-card,
-  .benefit-card,
-  .sdk-card,
-  details,
-  .bank-panel {
-    background: var(--landing-card);
-    border: 1px solid var(--landing-line);
-    border-radius: 8px;
+  .quickstart-step,
+  .benefit-card {
+    position: relative;
   }
 
-  .quickstart-card,
-  .benefit-card,
-  .sdk-card {
-    padding: 22px;
+  .quickstart-step:not(:last-child)::after {
+    background: linear-gradient(90deg, var(--landing-accent), transparent);
+    content: "";
+    height: 1px;
+    left: 58px;
+    opacity: 0.45;
+    position: absolute;
+    right: -20px;
+    top: 21px;
   }
 
-  .quickstart-card h3,
-  .benefit-card h3,
-  .sdk-card h3 {
-    font-size: 1.08rem;
-    margin: 0 0 10px;
+  .quickstart-step h3,
+  .benefit-card h3 {
+    font-size: 1.12rem;
+    line-height: 1.3;
+    margin: 18px 0 8px;
   }
 
-  .sdk-card h3 a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .sdk-card h3 a:hover {
-    color: var(--landing-accent);
-  }
-
-  .quickstart-card p,
-  .benefit-card p,
-  .sdk-card p {
+  .quickstart-step p,
+  .benefit-card p {
     color: var(--landing-muted);
+    line-height: 1.65;
     margin: 0;
   }
 
-  .quickstart-section {
-    background: var(--landing-bg);
-    border-bottom: 1px solid var(--landing-line);
+  .benefit-icon {
+    align-items: center;
+    background: rgba(79, 209, 197, 0.14);
+    border-radius: 12px;
+    color: var(--landing-accent);
+    display: inline-flex;
+    height: 46px;
+    justify-content: center;
+    width: 46px;
   }
 
+  .benefit-icon :global(svg) {
+    fill: none;
+    height: 24px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+    width: 24px;
+  }
+
+  /* Alternating bands: white after the hero, then soft/white down the page. */
   .references-section {
-    background: var(--landing-soft);
-    border-bottom: 1px solid var(--landing-line);
-    padding: 52px 0;
+    background: var(--landing-bg);
+    padding: 40px 0 56px;
   }
 
-  .architecture-section {
-    background: var(--landing-soft);
-    border-bottom: 1px solid var(--landing-line);
-    border-top: 1px solid var(--landing-line);
+  .bank-section,
+  .architecture-section,
+  .pricing-section {
+    background: var(--landing-band);
+  }
+
+  /* Centred headings break up the left-aligned rhythm. */
+  .section-heading.is-centered {
+    text-align: center;
+  }
+
+  .section-heading.is-centered > *,
+  .section-heading.is-centered > p:not(.eyebrow) {
+    margin-inline: auto;
+  }
+
+  /* Heading pinned on the left while the content scrolls on the right. */
+  .split-sticky {
+    align-items: start;
+    display: grid;
+    gap: 64px;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+
+  .sticky-heading {
+    position: sticky;
+    top: 96px;
+  }
+
+  .split-sticky .benefit-grid {
+    gap: 40px 36px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 0;
+  }
+
+  .faq-contact {
+    color: var(--landing-accent);
+    display: inline-block;
+    font-weight: 700;
+    margin-top: 22px;
+    text-decoration: none;
+  }
+
+  .faq-contact:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Diagram on the left here, so it alternates with the admin section below. */
+  .architecture-section .split-grid > :first-child {
+    order: 2;
   }
 
   .flow-panel {
@@ -1573,87 +1617,133 @@ const t = content[lang];
     margin-top: 24px;
   }
 
+  /* Keeps the glow behind the app windows from widening the page. */
   .management-app-section {
-    background: var(--landing-bg);
-    padding: 52px 0;
+    overflow-x: clip;
   }
 
-  .management-app-panel {
+  .admin-grid {
     align-items: center;
-    background:
-      linear-gradient(
-        135deg,
-        rgba(79, 209, 197, 0.12),
-        rgba(138, 180, 255, 0.1)
-      ),
-      var(--landing-card);
-    border: 1px solid var(--landing-line);
-    border-radius: 8px;
     display: grid;
-    gap: 36px;
-    grid-template-columns: minmax(0, 1fr) auto;
-    padding: 32px;
+    gap: 56px;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   }
 
-  .management-app-panel h2 {
-    font-size: clamp(1.65rem, 2.7vw, 2.5rem);
-    line-height: 1.1;
-    margin: 0;
-  }
-
-  .management-app-panel > div:first-child > p:not(.eyebrow) {
-    color: var(--landing-muted);
-    font-size: 1.02rem;
-    line-height: 1.7;
-    margin: 16px 0 0;
-    max-width: 760px;
-  }
-
-  .management-app-meta {
-    align-items: flex-end;
+  .admin-copy .eyebrow {
+    align-items: center;
     display: flex;
-    flex-direction: column;
-    gap: 18px;
+    gap: 10px;
   }
 
-  .management-app-meta button:disabled {
-    cursor: default;
-    opacity: 0.65;
-  }
-
-  .management-app-signing {
-    color: var(--landing-muted);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    margin: -8px 0 0;
-    max-width: 340px;
-  }
-
-  .management-app-update-signing {
-    grid-column: 1 / -1;
-    color: var(--landing-muted);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    margin: 0;
-    padding-top: 16px;
-    border-top: 1px solid var(--landing-line);
-  }
-
-  .platform-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-
-  .platform-list span {
-    background: var(--landing-soft);
-    border: 1px solid var(--landing-line);
+  .admin-badge {
+    background: rgba(79, 209, 197, 0.16);
     border-radius: 999px;
-    color: var(--landing-ink);
-    font-size: 0.82rem;
-    font-weight: 800;
-    padding: 6px 10px;
+    color: var(--landing-accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    padding: 3px 9px;
+    text-transform: none;
+  }
+
+  .admin-copy h2 {
+    font-size: clamp(1.9rem, 3vw, 3rem);
+    line-height: 1.08;
+    margin: 0;
+  }
+
+  .admin-lead {
+    color: var(--landing-muted);
+    font-size: 1.06rem;
+    line-height: 1.75;
+    margin: 18px 0 0;
+  }
+
+  .admin-downloads {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 28px;
+    max-width: 460px;
+  }
+
+  .admin-downloads .button {
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.25;
+    min-height: 58px;
+    padding: 8px 16px;
+  }
+
+  .admin-downloads small {
+    font-size: 0.78rem;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  .admin-platform {
+    text-align: center;
+  }
+
+  .admin-platform {
+    border: 1px dashed var(--landing-line);
+    border-radius: 8px;
+    color: var(--landing-muted);
+    font-weight: 700;
+    padding: 10px 16px;
+  }
+
+  .admin-trust {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+  }
+
+  .admin-trust li {
+    color: var(--landing-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding-left: 28px;
+    position: relative;
+  }
+
+  /* Shield-check glyph drawn with a mask so it follows the accent colour. */
+  .admin-trust li::before {
+    background: var(--landing-accent);
+    content: "";
+    height: 18px;
+    left: 0;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    position: absolute;
+    top: 2px;
+    width: 18px;
+  }
+
+  .admin-visual {
+    position: relative;
+  }
+
+  /* Soft brand glow behind the app windows instead of a boxed panel. */
+  .admin-visual::before {
+    background:
+      radial-gradient(
+        circle at 60% 40%,
+        rgba(79, 209, 197, 0.22),
+        transparent 60%
+      ),
+      radial-gradient(
+        circle at 30% 80%,
+        rgba(138, 180, 255, 0.18),
+        transparent 55%
+      );
+    content: "";
+    filter: blur(8px);
+    inset: -40px;
+    pointer-events: none;
+    position: absolute;
+    z-index: -1;
   }
 
   .flow-step {
@@ -1663,12 +1753,27 @@ const t = content[lang];
     gap: 14px;
   }
 
-  .flow-step span {
-    align-items: center;
-    background: rgba(79, 209, 197, 0.12);
-    border: 1px solid rgba(79, 209, 197, 0.32);
-    border-radius: 999px;
+  .flow-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin: 6px 0 0;
+  }
+
+  .flow-links a {
     color: var(--landing-accent);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .step-number,
+  .flow-step .step-number {
+    align-items: center;
+    background: var(--landing-accent);
+    border-radius: 999px;
+    box-shadow: 0 0 0 6px rgba(79, 209, 197, 0.16);
+    color: var(--landing-bg);
     display: inline-flex;
     font-weight: 800;
     height: 42px;
@@ -1702,70 +1807,34 @@ const t = content[lang];
     margin: 0;
   }
 
-  .sdk-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .sdk-card div {
-    align-items: start;
-    display: flex;
-    gap: 12px;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
-  .sdk-card span {
-    background: rgba(138, 180, 255, 0.14);
-    border-radius: 999px;
-    color: var(--landing-blue);
-    flex: 0 0 auto;
-    font-size: 0.76rem;
-    font-weight: 800;
-    padding: 5px 9px;
-  }
-
-  .bank-section {
-    background: var(--landing-bg);
-  }
-
   .bank-logo-panel {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--landing-line);
-    border-radius: 8px;
-    margin-top: 24px;
-    padding: 22px;
+    margin-top: 40px;
   }
 
   .bank-section :global(.bank-icon) {
+    filter: grayscale(1);
     max-height: 46px;
+    opacity: 0.75;
+    transition:
+      filter 0.2s,
+      opacity 0.2s,
+      transform 0.2s;
   }
 
-  .bank-panel {
-    background:
-      linear-gradient(
-        135deg,
-        rgba(79, 209, 197, 0.12),
-        rgba(138, 180, 255, 0.1)
-      ),
-      var(--landing-card);
-    padding: 36px;
+  .bank-section :global(.bank-logo-tile) {
+    border-color: transparent;
   }
 
-  .pricing-section {
-    background: var(--landing-soft);
-    border-top: 1px solid var(--landing-line);
+  .bank-section :global(.bank-logo-tile:hover .bank-icon) {
+    filter: none;
+    opacity: 1;
   }
 
   .pricing-panel {
-    background:
-      linear-gradient(
-        135deg,
-        rgba(79, 209, 197, 0.12),
-        rgba(138, 180, 255, 0.1)
-      ),
-      var(--landing-card);
+    background: var(--landing-card);
     border: 1px solid var(--landing-line);
-    border-radius: 8px;
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(16, 24, 32, 0.08);
     display: grid;
     gap: 40px;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1856,40 +1925,94 @@ const t = content[lang];
     margin: 10px 0 0;
   }
 
-  .faq-section {
-    background: var(--landing-soft);
+  .faq-list {
+    margin-top: 0;
+  }
+
+  .faq-list details {
+    border-bottom: 1px solid var(--landing-line);
+    max-width: 880px;
+  }
+
+  .faq-list details:first-child {
     border-top: 1px solid var(--landing-line);
   }
 
-  .faq-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  details {
-    padding: 18px 20px;
-  }
-
   summary {
+    align-items: center;
     cursor: pointer;
-    font-weight: 800;
+    display: flex;
+    font-size: 1.08rem;
+    font-weight: 750;
+    gap: 24px;
+    justify-content: space-between;
+    list-style: none;
+    padding: 22px 0;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    color: var(--landing-accent);
+    content: "+";
+    flex: none;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    transition: transform 0.2s;
+  }
+
+  details[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  summary:hover {
+    color: var(--landing-accent);
   }
 
   details p {
     color: var(--landing-muted);
-    margin: 14px 0 0;
+    line-height: 1.7;
+    margin: 0 0 22px;
+    max-width: 780px;
   }
 
   @media (max-width: 980px) {
-    .hero-grid,
+    .split-sticky {
+      gap: 32px;
+      grid-template-columns: 1fr;
+    }
+
+    .sticky-heading {
+      position: static;
+    }
+
+    .architecture-section .split-grid > :first-child {
+      order: 0;
+    }
+
+    .admin-grid {
+      gap: 40px;
+      grid-template-columns: 1fr;
+    }
+
+    .hero-network {
+      opacity: 0.2;
+    }
+
     .split-grid {
       grid-template-columns: 1fr;
     }
 
     .benefit-grid,
-    .quickstart-grid,
-    .sdk-grid,
-    .faq-grid {
+    .quickstart-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .quickstart-step::after {
+      display: none;
     }
 
     .pricing-panel {
@@ -1907,63 +2030,21 @@ const t = content[lang];
       padding: 48px 0;
     }
 
-    .proof-strip,
+    .landing-hero {
+      padding-top: 104px;
+    }
+
     .quickstart-grid,
-    .benefit-grid,
-    .sdk-grid,
-    .faq-grid {
+    .benefit-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .split-sticky .benefit-grid,
+    .admin-downloads {
       grid-template-columns: 1fr;
     }
 
     .pricing-panel {
-      padding: 24px;
-    }
-
-    .management-app-panel {
-      grid-template-columns: 1fr;
-      padding: 24px;
-    }
-
-    .management-app-meta {
-      align-items: flex-start;
-    }
-
-    .platform-list {
-      justify-content: flex-start;
-    }
-
-    .proof-item,
-    .proof-item:first-child,
-    .proof-item:last-child {
-      border: 1px solid var(--landing-line);
-      border-radius: 0;
-    }
-
-    .proof-item + .proof-item {
-      border-top: 0;
-    }
-
-    .proof-item:first-child {
-      border-radius: 8px 8px 0 0;
-    }
-
-    .proof-item:last-child {
-      border-radius: 0 0 8px 8px;
-    }
-
-    .terminal-panel {
-      border-radius: 6px;
-    }
-
-    pre {
-      padding: 18px;
-    }
-
-    code {
-      font-size: 0.78rem;
-    }
-
-    .bank-panel {
       padding: 24px;
     }
   }

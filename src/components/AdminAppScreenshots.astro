@@ -113,55 +113,91 @@ const screenshots = [
 
 <style>
   .admin-screenshots {
-    margin-top: 24px;
+    margin: 0;
   }
+  /* Two overlapping desktop windows: the larger one behind, the second in front. */
   .screenshot-cards {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    max-width: 480px;
+    padding-bottom: 22%;
+    position: relative;
   }
   .screenshot-card {
     appearance: none;
-    padding: 0;
-    text-align: left;
-    cursor: zoom-in;
-    border: 1px solid var(--landing-line);
-    border-radius: 8px;
-    overflow: hidden;
     background: var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(16, 24, 32, 0.16);
     color: var(--landing-ink);
+    cursor: zoom-in;
+    display: block;
     font: inherit;
+    margin-left: auto;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    text-align: left;
+    transition:
+      box-shadow 0.2s,
+      transform 0.2s;
+    width: 88%;
+  }
+  .screenshot-card + .screenshot-card {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    width: 60%;
+  }
+  /* Window title bar with traffic-light dots. */
+  .screenshot-card::before {
+    background:
+      radial-gradient(circle at 14px 50%, #ff5f57 4px, transparent 4.5px),
+      radial-gradient(circle at 30px 50%, #febc2e 4px, transparent 4.5px),
+      radial-gradient(circle at 46px 50%, #28c840 4px, transparent 4.5px),
+      var(--landing-soft);
+    border-bottom: 1px solid var(--landing-line);
+    content: "";
+    display: block;
+    height: 26px;
   }
   .screenshot-card:hover {
-    border-color: var(--landing-ink);
+    box-shadow: 0 30px 70px rgba(16, 24, 32, 0.24);
+    transform: translateY(-4px);
+    z-index: 1;
   }
   .screenshot-card:focus-visible,
   .screenshot-close:focus-visible,
   .screenshot-viewport:focus-visible {
-    outline: 2px solid var(--landing-ink);
+    outline: 2px solid var(--landing-accent, var(--landing-ink));
     outline-offset: 3px;
   }
   .screenshot-card img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: contain;
+    aspect-ratio: 16 / 10;
     background: #f3f5f9;
-  }
-  .screenshot-card span {
     display: block;
-    padding: 10px 12px;
-    font-size: 0.85rem;
-    line-height: 1.4;
+    height: auto;
+    object-fit: cover;
+    object-position: top left;
+    width: 100%;
+  }
+  /* The caption is the window title, centred in the title bar. */
+  .screenshot-card span {
+    color: var(--landing-muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+    left: 60px;
+    line-height: 26px;
+    overflow: hidden;
+    position: absolute;
+    right: 60px;
+    text-align: center;
+    text-overflow: ellipsis;
+    top: 0;
+    white-space: nowrap;
   }
   .screenshot-note {
     color: var(--landing-muted);
     font-size: 0.8rem;
     line-height: 1.5;
-    margin: 10px 0 0;
-    max-width: 480px;
+    margin: 18px 0 0;
   }
   .screenshot-dialog {
     box-sizing: border-box;

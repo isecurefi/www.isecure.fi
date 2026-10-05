@@ -252,11 +252,6 @@ export const translations = {
       fi: "Pankit",
       se: "Banker",
     },
-    sdk: {
-      en: "SDKs",
-      fi: "SDK:t",
-      se: "SDK:er",
-    },
     pricing: {
       en: "Pricing",
       fi: "Hinnat",
@@ -270,9 +265,9 @@ export const translations = {
   },
   references: {
     title: {
-      fi: "Yli 10 vuotta luotettavia pankkiyhteyksiä suomalaisille ohjelmistoille",
-      en: "Over 10 years of reliable bank connectivity for Finnish software",
-      se: "Över 10 år av tillförlitliga bankförbindelser för finländska programvaror",
+      fi: "Yli 10 vuotta luotettavia pankkiyhteyksiä",
+      en: "Over 10 years of reliable bank connectivity",
+      se: "Över 10 år av tillförlitliga bankförbindelser",
     },
   },
   quote: {
