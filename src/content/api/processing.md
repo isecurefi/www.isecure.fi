@@ -1,6 +1,8 @@
 Create, review and approve a payment file, then download it. Your application verifies and signs the file locally and sends it through the separate [File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile). Processing does not send payments to a bank.
 
-**Experimental · Test environment · Paid subscription and access approval required.**
+**Beta · Nordea certified · Test environment · Paid subscription and access approval required.**
+
+Certified Nordea payment-file profiles are production-ready in Finland, Sweden, Norway and Denmark. Support for other banks and profiles is qualified separately.
 
 This reference covers 26 payment operations, session exchange and notifications on the test server. Production plugin discovery and download are a separate, narrower service; they do not make payment processing available in production.
 

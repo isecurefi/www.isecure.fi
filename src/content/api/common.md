@@ -13,7 +13,7 @@ A shared identity does not mean one interchangeable token or identical authority
 
 ## Access and authentication
 
-These APIs are Experimental and available only in the ISECure test environment. Request access from [ISECure support](mailto:support@isecure.fi). Registration alone does not enable either product: your tenant needs the appropriate active paid subscription, and your user needs permission for each operation. A successful login does not grant payment approval or simulator management rights.
+Processing API is Beta, with certified Nordea payment-file profiles for Finland, Sweden, Norway and Denmark. The Bank Simulator control API is Experimental. These references document the ISECure test environment. Request access from [ISECure support](mailto:support@isecure.fi). Registration alone does not enable either product: your tenant needs the appropriate active paid subscription, and your user needs permission for each operation. A successful login does not grant payment approval or simulator management rights.
 
 [Processing API](https://www.isecure.fi/apis/processing/) and [Bank Simulator API](https://www.isecure.fi/apis/bank-simulator/) share one Processing base URL and session. [File Exchange](https://www.isecure.fi/wsapi_v2/) has a separate API and session. Your tenant is selected by the verified API key; you cannot select another tenant in a request body or URL. Resource IDs and account IDs do not grant access.
 

@@ -593,8 +593,9 @@ export function buildSpec(kind) {
     servers: [
       {
         url: metadata.baseUrl,
-        description:
-          "ISECure test environment — Experimental; access by request",
+        description: simulator
+          ? "ISECure test environment — Experimental; access by request"
+          : "ISECure test environment — Beta; Nordea certified; access by request",
       },
     ],
     tags: tags.map((name) => ({ name })),

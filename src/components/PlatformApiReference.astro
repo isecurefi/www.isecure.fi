@@ -12,7 +12,7 @@ const spec = kind === "processing" ? processing : simulator;
 const title = `${spec.info.title} documentation`;
 const description =
   kind === "processing"
-    ? "Prepare, validate, approve and download payment files. Experimental test API reference with authentication, TypeScript examples and OpenAPI 3.0 schemas."
+    ? "Prepare, validate, approve and download payment files. Beta API with certified Nordea profiles for Finland, Sweden, Norway and Denmark. Test API reference, TypeScript examples and OpenAPI 3.0 schemas."
     : "Configure synthetic bank accounts and scenarios, run tests and inspect results. Experimental test API reference with authentication, TypeScript examples and OpenAPI 3.0 schemas.";
 const specPath = `/apis/${kind}/openapi.json`;
 const specUrl = `${specPath}?revision=${metadata.repositoryRevision}`;
