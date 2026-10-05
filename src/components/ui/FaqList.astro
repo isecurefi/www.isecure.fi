@@ -1,0 +1,70 @@
+---
+interface Props {
+  items: readonly { q: string; a: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="ui-faq">
+  {
+    items.map((item) => (
+      <details>
+        <summary>{item.q}</summary>
+        <p>{item.a}</p>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  details {
+    border-bottom: 1px solid var(--landing-line);
+  }
+
+  details:first-child {
+    border-top: 1px solid var(--landing-line);
+  }
+
+  summary {
+    align-items: center;
+    color: var(--landing-ink);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.08rem;
+    font-weight: 750;
+    gap: 24px;
+    justify-content: space-between;
+    list-style: none;
+    padding: 22px 0;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    color: var(--landing-accent);
+    content: "+";
+    flex: none;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    transition: transform 0.2s;
+  }
+
+  details[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  summary:hover {
+    color: var(--landing-accent);
+  }
+
+  p {
+    color: var(--landing-muted);
+    line-height: 1.7;
+    margin: 0 0 22px;
+    max-width: 780px;
+  }
+</style>

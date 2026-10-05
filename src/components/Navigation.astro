@@ -88,6 +88,14 @@ const navItems = [
 </nav>
 
 <script is:inline>
+  // Over a page hero the bar stays transparent until the page scrolls.
+  (() => {
+    const navbar = document.querySelector(".navbar");
+    if (!navbar) return;
+    const sync = () => navbar.classList.toggle("is-scrolled", scrollY > 24);
+    addEventListener("scroll", sync, { passive: true });
+    sync();
+  })();
   document.querySelectorAll("[data-site-nav-toggle]").forEach((toggle) => {
     if (!(toggle instanceof HTMLButtonElement)) return;
     const controlledId = toggle.getAttribute("aria-controls");

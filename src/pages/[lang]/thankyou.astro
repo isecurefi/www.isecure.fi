@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PageHero from "../../components/ui/PageHero.astro";
 import { languages } from "../../utils/languages";
 
 export async function getStaticPaths() {
@@ -38,56 +39,41 @@ const messages = {
 };
 ---
 
-<Layout title={messages.title[lang]} lang={lang} robots="noindex, nofollow">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3
-              class="panel-title"
-              style="font-size: 2rem; margin-bottom: 1.5rem;"
-            >
-              {messages.heading[lang]}
-            </h3>
-          </div>
-          <div class="panel-body text-center">
-            <p style="font-size: 1.5rem; margin-bottom: 2rem;">
-              {messages.message[lang]}
-            </p>
-            <br />
-            <p style="font-size: 1.25rem;">
-              {messages.regards[lang]}<br />
-              -&nbsp;Dan Forsberg
-            </p>
-            <br />
-            <img
-              src="/images/isecure-small-logo.png"
-              alt="iSecure"
-              style="max-width: 200px"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<Layout
+  title={messages.title[lang]}
+  lang={lang}
+  robots="noindex, nofollow"
+  fullWidth
+>
+  <PageHero
+    align="center"
+    title={messages.heading[lang]}
+    lead={messages.message[lang]}
+  >
+    <p class="thankyou-regards">
+      {messages.regards[lang]}<br />
+      -&nbsp;Dan Forsberg
+    </p>
+    <img
+      class="thankyou-logo"
+      src="/images/isecure-small-logo.png"
+      alt="iSecure"
+    />
+  </PageHero>
 </Layout>
 
 <style>
-  .panel {
-    margin-top: 2rem;
-    border-radius: 8px;
-    box-shadow: var(--card-shadow);
+  .thankyou-regards {
+    color: var(--landing-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 32px auto 0;
   }
 
-  .panel-heading {
-    background: var(--primary-color);
-    color: white;
-    padding: 1rem;
-    border-radius: 8px 8px 0 0;
-  }
-
-  .panel-body {
-    padding: 2rem;
+  .thankyou-logo {
+    display: block;
+    height: auto;
+    margin: 28px auto 0;
+    max-width: 200px;
   }
 </style>

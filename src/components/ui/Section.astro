@@ -1,0 +1,67 @@
+---
+// Page section with a consistent container and vertical rhythm.
+// tone="band" fades a soft background in and out of the white page.
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"section"> {
+  tone?: "plain" | "band" | "soft";
+  width?: "default" | "narrow";
+  spacing?: "default" | "compact";
+}
+
+const {
+  tone = "plain",
+  width = "default",
+  spacing = "default",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<section
+  class:list={["ui-section", `is-${tone}`, `is-${spacing}`, className]}
+  {...rest}
+>
+  <div class:list={["ui-container", `is-${width}`]}><slot /></div>
+</section>
+
+<style>
+  .ui-section {
+    /* Decorative glows never widen the page; sticky children still work. */
+    overflow-x: clip;
+    padding: 80px 0;
+    scroll-margin-top: 66px;
+  }
+
+  .is-compact {
+    padding: 48px 0;
+  }
+
+  .is-band {
+    background: var(--landing-band);
+  }
+
+  .is-soft {
+    background: var(--landing-soft);
+  }
+
+  .ui-container {
+    margin: 0 auto;
+    width: min(1180px, calc(100% - 40px));
+  }
+
+  .ui-container.is-narrow {
+    width: min(880px, calc(100% - 40px));
+  }
+
+  @media (max-width: 640px) {
+    .ui-section {
+      padding: 52px 0;
+    }
+
+    .ui-container,
+    .ui-container.is-narrow {
+      width: calc(100% - 28px);
+    }
+  }
+</style>

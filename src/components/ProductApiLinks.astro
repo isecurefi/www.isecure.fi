@@ -1,5 +1,8 @@
 ---
 import type { Lang } from "../types";
+import Actions from "./ui/Actions.astro";
+import Button from "./ui/Button.astro";
+import Card from "./ui/Card.astro";
 interface Props {
   lang: Lang;
   kind: "processing" | "bank-simulator";
@@ -33,29 +36,13 @@ const copy = {
 }[lang];
 ---
 
-<section class="product-api-links">
-  <h2>{copy.title}</h2>{kind === "bank-simulator" && <p>{copy.simulator}</p>}<p>
-    {copy.text}
-  </p><div>
-    <a href={`/apis/${kind}/`}>{copy.reference}</a><a
-      href={`/apis/${kind}/openapi.json`}>{copy.json}</a
-    >
-  </div>
-</section>
-<style>
-  .product-api-links {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    border: 1px solid var(--border-color, #cfddda);
-    border-radius: 12px;
-  }
-  div {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  a {
-    color: inherit;
-    text-underline-offset: 0.2em;
-  }
-</style>
+<Card title={copy.title} icon="code" headingLevel={2}>
+  {kind === "bank-simulator" && <p>{copy.simulator}</p>}
+  <p>{copy.text}</p>
+  <Actions>
+    <Button href={`/apis/${kind}/`}>{copy.reference}</Button>
+    <Button variant="secondary" href={`/apis/${kind}/openapi.json`}>
+      {copy.json}
+    </Button>
+  </Actions>
+</Card>

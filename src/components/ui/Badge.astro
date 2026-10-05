@@ -1,0 +1,45 @@
+---
+interface Props {
+  tone?: "accent" | "blue" | "amber" | "neutral";
+}
+
+const { tone = "accent" } = Astro.props;
+---
+
+<span class:list={["ui-badge", `is-${tone}`]}><slot /></span>
+
+<style>
+  .ui-badge {
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    padding: 4px 10px;
+    text-transform: uppercase;
+  }
+
+  .is-accent {
+    background: rgba(79, 209, 197, 0.16);
+    color: var(--landing-accent);
+  }
+
+  .is-blue {
+    background: rgba(138, 180, 255, 0.18);
+    color: var(--landing-blue);
+  }
+
+  .is-amber {
+    background: rgba(255, 184, 76, 0.18);
+    color: #b26a00;
+  }
+
+  :global([data-isecure-theme="dark"]) .is-amber {
+    color: #ffc266;
+  }
+
+  .is-neutral {
+    background: var(--landing-soft);
+    color: var(--landing-muted);
+  }
+</style>

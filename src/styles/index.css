@@ -3,6 +3,7 @@
 
 /* Base styles */
 @import "./global.css";
+@import "./theme.css";
 
 /* Component styles */
 @import "./Hero.css";

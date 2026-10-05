@@ -52,40 +52,49 @@ const ui = catalogUi[lang];
 
 <style>
   .capability-section {
-    margin: 2.5rem auto;
-    max-width: 1000px;
+    margin: 2.5rem 0;
+  }
+
+  .capability-section:first-child {
+    margin-top: 0;
+  }
+
+  .capability-section:last-child {
+    margin-bottom: 0;
   }
 
   .capability-section h2 {
-    font-size: clamp(1.35rem, 3vw, 1.8rem);
-    margin-bottom: 1rem;
+    color: var(--landing-ink);
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    line-height: 1.2;
+    margin: 0 0 1.25rem;
   }
 
   .capability-table-wrap {
-    border: 1px solid #d6e0e2;
-    border-radius: 12px;
+    background: var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 14px;
     overflow-x: auto;
   }
 
   table {
-    background: #fff;
     border-collapse: collapse;
-    color: #17252b;
+    color: var(--landing-ink);
     min-width: 560px;
     width: 100%;
   }
 
   th,
   td {
-    border-bottom: 1px solid #dfe7e8;
-    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--landing-line);
+    padding: 0.95rem 1.1rem;
     text-align: left;
     vertical-align: top;
   }
 
   th {
-    background: #f4f7f8;
-    color: #4f6167;
+    background: var(--landing-soft);
+    color: var(--landing-muted);
     font-size: 0.76rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -105,18 +114,18 @@ const ui = catalogUi[lang];
   }
 
   td span:not(.direction) {
-    color: #53636a;
+    color: var(--landing-muted);
     line-height: 1.55;
     margin-top: 0.25rem;
   }
 
   .direction {
-    background: #e9f4f2;
+    background: rgba(79, 209, 197, 0.16);
     border-radius: 999px;
-    color: #075d54;
+    color: var(--landing-accent);
     display: inline-flex;
     font-size: 0.75rem;
     font-weight: 750;
-    padding: 0.28rem 0.55rem;
+    padding: 0.28rem 0.6rem;
   }
 </style>

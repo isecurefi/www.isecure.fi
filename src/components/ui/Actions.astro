@@ -1,0 +1,22 @@
+---
+interface Props {
+  align?: "start" | "center";
+}
+
+const { align = "start" } = Astro.props;
+---
+
+<div class:list={["ui-actions", `is-${align}`]}><slot /></div>
+
+<style>
+  .ui-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .is-center {
+    justify-content: center;
+  }
+</style>

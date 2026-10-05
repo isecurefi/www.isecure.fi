@@ -41,16 +41,23 @@ const externalCta = /^https?:\/\//u.test(record.cta.href[lang]);
 
 <style>
   .catalog-status {
-    background: #f6faf9;
-    border: 1px solid #bedbd5;
+    background: var(--landing-card);
+    border: 1px solid var(--landing-line);
     border-radius: 14px;
-    color: #17252b;
+    color: var(--landing-ink);
     display: grid;
     gap: 2rem;
     grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.8fr);
-    margin: 2.5rem auto;
-    max-width: 1000px;
+    margin: 2.5rem 0;
     padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .catalog-status:first-child {
+    margin-top: 0;
+  }
+
+  .catalog-status:last-child {
+    margin-bottom: 0;
   }
 
   .catalog-status h2 {
@@ -65,13 +72,14 @@ const externalCta = /^https?:\/\//u.test(record.cta.href[lang]);
 
   .catalog-status p,
   .catalog-status li {
+    color: var(--landing-muted);
     line-height: 1.65;
   }
 
   .catalog-cta {
-    background: #087f72;
+    background: var(--landing-primary-bg);
     border-radius: 8px;
-    color: #fff;
+    color: var(--landing-primary-ink);
     display: inline-flex;
     font-weight: 750;
     margin-top: 0.6rem;
@@ -80,17 +88,17 @@ const externalCta = /^https?:\/\//u.test(record.cta.href[lang]);
   }
 
   .catalog-cta:hover {
-    background: #066b61;
-    color: #fff;
+    background: var(--landing-primary-hover);
+    color: var(--landing-primary-ink);
   }
 
   .catalog-cta:focus-visible {
-    outline: 3px solid #17252b;
+    outline: 2px solid var(--landing-accent);
     outline-offset: 3px;
   }
 
   .catalog-limitations {
-    border-left: 1px solid #bedbd5;
+    border-left: 1px solid var(--landing-line);
     padding-left: 2rem;
   }
 
@@ -110,7 +118,7 @@ const externalCta = /^https?:\/\//u.test(record.cta.href[lang]);
 
     .catalog-limitations {
       border-left: 0;
-      border-top: 1px solid #bedbd5;
+      border-top: 1px solid var(--landing-line);
       padding-left: 0;
       padding-top: 1.25rem;
     }

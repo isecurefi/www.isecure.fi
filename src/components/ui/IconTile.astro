@@ -1,0 +1,41 @@
+---
+import { iconSvg, type IconName } from "./icons";
+
+interface Props {
+  name: IconName;
+  size?: "md" | "lg";
+}
+
+const { name, size = "md" } = Astro.props;
+---
+
+<span class:list={["ui-icon-tile", `is-${size}`]} set:html={iconSvg(name)} />
+
+<style>
+  .ui-icon-tile {
+    align-items: center;
+    background: rgba(79, 209, 197, 0.14);
+    border-radius: 12px;
+    color: var(--landing-accent);
+    display: inline-flex;
+    flex: none;
+    height: 46px;
+    justify-content: center;
+    width: 46px;
+  }
+
+  .ui-icon-tile.is-lg {
+    height: 52px;
+    width: 52px;
+  }
+
+  .ui-icon-tile :global(svg) {
+    height: 24px;
+    width: 24px;
+  }
+
+  .ui-icon-tile.is-lg :global(svg) {
+    height: 27px;
+    width: 27px;
+  }
+</style>

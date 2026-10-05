@@ -90,6 +90,7 @@ const robots =
     data-catalog-stage={catalogEntry?.stage}
     data-catalog-visibility={catalogEntry?.visibility}
   >
+    <slot name="hero" />
     {
       record && record.visibility !== "draft" && (
         <CatalogNavigation {lang} current={record} />

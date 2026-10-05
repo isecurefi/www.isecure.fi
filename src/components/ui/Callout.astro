@@ -1,0 +1,48 @@
+---
+// Highlighted note for scope, limitations or status.
+interface Props {
+  title?: string;
+  tone?: "info" | "note";
+}
+
+const { title, tone = "info" } = Astro.props;
+---
+
+<aside class:list={["ui-callout", `is-${tone}`]}>
+  {title && <p class="ui-callout-title">{title}</p>}
+  <slot />
+</aside>
+
+<style>
+  .ui-callout {
+    background: var(--landing-soft);
+    border-left: 3px solid var(--landing-accent);
+    border-radius: 0 10px 10px 0;
+    color: var(--landing-muted);
+    line-height: 1.65;
+    padding: 18px 22px;
+  }
+
+  .is-note {
+    border-left-color: var(--landing-blue);
+  }
+
+  .ui-callout-title {
+    color: var(--landing-ink);
+    font-weight: 750;
+    margin: 0 0 6px;
+  }
+
+  .ui-callout :global(p) {
+    margin: 0 0 8px;
+  }
+
+  .ui-callout :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .ui-callout :global(a) {
+    color: var(--landing-accent);
+    font-weight: 700;
+  }
+</style>

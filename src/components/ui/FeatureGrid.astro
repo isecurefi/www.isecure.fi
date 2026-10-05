@@ -1,0 +1,73 @@
+---
+// Borderless feature columns: icon, title and text.
+import IconTile from "./IconTile.astro";
+import type { IconName } from "./icons";
+
+interface Props {
+  items: readonly { icon?: IconName; title: string; text: string }[];
+  columns?: 2 | 3 | 4;
+}
+
+const { items, columns = 3 } = Astro.props;
+---
+
+<div class:list={["ui-features", `is-${columns}`]}>
+  {
+    items.map((item) => (
+      <section class="ui-feature">
+        {item.icon && <IconTile name={item.icon} />}
+        <h3>{item.title}</h3>
+        <p>{item.text}</p>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .ui-features {
+    display: grid;
+    gap: 40px 36px;
+  }
+
+  .is-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .is-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .is-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  h3 {
+    color: var(--landing-ink);
+    font-size: 1.12rem;
+    line-height: 1.3;
+    margin: 18px 0 8px;
+  }
+
+  .ui-feature:not(:has(.ui-icon-tile)) h3 {
+    margin-top: 0;
+  }
+
+  p {
+    color: var(--landing-muted);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  @media (max-width: 980px) {
+    .is-3,
+    .is-4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ui-features {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

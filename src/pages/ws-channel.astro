@@ -1,6 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getText } from "../store/translations";
+import PageHero from "../components/ui/PageHero.astro";
+import Prose from "../components/ui/Prose.astro";
+import Section from "../components/ui/Section.astro";
 import BankLogos from "../components/BankLogos.astro";
 
 const lang = "fi";
@@ -12,26 +15,40 @@ const landingCanonical = "https://www.isecure.fi/";
   lang={lang}
   robots="noindex, follow"
   canonicalUrl={landingCanonical}
+  fullWidth
 >
-  <div class="container page-container">
-    <h1 class="page-header">{getText("webService.wsChannel.title", lang)}</h1>
+  <PageHero
+    width="narrow"
+    title={getText("webService.wsChannel.title", lang)}
+  />
 
-    <div class="content-section">
-      <div class="main-content">
-        <h2 class="section-title">
-          {getText("webService.wsChannel.subtitle", lang)}
-        </h2>
-        <div class="content-block">
-          <p>{getText("webService.wsChannel.description", lang)}</p>
-          <p class="highlight-text">
-            <i>"{getText("webService.wsChannel.quote", lang)}"</i>
-          </p>
-          <p>{getText("webService.wsChannel.details", lang)}</p>
-        </div>
-      </div>
-    </div>
+  <Section width="narrow">
+    <Prose>
+      <h2>{getText("webService.wsChannel.subtitle", lang)}</h2>
+      <p>{getText("webService.wsChannel.description", lang)}</p>
+      <p class="highlight-text">
+        <i>"{getText("webService.wsChannel.quote", lang)}"</i>
+      </p>
+      <p>{getText("webService.wsChannel.details", lang)}</p>
+    </Prose>
+  </Section>
 
-    <h3>{getText("webService.banks", lang)}</h3>
+  <Section tone="band">
+    <h3 class="banks-title">{getText("webService.banks", lang)}</h3>
     <BankLogos />
-  </div>
+  </Section>
 </Layout>
+
+<style>
+  .highlight-text {
+    border-left: 3px solid var(--landing-accent);
+    padding-left: 18px;
+  }
+
+  .banks-title {
+    color: var(--landing-ink);
+    font-size: 1.2rem;
+    margin: 0 0 24px;
+    text-align: center;
+  }
+</style>

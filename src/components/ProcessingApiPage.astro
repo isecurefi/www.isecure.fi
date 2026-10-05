@@ -4,6 +4,17 @@ import { getCatalogRecord } from "../data/productRegistry";
 import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import type { Lang } from "../types";
 import CatalogAccessSummary from "./CatalogAccessSummary.astro";
+import Actions from "./ui/Actions.astro";
+import Button from "./ui/Button.astro";
+import Callout from "./ui/Callout.astro";
+import Card from "./ui/Card.astro";
+import CardGrid from "./ui/CardGrid.astro";
+import CheckList from "./ui/CheckList.astro";
+import PageHero from "./ui/PageHero.astro";
+import Section from "./ui/Section.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
+import Split from "./ui/Split.astro";
+import Steps from "./ui/Steps.astro";
 
 interface Props {
   lang: Lang;
@@ -161,328 +172,130 @@ const copy = {
 }[lang];
 ---
 
-<CatalogPageLayout {lang} {record} bodyClass="processing-api-page">
-  <article class="processing-api container">
-    <header>
-      <p class="eyebrow">{copy.eyebrow}</p>
-      <h1>{copy.heading}</h1>
-      <p class="lead">{copy.lead}</p>
-    </header>
+<CatalogPageLayout {lang} {record} bodyClass="processing-api-page" fullWidth>
+  <PageHero
+    slot="hero"
+    eyebrow={copy.eyebrow}
+    title={copy.heading}
+    lead={copy.lead}
+  >
+    <Actions>
+      <Button
+        href={record.cta.href[lang]}
+        data-analytics-content-type="product_access"
+        data-analytics-item-id={record.id}
+        data-analytics-source="product-status"
+      >
+        {record.cta.label[lang]}
+      </Button>
+    </Actions>
+    <Card slot="aside" tone="accent">
+      <CatalogAccessSummary
+        slot="header"
+        {lang}
+        stage={record.stage}
+        access={record.access}
+      />
+      <h2 class="status-title">{copy.statusTitle}</h2>
+      <p>{copy.statusText}</p>
+    </Card>
+  </PageHero>
 
-    <ProductApiLinks {lang} kind="processing" />
+  <Section>
+    <Split sticky>
+      <SectionHeading slot="side" title={copy.flowTitle} />
+      <Steps steps={copy.flow} direction="column" />
+    </Split>
+  </Section>
 
-    <section class="status" aria-labelledby="processing-status">
-      <div>
-        <CatalogAccessSummary
-          {lang}
-          stage={record.stage}
-          access={record.access}
-        />
-        <h2 id="processing-status">{copy.statusTitle}</h2>
-      </div>
-      <div class="status-copy">
-        <p>{copy.statusText}</p>
-        <a
-          href={record.cta.href[lang]}
-          data-analytics-content-type="product_access"
-          data-analytics-item-id={record.id}
-          data-analytics-source="product-status"
+  <Section tone="band">
+    <SectionHeading title={copy.relationshipTitle} />
+    <Steps
+      steps={[
+        { title: copy.processingLabel, text: copy.processing },
+        { title: copy.localLabel, text: copy.local },
+        { title: copy.exchangeLabel, text: copy.exchange },
+      ]}
+    />
+    <div class="destinations">
+      <CardGrid columns={2}>
+        <Card
+          title={copy.testPathTitle}
+          icon="flask"
+          href={simulatorRecord.routes[lang]}
+          linkLabel={copy.testPathLink}
+          data-analytics-content-type="product"
+          data-analytics-item-id={simulatorRecord.id}
+          data-analytics-source="processing-api-test-path"
         >
-          {record.cta.label[lang]}
-        </a>
-      </div>
-    </section>
-
-    <section>
-      <h2>{copy.flowTitle}</h2>
-      <ol class="flow">
-        {copy.flow.map((step) => <li>{step}</li>)}
-      </ol>
-    </section>
-
-    <section>
-      <h2>{copy.boundaryTitle}</h2>
-      <ul class="boundaries">
-        {copy.boundaries.map((boundary) => <li>{boundary}</li>)}
-      </ul>
-    </section>
-
-    <section>
-      <h2>{copy.relationshipTitle}</h2>
-      <div class="relationship" role="list">
-        <p role="listitem">
-          <strong>{copy.processingLabel}</strong><span>{copy.processing}</span>
-        </p>
-        <span aria-hidden="true">→</span>
-        <p role="listitem">
-          <strong>{copy.localLabel}</strong><span>{copy.local}</span>
-        </p>
-        <span aria-hidden="true">→</span>
-        <p role="listitem">
-          <strong>{copy.exchangeLabel}</strong><span>{copy.exchange}</span>
-        </p>
-      </div>
-      <div class="destination-grid">
-        <article>
-          <h3>{copy.testPathTitle}</h3>
           <p>{copy.testPath}</p>
-          <p class="destination-limit">{copy.testPathLimit}</p>
-          <a
-            href={simulatorRecord.routes[lang]}
-            data-analytics-content-type="product"
-            data-analytics-item-id={simulatorRecord.id}
-            data-analytics-source="processing-api-test-path"
-          >
-            {copy.testPathLink}
-          </a>
-        </article>
-        <article>
-          <h3>{copy.productionPathTitle}</h3>
+          <p class="limit">{copy.testPathLimit}</p>
+        </Card>
+        <Card title={copy.productionPathTitle} icon="bank">
           <p>{copy.productionPath}</p>
-        </article>
-      </div>
-      <p class="transport-note">{copy.transport}</p>
-    </section>
+        </Card>
+      </CardGrid>
+      <Callout tone="note">{copy.transport}</Callout>
+    </div>
+  </Section>
 
-    <aside class="example">
-      <h2>{copy.exampleTitle}</h2>
-      <p>{copy.exampleText}</p>
-      <div>
-        <a
-          href={exampleUrl}
-          target="_blank"
-          rel="noopener"
-          data-analytics-content-type="developer_resource"
-          data-analytics-item-id="processing-api-sdk-example"
-          data-analytics-source="processing-api-example">{copy.exampleLabel}</a
-        >
-        <a
-          href="/wsapi_v2/"
-          data-analytics-content-type="developer_resource"
-          data-analytics-item-id="file-exchange-api-reference"
-          data-analytics-source="processing-api-example">{copy.docsLabel}</a
-        >
-      </div>
-    </aside>
-  </article>
+  <Section>
+    <Split sticky>
+      <SectionHeading slot="side" title={copy.boundaryTitle} />
+      <CheckList items={copy.boundaries} icon="shield" />
+    </Split>
+  </Section>
+
+  <Section tone="band">
+    <CardGrid columns={2}>
+      <ProductApiLinks {lang} kind="processing" />
+      <Card
+        title={copy.exampleTitle}
+        icon="file"
+        headingLevel={2}
+        tone="accent"
+      >
+        <p>{copy.exampleText}</p>
+        <Actions>
+          <Button
+            href={exampleUrl}
+            external
+            data-analytics-content-type="developer_resource"
+            data-analytics-item-id="processing-api-sdk-example"
+            data-analytics-source="processing-api-example"
+          >
+            {copy.exampleLabel}
+          </Button>
+          <Button
+            variant="secondary"
+            href="/wsapi_v2/"
+            data-analytics-content-type="developer_resource"
+            data-analytics-item-id="file-exchange-api-reference"
+            data-analytics-source="processing-api-example"
+          >
+            {copy.docsLabel}
+          </Button>
+        </Actions>
+      </Card>
+    </CardGrid>
+  </Section>
 </CatalogPageLayout>
 
 <style>
-  .processing-api {
-    margin: 3rem auto;
-    max-width: 1000px;
+  .status-title {
+    color: var(--landing-ink);
+    font-size: 1.15rem;
+    margin: 6px 0 0;
   }
 
-  header,
-  .processing-api > section,
-  .example {
-    margin-inline: auto;
-    max-width: 900px;
-  }
-
-  header {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 2rem;
-  }
-
-  .eyebrow {
-    color: #087f72;
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  h1 {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-  }
-
-  .lead,
-  section p,
-  section li,
-  .example p {
-    line-height: 1.7;
-  }
-
-  .lead {
-    font-size: 1.12rem;
-  }
-
-  .processing-api > section,
-  .example {
-    margin-top: 2.5rem;
-  }
-
-  .status {
-    background: #eef5ff;
-    border: 1px solid #bfd1e8;
-    border-radius: 12px;
+  .destinations {
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1.45fr);
-    padding: 1.4rem;
+    gap: 20px;
+    margin-top: 48px;
   }
 
-  .status h2 {
-    font-size: 1.35rem;
-    margin: 0.6rem 0 0;
-  }
-
-  .status p {
-    margin: 0;
-  }
-
-  .status-copy a {
-    background: #087f72;
-    border-radius: 8px;
-    color: #fff;
-    display: inline-flex;
-    font-weight: 700;
-    margin-top: 0.9rem;
-    padding: 0.65rem 0.9rem;
-    text-decoration: none;
-  }
-
-  .status-copy a:focus-visible {
-    outline: 3px solid #17252b;
-    outline-offset: 3px;
-  }
-
-  .flow,
-  .boundaries {
-    padding-left: 1.4rem;
-  }
-
-  .flow li + li,
-  .boundaries li + li {
-    margin-top: 0.65rem;
-  }
-
-  .relationship {
-    align-items: stretch;
-    display: grid;
-    gap: 0.7rem;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(
-        0,
-        1.2fr
-      );
-  }
-
-  .relationship p {
-    border: 1px solid #d6e0e2;
-    border-radius: 10px;
-    margin: 0;
-    padding: 1rem;
-  }
-
-  .relationship strong {
-    display: block;
-    margin-bottom: 0.4rem;
-  }
-
-  .relationship > span {
-    align-self: center;
-    font-weight: 800;
-  }
-
-  .transport-note {
-    border-left: 4px solid #087f72;
-    margin-top: 1rem;
-    padding-left: 1rem;
-  }
-
-  .destination-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin-top: 1rem;
-  }
-
-  .destination-grid article {
-    background: var(--background-light);
-    border: 1px solid #d6e0e2;
-    border-radius: 10px;
-    padding: 1rem;
-  }
-
-  .destination-grid h3 {
-    font-size: 1.05rem;
-    margin: 0 0 0.5rem;
-  }
-
-  .destination-grid p {
-    margin: 0;
-  }
-
-  .destination-grid .destination-limit {
-    color: #53636a;
-    font-size: 0.94rem;
-    margin-top: 0.65rem;
-  }
-
-  .destination-grid a {
-    color: #075d75;
-    display: inline-block;
-    font-weight: 700;
-    margin-top: 0.85rem;
-  }
-
-  .example {
-    background: #eef8f6;
-    border: 1px solid #b9ddd6;
-    border-radius: 12px;
-    padding: 1.5rem;
-  }
-
-  .example div {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .example a {
-    border: 1px solid #087f72;
-    border-radius: 8px;
-    color: #087f72;
-    display: inline-block;
-    font-weight: 700;
-    padding: 0.7rem 1rem;
-    text-decoration: none;
-  }
-
-  .example a:first-child {
-    background: #087f72;
-    color: #fff;
-  }
-
-  .example a:focus-visible {
-    outline: 3px solid #17252b;
-    outline-offset: 3px;
-  }
-
-  @media (max-width: 760px) {
-    .status,
-    .relationship,
-    .destination-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .relationship > span {
-      justify-self: center;
-      transform: rotate(90deg);
-    }
-  }
-
-  @media (max-width: 576px) {
-    .processing-api {
-      margin-block: 2rem;
-    }
-
-    .example a {
-      text-align: center;
-      width: 100%;
-    }
+  .limit {
+    font-size: 0.92rem;
+    opacity: 0.85;
   }
 </style>

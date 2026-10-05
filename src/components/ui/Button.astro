@@ -1,0 +1,83 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a"> {
+  href: string;
+  variant?: "primary" | "secondary" | "link";
+  external?: boolean;
+}
+
+const {
+  href,
+  variant = "primary",
+  external = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<a
+  {href}
+  class:list={["ui-button", `is-${variant}`, className]}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener" : undefined}
+  {...rest}
+>
+  <slot />
+</a>
+
+<style>
+  .ui-button {
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    display: inline-flex;
+    font-weight: 700;
+    gap: 8px;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    text-decoration: none;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+  }
+
+  .is-primary {
+    background: var(--landing-primary-bg);
+    color: var(--landing-primary-ink);
+  }
+
+  .is-primary:hover {
+    background: var(--landing-primary-hover);
+    color: var(--landing-primary-ink);
+  }
+
+  .is-secondary {
+    background: var(--landing-card);
+    border-color: var(--landing-line);
+    color: var(--landing-ink);
+  }
+
+  .is-secondary:hover {
+    border-color: var(--landing-accent);
+    color: var(--landing-accent);
+  }
+
+  .is-link {
+    color: var(--landing-accent);
+    min-height: 0;
+    padding: 0;
+  }
+
+  .is-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .ui-button:focus-visible {
+    outline: 2px solid var(--landing-accent);
+    outline-offset: 3px;
+  }
+</style>

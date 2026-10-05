@@ -7,6 +7,14 @@ import type { Lang } from "../types";
 import CapabilityDirectionTable from "./CapabilityDirectionTable.astro";
 import CatalogStatus from "./CatalogStatus.astro";
 import CatalogFaqGlossary from "./CatalogFaqGlossary.astro";
+import Actions from "./ui/Actions.astro";
+import Button from "./ui/Button.astro";
+import Card from "./ui/Card.astro";
+import CardGrid from "./ui/CardGrid.astro";
+import CheckList from "./ui/CheckList.astro";
+import PageHero from "./ui/PageHero.astro";
+import Section from "./ui/Section.astro";
+import Split from "./ui/Split.astro";
 
 interface Props {
   lang: Lang;
@@ -25,12 +33,19 @@ const csharpExampleUrl =
   "https://github.com/isecurefi/isecure-cs-client/blob/main/examples/FileExchange/README.md";
 ---
 
-<CatalogPageLayout lang={lang} description={content.meta.description} {record}>
-  <article class="simulator-guide container">
-    <header class="simulator-header">
-      <p class="simulator-eyebrow">{content.eyebrow}</p>
-      <h1>{content.title}</h1>
-      <p class="simulator-intro">{content.intro}</p>
+<CatalogPageLayout
+  lang={lang}
+  description={content.meta.description}
+  {record}
+  fullWidth
+>
+  <PageHero
+    slot="hero"
+    eyebrow={content.eyebrow}
+    title={content.title}
+    lead={content.intro}
+  >
+    <Card slot="aside" icon="flask" tone="accent">
       <dl class="simulator-facts">
         <div>
           <dt>{content.baseUrlLabel}</dt>
@@ -41,266 +56,163 @@ const csharpExampleUrl =
           <dd><code>simulator</code></dd>
         </div>
       </dl>
-    </header>
+    </Card>
+  </PageHero>
 
+  <Section>
     <CatalogStatus {lang} {record} />
-
     <ProductApiLinks {lang} kind="bank-simulator" />
+  </Section>
 
+  <Section tone="band">
     <div class="simulator-sections">
       {
         content.sections.map((section) => (
-          <section>
-            <h2>{section.title}</h2>
+          <Split>
+            <h2 slot="side">{section.title}</h2>
             {section.paragraphs.map((paragraph) => (
               <p>{paragraph}</p>
             ))}
-            {section.items && (
-              <ul>
-                {section.items.map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
-            )}
-          </section>
+            {section.items && <CheckList items={section.items} />}
+          </Split>
         ))
       }
     </div>
+  </Section>
 
+  <Section>
     <CapabilityDirectionTable {lang} {record} />
     <CatalogFaqGlossary {lang} {record} />
+  </Section>
 
-    <aside class="simulator-processing">
-      <div>
-        <h2>{content.processingTitle}</h2>
+  <Section tone="band">
+    <CardGrid columns={2}>
+      <Card title={content.processingTitle} icon="file" headingLevel={2}>
         <p>{content.processingText}</p>
-      </div>
-      <a
-        class="simulator-link simulator-link-primary"
-        href={processingRecord.routes[lang]}
-        data-analytics-content-type="product"
-        data-analytics-item-id={processingRecord.id}
-        data-analytics-source="bank-simulator-processing"
+        <Actions>
+          <Button
+            href={processingRecord.routes[lang]}
+            data-analytics-content-type="product"
+            data-analytics-item-id={processingRecord.id}
+            data-analytics-source="bank-simulator-processing"
+          >
+            {content.processingLink}
+          </Button>
+        </Actions>
+      </Card>
+      <Card
+        title={content.exampleTitle}
+        icon="code"
+        headingLevel={2}
+        tone="accent"
       >
-        {content.processingLink}
-      </a>
-    </aside>
-
-    <aside class="simulator-example">
-      <h2>{content.exampleTitle}</h2>
-      <p>{content.exampleText}</p>
-      <div class="simulator-actions">
-        <a
-          class="simulator-link simulator-link-primary"
-          href="/wsapi_v2/"
+        <p>{content.exampleText}</p>
+        <Actions>
+          <Button
+            href="/wsapi_v2/"
+            data-analytics-content-type="developer_resource"
+            data-analytics-item-id="file-exchange-api-reference"
+            data-analytics-source="bank-simulator-example"
+          >
+            {content.apiLink}
+          </Button>
+          <Button
+            variant="secondary"
+            href={sdkExampleUrl}
+            external
+            data-analytics-content-type="developer_resource"
+            data-analytics-item-id="bank-simulator-sdk-example"
+            data-analytics-source="bank-simulator-example"
+          >
+            {content.sdkLink}
+          </Button>
+        </Actions>
+        <p class="csharp">{content.csharpExampleText}</p>
+        <Button
+          variant="link"
+          href={csharpExampleUrl}
+          external
           data-analytics-content-type="developer_resource"
-          data-analytics-item-id="file-exchange-api-reference"
+          data-analytics-item-id="bank-simulator-csharp-example"
           data-analytics-source="bank-simulator-example"
         >
-          {content.apiLink}
-        </a>
-        <a
-          class="simulator-link"
-          href={sdkExampleUrl}
-          target="_blank"
-          rel="noopener"
-          data-analytics-content-type="developer_resource"
-          data-analytics-item-id="bank-simulator-sdk-example"
-          data-analytics-source="bank-simulator-example"
-        >
-          {content.sdkLink}
-        </a>
-      </div>
-      <p>{content.csharpExampleText}</p>
-      <a
-        class="simulator-link"
-        href={csharpExampleUrl}
-        target="_blank"
-        rel="noopener"
-        data-analytics-content-type="developer_resource"
-        data-analytics-item-id="bank-simulator-csharp-example"
-        data-analytics-source="bank-simulator-example"
-      >
-        {content.csharpLink}
-      </a>
-    </aside>
-  </article>
+          {content.csharpLink}
+        </Button>
+      </Card>
+    </CardGrid>
+  </Section>
 </CatalogPageLayout>
 
 <style>
-  .simulator-guide {
-    margin: 3rem auto;
-    max-width: 900px;
-  }
-
-  .simulator-header {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 2rem;
-  }
-
-  .simulator-eyebrow {
-    color: #087f72;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
-
-  .simulator-header h1 {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    margin-bottom: 1rem;
-  }
-
-  .simulator-intro {
-    font-size: 1.15rem;
-    line-height: 1.75;
-    max-width: 760px;
-  }
-
   .simulator-facts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 1.75rem 0 0;
-  }
-
-  .simulator-facts div {
-    background: var(--background-light);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    min-width: min(100%, 260px);
-    padding: 0.85rem 1rem;
+    display: grid;
+    gap: 18px;
+    margin: 0;
   }
 
   .simulator-facts dt {
-    color: #5f6870;
+    color: var(--landing-muted);
     font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
+    font-weight: 800;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
   .simulator-facts dd {
-    margin: 0.25rem 0 0;
+    color: var(--landing-ink);
+    font-size: 1.1rem;
+    margin: 4px 0 0;
   }
 
-  .simulator-facts code {
-    color: #b42369;
+  code {
+    color: inherit;
+    overflow-wrap: anywhere;
   }
 
   .simulator-sections {
     display: grid;
-    gap: 2rem;
-    margin-top: 2.5rem;
   }
 
-  .simulator-sections section {
-    max-width: 780px;
+  .simulator-sections > :global(.ui-split) {
+    padding: 32px 0;
   }
 
-  .simulator-sections h2,
-  .simulator-processing h2,
-  .simulator-example h2 {
-    font-size: 1.4rem;
-    margin-bottom: 0.75rem;
+  .simulator-sections > :global(.ui-split + .ui-split) {
+    border-top: 1px solid var(--landing-line);
   }
 
-  .simulator-sections p,
-  .simulator-processing p,
-  .simulator-example p {
+  .simulator-sections > :global(.ui-split:first-child) {
+    padding-top: 0;
+  }
+
+  .simulator-sections > :global(.ui-split:last-child) {
+    padding-bottom: 0;
+  }
+
+  @media (max-width: 980px) {
+    .simulator-sections > :global(.ui-split) {
+      gap: 14px;
+    }
+  }
+
+  .simulator-sections h2 {
+    color: var(--landing-ink);
+    font-size: 1.35rem;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .simulator-sections p {
+    color: var(--landing-muted);
     line-height: 1.75;
-    margin-bottom: 0.75rem;
+    margin: 0 0 14px;
   }
 
-  .simulator-actions + p {
-    margin-top: 1.25rem;
+  .simulator-sections :global(.ui-checklist) {
+    margin-top: 6px;
   }
 
-  .simulator-sections ul {
-    line-height: 1.75;
-    padding-left: 1.25rem;
-  }
-
-  .simulator-sections li + li {
-    margin-top: 0.35rem;
-  }
-
-  code {
-    overflow-wrap: anywhere;
-  }
-
-  .simulator-processing,
-  .simulator-example {
-    background: #eef8f6;
-    border: 1px solid #b9ddd6;
-    border-radius: 12px;
-    margin-top: 3rem;
-    padding: 1.5rem;
-  }
-
-  .simulator-processing {
-    align-items: center;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .simulator-processing p {
-    margin-bottom: 0;
-  }
-
-  .simulator-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.25rem;
-  }
-
-  .simulator-link {
-    border: 1px solid #087f72;
-    border-radius: 8px;
-    color: #087f72;
-    display: inline-block;
-    font-weight: 700;
-    padding: 0.7rem 1rem;
-    text-decoration: none;
-  }
-
-  .simulator-link-primary {
-    background: #087f72;
-    color: #fff;
-  }
-
-  .simulator-link:hover {
-    background: #d9efeb;
-    color: #066b61;
-  }
-
-  .simulator-link-primary:hover {
-    background: #066b61;
-    color: #fff;
-  }
-
-  .simulator-link:focus-visible {
-    outline: 3px solid #212529;
-    outline-offset: 3px;
-  }
-
-  @media (max-width: 576px) {
-    .simulator-guide {
-      margin: 2rem auto;
-    }
-
-    .simulator-link {
-      text-align: center;
-      width: 100%;
-    }
-
-    .simulator-processing {
-      grid-template-columns: 1fr;
-    }
+  :global(.ui-card-body) .csharp {
+    margin-top: 18px;
   }
 </style>

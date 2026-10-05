@@ -1,0 +1,268 @@
+/*
+ * Site theme: colour tokens and the shared chrome (navigation, theme switch,
+ * contact card, footer) for every page rendered through Layout.astro.
+ * Dark values are the base; [data-isecure-theme="light"] overrides them.
+ */
+
+html.banking-theme-root,
+body.banking-theme-page {
+  --landing-ink: #eaf2f4;
+  --landing-muted: #9fb1bf;
+  --landing-line: rgba(255, 255, 255, 0.14);
+  --landing-soft: #0d1820;
+  --landing-accent: #4fd1c5;
+  --landing-accent-strong: #35b8ad;
+  --landing-primary-bg: #4fd1c5;
+  --landing-primary-hover: #35b8ad;
+  --landing-primary-ink: #061314;
+  --landing-blue: #8ab4ff;
+  --landing-bg: #071116;
+  --landing-card: #101c25;
+  --landing-card-strong: #142633;
+  --landing-hero-bg:
+    linear-gradient(180deg, transparent 60%, #071116),
+    radial-gradient(
+      circle at 18% 12%,
+      rgba(79, 209, 197, 0.2),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 80% 55%,
+      rgba(138, 180, 255, 0.12),
+      transparent 40%
+    ),
+    linear-gradient(120deg, #071116 0%, #0c1825 54%, #071116 100%);
+  --landing-hero-grid: rgba(255, 255, 255, 0.05);
+  --landing-band: linear-gradient(
+    180deg,
+    var(--landing-bg),
+    var(--landing-soft) 140px,
+    var(--landing-soft) calc(100% - 140px),
+    var(--landing-bg)
+  );
+  --landing-footer-bg:
+    radial-gradient(
+      circle at 85% 0%,
+      rgba(79, 209, 197, 0.12),
+      transparent 45%
+    ),
+    linear-gradient(120deg, #0b1820 0%, #0e1d2b 100%);
+}
+
+html.banking-theme-root[data-isecure-theme="light"],
+body.banking-theme-page[data-isecure-theme="light"] {
+  --landing-ink: #12212f;
+  --landing-muted: #526173;
+  --landing-line: #dce5ea;
+  --landing-soft: #edf3f5;
+  --landing-accent: #006f6a;
+  --landing-accent-strong: #005a56;
+  --landing-primary-bg: #b8eee7;
+  --landing-primary-hover: #9fe4dc;
+  --landing-primary-ink: #073936;
+  --landing-blue: #174ea6;
+  --landing-bg: #ffffff;
+  --landing-card: #ffffff;
+  --landing-card-strong: #f8fbfc;
+  --landing-hero-bg:
+    linear-gradient(180deg, transparent 60%, #ffffff),
+    radial-gradient(
+      circle at 14% 16%,
+      rgba(0, 111, 106, 0.16),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 80% 55%,
+      rgba(23, 78, 166, 0.12),
+      transparent 42%
+    ),
+    linear-gradient(120deg, #edf6f5 0%, #f6f9fc 55%, #edf2fb 100%);
+  --landing-hero-grid: rgba(18, 33, 47, 0.06);
+  --landing-footer-bg:
+    radial-gradient(circle at 85% 0%, rgba(23, 78, 166, 0.08), transparent 45%),
+    linear-gradient(120deg, #e7f3f1 0%, #eef3fa 100%);
+}
+
+.banking-landing {
+  color: var(--landing-ink);
+  background: var(--landing-bg);
+}
+
+html.banking-theme-root,
+body.banking-theme-page {
+  background: var(--landing-bg);
+}
+
+body.banking-theme-page .navbar {
+  background: var(--landing-bg) !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+body.banking-theme-page .navbar .nav-link,
+body.banking-theme-page .navbar-brand,
+body.banking-theme-page .lang-link {
+  color: var(--landing-ink);
+}
+
+body.banking-theme-page .navbar-brand {
+  align-items: center;
+  background: url("/images/isecure-small-logo.png") center calc(50% - 4px) /
+    contain no-repeat;
+  display: inline-flex;
+  flex: 0 0 69px;
+  font-size: 0;
+  height: 26px;
+  line-height: 0;
+  margin: 0 0.75rem 0 0;
+  padding: 0 !important;
+  position: relative;
+  width: 69px;
+}
+
+body.banking-theme-page .navbar-brand img {
+  display: block;
+  height: 1px;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+body.banking-theme-page .navbar .nav-link {
+  border-radius: 6px;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+body.banking-theme-page .navbar .nav-link:hover,
+body.banking-theme-page .lang-link:hover {
+  background: rgba(79, 209, 197, 0.14);
+  color: var(--landing-accent);
+}
+
+body.banking-theme-page .lang-link.active {
+  background: var(--landing-primary-bg);
+  color: var(--landing-primary-ink);
+}
+
+body.banking-theme-page .navbar-toggler {
+  border-color: var(--landing-line);
+}
+
+body.banking-theme-page .navbar-toggler-icon {
+  filter: invert(1);
+}
+
+body.banking-theme-page[data-isecure-theme="light"] .navbar-toggler-icon {
+  filter: none;
+}
+
+body.banking-theme-page .site-theme-toggle {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--landing-line);
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 2px;
+  margin: 0 0.55rem 0 0;
+  padding: 2px;
+}
+
+body.banking-theme-page .site-theme-toggle button {
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  color: var(--landing-muted);
+  cursor: pointer;
+  display: inline-grid;
+  font-size: 1rem;
+  font-weight: 800;
+  height: 30px;
+  line-height: 1;
+  min-height: 30px;
+  padding: 0;
+  place-items: center;
+  width: 30px;
+}
+
+body.banking-theme-page .site-theme-toggle button[aria-pressed="true"] {
+  background: var(--landing-primary-bg);
+  color: var(--landing-primary-ink);
+}
+
+body.banking-theme-page .contact-section {
+  --contact-bg: var(--landing-card);
+  --contact-panel: var(--landing-soft);
+  --contact-panel-strong: var(--landing-card-strong);
+  --contact-ink: var(--landing-ink);
+  --contact-muted: var(--landing-muted);
+  --contact-line: var(--landing-line);
+  --contact-input: var(--landing-bg);
+  --contact-accent: var(--landing-primary-bg);
+  --contact-accent-ink: var(--landing-primary-ink);
+  --contact-kicker: var(--landing-accent);
+  --contact-badge-bg: rgba(255, 255, 255, 0.04);
+  background: var(--landing-card) !important;
+  border: 1px solid var(--landing-line);
+  color: var(--landing-ink) !important;
+  box-shadow: none;
+}
+
+body.banking-theme-page .footer span,
+body.banking-theme-page .footer p {
+  color: var(--landing-muted) !important;
+}
+
+body.banking-theme-page .footer .footer-col-title {
+  color: var(--landing-accent) !important;
+}
+
+body.banking-theme-page .footer strong,
+body.banking-theme-page .footer a,
+body.banking-theme-page .footer button {
+  color: var(--landing-ink) !important;
+}
+
+body.banking-theme-page .footer a:hover {
+  color: var(--landing-accent) !important;
+}
+
+body.banking-theme-page .footer-logo img {
+  display: block;
+  height: auto;
+  max-width: 132px;
+  width: 100%;
+}
+
+/*
+ * Base layer: map Bootstrap and the older site variables onto the theme so
+ * any markup not yet built from src/components/ui follows light and dark mode.
+ */
+body.banking-theme-page {
+  --primary-color: var(--landing-accent);
+  --secondary-color: var(--landing-muted);
+  --background-color: var(--landing-bg);
+  --background-light: var(--landing-soft);
+  --text-color: var(--landing-ink);
+  --text-muted: var(--landing-muted);
+  --border-color: var(--landing-line);
+  --input-background: var(--landing-bg);
+  --card-shadow: 0 1px 2px rgba(16, 24, 32, 0.06);
+  --bs-body-color: var(--landing-ink);
+  --bs-body-bg: var(--landing-bg);
+  --bs-heading-color: var(--landing-ink);
+  --bs-border-color: var(--landing-line);
+  --bs-secondary-color: var(--landing-muted);
+  --bs-link-color-rgb: 79, 209, 197;
+  --bs-link-hover-color-rgb: 53, 184, 173;
+  color: var(--landing-ink);
+}
+
+body.banking-theme-page[data-isecure-theme="light"] {
+  --bs-link-color-rgb: 0, 111, 106;
+  --bs-link-hover-color-rgb: 0, 90, 86;
+}

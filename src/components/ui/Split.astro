@@ -1,0 +1,65 @@
+---
+// Two columns: a side column (optionally pinned while scrolling) and main content.
+interface Props {
+  sticky?: boolean;
+  reverse?: boolean;
+  align?: "start" | "center";
+}
+
+const { sticky = false, reverse = false, align = "start" } = Astro.props;
+---
+
+<div
+  class:list={[
+    "ui-split",
+    `is-${align}`,
+    { "is-sticky": sticky, "is-reverse": reverse },
+  ]}
+>
+  <div class="ui-split-side"><slot name="side" /></div>
+  <div class="ui-split-main"><slot /></div>
+</div>
+
+<style>
+  .ui-split {
+    display: grid;
+    gap: 64px;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+
+  .is-start {
+    align-items: start;
+  }
+
+  .is-center {
+    align-items: center;
+  }
+
+  .is-reverse .ui-split-side {
+    order: 2;
+  }
+
+  .is-sticky .ui-split-side {
+    position: sticky;
+    top: 96px;
+  }
+
+  .ui-split-side :global(.ui-heading) {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 980px) {
+    .ui-split {
+      gap: 32px;
+      grid-template-columns: 1fr;
+    }
+
+    .is-reverse .ui-split-side {
+      order: 0;
+    }
+
+    .is-sticky .ui-split-side {
+      position: static;
+    }
+  }
+</style>

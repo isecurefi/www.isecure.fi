@@ -8,6 +8,10 @@ import Layout from "../layouts/Layout.astro";
 import type { Lang } from "../types";
 import CatalogNavigation from "./CatalogNavigation.astro";
 import CatalogAccessSummary from "./CatalogAccessSummary.astro";
+import Callout from "./ui/Callout.astro";
+import PageHero from "./ui/PageHero.astro";
+import Section from "./ui/Section.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
 
 interface Props {
   lang: Lang;
@@ -120,232 +124,222 @@ const structuredData = {
   {structuredData}
   {lang}
   bodyClass="product-index-page"
+  fullWidth
 >
+  <PageHero eyebrow={copy.eyebrow} title={copy.heading} lead={copy.lead} />
   <CatalogNavigation {lang} />
-  <article class="product-index container">
-    <header>
-      <p class="product-index-eyebrow">{copy.eyebrow}</p>
-      <h1>{copy.heading}</h1>
-      <p>{copy.lead}</p>
-    </header>
 
-    <section class="test-journey" aria-labelledby="test-journey-title">
-      <p class="test-journey-eyebrow">{copy.journeyEyebrow}</p>
-      <h2 id="test-journey-title">{copy.journeyTitle}</h2>
-      <p>{copy.journeyLead}</p>
-      <ol>
-        <li>
-          <a
-            href={processing.routes[lang]}
-            data-analytics-content-type="product"
-            data-analytics-item-id={processing.id}
-            data-analytics-source="product-index-test-journey"
-            >{processing.name[lang]}</a
-          >
-          <span>{processing.buyerJob[lang]}</span>
-        </li>
-        <li>
-          <strong>{copy.localLabel}</strong>
-          <span>{copy.localText}</span>
-        </li>
-        <li>
-          <a
-            href={simulator.routes[lang]}
-            data-analytics-content-type="product"
-            data-analytics-item-id={simulator.id}
-            data-analytics-source="product-index-test-journey"
-            >{simulator.name[lang]}</a
-          >
-          <span>{copy.simulatorText}</span>
-        </li>
-        <li>
-          <a
-            href={connectivity.routes[lang]}
-            data-analytics-content-type="product"
-            data-analytics-item-id={connectivity.id}
-            data-analytics-source="product-index-test-journey"
-            >{connectivity.name[lang]}</a
-          >
-          <span>{copy.connectivityText}</span>
-        </li>
-      </ol>
-      <small>{copy.journeyLimit}</small>
-    </section>
+  <Section aria-labelledby="test-journey-title">
+    <SectionHeading
+      id="test-journey-title"
+      eyebrow={copy.journeyEyebrow}
+      title={copy.journeyTitle}
+      lead={copy.journeyLead}
+    />
+    <ol class="journey">
+      <li>
+        <a
+          href={processing.routes[lang]}
+          data-analytics-content-type="product"
+          data-analytics-item-id={processing.id}
+          data-analytics-source="product-index-test-journey"
+          >{processing.name[lang]}</a
+        >
+        <span>{processing.buyerJob[lang]}</span>
+      </li>
+      <li>
+        <strong>{copy.localLabel}</strong>
+        <span>{copy.localText}</span>
+      </li>
+      <li>
+        <a
+          href={simulator.routes[lang]}
+          data-analytics-content-type="product"
+          data-analytics-item-id={simulator.id}
+          data-analytics-source="product-index-test-journey"
+          >{simulator.name[lang]}</a
+        >
+        <span>{copy.simulatorText}</span>
+      </li>
+      <li>
+        <a
+          href={connectivity.routes[lang]}
+          data-analytics-content-type="product"
+          data-analytics-item-id={connectivity.id}
+          data-analytics-source="product-index-test-journey"
+          >{connectivity.name[lang]}</a
+        >
+        <span>{copy.connectivityText}</span>
+      </li>
+    </ol>
+    <Callout tone="note">{copy.journeyLimit}</Callout>
+  </Section>
 
-    <section aria-label={ui.catalogEntries}>
-      <div class="product-grid">
-        {
-          entries.map((entry) => (
-            <article class="product-card" data-catalog-entry={entry.id}>
-              <CatalogAccessSummary
-                {lang}
-                stage={entry.stage}
-                access={entry.access}
-                compact
-                card
-              >
-                <h3 slot="title">
-                  <a
-                    href={entry.routes[lang]}
-                    data-analytics-content-type="product"
-                    data-analytics-item-id={entry.id}
-                    data-analytics-source="product-index"
-                  >
-                    {entry.name[lang]}
-                  </a>
-                </h3>
-                <div class="product-card-content" data-card-content>
-                  <p>{entry.buyerJob[lang]}</p>
-                  <small>{entry.qualification.scope[lang]}</small>
-                </div>
-              </CatalogAccessSummary>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-  </article>
+  <Section tone="band" aria-label={ui.catalogEntries}>
+    <div class="product-grid">
+      {
+        entries.map((entry) => (
+          <article class="product-card" data-catalog-entry={entry.id}>
+            <CatalogAccessSummary
+              {lang}
+              stage={entry.stage}
+              access={entry.access}
+              compact
+              card
+            >
+              <h3 slot="title">
+                <a
+                  href={entry.routes[lang]}
+                  data-analytics-content-type="product"
+                  data-analytics-item-id={entry.id}
+                  data-analytics-source="product-index"
+                >
+                  {entry.name[lang]}
+                </a>
+              </h3>
+              <div class="product-card-content" data-card-content>
+                <p>{entry.buyerJob[lang]}</p>
+                <small>{entry.qualification.scope[lang]}</small>
+              </div>
+            </CatalogAccessSummary>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
 </Layout>
 
 <style>
-  .product-index {
-    margin: 3rem auto;
-    max-width: 1040px;
-  }
-
-  .product-index > header {
-    max-width: 780px;
-  }
-
-  .product-index-eyebrow {
-    color: #087f72;
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .product-index h1 {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-  }
-
-  .product-index > header > p:last-child {
-    font-size: 1.1rem;
-    line-height: 1.7;
-  }
-
-  .product-index section {
-    margin-top: 3rem;
-  }
-
-  .test-journey {
-    background: #eef8f6;
-    border: 1px solid #b9ddd6;
-    border-radius: 12px;
-    padding: clamp(1.25rem, 3vw, 2rem);
-  }
-
-  .test-journey-eyebrow {
-    color: #087f72;
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    margin: 0 0 0.4rem;
-    text-transform: uppercase;
-  }
-
-  .test-journey h2 {
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    margin: 0;
-  }
-
-  .test-journey > p:not(.test-journey-eyebrow) {
-    line-height: 1.65;
-    max-width: 800px;
-  }
-
-  .test-journey ol {
+  .journey {
+    counter-reset: journey;
     display: grid;
-    gap: 0.75rem;
+    gap: 20px;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     list-style: none;
-    margin: 1.25rem 0;
+    margin: 0 0 24px;
     padding: 0;
   }
 
-  .test-journey li {
-    background: #fff;
-    border: 1px solid #cde2dd;
-    border-radius: 8px;
-    padding: 0.9rem;
+  .journey li {
+    background: var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 14px;
+    counter-increment: journey;
+    padding: 22px;
   }
 
-  .test-journey li a,
-  .test-journey li strong {
-    color: #075d75;
+  .journey li::before {
+    align-items: center;
+    background: var(--landing-accent);
+    border-radius: 999px;
+    color: var(--landing-bg);
+    content: counter(journey);
+    display: inline-flex;
+    font-weight: 800;
+    height: 34px;
+    justify-content: center;
+    margin-bottom: 14px;
+    width: 34px;
+  }
+
+  .journey a,
+  .journey strong {
+    color: var(--landing-ink);
     display: block;
+    font-size: 1.08rem;
     font-weight: 750;
-    margin-bottom: 0.35rem;
+    margin-bottom: 6px;
+    text-decoration: none;
   }
 
-  .test-journey li span,
-  .test-journey small {
-    color: #53636a;
-    line-height: 1.5;
+  .journey a:hover {
+    color: var(--landing-accent);
+  }
+
+  .journey span {
+    color: var(--landing-muted);
+    line-height: 1.6;
   }
 
   .product-grid {
     display: grid;
-    column-gap: clamp(2rem, 5vw, 4rem);
+    gap: 20px;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    row-gap: 2.5rem;
   }
 
   .product-card {
+    background: var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(16, 24, 32, 0.04);
     min-width: 0;
-    padding: 0;
+    padding: 26px;
+    position: relative;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s,
+      transform 0.2s;
+  }
+
+  .product-card:hover {
+    border-color: var(--landing-accent);
+    box-shadow: 0 18px 40px rgba(16, 24, 32, 0.1);
+    transform: translateY(-3px);
+  }
+
+  .product-card:has(h3 a:focus-visible) {
+    outline: 2px solid var(--landing-accent);
+    outline-offset: 3px;
   }
 
   .product-card h3 {
-    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-size: 1.3rem;
     line-height: 1.25;
     margin: 0;
   }
 
+  .product-card h3 a {
+    color: var(--landing-ink);
+    text-decoration: none;
+  }
+
+  /* The title link covers the card, like ui/Card. */
+  .product-card h3 a::after {
+    content: "";
+    inset: 0;
+    position: absolute;
+  }
+
+  .product-card h3 a:focus-visible {
+    outline: none;
+  }
+
   .product-card p {
+    color: var(--landing-ink);
     font-size: 1.03rem;
     line-height: 1.6;
-    margin-top: 0.8rem;
+    margin: 14px 0 8px;
   }
 
   .product-card small {
-    color: #53636a;
+    color: var(--landing-muted);
     display: block;
     font-size: 0.94rem;
     line-height: 1.5;
   }
 
-  .product-card a {
-    color: #075d75;
-    font-weight: 750;
-    text-decoration: none;
+  @media (max-width: 980px) {
+    .journey {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
-  .product-card a:hover {
-    color: #087f72;
-  }
-
-  .product-card a:focus-visible {
-    border-radius: 3px;
-    outline: 3px solid #58b7aa;
-    outline-offset: 4px;
-  }
-
-  @media (max-width: 900px) {
-    .product-grid,
-    .test-journey ol {
+  @media (max-width: 640px) {
+    .journey {
       grid-template-columns: 1fr;
     }
   }

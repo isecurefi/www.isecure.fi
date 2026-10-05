@@ -1,6 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import type { Lang } from "../types";
+import Actions from "./ui/Actions.astro";
+import Button from "./ui/Button.astro";
+import Card from "./ui/Card.astro";
+import CheckList from "./ui/CheckList.astro";
+import PageHero from "./ui/PageHero.astro";
+import Prose from "./ui/Prose.astro";
+import Section from "./ui/Section.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
 
 interface Props {
   lang: Lang;
@@ -81,16 +89,16 @@ const alternateLinks = [
   lang={lang}
   description={t.description}
   alternateLinks={alternateLinks}
+  fullWidth
 >
-  <article class="about-page container">
-    <h1>{t.title}</h1>
-    <p class="about-intro">{t.intro}</p>
+  <PageHero title={t.title} lead={t.intro}>
+    <Card slot="aside" tone="accent">
+      <CheckList items={t.facts} />
+    </Card>
+  </PageHero>
 
-    <ul class="about-facts">
-      {t.facts.map((fact) => <li>{fact}</li>)}
-    </ul>
-
-    <section class="about-founder">
+  <Section tone="band" width="narrow">
+    <div class="about-founder">
       <img
         src="/images/dforsber.png"
         class="about-portrait"
@@ -98,69 +106,52 @@ const alternateLinks = [
         loading="lazy"
       />
       <div>
-        <h2>{t.founderTitle}</h2>
-        <p><strong>Dan Forsberg, D.Sc.</strong></p>
-        <p>{t.founderText}</p>
+        <SectionHeading title={t.founderTitle} />
+        <Prose>
+          <p><strong>Dan Forsberg, D.Sc.</strong></p>
+          <p>{t.founderText}</p>
+        </Prose>
       </div>
-    </section>
+    </div>
+  </Section>
 
-    <section>
-      <h2>{t.certsTitle}</h2>
-      <div class="about-certs">
-        {
-          awsCerts.map((cert) => (
-            <img
-              src={`/images/AWS_${cert}.png`}
-              alt={`AWS ${cert} certification`}
-              loading="lazy"
-            />
-          ))
-        }
-      </div>
-    </section>
-
-    <p>
-      <a href="https://github.com/isecurefi">{t.githubCta}</a>
-    </p>
-  </article>
+  <Section width="narrow">
+    <SectionHeading title={t.certsTitle} />
+    <div class="about-certs">
+      {
+        awsCerts.map((cert) => (
+          <img
+            src={`/images/AWS_${cert}.png`}
+            alt={`AWS ${cert} certification`}
+            loading="lazy"
+          />
+        ))
+      }
+    </div>
+    <Actions>
+      <Button href="https://github.com/isecurefi" variant="secondary"
+        >{t.githubCta}</Button
+      >
+    </Actions>
+  </Section>
 </Layout>
 
 <style>
-  .about-page {
-    margin: 3rem auto;
-    max-width: 760px;
-  }
-
-  .about-intro {
-    font-size: 1.1rem;
-    line-height: 1.7;
-  }
-
-  .about-facts {
-    line-height: 2;
-    margin: 1.5rem 0;
-    padding-left: 1.25rem;
-  }
-
-  .about-page h2 {
-    font-size: 1.25rem;
-    margin: 2rem 0 0.75rem;
-  }
-
-  .about-page p {
-    line-height: 1.7;
-  }
-
   .about-founder {
-    align-items: start;
+    align-items: center;
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: 120px minmax(0, 1fr);
-    margin: 2rem 0;
+    gap: 48px;
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+
+  .about-founder :global(.ui-heading) {
+    margin-bottom: 20px;
   }
 
   .about-portrait {
-    border-radius: 8px;
+    border: 1px solid var(--landing-line);
+    border-radius: 14px;
+    display: block;
     height: auto;
     width: 100%;
   }
@@ -169,18 +160,23 @@ const alternateLinks = [
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 16px;
   }
 
   .about-certs img {
     height: auto;
-    max-height: 56px;
+    max-height: 72px;
     width: auto;
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 640px) {
     .about-founder {
-      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 24px;
+      grid-template-columns: 1fr;
+    }
+
+    .about-portrait {
+      max-width: 160px;
     }
   }
 </style>

@@ -67,13 +67,13 @@ const ui = catalogUi[lang];
 
 <style>
   .catalog-access-summary {
-    color: #17252b;
+    color: var(--landing-ink, #17252b);
   }
 
   .catalog-stage-badge {
-    background: #e1efec;
+    background: rgba(79, 209, 197, 0.16);
     border-radius: 999px;
-    color: #075d54;
+    color: var(--landing-accent, #075d54);
     display: inline-flex;
     font-size: 0.76rem;
     font-weight: 800;
@@ -84,14 +84,14 @@ const ui = catalogUi[lang];
 
   .catalog-stage-badge.is-planned,
   .catalog-stage-badge.is-retired {
-    background: #fff0cc;
-    color: #775000;
+    background: rgba(255, 184, 76, 0.18);
+    color: #9a5b00;
   }
 
   .catalog-stage-badge.is-experimental,
   .catalog-stage-badge.is-beta {
-    background: #e7f0ff;
-    color: #174f8a;
+    background: rgba(138, 180, 255, 0.18);
+    color: var(--landing-blue, #174f8a);
   }
 
   .catalog-card-heading {
@@ -110,7 +110,8 @@ const ui = catalogUi[lang];
     flex: 0 0 auto;
   }
 
-  ul {
+  /* Scoped to the summary so global content list padding can't indent it. */
+  .catalog-access-summary ul {
     display: grid;
     gap: 0.55rem;
     list-style: none;
@@ -129,7 +130,7 @@ const ui = catalogUi[lang];
 
   li span,
   p {
-    color: #53636a;
+    color: var(--landing-muted, #53636a);
     font-size: 0.84rem;
     margin: 0.18rem 0 0;
   }

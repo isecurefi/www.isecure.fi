@@ -5,24 +5,22 @@ import OurProducts from "./OurProducts.astro";
 import References from "./References.astro";
 import AdminAppScreenshots from "./AdminAppScreenshots.astro";
 import adminAppRelease from "../data/admin-app-release.json";
+import Actions from "./ui/Actions.astro";
+import Button from "./ui/Button.astro";
+import FaqList from "./ui/FaqList.astro";
+import FeatureGrid from "./ui/FeatureGrid.astro";
+import Section from "./ui/Section.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
+import Split from "./ui/Split.astro";
+import Steps from "./ui/Steps.astro";
+import type { IconName } from "./ui/icons";
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
-const icon = (paths: string) =>
-  `<svg viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>`;
-const benefitIcons = [
-  icon('<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>'),
-  icon(
-    '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/>',
-  ),
-  icon(
-    '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>',
-  ),
-  icon('<path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 4l-4 16"/>'),
-];
+const benefitIcons: IconName[] = ["bolt", "key", "shield", "code"];
 const sdkLinks = [
   {
     title: "TypeScript SDK",
@@ -47,10 +45,7 @@ const content = {
     themeLabel: "Teema",
     darkLabel: "Tumma",
     lightLabel: "Vaalea",
-    proof: [
-      "Yli 600 yritystä käyttää API:a suoraan",
-      "Yli 10 vuotta tuotannossa",
-    ],
+    proof: ["Yli 600 yritystä käyttää API:a suoraan"],
     quickstartEyebrow: "Käyttöönotto",
     quickstartTitle: "Ensimmäinen testikutsu, vain kolme askelta",
     quickstartLead:
@@ -205,7 +200,7 @@ const content = {
     themeLabel: "Theme",
     darkLabel: "Dark",
     lightLabel: "Light",
-    proof: ["600+ companies use the API directly", "10+ years in production"],
+    proof: ["600+ companies use the API directly"],
     quickstartEyebrow: "Get started",
     quickstartTitle: "First test call in three steps",
     quickstartLead:
@@ -360,7 +355,7 @@ const content = {
     themeLabel: "Tema",
     darkLabel: "Mörk",
     lightLabel: "Ljus",
-    proof: ["600+ företag använder API:t direkt", "10+ år i produktion"],
+    proof: ["600+ företag använder API:t direkt"],
     quickstartEyebrow: "Kom igång",
     quickstartTitle: "Första testanropet i tre steg",
     quickstartLead:
@@ -518,22 +513,21 @@ const t = content[lang];
         <h1>{t.title}</h1>
         <p class="lead">{t.lead}</p>
         <p class="hero-icp">{t.icp}</p>
-        <div class="hero-actions">
-          <a
-            class="button button-primary"
+        <Actions>
+          <Button
             href="#quickstart"
             data-analytics-content-type="product_action"
             data-analytics-item-id="bank-connectivity-quickstart"
-            data-analytics-source="homepage-hero">{t.primaryCta}</a
+            data-analytics-source="homepage-hero">{t.primaryCta}</Button
           >
-          <a
-            class="button button-secondary"
+          <Button
+            variant="secondary"
             href="/wsapi_v2/"
             data-analytics-content-type="developer_resource"
             data-analytics-item-id="file-exchange-api-reference"
-            data-analytics-source="homepage-hero">{t.secondaryCta}</a
+            data-analytics-source="homepage-hero">{t.secondaryCta}</Button
           >
-        </div>
+        </Actions>
         <ul class="proof-line" aria-label="ISECure proof points">
           {t.proof.map((item) => <li>{item}</li>)}
         </ul>
@@ -549,111 +543,96 @@ const t = content[lang];
 
   <OurProducts {lang} />
 
-  <section class="landing-section quickstart-section" id="quickstart">
-    <div class="landing-inner section-heading">
-      <p class="eyebrow">{t.quickstartEyebrow}</p>
-      <h2>{t.quickstartTitle}</h2>
-      <p>{t.quickstartLead}</p>
-      <div class="doc-actions">
-        <a
-          class="button button-primary"
+  <Section id="quickstart">
+    <SectionHeading
+      eyebrow={t.quickstartEyebrow}
+      title={t.quickstartTitle}
+      lead={t.quickstartLead}
+    >
+      <Actions>
+        <Button
           href="/wsapi_v2/"
           data-analytics-content-type="developer_resource"
           data-analytics-item-id="file-exchange-api-reference"
-          data-analytics-source="homepage-quickstart">{t.docsCta}</a
+          data-analytics-source="homepage-quickstart">{t.docsCta}</Button
         >
-        <a
-          class="button button-secondary"
+        <Button
+          variant="secondary"
           href="https://github.com/isecurefi/isecure-ts-client"
-          target="_blank"
-          rel="noopener"
+          external
           data-analytics-content-type="developer_resource"
           data-analytics-item-id="typescript-sdk"
-          data-analytics-source="homepage-quickstart"
+          data-analytics-source="homepage-quickstart">TypeScript SDK</Button
         >
-          TypeScript SDK
-        </a>
-        <a
-          class="button button-secondary"
+        <Button
+          variant="secondary"
           href="https://github.com/isecurefi/isecure-py-client"
-          target="_blank"
-          rel="noopener"
+          external
           data-analytics-content-type="developer_resource"
           data-analytics-item-id="python-sdk"
-          data-analytics-source="homepage-quickstart"
+          data-analytics-source="homepage-quickstart">Python SDK (Beta)</Button
         >
-          Python SDK (Beta)
-        </a>
-      </div>
-    </div>
-    <div class="landing-inner quickstart-grid">
-      {
-        t.quickstart.map((step, index) => (
-          <section class="quickstart-step">
-            <span class="step-number">{index + 1}</span>
-            <h3>{step.title}</h3>
-            <p>{step.text}</p>
-          </section>
-        ))
-      }
-    </div>
-  </section>
+      </Actions>
+    </SectionHeading>
+    <Steps steps={t.quickstart} />
+  </Section>
 
   <section class="landing-section bank-section" id="banks">
-    <div class="landing-inner section-heading is-centered">
-      <p class="eyebrow">{t.banksEyebrow}</p>
-      <h2>{t.banksTitle}</h2>
-      <p>{t.banks}</p>
+    <div class="landing-inner">
+      <SectionHeading
+        align="center"
+        eyebrow={t.banksEyebrow}
+        title={t.banksTitle}
+        lead={t.banks}
+      />
     </div>
     <div class="bank-logo-panel">
       <BankLogos />
     </div>
   </section>
 
-  <section class="landing-section" id="model">
-    <div class="landing-inner split-sticky">
-      <div class="section-heading sticky-heading">
-        <p class="eyebrow">{t.whyEyebrow}</p>
-        <h2>{t.whyTitle}</h2>
-        <p>{t.whyLead}</p>
-      </div>
-      <div class="benefit-grid">
-        {
-          t.benefits.map((benefit, index) => (
-            <section class="benefit-card">
-              <span class="benefit-icon" set:html={benefitIcons[index]} />
-              <h3>{benefit.title}</h3>
-              <p>{benefit.text}</p>
-            </section>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+  <Section id="model">
+    <Split sticky>
+      <SectionHeading
+        slot="side"
+        eyebrow={t.whyEyebrow}
+        title={t.whyTitle}
+        lead={t.whyLead}
+      />
+      <FeatureGrid
+        columns={2}
+        items={t.benefits.map((benefit, index) => ({
+          ...benefit,
+          icon: benefitIcons[index],
+        }))}
+      />
+    </Split>
+  </Section>
 
-  <section class="landing-section architecture-section" id="api">
-    <div class="landing-inner split-grid">
-      <div>
-        <p class="eyebrow">{t.architectureEyebrow}</p>
-        <h2>{t.architectureTitle}</h2>
-        <p>{t.architectureLead}</p>
-        <div class="doc-actions architecture-actions">
-          <a
-            class="button button-primary"
+  <Section id="api" tone="band">
+    <Split reverse align="center">
+      <SectionHeading
+        slot="side"
+        eyebrow={t.architectureEyebrow}
+        title={t.architectureTitle}
+        lead={t.architectureLead}
+      >
+        <Actions>
+          <Button
             href="/wsapi_v2/"
             data-analytics-content-type="developer_resource"
             data-analytics-item-id="file-exchange-api-reference"
-            data-analytics-source="homepage-architecture">{t.docsCta}</a
+            data-analytics-source="homepage-architecture">{t.docsCta}</Button
           >
-          <a
-            class="button button-secondary"
+          <Button
+            variant="secondary"
             href="/wsapi_v2.json"
             data-analytics-content-type="developer_resource"
             data-analytics-item-id="file-exchange-openapi"
-            data-analytics-source="homepage-architecture">{t.openApiCta}</a
+            data-analytics-source="homepage-architecture">{t.openApiCta}</Button
           >
-        </div>
-      </div>
+        </Actions>
+      </SectionHeading>
       <div class="flow-panel" aria-label={t.architectureTitle}>
         {
           t.flow.map((step, index) => (
@@ -690,11 +669,11 @@ const t = content[lang];
           <p>{t.infrastructureOption.text}</p>
         </aside>
       </div>
-    </div>
-  </section>
+    </Split>
+  </Section>
 
-  <section class="landing-section management-app-section" id="management-app">
-    <div class="landing-inner admin-grid">
+  <Section id="management-app">
+    <div class="admin-grid">
       <div class="admin-copy">
         <p class="eyebrow">
           {t.managementApp.eyebrow}
@@ -712,8 +691,7 @@ const t = content[lang];
           {
             adminAppRelease.available ? (
               <>
-                <a
-                  class="button button-primary"
+                <Button
                   href={adminAppRelease.macOS}
                   data-analytics-content-type="download"
                   data-analytics-item-id="isecure-admin-macos"
@@ -721,9 +699,9 @@ const t = content[lang];
                 >
                   <strong>{t.managementApp.cta} macOS</strong>
                   <small>Apple Silicon</small>
-                </a>
-                <a
-                  class="button button-secondary"
+                </Button>
+                <Button
+                  variant="secondary"
                   href={adminAppRelease.windows}
                   data-analytics-content-type="download"
                   data-analytics-item-id="isecure-admin-windows"
@@ -731,7 +709,7 @@ const t = content[lang];
                 >
                   <strong>{t.managementApp.cta} Windows</strong>
                   <small>64-bit</small>
-                </a>
+                </Button>
               </>
             ) : (
               <>
@@ -760,15 +738,16 @@ const t = content[lang];
         />
       </div>
     </div>
-  </section>
+  </Section>
 
-  <section class="landing-section pricing-section" id="pricing">
-    <div class="landing-inner section-heading is-centered">
-      <p class="eyebrow">{t.pricingEyebrow}</p>
-      <h2>{t.pricingTitle}</h2>
-      <p>{t.pricingLead}</p>
-    </div>
-    <div class="landing-inner pricing-panel">
+  <Section id="pricing" tone="band">
+    <SectionHeading
+      align="center"
+      eyebrow={t.pricingEyebrow}
+      title={t.pricingTitle}
+      lead={t.pricingLead}
+    />
+    <div class="pricing-panel">
       <div class="pricing-main">
         <p class="pricing-from-label">{t.pricingFromLabel}</p>
         <p class="pricing-price">{t.pricingFrom}</p>
@@ -777,22 +756,22 @@ const t = content[lang];
         <ul class="pricing-included">
           {t.pricingIncluded.map((item) => <li>{item}</li>)}
         </ul>
-        <div class="doc-actions">
-          <a
-            class="button button-primary"
+        <Actions>
+          <Button
             href="#quickstart"
             data-analytics-content-type="product_action"
             data-analytics-item-id="bank-connectivity-quickstart"
-            data-analytics-source="homepage-pricing">{t.primaryCta}</a
+            data-analytics-source="homepage-pricing">{t.primaryCta}</Button
           >
-          <a
-            class="button button-secondary"
+          <Button
+            variant="secondary"
             href="#contact"
             data-analytics-content-type="product_access"
             data-analytics-item-id="bank-connectivity"
-            data-analytics-source="homepage-pricing">{t.pricingContactCta}</a
+            data-analytics-source="homepage-pricing"
+            >{t.pricingContactCta}</Button
           >
-        </div>
+        </Actions>
       </div>
       <div class="pricing-breakdown">
         {
@@ -810,39 +789,24 @@ const t = content[lang];
         <p class="pricing-note">{t.pricingNote}</p>
       </div>
     </div>
-  </section>
+  </Section>
 
-  <section class="landing-section faq-section" id="faq">
-    <div class="landing-inner split-sticky">
-      <div class="section-heading sticky-heading">
-        <p class="eyebrow">{t.faqEyebrow}</p>
-        <h2>{t.faqTitle}</h2>
-        <a class="faq-contact" href="#contact">{t.pricingContactCta} →</a>
-      </div>
-      <div class="faq-list">
-        {
-          t.faqs.map((faq) => (
-            <details>
-              <summary>{faq.q}</summary>
-              <p>{faq.a}</p>
-            </details>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+  <Section id="faq">
+    <Split sticky>
+      <SectionHeading slot="side" eyebrow={t.faqEyebrow} title={t.faqTitle}>
+        <Actions>
+          <Button variant="link" href="#contact">{t.pricingContactCta} →</Button
+          >
+        </Actions>
+      </SectionHeading>
+      <FaqList items={t.faqs} />
+    </Split>
+  </Section>
 </article>
 
 <script>
   // One API, all the banks: payment files flow from the secured hub to every
   // bank, statements flow back, and lanes near the pointer light up.
-  // The navigation bar is transparent over the hero and solid once scrolled.
-  const navbar = document.querySelector(".navbar");
-  const syncNavbar = () =>
-    navbar?.classList.toggle("is-scrolled", window.scrollY > 24);
-  window.addEventListener("scroll", syncNavbar, { passive: true });
-  syncNavbar();
-
   type Point = { x: number; y: number };
   const canvas = document.querySelector<HTMLCanvasElement>(".hero-network");
   const hero = canvas?.parentElement;
@@ -1053,241 +1017,6 @@ const t = content[lang];
 </script>
 
 <style>
-  :global(html.banking-theme-root),
-  :global(body.banking-theme-page) {
-    --landing-ink: #eaf2f4;
-    --landing-muted: #9fb1bf;
-    --landing-line: rgba(255, 255, 255, 0.14);
-    --landing-soft: #0d1820;
-    --landing-accent: #4fd1c5;
-    --landing-accent-strong: #35b8ad;
-    --landing-primary-bg: #4fd1c5;
-    --landing-primary-hover: #35b8ad;
-    --landing-primary-ink: #061314;
-    --landing-blue: #8ab4ff;
-    --landing-bg: #071116;
-    --landing-card: #101c25;
-    --landing-card-strong: #142633;
-    --landing-hero-bg:
-      linear-gradient(180deg, transparent 60%, #071116),
-      radial-gradient(
-        circle at 18% 12%,
-        rgba(79, 209, 197, 0.2),
-        transparent 34%
-      ),
-      radial-gradient(
-        circle at 80% 55%,
-        rgba(138, 180, 255, 0.12),
-        transparent 40%
-      ),
-      linear-gradient(120deg, #071116 0%, #0c1825 54%, #071116 100%);
-    --landing-hero-grid: rgba(255, 255, 255, 0.05);
-    --landing-band: linear-gradient(
-      180deg,
-      var(--landing-bg),
-      var(--landing-soft) 140px,
-      var(--landing-soft) calc(100% - 140px),
-      var(--landing-bg)
-    );
-    --landing-footer-bg:
-      radial-gradient(
-        circle at 85% 0%,
-        rgba(79, 209, 197, 0.12),
-        transparent 45%
-      ),
-      linear-gradient(120deg, #0b1820 0%, #0e1d2b 100%);
-  }
-
-  :global(html.banking-theme-root[data-isecure-theme="light"]),
-  :global(body.banking-theme-page[data-isecure-theme="light"]) {
-    --landing-ink: #12212f;
-    --landing-muted: #526173;
-    --landing-line: #dce5ea;
-    --landing-soft: #edf3f5;
-    --landing-accent: #006f6a;
-    --landing-accent-strong: #005a56;
-    --landing-primary-bg: #b8eee7;
-    --landing-primary-hover: #9fe4dc;
-    --landing-primary-ink: #073936;
-    --landing-blue: #174ea6;
-    --landing-bg: #ffffff;
-    --landing-card: #ffffff;
-    --landing-card-strong: #f8fbfc;
-    --landing-hero-bg:
-      linear-gradient(180deg, transparent 60%, #ffffff),
-      radial-gradient(
-        circle at 14% 16%,
-        rgba(0, 111, 106, 0.16),
-        transparent 38%
-      ),
-      radial-gradient(
-        circle at 80% 55%,
-        rgba(23, 78, 166, 0.12),
-        transparent 42%
-      ),
-      linear-gradient(120deg, #edf6f5 0%, #f6f9fc 55%, #edf2fb 100%);
-    --landing-hero-grid: rgba(18, 33, 47, 0.06);
-    --landing-footer-bg:
-      radial-gradient(
-        circle at 85% 0%,
-        rgba(23, 78, 166, 0.08),
-        transparent 45%
-      ),
-      linear-gradient(120deg, #e7f3f1 0%, #eef3fa 100%);
-  }
-
-  .banking-landing {
-    color: var(--landing-ink);
-    background: var(--landing-bg);
-  }
-
-  :global(html.banking-theme-root),
-  :global(body.banking-theme-page) {
-    background: var(--landing-bg);
-  }
-
-  :global(body.banking-theme-page .navbar) {
-    background: var(--landing-bg) !important;
-    border-bottom: 0 !important;
-    box-shadow: none !important;
-  }
-
-  :global(body.banking-theme-page .navbar .nav-link),
-  :global(body.banking-theme-page .navbar-brand),
-  :global(body.banking-theme-page .lang-link) {
-    color: var(--landing-ink);
-  }
-
-  :global(body.banking-theme-page .navbar-brand) {
-    align-items: center;
-    background: url("/images/isecure-small-logo.png") center calc(50% - 4px) /
-      contain no-repeat;
-    display: inline-flex;
-    flex: 0 0 69px;
-    font-size: 0;
-    height: 26px;
-    line-height: 0;
-    margin: 0 0.75rem 0 0;
-    padding: 0 !important;
-    position: relative;
-    width: 69px;
-  }
-
-  :global(body.banking-theme-page .navbar-brand img) {
-    display: block;
-    height: 1px;
-    inset: 0;
-    margin: 0;
-    opacity: 0;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-  }
-
-  :global(body.banking-theme-page .navbar .nav-link:hover),
-  :global(body.banking-theme-page .lang-link:hover) {
-    background: var(--landing-card);
-    color: var(--landing-accent);
-  }
-
-  :global(body.banking-theme-page .lang-link.active) {
-    background: var(--landing-primary-bg);
-    color: var(--landing-primary-ink);
-  }
-
-  :global(body.banking-theme-page .navbar-toggler) {
-    border-color: var(--landing-line);
-  }
-
-  :global(body.banking-theme-page .navbar-toggler-icon) {
-    filter: invert(1);
-  }
-
-  :global(
-    body.banking-theme-page[data-isecure-theme="light"] .navbar-toggler-icon
-  ) {
-    filter: none;
-  }
-
-  :global(body.banking-theme-page .site-theme-toggle) {
-    align-items: center;
-    background: transparent;
-    border: 1px solid var(--landing-line);
-    border-radius: 999px;
-    display: inline-flex;
-    gap: 2px;
-    margin: 0 0.55rem 0 0;
-    padding: 2px;
-  }
-
-  :global(body.banking-theme-page .site-theme-toggle button) {
-    background: transparent;
-    border: 0;
-    border-radius: 999px;
-    color: var(--landing-muted);
-    cursor: pointer;
-    display: inline-grid;
-    font-size: 1rem;
-    font-weight: 800;
-    height: 30px;
-    line-height: 1;
-    min-height: 30px;
-    padding: 0;
-    place-items: center;
-    width: 30px;
-  }
-
-  :global(
-    body.banking-theme-page .site-theme-toggle button[aria-pressed="true"]
-  ) {
-    background: var(--landing-primary-bg);
-    color: var(--landing-primary-ink);
-  }
-
-  :global(body.banking-theme-page .contact-section) {
-    --contact-bg: var(--landing-card);
-    --contact-panel: var(--landing-soft);
-    --contact-panel-strong: var(--landing-card-strong);
-    --contact-ink: var(--landing-ink);
-    --contact-muted: var(--landing-muted);
-    --contact-line: var(--landing-line);
-    --contact-input: var(--landing-bg);
-    --contact-accent: var(--landing-primary-bg);
-    --contact-accent-ink: var(--landing-primary-ink);
-    --contact-kicker: var(--landing-accent);
-    --contact-badge-bg: rgba(255, 255, 255, 0.04);
-    background: var(--landing-card) !important;
-    border: 1px solid var(--landing-line);
-    color: var(--landing-ink) !important;
-    box-shadow: none;
-  }
-
-  :global(body.banking-theme-page .footer span),
-  :global(body.banking-theme-page .footer p) {
-    color: var(--landing-muted) !important;
-  }
-
-  :global(body.banking-theme-page .footer .footer-col-title) {
-    color: var(--landing-accent) !important;
-  }
-
-  :global(body.banking-theme-page .footer strong),
-  :global(body.banking-theme-page .footer a),
-  :global(body.banking-theme-page .footer button) {
-    color: var(--landing-ink) !important;
-  }
-
-  :global(body.banking-theme-page .footer a:hover) {
-    color: var(--landing-accent) !important;
-  }
-
-  :global(body.banking-theme-page .footer-logo img) {
-    display: block;
-    height: auto;
-    max-width: 132px;
-    width: 100%;
-  }
-
   .landing-inner {
     width: min(1180px, calc(100% - 40px));
     margin: 0 auto;
@@ -1324,13 +1053,6 @@ const t = content[lang];
     position: absolute;
     width: 100%;
     z-index: -1;
-  }
-
-  .split-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.04fr) minmax(360px, 0.96fr);
-    gap: 44px;
-    align-items: center;
   }
 
   .eyebrow,
@@ -1385,45 +1107,6 @@ const t = content[lang];
     padding: 12px 16px;
   }
 
-  .hero-actions,
-  .doc-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 28px;
-  }
-
-  .button {
-    align-items: center;
-    border-radius: 6px;
-    display: inline-flex;
-    font-weight: 700;
-    min-height: 44px;
-    padding: 0 18px;
-    text-decoration: none;
-  }
-
-  .button-primary {
-    background: var(--landing-primary-bg);
-    color: var(--landing-primary-ink);
-  }
-
-  .button-primary:hover {
-    background: var(--landing-primary-hover);
-    color: var(--landing-primary-ink);
-  }
-
-  .button-secondary {
-    background: var(--landing-card);
-    border: 1px solid var(--landing-line);
-    color: var(--landing-ink);
-  }
-
-  .button-secondary:hover {
-    border-color: var(--landing-accent);
-    color: var(--landing-accent);
-  }
-
   .proof-line {
     color: var(--landing-muted);
     display: flex;
@@ -1462,148 +1145,14 @@ const t = content[lang];
     scroll-margin-top: 66px;
   }
 
-  .section-heading > * {
-    max-width: 780px;
-  }
-
-  .section-heading h2,
-  .split-grid h2 {
-    font-size: clamp(1.9rem, 3vw, 3rem);
-    line-height: 1.08;
-    margin: 0;
-  }
-
-  .section-heading p:not(.eyebrow),
-  .split-grid p:not(.eyebrow) {
-    color: var(--landing-muted);
-    font-size: 1.06rem;
-    line-height: 1.75;
-    margin: 18px 0 0;
-  }
-
-  .benefit-grid,
-  .quickstart-grid {
-    display: grid;
-    gap: 32px;
-    margin-top: 40px;
-  }
-
-  .quickstart-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .benefit-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .quickstart-step,
-  .benefit-card {
-    position: relative;
-  }
-
-  .quickstart-step:not(:last-child)::after {
-    background: linear-gradient(90deg, var(--landing-accent), transparent);
-    content: "";
-    height: 1px;
-    left: 58px;
-    opacity: 0.45;
-    position: absolute;
-    right: -20px;
-    top: 21px;
-  }
-
-  .quickstart-step h3,
-  .benefit-card h3 {
-    font-size: 1.12rem;
-    line-height: 1.3;
-    margin: 18px 0 8px;
-  }
-
-  .quickstart-step p,
-  .benefit-card p {
-    color: var(--landing-muted);
-    line-height: 1.65;
-    margin: 0;
-  }
-
-  .benefit-icon {
-    align-items: center;
-    background: rgba(79, 209, 197, 0.14);
-    border-radius: 12px;
-    color: var(--landing-accent);
-    display: inline-flex;
-    height: 46px;
-    justify-content: center;
-    width: 46px;
-  }
-
-  .benefit-icon :global(svg) {
-    fill: none;
-    height: 24px;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 1.8;
-    width: 24px;
-  }
-
   /* Alternating bands: white after the hero, then soft/white down the page. */
   .references-section {
     background: var(--landing-bg);
     padding: 40px 0 56px;
   }
 
-  .bank-section,
-  .architecture-section,
-  .pricing-section {
+  .bank-section {
     background: var(--landing-band);
-  }
-
-  /* Centred headings break up the left-aligned rhythm. */
-  .section-heading.is-centered {
-    text-align: center;
-  }
-
-  .section-heading.is-centered > *,
-  .section-heading.is-centered > p:not(.eyebrow) {
-    margin-inline: auto;
-  }
-
-  /* Heading pinned on the left while the content scrolls on the right. */
-  .split-sticky {
-    align-items: start;
-    display: grid;
-    gap: 64px;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  }
-
-  .sticky-heading {
-    position: sticky;
-    top: 96px;
-  }
-
-  .split-sticky .benefit-grid {
-    gap: 40px 36px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin-top: 0;
-  }
-
-  .faq-contact {
-    color: var(--landing-accent);
-    display: inline-block;
-    font-weight: 700;
-    margin-top: 22px;
-    text-decoration: none;
-  }
-
-  .faq-contact:hover {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-
-  /* Diagram on the left here, so it alternates with the admin section below. */
-  .architecture-section .split-grid > :first-child {
-    order: 2;
   }
 
   .flow-panel {
@@ -1611,15 +1160,6 @@ const t = content[lang];
     border: 1px solid var(--landing-line);
     border-radius: 8px;
     padding: 22px;
-  }
-
-  .architecture-actions {
-    margin-top: 24px;
-  }
-
-  /* Keeps the glow behind the app windows from widening the page. */
-  .management-app-section {
-    overflow-x: clip;
   }
 
   .admin-grid {
@@ -1666,9 +1206,9 @@ const t = content[lang];
     max-width: 460px;
   }
 
-  .admin-downloads .button {
+  .admin-downloads :global(.ui-button) {
     flex-direction: column;
-    justify-content: center;
+    gap: 0;
     line-height: 1.25;
     min-height: 58px;
     padding: 8px 16px;
@@ -1925,74 +1465,7 @@ const t = content[lang];
     margin: 10px 0 0;
   }
 
-  .faq-list {
-    margin-top: 0;
-  }
-
-  .faq-list details {
-    border-bottom: 1px solid var(--landing-line);
-    max-width: 880px;
-  }
-
-  .faq-list details:first-child {
-    border-top: 1px solid var(--landing-line);
-  }
-
-  summary {
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    font-size: 1.08rem;
-    font-weight: 750;
-    gap: 24px;
-    justify-content: space-between;
-    list-style: none;
-    padding: 22px 0;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-
-  summary::after {
-    color: var(--landing-accent);
-    content: "+";
-    flex: none;
-    font-size: 1.5rem;
-    font-weight: 400;
-    line-height: 1;
-    transition: transform 0.2s;
-  }
-
-  details[open] summary::after {
-    transform: rotate(45deg);
-  }
-
-  summary:hover {
-    color: var(--landing-accent);
-  }
-
-  details p {
-    color: var(--landing-muted);
-    line-height: 1.7;
-    margin: 0 0 22px;
-    max-width: 780px;
-  }
-
   @media (max-width: 980px) {
-    .split-sticky {
-      gap: 32px;
-      grid-template-columns: 1fr;
-    }
-
-    .sticky-heading {
-      position: static;
-    }
-
-    .architecture-section .split-grid > :first-child {
-      order: 0;
-    }
-
     .admin-grid {
       gap: 40px;
       grid-template-columns: 1fr;
@@ -2000,19 +1473,6 @@ const t = content[lang];
 
     .hero-network {
       opacity: 0.2;
-    }
-
-    .split-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .benefit-grid,
-    .quickstart-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .quickstart-step::after {
-      display: none;
     }
 
     .pricing-panel {
@@ -2034,12 +1494,6 @@ const t = content[lang];
       padding-top: 104px;
     }
 
-    .quickstart-grid,
-    .benefit-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .split-sticky .benefit-grid,
     .admin-downloads {
       grid-template-columns: 1fr;
     }

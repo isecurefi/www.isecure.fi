@@ -1,0 +1,60 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  align?: "start" | "center";
+  id?: string;
+}
+
+const { eyebrow, title, lead, align = "start", id } = Astro.props;
+---
+
+<div class:list={["ui-heading", `is-${align}`]}>
+  {eyebrow && <p class="ui-eyebrow">{eyebrow}</p>}
+  <h2 {id}>{title}</h2>
+  {lead && <p class="ui-lead">{lead}</p>}
+  <slot />
+</div>
+
+<style>
+  .ui-heading {
+    margin-bottom: 40px;
+  }
+
+  .ui-heading > * {
+    max-width: 780px;
+  }
+
+  .is-center {
+    text-align: center;
+  }
+
+  .is-center > * {
+    margin-inline: auto;
+  }
+
+  .ui-eyebrow {
+    color: var(--landing-accent);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    color: var(--landing-ink);
+    font-size: clamp(1.9rem, 3vw, 2.8rem);
+    line-height: 1.1;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-lead {
+    color: var(--landing-muted);
+    font-size: 1.08rem;
+    line-height: 1.75;
+    margin: 18px 0 0;
+  }
+</style>

@@ -6,11 +6,20 @@ import ProviderDetail from "./ProviderDetail.astro";
 import { getCatalogRecord } from "../data/productRegistry";
 import CatalogPageLayout from "../layouts/CatalogPageLayout.astro";
 import type { Lang } from "../types";
+import Actions from "./ui/Actions.astro";
+import Button from "./ui/Button.astro";
+import Callout from "./ui/Callout.astro";
+import Card from "./ui/Card.astro";
+import CardGrid from "./ui/CardGrid.astro";
+import PageHero from "./ui/PageHero.astro";
+import Prose from "./ui/Prose.astro";
+import Section from "./ui/Section.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
 
 // Shared presentational component for keyword-targeted content pages.
 // Each topic passes its trilingual `content` and a `related` cross-link list;
 // this renders consistent, indexable markup with hreflang alternates.
-interface Section {
+interface GuideSection {
   h2: string;
   paras: string[];
   list?: string[];
@@ -24,7 +33,7 @@ interface LangContent {
   description: string;
   h1: string;
   intro: string;
-  sections: Section[];
+  sections: GuideSection[];
   sources?: Source[];
   cta?: {
     title: string;
@@ -65,169 +74,114 @@ const relatedHref = (s: string) =>
   description={t.description}
   {slug}
   record={catalogRecord}
+  fullWidth
 >
-  <article class="guide-page container">
-    <h1>{t.h1}</h1>
-    <p class="guide-lead">{t.intro}</p>
+  <PageHero slot="hero" title={t.h1} lead={t.intro} />
 
-    {
-      t.sections.map((s) => (
-        <section>
-          <h2>{s.h2}</h2>
-          {s.paras.map((p) => (
-            <p>{p}</p>
-          ))}
-          {s.list && (
-            <ul>
-              {s.list.map((li) => (
-                <li>{li}</li>
+  <Section>
+    <article class="guide-page">
+      <Prose>
+        {
+          t.sections.map((s) => (
+            <section>
+              <h2>{s.h2}</h2>
+              {s.paras.map((p) => (
+                <p>{p}</p>
               ))}
-            </ul>
-          )}
-        </section>
-      ))
-    }
+              {s.list && (
+                <ul>
+                  {s.list.map((li) => (
+                    <li>{li}</li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          ))
+        }
+      </Prose>
 
-    {
-      t.sources && t.sources.length > 0 && (
-        <aside class="guide-sources">
-          <h2>{sourcesTitle}</h2>
-          <ul>
-            {t.sources.map((source) => (
-              <li>
-                <a href={source.href}>{source.label}</a>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      )
-    }
+      {
+        t.sources && t.sources.length > 0 && (
+          <div class="guide-sources">
+            <Callout tone="note">
+              <h2>{sourcesTitle}</h2>
+              <ul>
+                {t.sources.map((source) => (
+                  <li>
+                    <a href={source.href}>{source.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </Callout>
+          </div>
+        )
+      }
+    </article>
+  </Section>
 
-    {
-      catalogRecord?.kind === "product" && (
-        <>
-          <CatalogStatus lang={lang} record={catalogRecord} />
-          <CapabilityDirectionTable lang={lang} record={catalogRecord} />
-          <CatalogFaqGlossary lang={lang} record={catalogRecord} />
-        </>
-      )
-    }
+  {
+    catalogRecord?.kind === "product" && (
+      <Section tone="band">
+        <CatalogStatus lang={lang} record={catalogRecord} />
+        <CapabilityDirectionTable lang={lang} record={catalogRecord} />
+        <CatalogFaqGlossary lang={lang} record={catalogRecord} />
+      </Section>
+    )
+  }
 
-    {
-      catalogRecord?.kind === "integration" && (
+  {
+    catalogRecord?.kind === "integration" && (
+      <Section tone="band">
         <ProviderDetail lang={lang} record={catalogRecord} />
-      )
-    }
+      </Section>
+    )
+  }
 
-    {
-      t.cta && (
-        <aside class="guide-cta">
-          <h2>{t.cta.title}</h2>
-          <p>{t.cta.text}</p>
-          <a class="guide-cta-button" href="#contact">
-            {t.cta.label}
-          </a>
-        </aside>
-      )
-    }
+  {
+    t.cta && (
+      <Section tone="band" class="guide-cta">
+        <SectionHeading title={t.cta.title} lead={t.cta.text} align="center">
+          <Actions align="center">
+            <Button href="#contact">{t.cta.label}</Button>
+          </Actions>
+        </SectionHeading>
+      </Section>
+    )
+  }
 
-    {
-      related.length > 0 && (
-        <aside class="guide-related">
-          <h2>{relatedTitle}</h2>
-          <ul>
-            {related.map((r) => (
-              <li>
-                <a href={relatedHref(r.slug)}>{r[lang]}</a>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      )
-    }
-  </article>
+  {
+    related.length > 0 && (
+      <Section class="guide-related">
+        <SectionHeading title={relatedTitle} />
+        <CardGrid columns={related.length >= 4 ? 4 : 3}>
+          {related.map((r) => (
+            <Card title={r[lang]} href={relatedHref(r.slug)} icon="arrow" />
+          ))}
+        </CardGrid>
+      </Section>
+    )
+  }
 </CatalogPageLayout>
 
 <style>
-  .guide-page {
-    margin: 3rem auto;
-    max-width: 760px;
-  }
-
-  .guide-lead {
-    font-size: 1.15rem;
-    line-height: 1.7;
-    margin-bottom: 2rem;
-  }
-
-  .guide-page h2 {
-    font-size: 1.3rem;
-    margin: 2rem 0 0.75rem;
-  }
-
-  .guide-page p {
-    line-height: 1.75;
-  }
-
-  .guide-page ul {
-    line-height: 1.9;
-    padding-left: 1.25rem;
-  }
-
-  .guide-related {
-    border-top: 1px solid #dee2e6;
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-  }
-
-  .guide-related a {
-    color: #0d6efd;
+  /* Prose resets the first heading in each section, so space sections here. */
+  .guide-page section + section {
+    margin-top: 2.4em;
   }
 
   .guide-sources {
-    border-left: 4px solid #0d6efd;
-    margin-top: 2rem;
-    padding: 0.25rem 0 0.25rem 1rem;
+    margin-top: 48px;
+    max-width: 780px;
   }
 
   .guide-sources h2 {
-    margin-top: 0;
+    color: var(--landing-ink);
+    font-size: 1.05rem;
+    margin: 0 0 8px;
   }
 
   .guide-sources ul {
-    margin-bottom: 0;
-  }
-
-  .guide-cta {
-    background: #eef6ff;
-    border: 1px solid #cfe2ff;
-    border-radius: 12px;
-    margin-top: 2.5rem;
-    padding: 1.5rem;
-  }
-
-  .guide-cta h2 {
-    margin-top: 0;
-  }
-
-  .guide-cta-button {
-    background: #0d6efd;
-    border-radius: 8px;
-    color: #fff;
-    display: inline-block;
-    font-weight: 700;
-    margin-top: 0.5rem;
-    padding: 0.75rem 1.1rem;
-    text-decoration: none;
-  }
-
-  .guide-cta-button:hover {
-    background: #0b5ed7;
-    color: #fff;
-  }
-
-  .guide-cta-button:focus-visible {
-    outline: 3px solid #212529;
-    outline-offset: 3px;
+    margin: 0;
+    padding-left: 1.2rem;
   }
 </style>

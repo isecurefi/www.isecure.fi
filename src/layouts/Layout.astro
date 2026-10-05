@@ -31,9 +31,11 @@ const {
   alternateLinks = [],
   showLanguageSwitcher = true,
 } = Astro.props;
-const htmlClass = bodyClass.includes("banking-theme-page")
-  ? "banking-theme-root"
-  : "";
+// Every page shares the site theme (tokens in styles/theme.css).
+const htmlClass = "banking-theme-root";
+const themedBodyClass = bodyClass.includes("banking-theme-page")
+  ? bodyClass
+  : `banking-theme-page ${bodyClass}`.trim();
 import { defaultLanguage as defaultLang } from "../utils/languages";
 const [, pathLang] = Astro.url.pathname.split("/");
 const lang =
@@ -274,7 +276,7 @@ const fullTitle = titleAlreadyBranded
     </style>
   </head>
   <body
-    class={bodyClass}
+    class={themedBodyClass}
     data-isecure-theme={htmlClass ? "light" : undefined}
     data-analytics-language={lang}
   >

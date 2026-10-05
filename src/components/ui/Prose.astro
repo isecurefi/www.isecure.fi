@@ -1,0 +1,74 @@
+---
+// Long-form text (guides, policies) with themed typography.
+---
+
+<div class="ui-prose"><slot /></div>
+
+<style>
+  .ui-prose {
+    color: var(--landing-ink);
+    font-size: 1.04rem;
+    line-height: 1.75;
+    max-width: 780px;
+  }
+
+  .ui-prose :global(h2) {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    line-height: 1.2;
+    margin: 2.2em 0 0.6em;
+  }
+
+  .ui-prose :global(h3) {
+    font-size: 1.2rem;
+    margin: 1.8em 0 0.5em;
+  }
+
+  /* The block's first element (or the heading opening a first wrapper
+     section) loses its top margin; later sections keep their spacing. */
+  .ui-prose > :global(:first-child),
+  .ui-prose > :global(:first-child > :first-child) {
+    margin-top: 0;
+  }
+
+  .ui-prose :global(p),
+  .ui-prose :global(li) {
+    color: var(--landing-muted);
+  }
+
+  .ui-prose :global(strong) {
+    color: var(--landing-ink);
+  }
+
+  .ui-prose :global(a) {
+    color: var(--landing-accent);
+    font-weight: 600;
+    text-underline-offset: 0.2em;
+  }
+
+  .ui-prose :global(code) {
+    background: var(--landing-soft);
+    border-radius: 4px;
+    color: var(--landing-ink);
+    font-size: 0.9em;
+    padding: 0.1em 0.35em;
+  }
+
+  .ui-prose :global(table) {
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    width: 100%;
+  }
+
+  .ui-prose :global(th),
+  .ui-prose :global(td) {
+    border-bottom: 1px solid var(--landing-line);
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .ui-prose :global(th) {
+    color: var(--landing-ink);
+    font-size: 0.9rem;
+  }
+</style>

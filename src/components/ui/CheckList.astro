@@ -1,0 +1,51 @@
+---
+import { iconSvg, type IconName } from "./icons";
+
+interface Props {
+  items: readonly string[];
+  icon?: IconName;
+}
+
+const { items, icon = "check" } = Astro.props;
+const glyph = iconSvg(icon);
+---
+
+<ul class="ui-checklist">
+  {
+    items.map((item) => (
+      <li>
+        <span class="ui-checklist-icon" set:html={glyph} />
+        <span>{item}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .ui-checklist {
+    display: grid;
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    color: var(--landing-muted);
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 22px minmax(0, 1fr);
+    line-height: 1.65;
+  }
+
+  .ui-checklist-icon {
+    color: var(--landing-accent);
+    padding-top: 2px;
+  }
+
+  .ui-checklist-icon :global(svg) {
+    display: block;
+    height: 20px;
+    width: 20px;
+  }
+</style>

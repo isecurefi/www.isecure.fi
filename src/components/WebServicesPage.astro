@@ -5,6 +5,15 @@ import type { Lang } from "../types";
 import CapabilityDirectionTable from "./CapabilityDirectionTable.astro";
 import CatalogAccessSummary from "./CatalogAccessSummary.astro";
 import CatalogFaqGlossary from "./CatalogFaqGlossary.astro";
+import Actions from "./ui/Actions.astro";
+import Button from "./ui/Button.astro";
+import Card from "./ui/Card.astro";
+import CardGrid from "./ui/CardGrid.astro";
+import CheckList from "./ui/CheckList.astro";
+import PageHero from "./ui/PageHero.astro";
+import Section from "./ui/Section.astro";
+import SectionHeading from "./ui/SectionHeading.astro";
+import Split from "./ui/Split.astro";
 
 interface PageContent {
   title: string;
@@ -210,283 +219,155 @@ const relatedHref = (slug: string) =>
   description={t.description}
   {record}
   bodyClass="bank-connectivity-page"
+  fullWidth
 >
-  <article class="bank-connectivity container">
-    <header>
-      <p class="eyebrow">{record.name[lang]}</p>
-      <h1>{t.h1}</h1>
-      <p class="lead">{t.intro}</p>
-    </header>
-
-    <section class="status" aria-labelledby="bank-connectivity-status">
-      <div>
+  <PageHero slot="hero" eyebrow={record.name[lang]} title={t.h1} lead={t.intro}>
+    <section
+      slot="aside"
+      class="status"
+      aria-labelledby="bank-connectivity-status"
+    >
+      <Card tone="accent">
         <CatalogAccessSummary
+          slot="header"
           {lang}
           stage={record.stage}
           access={record.access}
         />
         <h2 id="bank-connectivity-status">{t.statusTitle}</h2>
-      </div>
-      <div class="status-copy">
         <p>{record.qualification.scope[lang]}</p>
-        <a
-          href={record.cta.href[lang]}
-          data-analytics-content-type="product_access"
-          data-analytics-item-id={record.id}
-          data-analytics-source="product-status"
-        >
-          {record.cta.label[lang]}
-        </a>
-      </div>
+        <Actions>
+          <Button
+            href={record.cta.href[lang]}
+            data-analytics-content-type="product_access"
+            data-analytics-item-id={record.id}
+            data-analytics-source="product-status"
+          >
+            {record.cta.label[lang]}
+          </Button>
+        </Actions>
+      </Card>
     </section>
+  </PageHero>
 
+  <Section>
     <div class="product-sections">
       {
         t.sections.map((section) => (
-          <section>
-            <h2>{section.h2}</h2>
+          <Split>
+            <h2 slot="side">{section.h2}</h2>
             {section.paras.map((paragraph) => (
               <p>{paragraph}</p>
             ))}
-            {section.list && (
-              <ul>
-                {section.list.map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
-            )}
-          </section>
+            {section.list && <CheckList items={section.list} />}
+          </Split>
         ))
       }
-
-      <section>
-        <h2>{t.limitationsTitle}</h2>
-        <ul class="boundaries">
-          {record.limitations[lang].map((limitation) => <li>{limitation}</li>)}
-        </ul>
-      </section>
     </div>
+  </Section>
 
-    <aside class="simulator-callout">
-      <div>
-        <h2>{t.simulatorTitle}</h2>
-        <p>{t.simulatorText}</p>
-      </div>
-      <a
-        href={simulatorRecord.routes[lang]}
-        data-analytics-content-type="product"
-        data-analytics-item-id={simulatorRecord.id}
-        data-analytics-source="bank-connectivity-simulator">{t.simulatorLink}</a
-      >
-    </aside>
+  <Section tone="band">
+    <Split sticky>
+      <SectionHeading slot="side" title={t.limitationsTitle} />
+      <CheckList items={record.limitations[lang]} icon="shield" />
+    </Split>
+  </Section>
 
+  <Section width="narrow">
+    <SectionHeading
+      align="center"
+      title={t.simulatorTitle}
+      lead={t.simulatorText}
+    >
+      <Actions align="center">
+        <Button
+          href={simulatorRecord.routes[lang]}
+          data-analytics-content-type="product"
+          data-analytics-item-id={simulatorRecord.id}
+          data-analytics-source="bank-connectivity-simulator"
+        >
+          {t.simulatorLink}
+        </Button>
+      </Actions>
+    </SectionHeading>
+  </Section>
+
+  <Section tone="band">
     <CapabilityDirectionTable {lang} {record} />
     <CatalogFaqGlossary {lang} {record} />
+  </Section>
 
-    <aside class="related">
-      <h2>{relatedTitle}</h2>
-      <ul>
-        {
-          related.map((item) => (
-            <li>
-              <a href={relatedHref(item.slug)}>{item[lang]}</a>
-            </li>
-          ))
-        }
-      </ul>
-    </aside>
-  </article>
+  <Section>
+    <SectionHeading title={relatedTitle} />
+    <CardGrid columns={3}>
+      {
+        related.map((item) => (
+          <Card
+            title={item[lang]}
+            href={relatedHref(item.slug)}
+            icon="document"
+          />
+        ))
+      }
+    </CardGrid>
+  </Section>
 </CatalogPageLayout>
 
 <style>
-  .bank-connectivity {
-    margin: 3rem auto;
-    max-width: 1000px;
-  }
-
-  header,
-  .bank-connectivity > section,
-  .product-sections,
-  .simulator-callout,
-  .related {
-    margin-inline: auto;
-    max-width: 900px;
-  }
-
-  header {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 2rem;
-  }
-
-  .eyebrow {
-    color: #087f72;
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  h1 {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-  }
-
-  .lead,
-  .product-sections p,
-  .product-sections li {
-    line-height: 1.7;
-  }
-
-  .lead {
-    font-size: 1.12rem;
-  }
-
-  .status,
-  .product-sections,
-  .simulator-callout,
-  .related {
-    margin-top: 2.5rem;
-  }
-
-  .status {
-    background: #eef5ff;
-    border: 1px solid #bfd1e8;
-    border-radius: 12px;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: minmax(180px, 0.55fr) minmax(0, 1.45fr);
-    padding: 1.4rem;
-  }
-
   .status h2 {
-    font-size: 1.35rem;
-    margin: 0.6rem 0 0;
+    color: var(--landing-ink);
+    font-size: 1.15rem;
+    margin: 6px 0 0;
   }
 
   .status p {
-    line-height: 1.7;
     margin: 0;
   }
 
-  .status-copy a {
-    background: #087f72;
-    border-radius: 8px;
-    color: #fff;
-    display: inline-flex;
-    font-weight: 700;
-    margin-top: 0.9rem;
-    padding: 0.65rem 0.9rem;
-    text-decoration: none;
-  }
-
-  .status-copy a:focus-visible,
-  .related a:focus-visible {
-    outline: 3px solid #17252b;
-    outline-offset: 3px;
+  .status :global(.ui-actions) {
+    margin-top: 12px;
   }
 
   .product-sections {
     display: grid;
-    gap: 2.5rem;
+  }
+
+  .product-sections > :global(.ui-split) {
+    padding: 32px 0;
+  }
+
+  .product-sections > :global(.ui-split + .ui-split) {
+    border-top: 1px solid var(--landing-line);
+  }
+
+  .product-sections > :global(.ui-split:first-child) {
+    padding-top: 0;
+  }
+
+  .product-sections > :global(.ui-split:last-child) {
+    padding-bottom: 0;
+  }
+
+  @media (max-width: 980px) {
+    .product-sections > :global(.ui-split) {
+      gap: 14px;
+    }
   }
 
   .product-sections h2 {
-    font-size: 1.45rem;
-    margin: 0 0 0.75rem;
-  }
-
-  .product-sections p {
-    margin: 0 0 0.75rem;
-  }
-
-  .product-sections ul {
-    padding-left: 1.4rem;
-  }
-
-  .product-sections li + li {
-    margin-top: 0.5rem;
-  }
-
-  .boundaries {
-    border-left: 4px solid #087f72;
-    padding-left: 1.25rem;
-  }
-
-  .simulator-callout {
-    align-items: center;
-    background: #eef8f6;
-    border: 1px solid #b9ddd6;
-    border-radius: 12px;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: minmax(0, 1fr) auto;
-    padding: 1.5rem;
-  }
-
-  .simulator-callout h2 {
-    font-size: 1.4rem;
-    margin: 0 0 0.65rem;
-  }
-
-  .simulator-callout p {
-    line-height: 1.7;
+    color: var(--landing-ink);
+    font-size: 1.5rem;
+    line-height: 1.25;
     margin: 0;
   }
 
-  .simulator-callout a {
-    background: #087f72;
-    border-radius: 8px;
-    color: #fff;
-    display: inline-flex;
-    font-weight: 700;
-    padding: 0.7rem 1rem;
-    text-decoration: none;
+  .product-sections p {
+    color: var(--landing-muted);
+    line-height: 1.75;
+    margin: 0 0 14px;
   }
 
-  .simulator-callout a:focus-visible {
-    outline: 3px solid #17252b;
-    outline-offset: 3px;
-  }
-
-  .related {
-    border-top: 1px solid var(--border-color);
-    padding-top: 1.5rem;
-  }
-
-  .related h2 {
-    font-size: 1.35rem;
-  }
-
-  .related ul {
-    columns: 2;
-    line-height: 1.7;
-    padding-left: 1.25rem;
-  }
-
-  .related li {
-    break-inside: avoid;
-    margin-bottom: 0.45rem;
-  }
-
-  .related a {
-    color: #075d75;
-  }
-
-  @media (max-width: 760px) {
-    .status,
-    .simulator-callout {
-      grid-template-columns: 1fr;
-    }
-
-    .related ul {
-      columns: 1;
-    }
-  }
-
-  @media (max-width: 576px) {
-    .bank-connectivity {
-      margin-block: 2rem;
-    }
+  .product-sections :global(.ui-checklist) {
+    margin-top: 6px;
   }
 </style>

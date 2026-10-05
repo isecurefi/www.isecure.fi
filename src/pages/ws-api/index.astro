@@ -1,8 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getText } from "../../store/translations";
+import PageHero from "../../components/ui/PageHero.astro";
+import Prose from "../../components/ui/Prose.astro";
+import Section from "../../components/ui/Section.astro";
 import BankLogos from "../../components/BankLogos.astro";
-import "../../styles/PageContent.css";
 
 const lang = "fi";
 const landingCanonical = "https://www.isecure.fi/";
@@ -14,105 +16,108 @@ const landingCanonical = "https://www.isecure.fi/";
   robots="noindex, follow"
   canonicalUrl={landingCanonical}
   description={"ISECure WS-Kanava API: Turvallinen ja skaalautuva REST API pankkiyhteyksien hallintaan. Tukee kaikkia suomalaisia pankkeja, AWS-pohjainen ratkaisu, OpenAPI-dokumentaatio."}
+  fullWidth
 >
-  <div class="container page-container">
-    <h1 class="page-header">ISECure WS-Kanava API</h1>
+  <PageHero width="narrow" title="ISECure WS-Kanava API" />
 
-    <div class="content-section">
-      <div class="main-content">
-        <h2 class="section-title">WS-Kanava SaaS palveluna - API</h2>
+  <Section width="narrow">
+    <Prose>
+      <h2>WS-Kanava SaaS palveluna - API</h2>
+      <p>
+        Oletko kehittämässä omaa palvelua tai tuotetta, jossa hyödynnät
+        WS-kanavaa? Tarjoamme kilpailukykyiseen hintaan WS-Kanavan SaaS
+        palveluna.
+      </p>
 
-        <div class="content-block">
-          <p>
-            Oletko kehittämässä omaa palvelua tai tuotetta, jossa hyödynnät
-            WS-kanavaa? Tarjoamme kilpailukykyiseen hintaan WS-Kanavan SaaS
-            palveluna.
-          </p>
+      <p>
+        Palvelumme käyttää mm. AWS:n API Gateway, Dynamo DB, Cognito Your User
+        Pool, KMS, IAM, CloudWatch ja Lambda palveluita ja skaalautuu tarpeidesi
+        mukaan.
+      </p>
 
-          <p>
-            Palvelumme käyttää mm. AWS:n API Gateway, Dynamo DB, Cognito Your
-            User Pool, KMS, IAM, CloudWatch ja Lambda palveluita ja skaalautuu
-            tarpeidesi mukaan.
-          </p>
+      <ul>
+        <li>
+          Yksi ja sama rajapinta kaikille pankeille tiedostojen lähettämiseen ja
+          vastaanottamiseen, tunnusten- ja sertifikaattien hallintaan.
+          Sertifikaattien automaattinen uudistaminen.
+        </li>
+        <li>
+          Integraattorikohtainen API -avain. Tunnukset saman API -avaimen
+          sisällä voivat jakaa sertifikaatteja toisilleen.
+        </li>
+        <li>
+          Rekisteröityminen sisältää erilliset "admin", että "data" -tunnukset.
+          Admin -tunnus vaatii kirjautumisessa salasanan lisäksi SMS koodin.
+          "data" -tunnus vain salasanan. Admin -tunnuksella hallinnoidaan mm.
+          PGP avaimia, sertifikaattien jakoa eri tunnusten välillä (optio), jne.
+        </li>
+        <li>
+          Aineiston lähetyksessä mahdollisuus vaatia PGP -allekirjoitetut
+          aineistot (optio)
+        </li>
+        <li>Erinomainen komentorivityökalu palvelun käyttöön ("wscli")</li>
+        <li>
+          Sertifikaattien import ja export -toiminnot, ei "vendor lock":ia.
+          Sertifikaattia vastaava salainen avain exportataan vain asiakkaan PGP
+          avaimelle. Palvelussa salainen avain on kryptattu AWS:n KMS
+          palvelulla.
+        </li>
+        <li>
+          Kirjautuminen käyttää julkisen avaimen RSA kryptausta ja
+          challenge-response metodia. API ajetaan SSL:n yli, vaikkakin itse
+          kirjautumisen tietoturva on siitä riippumaton (MitM). "admin"
+          -tunnuksen kirjautuminen vaatii kertakäyttöisen SMS koodin (2FA).
+        </li>
+        <li>
+          Paranneltu <a href="https://isecurefi.github.io/wscli-php/"
+            >WSCLI PHP SDK ja client</a
+          > helppoa integroimista varten.
+        </li>
+        <li>
+          <a href="https://github.com/isecurefi/wscli-php"
+            >WSCLI SDK ja client - GitHub repository</a
+          >
+        </li>
+        <li>
+          <a href="/wsapi_v2.json"
+            >WSAPI OpenAPI API rajapintakuvaus JSON -muodossa</a
+          >
+        </li>
+        <li>
+          <a href="/wsapi_v2/">WSAPI v2 API Dokumentaatio</a>
+        </li>
+      </ul>
 
-          <ul>
-            <li>
-              Yksi ja sama rajapinta kaikille pankeille tiedostojen
-              lähettämiseen ja vastaanottamiseen, tunnusten- ja sertifikaattien
-              hallintaan. Sertifikaattien automaattinen uudistaminen.
-            </li>
-            <li>
-              Integraattorikohtainen API -avain. Tunnukset saman API -avaimen
-              sisällä voivat jakaa sertifikaatteja toisilleen.
-            </li>
-            <li>
-              Rekisteröityminen sisältää erilliset "admin", että "data"
-              -tunnukset. Admin -tunnus vaatii kirjautumisessa salasanan lisäksi
-              SMS koodin. "data" -tunnus vain salasanan. Admin -tunnuksella
-              hallinnoidaan mm. PGP avaimia, sertifikaattien jakoa eri tunnusten
-              välillä (optio), jne.
-            </li>
-            <li>
-              Aineiston lähetyksessä mahdollisuus vaatia PGP -allekirjoitetut
-              aineistot (optio)
-            </li>
-            <li>Erinomainen komentorivityökalu palvelun käyttöön ("wscli")</li>
-            <li>
-              Sertifikaattien import ja export -toiminnot, ei "vendor lock":ia.
-              Sertifikaattia vastaava salainen avain exportataan vain asiakkaan
-              PGP avaimelle. Palvelussa salainen avain on kryptattu AWS:n KMS
-              palvelulla.
-            </li>
-            <li>
-              Kirjautuminen käyttää julkisen avaimen RSA kryptausta ja
-              challenge-response metodia. API ajetaan SSL:n yli, vaikkakin itse
-              kirjautumisen tietoturva on siitä riippumaton (MitM). "admin"
-              -tunnuksen kirjautuminen vaatii kertakäyttöisen SMS koodin (2FA).
-            </li>
-            <li>
-              Paranneltu <a href="https://isecurefi.github.io/wscli-php/"
-                >WSCLI PHP SDK ja client</a
-              > helppoa integroimista varten.
-            </li>
-            <li>
-              <a href="https://github.com/isecurefi/wscli-php"
-                >WSCLI SDK ja client - GitHub repository</a
-              >
-            </li>
-            <li>
-              <a href="/wsapi_v2.json"
-                >WSAPI OpenAPI API rajapintakuvaus JSON -muodossa</a
-              >
-            </li>
-            <li>
-              <a href="/wsapi_v2/">WSAPI v2 API Dokumentaatio</a>
-            </li>
-          </ul>
+      <p>
+        Halutessasi autamme integroinnissa ja tarvittaessa asennamme teille
+        työkalut ja hoidamme boardauksen - rekisteröimme sinut ja hoidamme
+        sertifikaattien enrollauksen puolestasi.
+      </p>
+    </Prose>
+  </Section>
 
-          <p>
-            Halutessasi autamme integroinnissa ja tarvittaessa asennamme teille
-            työkalut ja hoidamme boardauksen - rekisteröimme sinut ja hoidamme
-            sertifikaattien enrollauksen puolestasi.
-          </p>
-        </div>
-      </div>
-    </div>
+  <Section id="sftp" width="narrow" spacing="compact">
+    <Prose>
+      <h2>Pankkitiedostot SFTP-palveluna</h2>
+      <p>
+        Palvelu synkronoi tiedostot pankista esim. SFTP palvelimellesi tai
+        vaikkapa AWS S3 Bucket:iin säännöllisesti ja luotettavasti haluamansi
+        ajankohtana. Selkeät raportit sekä lähetyksistä että vastaanotoista.
+      </p>
+    </Prose>
+  </Section>
 
-    <div id="sftp" class="content-section">
-      <div class="main-content">
-        <h2 class="section-title">Pankkitiedostot SFTP-palveluna</h2>
-        <div class="content-block">
-          <p>
-            Palvelu synkronoi tiedostot pankista esim. SFTP palvelimellesi tai
-            vaikkapa AWS S3 Bucket:iin säännöllisesti ja luotettavasti
-            haluamansi ajankohtana. Selkeät raportit sekä lähetyksistä että
-            vastaanotoista.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <h3>{getText("webService.banks", lang)}</h3>
+  <Section tone="band">
+    <h3 class="banks-title">{getText("webService.banks", lang)}</h3>
     <BankLogos />
-  </div>
+  </Section>
 </Layout>
+
+<style>
+  .banks-title {
+    color: var(--landing-ink);
+    font-size: 1.2rem;
+    margin: 0 0 24px;
+    text-align: center;
+  }
+</style>

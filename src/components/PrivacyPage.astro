@@ -1,6 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import type { Lang } from "../types";
+import PageHero from "./ui/PageHero.astro";
+import Prose from "./ui/Prose.astro";
+import Section from "./ui/Section.astro";
 
 interface Props {
   lang: Lang;
@@ -113,42 +116,34 @@ const alternateLinks = [
   lang={lang}
   description={t.description}
   alternateLinks={alternateLinks}
+  fullWidth
 >
-  <article class="legal-page container">
-    <h1>{t.title}</h1>
+  <PageHero width="narrow" title={t.title}>
     <p class="legal-updated">{t.updated}</p>
-    {
-      t.sections.map((section) => (
-        <section>
-          <h2>{section.h}</h2>
-          <p>{section.p}</p>
-        </section>
-      ))
-    }
-  </article>
+  </PageHero>
+
+  <Section width="narrow">
+    <Prose>
+      {
+        t.sections.map((section) => (
+          <section>
+            <h2>{section.h}</h2>
+            <p>{section.p}</p>
+          </section>
+        ))
+      }
+    </Prose>
+  </Section>
 </Layout>
 
 <style>
-  .legal-page {
-    margin: 3rem auto;
-    max-width: 760px;
-  }
-
-  .legal-page h1 {
-    margin-bottom: 0.5rem;
-  }
-
   .legal-updated {
-    color: var(--text-muted, #6c757d);
-    margin-bottom: 2rem;
+    color: var(--landing-muted);
+    margin: 18px 0 0;
   }
 
-  .legal-page h2 {
-    font-size: 1.25rem;
-    margin: 1.75rem 0 0.5rem;
-  }
-
-  .legal-page p {
-    line-height: 1.7;
+  /* Prose resets each section's leading h2, so space the sections here. */
+  section + section {
+    margin-top: 2.2em;
   }
 </style>

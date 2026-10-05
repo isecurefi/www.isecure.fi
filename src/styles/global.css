@@ -105,7 +105,7 @@ html.banking-theme-root body.banking-theme-page .navbar {
 
 /* On the landing page the bar blends into the hero until the page scrolls. */
 html.banking-theme-root
-  body.banking-theme-page:has(.landing-hero)
+  body.banking-theme-page:has(.landing-hero, .ui-hero)
   .navbar:not(.is-scrolled):not(:has(.navbar-collapse.show, .collapsing)) {
   background: transparent !important;
 }

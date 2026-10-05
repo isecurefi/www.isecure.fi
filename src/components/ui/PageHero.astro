@@ -1,0 +1,139 @@
+---
+// Page-level hero: brand gradient, faint grid and a fade into the page.
+// It extends up behind the fixed navigation, which stays transparent over it.
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  align?: "start" | "center";
+  // "narrow" lines the hero up with Section width="narrow" on reading pages.
+  width?: "default" | "narrow";
+}
+
+const {
+  eyebrow,
+  title,
+  lead,
+  align = "start",
+  width = "default",
+} = Astro.props;
+const hasAside = Astro.slots.has("aside");
+---
+
+<section
+  class:list={[
+    "ui-hero",
+    `is-${align}`,
+    `is-${width}`,
+    { "has-aside": hasAside },
+  ]}
+>
+  <div class="ui-hero-inner">
+    <div class="ui-hero-copy">
+      {eyebrow && <p class="ui-hero-eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      {lead && <p class="ui-hero-lead">{lead}</p>}
+      <slot />
+    </div>
+    {
+      hasAside && (
+        <div class="ui-hero-aside">
+          <slot name="aside" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .ui-hero {
+    background: var(--landing-hero-bg);
+    isolation: isolate;
+    margin-top: -56px;
+    overflow: hidden;
+    padding: 136px 0 72px;
+    position: relative;
+  }
+
+  .ui-hero::before {
+    background-image:
+      linear-gradient(var(--landing-hero-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--landing-hero-grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    content: "";
+    inset: 0;
+    mask-image: radial-gradient(ellipse at 75% 40%, #000, transparent 70%);
+    pointer-events: none;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .ui-hero-inner {
+    margin: 0 auto;
+    width: min(1180px, calc(100% - 40px));
+  }
+
+  .is-narrow .ui-hero-inner {
+    width: min(880px, calc(100% - 40px));
+  }
+
+  .has-aside .ui-hero-inner {
+    align-items: center;
+    display: grid;
+    gap: 56px;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .ui-hero-copy > * {
+    max-width: 820px;
+  }
+
+  .is-center .ui-hero-copy {
+    text-align: center;
+  }
+
+  .is-center .ui-hero-copy > * {
+    margin-inline: auto;
+  }
+
+  .ui-hero-eyebrow {
+    color: var(--landing-accent);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin: 0 0 14px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    color: var(--landing-ink);
+    font-size: clamp(2.2rem, 4.6vw, 3.9rem);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-hero-lead {
+    color: var(--landing-muted);
+    font-size: clamp(1.15rem, 1.5vw, 1.32rem);
+    line-height: 1.6;
+    margin: 22px 0 0;
+  }
+
+  @media (max-width: 980px) {
+    .has-aside .ui-hero-inner {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ui-hero {
+      padding: 104px 0 48px;
+    }
+
+    .ui-hero-inner {
+      width: min(100% - 28px, 1180px);
+    }
+  }
+</style>

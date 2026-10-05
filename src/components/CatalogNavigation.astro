@@ -43,47 +43,48 @@ const records = getPublicProductRecords();
 </nav>
 
 <style>
+  /* Product switcher: pill tabs under the page hero. */
   .catalog-navigation {
     align-items: center;
-    border-bottom: 1px solid var(--border-color, #dee2e6);
+    border-bottom: 1px solid var(--landing-line);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem 1rem;
+    gap: 6px;
     margin: 0 auto;
-    max-width: 1120px;
-    padding: 0.85rem 1.25rem;
+    padding: 14px 0;
+    width: min(1180px, calc(100% - 40px));
   }
 
   .catalog-navigation a {
-    color: inherit;
-    font-size: 0.88rem;
+    border-radius: 999px;
+    color: var(--landing-muted);
+    font-size: 0.9rem;
     font-weight: 650;
+    padding: 6px 14px;
     text-decoration: none;
+    transition:
+      background-color 0.15s,
+      color 0.15s;
+  }
+
+  .catalog-navigation a:hover {
+    background: var(--landing-soft);
+    color: var(--landing-ink);
   }
 
   .catalog-navigation a[aria-current="page"] {
-    color: #087f72;
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.3rem;
+    background: rgba(79, 209, 197, 0.16);
+    color: var(--landing-accent);
   }
 
   .catalog-navigation a:focus-visible {
-    outline: 3px solid currentColor;
-    outline-offset: 3px;
+    outline: 2px solid var(--landing-accent);
+    outline-offset: 2px;
   }
 
-  :global(body.banking-theme-page[data-isecure-theme="dark"])
+  @media (max-width: 640px) {
     .catalog-navigation {
-    border-color: #27434a;
-    color: #d8e5e8;
-  }
-
-  @media (max-width: 576px) {
-    .catalog-navigation {
-      align-items: flex-start;
-      flex-direction: column;
-      padding-inline: 1rem;
+      width: calc(100% - 28px);
     }
   }
 </style>
