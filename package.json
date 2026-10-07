@@ -57,7 +57,7 @@
     "test:redirects": "node scripts/test-cloudfront-redirects.mjs",
     "deploy": "yarn lint && yarn format:check && yarn build && node scripts/publish-site.mjs publish",
     "api:sync:products": "node scripts/sync-platform-openapi.mjs",
-    "api:generate:products": "node scripts/platform-api-docs.mjs"
+    "api:generate:products": "node scripts/platform-api-docs.mjs && yarn prettier --write src/data/processing.openapi.json src/data/bank-simulator.openapi.json"
   },
   "repository": {
     "type": "git",
