@@ -59,9 +59,7 @@
       "post": {
         "operationId": "processing_session.exchange",
         "summary": "Create a Processing session",
-        "tags": [
-          "Session"
-        ],
+        "tags": ["Session"],
         "description": "Exchange the current File Exchange ID token for a separate, audience-bound Processing session. Send the ID token without a prefix in Authorization and the tenant API key in x-api-key. There is no request body. Complete any login verification or MFA first. The session expires after 15 minutes.",
         "security": [
           {
@@ -134,9 +132,7 @@
       "get": {
         "operationId": "processing_events.stream",
         "summary": "Read event notifications",
-        "tags": [
-          "Notifications"
-        ],
+        "tags": ["Notifications"],
         "description": "Receive a bounded text/event-stream connection. The current lease is at most 20 seconds. Event and task items contain an opaque id and JSON data; heartbeats keep the connection active. Reconnect deliberately with the last completely handled ID, and reconcile resource state after a gap. Additional event/task read authority is required. This is not complete audit history.",
         "security": [
           {
@@ -151,9 +147,7 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "enum": [
-                1
-              ]
+              "enum": [1]
             }
           },
           {
@@ -234,9 +228,7 @@
         "operationId": "simulation_artifacts.list",
         "summary": "List simulation file references",
         "description": "Find references to exact synthetic input and output files. Download their bytes through the independently authorized [File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/DownloadFile).\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 3`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationArtifacts.list`. Input type: [SimulationArtifactListInput](#schema/isecure.bankfiles.simulation.SimulationArtifactListInput).",
-        "tags": [
-          "File references"
-        ],
+        "tags": ["File references"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -245,9 +237,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                3
-              ]
+              "enum": [3]
             }
           },
           {
@@ -447,9 +437,7 @@
         "operationId": "simulation_branches.create",
         "summary": "Create a branch",
         "description": "Start a separate experiment from an eligible checkpoint while keeping the original evidence distinct.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. \n\nSDK: `client.simulationBranches.create`. Input type: [CreateSimulationBranchInput](#schema/isecure.bankfiles.simulation.CreateSimulationBranchInput).",
-        "tags": [
-          "Branches"
-        ],
+        "tags": ["Branches"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -458,9 +446,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -688,9 +674,7 @@
         "operationId": "simulation_capabilities.list",
         "summary": "List simulator capabilities",
         "description": "Discover supported profiles, clock modes and quotas before configuring a synthetic test.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 5`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationCapabilities.list`. Input type: [SimulationCapabilityListInput](#schema/isecure.bankfiles.simulation.SimulationCapabilityListInput).",
-        "tags": [
-          "Capabilities"
-        ],
+        "tags": ["Capabilities"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -699,9 +683,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                5
-              ]
+              "enum": [5]
             }
           },
           {
@@ -891,9 +873,7 @@
         "operationId": "simulation_checkpoints.create",
         "summary": "Create a checkpoint",
         "description": "Save an eligible simulation state for a repeatable comparison. The returned checkpoint is an opaque reference.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.simulationCheckpoints.create`. Input type: [CreateSimulationCheckpointInput](#schema/isecure.bankfiles.simulation.CreateSimulationCheckpointInput).",
-        "tags": [
-          "Checkpoints"
-        ],
+        "tags": ["Checkpoints"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -902,9 +882,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -1159,9 +1137,7 @@
         "operationId": "simulation_clocks.control",
         "summary": "Control simulated business time",
         "description": "Apply a supported clock action for schedules and cutoffs. This clock cannot change authentication or subscription expiry.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.simulationClocks.control`. Input type: [ControlSimulationClockInput](#schema/isecure.bankfiles.simulation.ControlSimulationClockInput).",
-        "tags": [
-          "Business time"
-        ],
+        "tags": ["Business time"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1170,9 +1146,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -1427,9 +1401,7 @@
         "operationId": "simulation_events.list",
         "summary": "Read simulation events",
         "description": "Read recorded observations for the selected scope. Paginate through the returned snapshot to reconcile a run.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 3`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationEvents.list`. Input type: [SimulationEventListInput](#schema/isecure.bankfiles.simulation.SimulationEventListInput).",
-        "tags": [
-          "Events"
-        ],
+        "tags": ["Events"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1438,9 +1410,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                3
-              ]
+              "enum": [3]
             }
           },
           {
@@ -1650,9 +1620,7 @@
         "operationId": "simulation_runs.list",
         "summary": "List runs",
         "description": "Find runs and inspect their current state using the available filters.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationRuns.list`. Input type: [SimulationRunListInput](#schema/isecure.bankfiles.simulation.SimulationRunListInput).",
-        "tags": [
-          "Runs"
-        ],
+        "tags": ["Runs"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1661,9 +1629,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -1873,9 +1839,7 @@
         "operationId": "simulation_runs.get",
         "summary": "Read a run",
         "description": "Read a run to follow accepted work to completion or failure. A start response alone does not mean the work has finished.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationRuns.get`. Input type: [SimulationResourceGetInput](#schema/isecure.bankfiles.simulation.SimulationResourceGetInput).",
-        "tags": [
-          "Runs"
-        ],
+        "tags": ["Runs"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1884,9 +1848,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -2066,9 +2028,7 @@
         "operationId": "simulation_runs.start",
         "summary": "Start a simulation run",
         "description": "Start work using exact workspace and scenario references plus admitted synthetic input. Persist the command key before sending.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. \n\nSDK: `client.simulationRuns.start`. Input type: [StartSimulationRunInput](#schema/isecure.bankfiles.simulation.StartSimulationRunInput).",
-        "tags": [
-          "Runs"
-        ],
+        "tags": ["Runs"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -2077,9 +2037,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -2307,9 +2265,7 @@
         "operationId": "simulation_scenarios.list",
         "summary": "List scenarios",
         "description": "Find reusable synthetic response scenarios visible to your user.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 3`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationScenarios.list`. Input type: [SimulationScenarioListInput](#schema/isecure.bankfiles.simulation.SimulationScenarioListInput).",
-        "tags": [
-          "Scenarios"
-        ],
+        "tags": ["Scenarios"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -2318,9 +2274,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                3
-              ]
+              "enum": [3]
             }
           },
           {
@@ -2520,9 +2474,7 @@
         "operationId": "simulation_scenarios.get",
         "summary": "Read a scenario",
         "description": "Read the exact scenario reference selected for a test.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 3`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationScenarios.get`. Input type: [SimulationResourceGetInput](#schema/isecure.bankfiles.simulation.SimulationResourceGetInput).",
-        "tags": [
-          "Scenarios"
-        ],
+        "tags": ["Scenarios"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -2531,9 +2483,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                3
-              ]
+              "enum": [3]
             }
           },
           {
@@ -2713,9 +2663,7 @@
         "operationId": "simulation_scenarios.create",
         "summary": "Create a scenario",
         "description": "Define supported synthetic responses, timing and behavior using the discovered capabilities.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. \n\nSDK: `client.simulationScenarios.create`. Input type: [CreateSimulationScenarioInput](#schema/isecure.bankfiles.simulation.CreateSimulationScenarioInput).",
-        "tags": [
-          "Scenarios"
-        ],
+        "tags": ["Scenarios"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -2724,9 +2672,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -2954,9 +2900,7 @@
         "operationId": "simulation_scenarios.revise",
         "summary": "Revise a scenario",
         "description": "Create a new scenario revision. Existing runs remain associated with the exact revision they selected.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.simulationScenarios.revise`. Input type: [ReviseSimulationScenarioInput](#schema/isecure.bankfiles.simulation.ReviseSimulationScenarioInput).",
-        "tags": [
-          "Scenarios"
-        ],
+        "tags": ["Scenarios"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -2965,9 +2909,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -3222,9 +3164,7 @@
         "operationId": "simulation_workspaces.list",
         "summary": "List workspaces",
         "description": "List synthetic workspaces visible to your user with optional state filters and pagination.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationWorkspaces.list`. Input type: [SimulationWorkspaceListInput](#schema/isecure.bankfiles.simulation.SimulationWorkspaceListInput).",
-        "tags": [
-          "Workspaces and accounts"
-        ],
+        "tags": ["Workspaces and accounts"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -3233,9 +3173,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -3425,9 +3363,7 @@
         "operationId": "simulation_workspaces.get",
         "summary": "Read a workspace",
         "description": "Read a workspace using its complete resource reference, including a revision when selecting an exact historical revision.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.simulationWorkspaces.get`. Input type: [SimulationResourceGetInput](#schema/isecure.bankfiles.simulation.SimulationResourceGetInput).",
-        "tags": [
-          "Workspaces and accounts"
-        ],
+        "tags": ["Workspaces and accounts"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -3436,9 +3372,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -3618,9 +3552,7 @@
         "operationId": "simulation_workspaces.activate",
         "summary": "Activate a workspace",
         "description": "Make an eligible draft workspace available for simulation runs after reviewing its configuration.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.simulationWorkspaces.activate`. Input type: [TransitionSimulationWorkspaceInput](#schema/isecure.bankfiles.simulation.TransitionSimulationWorkspaceInput).",
-        "tags": [
-          "Workspaces and accounts"
-        ],
+        "tags": ["Workspaces and accounts"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -3629,9 +3561,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -3886,9 +3816,7 @@
         "operationId": "simulation_workspaces.close",
         "summary": "Close a workspace",
         "description": "Close the selected workspace through its lifecycle. This is not an instruction to erase past test evidence.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.simulationWorkspaces.close`. Input type: [TransitionSimulationWorkspaceInput](#schema/isecure.bankfiles.simulation.TransitionSimulationWorkspaceInput).",
-        "tags": [
-          "Workspaces and accounts"
-        ],
+        "tags": ["Workspaces and accounts"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -3897,9 +3825,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -4154,9 +4080,7 @@
         "operationId": "simulation_workspaces.create",
         "summary": "Create a workspace and accounts",
         "description": "Define synthetic banks, legal entities, accounts, opening balances, currencies and service setup in a new draft workspace.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. \n\nSDK: `client.simulationWorkspaces.create`. Input type: [CreateSimulationWorkspaceInput](#schema/isecure.bankfiles.simulation.CreateSimulationWorkspaceInput).",
-        "tags": [
-          "Workspaces and accounts"
-        ],
+        "tags": ["Workspaces and accounts"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -4165,9 +4089,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -4395,9 +4317,7 @@
         "operationId": "simulation_workspaces.reset",
         "summary": "Reset a workspace",
         "description": "Apply the requested supported reset to the exact workspace version. Review the reset mode and retained evidence before sending.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.simulationWorkspaces.reset`. Input type: [ResetSimulationWorkspaceInput](#schema/isecure.bankfiles.simulation.ResetSimulationWorkspaceInput).",
-        "tags": [
-          "Workspaces and accounts"
-        ],
+        "tags": ["Workspaces and accounts"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -4406,9 +4326,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -4663,9 +4581,7 @@
         "operationId": "simulation_workspaces.revise",
         "summary": "Revise workspace configuration",
         "description": "Create a new workspace revision with updated synthetic configuration. Supply the current version to avoid overwriting another change.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.simulationWorkspaces.revise`. Input type: [ReviseSimulationWorkspaceInput](#schema/isecure.bankfiles.simulation.ReviseSimulationWorkspaceInput).",
-        "tags": [
-          "Workspaces and accounts"
-        ],
+        "tags": ["Workspaces and accounts"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -4674,9 +4590,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -4931,9 +4845,7 @@
         "operationId": "simulation_workspaces.suspend",
         "summary": "Suspend a workspace",
         "description": "Suspend the selected workspace through its governed lifecycle. Check the returned state before starting further work.\n\nRequired permission: `manage_simulation`, plus an active Bank Simulation subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 4`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.simulationWorkspaces.suspend`. Input type: [TransitionSimulationWorkspaceInput](#schema/isecure.bankfiles.simulation.TransitionSimulationWorkspaceInput).",
-        "tags": [
-          "Workspaces and accounts"
-        ],
+        "tags": ["Workspaces and accounts"],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -4942,9 +4854,7 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [
-                4
-              ]
+              "enum": [4]
             }
           },
           {
@@ -5234,10 +5144,7 @@
             "maxLength": 128
           }
         },
-        "required": [
-          "approval_request_id",
-          "exact_subject_digest"
-        ],
+        "required": ["approval_request_id", "exact_subject_digest"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.AttemptReference": {
@@ -5258,11 +5165,7 @@
             "maximum": 2147483647
           }
         },
-        "required": [
-          "attempt_type",
-          "attempt_id",
-          "attempt_ordinal"
-        ],
+        "required": ["attempt_type", "attempt_id", "attempt_ordinal"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.AuthorizationReference": {
@@ -5278,19 +5181,12 @@
             "format": "date-time"
           }
         },
-        "required": [
-          "authorization_decision_id",
-          "decided_at"
-        ],
+        "required": ["authorization_decision_id", "decided_at"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.CancellationBoundary": {
         "type": "string",
-        "enum": [
-          "preventable",
-          "race_possible",
-          "irreversible"
-        ],
+        "enum": ["preventable", "race_possible", "irreversible"],
         "description": "Whether cancellation can still prevent, may race with, or cannot reverse an effect"
       },
       "isecure.bankfiles.operations.ExactMoney": {
@@ -5308,21 +5204,12 @@
             "maxLength": 3
           }
         },
-        "required": [
-          "amount",
-          "currency"
-        ],
+        "required": ["amount", "currency"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.IdempotencyOutcome": {
         "type": "string",
-        "enum": [
-          "applied",
-          "replayed",
-          "in_progress",
-          "mismatch",
-          "expired"
-        ],
+        "enum": ["applied", "replayed", "in_progress", "mismatch", "expired"],
         "description": "Result of applying a caller idempotency key to the normalized command input; mismatch and expiry never reapply the command"
       },
       "isecure.bankfiles.operations.IdempotencyResult": {
@@ -5341,10 +5228,7 @@
             "format": "date-time"
           }
         },
-        "required": [
-          "outcome",
-          "retained_until"
-        ],
+        "required": ["outcome", "retained_until"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.LifecycleTransition": {
@@ -5402,9 +5286,7 @@
             "maxLength": 64
           }
         },
-        "required": [
-          "operation_id"
-        ],
+        "required": ["operation_id"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.OperationContext": {
@@ -5517,11 +5399,7 @@
       },
       "isecure.bankfiles.operations.OperationIssueSeverity": {
         "type": "string",
-        "enum": [
-          "error",
-          "warning",
-          "information"
-        ],
+        "enum": ["error", "warning", "information"],
         "description": "Presentation severity without changing whether the operation succeeded"
       },
       "isecure.bankfiles.operations.PageRequest": {
@@ -5553,9 +5431,7 @@
             "format": "uuid"
           }
         },
-        "required": [
-          "snapshot_reference"
-        ],
+        "required": ["snapshot_reference"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.PlatformIssues": {
@@ -5571,9 +5447,7 @@
             "maxItems": 1
           }
         },
-        "required": [
-          "issues"
-        ],
+        "required": ["issues"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.RequiredAction": {
@@ -5584,9 +5458,7 @@
             "type": "object",
             "properties": {
               "action_type": {
-                "enum": [
-                  "human_review"
-                ]
+                "enum": ["human_review"]
               },
               "subject_reference": {
                 "$ref": "#/components/schemas/isecure.bankfiles.operations.ResourceReference"
@@ -5596,11 +5468,7 @@
                 "maxLength": 64
               }
             },
-            "required": [
-              "action_type",
-              "subject_reference",
-              "reason_code"
-            ],
+            "required": ["action_type", "subject_reference", "reason_code"],
             "additionalProperties": false
           },
           {
@@ -5608,9 +5476,7 @@
             "type": "object",
             "properties": {
               "action_type": {
-                "enum": [
-                  "strong_authentication"
-                ]
+                "enum": ["strong_authentication"]
               },
               "action_reference": {
                 "type": "string",
@@ -5621,10 +5487,7 @@
                 "format": "date-time"
               }
             },
-            "required": [
-              "action_type",
-              "action_reference"
-            ],
+            "required": ["action_type", "action_reference"],
             "additionalProperties": false
           },
           {
@@ -5632,19 +5495,14 @@
             "type": "object",
             "properties": {
               "action_type": {
-                "enum": [
-                  "configuration"
-                ]
+                "enum": ["configuration"]
               },
               "configuration_code": {
                 "type": "string",
                 "maxLength": 64
               }
             },
-            "required": [
-              "action_type",
-              "configuration_code"
-            ],
+            "required": ["action_type", "configuration_code"],
             "additionalProperties": false
           },
           {
@@ -5652,9 +5510,7 @@
             "type": "object",
             "properties": {
               "action_type": {
-                "enum": [
-                  "retry_later"
-                ]
+                "enum": ["retry_later"]
               },
               "retry_after_seconds": {
                 "type": "integer",
@@ -5662,10 +5518,7 @@
                 "maximum": 2147483647
               }
             },
-            "required": [
-              "action_type",
-              "retry_after_seconds"
-            ],
+            "required": ["action_type", "retry_after_seconds"],
             "additionalProperties": false
           }
         ]
@@ -5695,10 +5548,7 @@
             "format": "uuid"
           }
         },
-        "required": [
-          "resource_type",
-          "resource_id"
-        ],
+        "required": ["resource_type", "resource_id"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.TaskReference": {
@@ -5728,12 +5578,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.CancellationBoundary"
           }
         },
-        "required": [
-          "task_id",
-          "attempt",
-          "state",
-          "cancellation_boundary"
-        ],
+        "required": ["task_id", "attempt", "state", "cancellation_boundary"],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.TaskState": {
@@ -5805,10 +5650,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.ResourceReference"
           }
         },
-        "required": [
-          "checkpoint_reference",
-          "scenario_revision_reference"
-        ],
+        "required": ["checkpoint_reference", "scenario_revision_reference"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.CreateSimulationCheckpointInput": {
@@ -5826,10 +5668,7 @@
             "x-isecure-json-representation": "decimal-string"
           }
         },
-        "required": [
-          "run_reference",
-          "expected_resource_version"
-        ],
+        "required": ["run_reference", "expected_resource_version"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.CreateSimulationScenarioInput": {
@@ -6014,9 +5853,7 @@
       },
       "isecure.bankfiles.simulation.SimulationArtifactAccessMode": {
         "type": "string",
-        "enum": [
-          "file_exchange"
-        ],
+        "enum": ["file_exchange"],
         "description": "Exact Artifact access remains on the permanent File Exchange API"
       },
       "isecure.bankfiles.simulation.SimulationArtifactListInput": {
@@ -6032,10 +5869,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageRequest"
           }
         },
-        "required": [
-          "run_reference",
-          "page"
-        ],
+        "required": ["run_reference", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationArtifactListResult": {
@@ -6056,11 +5890,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageResult"
           }
         },
-        "required": [
-          "context",
-          "artifacts",
-          "page"
-        ],
+        "required": ["context", "artifacts", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationArtifactReference": {
@@ -6120,9 +5950,7 @@
       },
       "isecure.bankfiles.simulation.SimulationBehaviorScope": {
         "type": "string",
-        "enum": [
-          "synthetic_only"
-        ],
+        "enum": ["synthetic_only"],
         "description": "Non-production behavior scope advertised by a Simulation capability; this is not a support claim"
       },
       "isecure.bankfiles.simulation.SimulationBranchResource": {
@@ -6165,10 +5993,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.simulation.SimulationBranchResource"
           }
         },
-        "required": [
-          "context",
-          "branch"
-        ],
+        "required": ["context", "branch"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationCapability": {
@@ -6256,9 +6081,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageRequest"
           }
         },
-        "required": [
-          "page"
-        ],
+        "required": ["page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationCapabilityListResult": {
@@ -6279,11 +6102,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageResult"
           }
         },
-        "required": [
-          "context",
-          "capabilities",
-          "page"
-        ],
+        "required": ["context", "capabilities", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationCheckpointResource": {
@@ -6335,10 +6154,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.simulation.SimulationCheckpointResource"
           }
         },
-        "required": [
-          "context",
-          "checkpoint"
-        ],
+        "required": ["context", "checkpoint"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationClockControlKind": {
@@ -6366,20 +6182,12 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.LifecycleTransition"
           }
         },
-        "required": [
-          "context",
-          "clock",
-          "lifecycle"
-        ],
+        "required": ["context", "clock", "lifecycle"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationClockMode": {
         "type": "string",
-        "enum": [
-          "paused",
-          "real_time",
-          "accelerated"
-        ],
+        "enum": ["paused", "real_time", "accelerated"],
         "description": "Business-clock pacing; it never changes authenticated platform time"
       },
       "isecure.bankfiles.simulation.SimulationClockSnapshot": {
@@ -6427,9 +6235,7 @@
       },
       "isecure.bankfiles.simulation.SimulationDataAdmissionMode": {
         "type": "string",
-        "enum": [
-          "synthetic"
-        ],
+        "enum": ["synthetic"],
         "description": "Closed synthetic-only admission posture; governed replay remains a separate later contract"
       },
       "isecure.bankfiles.simulation.SimulationEventKind": {
@@ -6464,10 +6270,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageRequest"
           }
         },
-        "required": [
-          "workspace_reference",
-          "page"
-        ],
+        "required": ["workspace_reference", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationEventListResult": {
@@ -6488,11 +6291,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageResult"
           }
         },
-        "required": [
-          "context",
-          "events",
-          "page"
-        ],
+        "required": ["context", "events", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationEventResource": {
@@ -6568,10 +6367,7 @@
       },
       "isecure.bankfiles.simulation.SimulationFileDirection": {
         "type": "string",
-        "enum": [
-          "customer_to_bank",
-          "bank_to_customer"
-        ],
+        "enum": ["customer_to_bank", "bank_to_customer"],
         "description": "Direction of one synthetic bank-file service permission; it is relative to the corporate customer"
       },
       "isecure.bankfiles.simulation.SimulationFileServicePermission": {
@@ -6830,9 +6626,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.ResourceReference"
           }
         },
-        "required": [
-          "resource_reference"
-        ],
+        "required": ["resource_reference"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationRunGetResult": {
@@ -6845,10 +6639,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.simulation.SimulationRunResource"
           }
         },
-        "required": [
-          "context",
-          "run"
-        ],
+        "required": ["context", "run"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationRunInput": {
@@ -6859,18 +6650,13 @@
             "type": "object",
             "properties": {
               "input_type": {
-                "enum": [
-                  "payment_order_revision"
-                ]
+                "enum": ["payment_order_revision"]
               },
               "payment_order_revision_reference": {
                 "$ref": "#/components/schemas/isecure.bankfiles.operations.ResourceReference"
               }
             },
-            "required": [
-              "input_type",
-              "payment_order_revision_reference"
-            ],
+            "required": ["input_type", "payment_order_revision_reference"],
             "additionalProperties": false
           },
           {
@@ -6878,18 +6664,13 @@
             "type": "object",
             "properties": {
               "input_type": {
-                "enum": [
-                  "exact_artifact"
-                ]
+                "enum": ["exact_artifact"]
               },
               "artifact": {
                 "$ref": "#/components/schemas/isecure.bankfiles.simulation.SimulationArtifactReference"
               }
             },
-            "required": [
-              "input_type",
-              "artifact"
-            ],
+            "required": ["input_type", "artifact"],
             "additionalProperties": false
           }
         ]
@@ -6910,10 +6691,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageRequest"
           }
         },
-        "required": [
-          "workspace_reference",
-          "page"
-        ],
+        "required": ["workspace_reference", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationRunListResult": {
@@ -6934,11 +6712,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageResult"
           }
         },
-        "required": [
-          "context",
-          "runs",
-          "page"
-        ],
+        "required": ["context", "runs", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationRunMutationResult": {
@@ -6954,11 +6728,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.simulation.SimulationRunResource"
           }
         },
-        "required": [
-          "context",
-          "task",
-          "run"
-        ],
+        "required": ["context", "task", "run"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationRunResource": {
@@ -7080,10 +6850,7 @@
       },
       "isecure.bankfiles.simulation.SimulationRuntimeAvailability": {
         "type": "string",
-        "enum": [
-          "contract_only",
-          "hosted"
-        ],
+        "enum": ["contract_only", "hosted"],
         "description": "Current runtime availability; a generated contract alone remains contract-only"
       },
       "isecure.bankfiles.simulation.SimulationRuntimeCurrencyPolicy": {
@@ -7101,11 +6868,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.ExactMoney"
           }
         },
-        "required": [
-          "currency",
-          "booking_cutoff",
-          "fixed_charge"
-        ],
+        "required": ["currency", "booking_cutoff", "fixed_charge"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationRuntimeFxPair": {
@@ -7116,9 +6879,7 @@
             "type": "object",
             "properties": {
               "support_status": {
-                "enum": [
-                  "supported"
-                ]
+                "enum": ["supported"]
               },
               "source_currency": {
                 "type": "string",
@@ -7148,9 +6909,7 @@
             "type": "object",
             "properties": {
               "support_status": {
-                "enum": [
-                  "unsupported"
-                ]
+                "enum": ["unsupported"]
               },
               "source_currency": {
                 "type": "string",
@@ -7195,11 +6954,7 @@
             "maximum": 2147483647
           }
         },
-        "required": [
-          "hour",
-          "minute",
-          "second"
-        ],
+        "required": ["hour", "minute", "second"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationRuntimePolicyProfile": {
@@ -7312,9 +7067,7 @@
       },
       "isecure.bankfiles.simulation.SimulationRuntimeWeekendRule": {
         "type": "string",
-        "enum": [
-          "saturday_and_sunday"
-        ],
+        "enum": ["saturday_and_sunday"],
         "description": "Closed non-business weekday rule implemented by the synthetic bank runtime"
       },
       "isecure.bankfiles.simulation.SimulationScenarioDirective": {
@@ -7352,10 +7105,7 @@
             "maxLength": 64
           }
         },
-        "required": [
-          "directive_ordinal",
-          "outcome"
-        ],
+        "required": ["directive_ordinal", "outcome"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationScenarioGetResult": {
@@ -7368,10 +7118,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.simulation.SimulationScenarioResource"
           }
         },
-        "required": [
-          "context",
-          "scenario"
-        ],
+        "required": ["context", "scenario"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationScenarioListInput": {
@@ -7387,10 +7134,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageRequest"
           }
         },
-        "required": [
-          "workspace_reference",
-          "page"
-        ],
+        "required": ["workspace_reference", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationScenarioListResult": {
@@ -7411,11 +7155,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageResult"
           }
         },
-        "required": [
-          "context",
-          "scenarios",
-          "page"
-        ],
+        "required": ["context", "scenarios", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationScenarioMutationResult": {
@@ -7431,11 +7171,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.LifecycleTransition"
           }
         },
-        "required": [
-          "context",
-          "scenario",
-          "lifecycle"
-        ],
+        "required": ["context", "scenario", "lifecycle"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationScenarioOutcome": {
@@ -7528,11 +7264,7 @@
       },
       "isecure.bankfiles.simulation.SimulationScenarioState": {
         "type": "string",
-        "enum": [
-          "draft",
-          "active",
-          "superseded"
-        ],
+        "enum": ["draft", "active", "superseded"],
         "description": "Immutable scenario-revision lifecycle"
       },
       "isecure.bankfiles.simulation.SimulationServiceCutoffDefinition": {
@@ -7745,21 +7477,12 @@
             "maxLength": 64
           }
         },
-        "required": [
-          "subject_kind",
-          "subject_key"
-        ],
+        "required": ["subject_kind", "subject_key"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationTopologySubjectKind": {
         "type": "string",
-        "enum": [
-          "bank",
-          "legal_entity",
-          "account",
-          "currency",
-          "counterparty"
-        ],
+        "enum": ["bank", "legal_entity", "account", "currency", "counterparty"],
         "description": "Workspace-local Scenario target; it cannot resolve a production resource"
       },
       "isecure.bankfiles.simulation.SimulationWorkspaceGetResult": {
@@ -7772,10 +7495,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.simulation.SimulationWorkspaceResource"
           }
         },
-        "required": [
-          "context",
-          "workspace"
-        ],
+        "required": ["context", "workspace"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationWorkspaceListInput": {
@@ -7788,9 +7508,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageRequest"
           }
         },
-        "required": [
-          "page"
-        ],
+        "required": ["page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationWorkspaceListResult": {
@@ -7811,11 +7529,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageResult"
           }
         },
-        "required": [
-          "context",
-          "workspaces",
-          "page"
-        ],
+        "required": ["context", "workspaces", "page"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationWorkspaceMutationResult": {
@@ -7831,11 +7545,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.LifecycleTransition"
           }
         },
-        "required": [
-          "context",
-          "workspace",
-          "lifecycle"
-        ],
+        "required": ["context", "workspace", "lifecycle"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationWorkspaceResetResource": {
@@ -7899,12 +7609,7 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.LifecycleTransition"
           }
         },
-        "required": [
-          "context",
-          "workspace",
-          "reset",
-          "lifecycle"
-        ],
+        "required": ["context", "workspace", "reset", "lifecycle"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SimulationWorkspaceResetScope": {
@@ -7985,12 +7690,7 @@
       },
       "isecure.bankfiles.simulation.SimulationWorkspaceState": {
         "type": "string",
-        "enum": [
-          "draft",
-          "active",
-          "suspended",
-          "closed"
-        ],
+        "enum": ["draft", "active", "suspended", "closed"],
         "description": "Lifecycle of one isolated non-production Simulation Workspace"
       },
       "isecure.bankfiles.simulation.StartSimulationRunInput": {
@@ -8239,11 +7939,7 @@
             "maxLength": 64
           }
         },
-        "required": [
-          "counterparty_key",
-          "display_name",
-          "domicile_country"
-        ],
+        "required": ["counterparty_key", "display_name", "domicile_country"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SyntheticCurrencyDefinition": {
@@ -8260,10 +7956,7 @@
             "maximum": 32767
           }
         },
-        "required": [
-          "currency",
-          "fraction_digits"
-        ],
+        "required": ["currency", "fraction_digits"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SyntheticLegalEntityDefinition": {
@@ -8283,11 +7976,7 @@
             "maxLength": 2
           }
         },
-        "required": [
-          "legal_entity_key",
-          "display_name",
-          "domicile_country"
-        ],
+        "required": ["legal_entity_key", "display_name", "domicile_country"],
         "additionalProperties": false
       },
       "isecure.bankfiles.simulation.SyntheticWebServicesUserDefinition": {
@@ -8340,10 +8029,7 @@
             "x-isecure-json-representation": "decimal-string"
           }
         },
-        "required": [
-          "workspace_reference",
-          "expected_resource_version"
-        ],
+        "required": ["workspace_reference", "expected_resource_version"],
         "additionalProperties": false
       },
       "ProcessingError": {
@@ -8355,15 +8041,10 @@
           },
           "schemaVersion": {
             "type": "integer",
-            "enum": [
-              1
-            ]
+            "enum": [1]
           }
         },
-        "required": [
-          "code",
-          "schemaVersion"
-        ],
+        "required": ["code", "schemaVersion"],
         "additionalProperties": false
       },
       "ProcessingSession": {
@@ -8371,9 +8052,7 @@
         "properties": {
           "audience": {
             "type": "string",
-            "enum": [
-              "isecure-processing-gpgtest-v1"
-            ]
+            "enum": ["isecure-processing-gpgtest-v1"]
           },
           "expiresAtEpochSeconds": {
             "type": "integer",
@@ -8386,15 +8065,11 @@
           },
           "schemaVersion": {
             "type": "integer",
-            "enum": [
-              1
-            ]
+            "enum": [1]
           },
           "tokenType": {
             "type": "string",
-            "enum": [
-              "Processing"
-            ]
+            "enum": ["Processing"]
           }
         },
         "required": [
@@ -8421,9 +8096,7 @@
   "x-tagGroups": [
     {
       "name": "Getting started",
-      "tags": [
-        "Session"
-      ]
+      "tags": ["Session"]
     },
     {
       "name": "Bank Simulator API",
@@ -8441,9 +8114,7 @@
     },
     {
       "name": "Notifications",
-      "tags": [
-        "Notifications"
-      ]
+      "tags": ["Notifications"]
     }
   ]
 }
