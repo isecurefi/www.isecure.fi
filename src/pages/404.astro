@@ -1,0 +1,30 @@
+---
+// Single static error page served by CloudFront for every missing path, so it
+// speaks all three site languages instead of guessing one from the URL.
+import Layout from "../layouts/Layout.astro";
+import Actions from "../components/ui/Actions.astro";
+import Button from "../components/ui/Button.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import { localizedRoutes } from "../lib/seo";
+
+const home = localizedRoutes();
+---
+
+<Layout
+  title="Sivua ei löytynyt – Page not found"
+  lang="fi"
+  robots="noindex, nofollow"
+  fullWidth
+>
+  <PageHero
+    align="center"
+    title="Sivua ei löytynyt"
+    lead="Osoite on vanhentunut tai kirjoitettu väärin. The page you requested does not exist. Sidan du sökte finns inte."
+  >
+    <Actions align="center">
+      <Button href={home.fi}>Etusivulle</Button>
+      <Button href={home.en} variant="secondary">English home</Button>
+      <Button href={home.se} variant="secondary">Svenska</Button>
+    </Actions>
+  </PageHero>
+</Layout>

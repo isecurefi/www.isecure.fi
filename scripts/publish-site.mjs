@@ -93,6 +93,21 @@ export function createReleaseManifest(distDirectory, revision, sourceDate) {
   };
 }
 
+// Missing S3 objects surface as 403 through the origin access identity, so both
+// 403 and 404 must map to the site's own 404 page with a real 404 status.
+export const NOT_FOUND_PAGE = "/404.html";
+export function withCustomErrorResponses(distributionConfig) {
+  const copy = structuredClone(distributionConfig);
+  const items = [403, 404].map((code) => ({
+    ErrorCode: code,
+    ResponsePagePath: NOT_FOUND_PAGE,
+    ResponseCode: "404",
+    ErrorCachingMinTTL: 60,
+  }));
+  copy.CustomErrorResponses = { Quantity: items.length, Items: items };
+  return copy;
+}
+
 export function withOriginPath(distributionConfig, originId, originPath) {
   const copy = structuredClone(distributionConfig);
   const matches = copy.Origins.Items.filter((origin) => origin.Id === originId);
@@ -130,7 +145,7 @@ function assertSecretFree(distDirectory) {
   }
 }
 
-function getDistribution(distributionId) {
+export function getDistribution(distributionId) {
   return runJson("aws", [
     "cloudfront",
     "get-distribution-config",
@@ -151,13 +166,7 @@ function originPath(distribution, originId) {
   return matches[0].OriginPath ?? "";
 }
 
-function switchOrigin(distributionId, originId, targetPath) {
-  const current = getDistribution(distributionId);
-  const config = withOriginPath(
-    current.DistributionConfig,
-    originId,
-    targetPath,
-  );
+export function updateDistribution(distributionId, etag, config) {
   const temporaryDirectory = mkdtempSync(join(tmpdir(), "isecure-publish-"));
   const configPath = join(temporaryDirectory, "distribution.json");
   try {
@@ -170,7 +179,7 @@ function switchOrigin(distributionId, originId, targetPath) {
         "--id",
         distributionId,
         "--if-match",
-        current.ETag,
+        etag,
         "--distribution-config",
         `file://${configPath}`,
         "--output",

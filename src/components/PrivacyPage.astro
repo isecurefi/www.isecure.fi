@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { alternateLinks, localizedRoutes } from "../lib/seo";
 import type { Lang } from "../types";
 import PageHero from "./ui/PageHero.astro";
 import Prose from "./ui/Prose.astro";
@@ -102,20 +103,13 @@ const content = {
 };
 
 const t = content[lang];
-const origin = "https://www.isecure.fi";
-const alternateLinks = [
-  { hreflang: "fi", href: `${origin}/privacy/` },
-  { hreflang: "en", href: `${origin}/en/privacy/` },
-  { hreflang: "sv", href: `${origin}/se/privacy/` },
-  { hreflang: "x-default", href: `${origin}/en/privacy/` },
-];
 ---
 
 <Layout
   title={t.metaTitle}
   lang={lang}
   description={t.description}
-  alternateLinks={alternateLinks}
+  alternateLinks={alternateLinks(localizedRoutes("privacy"))}
   fullWidth
 >
   <PageHero width="narrow" title={t.title}>

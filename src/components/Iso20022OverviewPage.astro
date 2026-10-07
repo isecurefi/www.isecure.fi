@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { absoluteUrl, alternateLinks, localizedRoutes } from "../lib/seo";
 import type { Lang } from "../types";
 import Actions from "./ui/Actions.astro";
 import Button from "./ui/Button.astro";
@@ -17,15 +18,8 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const origin = "https://www.isecure.fi";
-const base = lang === "fi" ? "/" : `/${lang}/`;
-const canonicalUrl = `${origin}${base}iso-20022/`;
-const alternateLinks = [
-  { hreflang: "fi", href: `${origin}/iso-20022/` },
-  { hreflang: "en", href: `${origin}/en/iso-20022/` },
-  { hreflang: "sv", href: `${origin}/se/iso-20022/` },
-  { hreflang: "x-default", href: `${origin}/en/iso-20022/` },
-];
+const routes = localizedRoutes("iso-20022");
+const canonicalUrl = absoluteUrl(routes[lang]);
 
 const content = {
   fi: {
@@ -236,7 +230,7 @@ const t = content[lang];
   lang={lang}
   description={t.description}
   canonicalUrl={canonicalUrl}
-  alternateLinks={alternateLinks}
+  alternateLinks={alternateLinks(routes)}
   fullWidth
 >
   <PageHero eyebrow={t.eyebrow} title={t.h1} lead={t.intro} />

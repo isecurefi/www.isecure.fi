@@ -1,0 +1,306 @@
+---
+import GuidePage from "./GuidePage.astro";
+import type { Lang } from "../types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const sources = {
+  regulation: "https://eur-lex.europa.eu/eli/reg/2024/886/oj",
+  epc: "https://www.europeanpaymentscouncil.eu/document-library/rulebooks/verification-payee-scheme-rulebook",
+};
+
+const content = {
+  fi: {
+    title: "Mikä on maksunsaajan tarkistus (VoP)? | ISECure",
+    description:
+      "Verification of Payee (VoP) tarkistaa, että maksunsaajan nimi vastaa tilinumeroa ennen maksua. Lue selkeästi ja lyhyesti, mitä EU-sääntely vaatii ja miten VoP toimii yritysten maksuaineistoissa.",
+    h1: "Mikä on maksunsaajan tarkistus (VoP)?",
+    intro:
+      "Maksunsaajan tarkistus eli Verification of Payee (VoP) varmistaa ennen maksua, että antamasi saajan nimi vastaa tilin omistajan nimeä. Euroalueen pankkien on tarjottava tarkistus jokaiselle tavalliselle euromääräiselle tilisiirrolle (SEPA-tilisiirto, katso sanasto alla) lokakuusta 2025 alkaen. Jos yrityksesi maksaa Nordean, OP:n tai Danske Bankin kautta, ISECuren Processing API sisältää VoP-tarkistuksen ja tekee sen puolestasi ennen kuin maksut lähetetään pankkiin. Tällä sivulla kerrotaan, miten.",
+    sections: [
+      {
+        h2: "Miksi VoP on olemassa",
+        paras: [
+          "Pankki on perinteisesti tarkistanut vain, että tilinumero on muodollisesti oikea. Saajan nimeä ei verrattu tilin omistajaan. Siksi laskupetos, jossa rikollinen vaihtaa laskun tilinumeron, ja yksinkertainen näppäilyvirhe ovat voineet ohjata rahat väärälle tilille ilman varoitusta.",
+          "EU:n pikamaksuasetus eli asetus (EU) 2024/886 muutti tämän. Se velvoittaa euroalueen pankit tarjoamaan maksunsaajan tarkistuksen kaikille euromääräisille SEPA-tilisiirroille 9.10.2025 alkaen, sekä tavallisille tilisiirroille että pikamaksuille, jotka saapuvat sekunneissa. Euroalueen ulkopuolisten EU-maiden pankkien määräaika on 9.7.2027. Euroopan maksuneuvosto, joka laatii euromaksujen yhteiset säännöt, määrittelee, miten pankit vastaavat toistensa tarkistuksiin. Siksi tulos tarkoittaa samaa jokaisessa pankissa.",
+        ],
+      },
+      {
+        h2: "Näin tarkistus toimii",
+        paras: [
+          "Ennen kuin hyväksyt maksun, pankkisi kysyy saajan pankilta, vastaako antamasi nimi tilinumeroa. Vastaus tulee muutamassa sekunnissa, ja se on aina yksi neljästä tuloksesta:",
+        ],
+        list: [
+          "Vastaa: nimi ja tilinumero kuuluvat yhteen.",
+          "Lähes vastaa: nimi on lähellä oikeaa, esimerkiksi kirjoitusasu eroaa tai Oy puuttuu. Saajan pankki kertoo tilin todellisen nimen, jotta voit verrata ja päättää.",
+          "Ei vastaa: nimi ei kuulu kyseiselle tilille.",
+          "Ei voitu tarkistaa: saajan pankki ei pysty vastaamaan, esimerkiksi koska se ei vielä tarjoa palvelua. Pidä tätä tuntemattomana tuloksena, ei hyväksyntänä.",
+        ],
+      },
+      {
+        h2: "Mitä tulos tarkoittaa sinulle",
+        paras: [
+          "Tarkistus ei itsessään koskaan estä maksua. Päätät itse tuloksesta riippumatta, jatkatko maksua. Jos jatkat Ei vastaa -tuloksesta huolimatta ja rahat päätyvät väärälle tilille, vastuu on yleensä maksajalla eikä pankilla. Käytännössä rahat menettää siis yrityksesi, ei pankki. Pankin on hyvitettävä maksu vain, jos se ei tehnyt tarkistusta asianmukaisesti. Siksi tulos kannattaa näyttää maksun hyväksyjälle selvästi ja tallentaa päätös.",
+        ],
+      },
+      {
+        h2: "Mitä VoP ei tee",
+        paras: [
+          "VoP vertaa vain nimeä ja tilinumeroa. Se ei kerro, onko lasku aito tai onko saaja se, joka väittää olevansa. Vastaa-tulos ei ole pankin lupaus siitä, että maksu toteutuu, eikä se ole todiste toteutuneesta maksusta. Tulos koskee tarkistushetkeä: tilin tiedot voivat muuttua myöhemmin. Tarkistuksen käyttö edellyttää, että yrityksellä on pankin kanssa VoP-palvelun kattava sopimus.",
+        ],
+      },
+      {
+        h2: "Maksaminen eräajoina: mikä muuttuu yrityksille",
+        paras: [
+          "Yritykset maksavat yleensä eräajoina: taloushallinnon järjestelmä muodostaa yhdellä kertaa maksuaineiston, jossa voi olla satoja maksuja. Asetus antaa yritykselle oikeuden kieltäytyä tarkistuksesta eränä lähetettäville maksuaineistoille. Käytännössä suomalaiset pankit tarjoavat aineiston tarkistuksen erillisenä, vapaaehtoisena palveluna, joten yritys, joka ei käytä sitä, on kieltäytynyt tarkistuksesta. Virheellisen maksun riski jää silloin yritykselle.",
+          "Nordea, OP ja Danske Bank tarjoavat kaikki VoP-tarkistuksen yritysasiakkaille, mutta jokainen eri tavalla. OP vastaanottaa erillisen tarkistuspyynnön samassa muodossa kuin maksuaineiston ja vastaa tulosraportilla; varsinainen maksuaineisto lähetetään vasta sen jälkeen. Nordea tarkistaa aineiston erillisessä palvelussa, josta ohjelmistosi noutaa tuloksen jälkikäteen. Danske Bank tarkistaa saajat yksi kerrallaan, toistaiseksi pilottina Suomen ja Irlannin asiakkaille. Neljä tulosvaihtoehtoa ovat samat, mutta pyyntöjen muoto, rajoitukset ja sopimukset eroavat.",
+        ],
+      },
+      {
+        h2: "Näin ISECure tekee tarkistuksen puolestasi",
+        paras: [
+          "Processing API:ssa tarkistus on osa maksuaineiston valmistelua. Ohjelmistosi valitsee pankin ja maan, syöttää maksutiedot ja pyytää saajien tarkistusta. ISECure lähettää pyynnön pankille yrityksesi pankkisopimuksen puitteissa ja liittää jokaisen tuloksen täsmälleen siihen maksujen joukkoon, joka tarkistettiin. Näin mikään ei voi muuttua tarkistuksen jälkeen ilman uutta tarkistusta. Ihminen käy läpi Lähes vastaa- ja Ei vastaa -tulokset, korjaa tarvittaessa saajan tiedot ja hyväksyy sitten aineiston.",
+        ],
+        list: [
+          "Sama tulosmalli Nordean, OP:n ja Danske Bankin maksuille, vaikka pankkien tekniikka eroaa.",
+          "Jokainen tulos pysyy kiinni niissä maksuissa, joita vasten se tarkistettiin. Jos maksua muutetaan, se tarkistetaan uudelleen.",
+          "Ihminen tarkistaa poikkeavat tulokset ennen kuin aineisto vapautetaan järjestelmääsi.",
+          "Processing API valmistelee ja tarkistaa maksut. Maksujen lähettäminen pankkiin ja pankin oma maksun valtuutus pysyvät omassa järjestelmässäsi täsmälleen kuten nykyisin.",
+        ],
+      },
+      {
+        h2: "Sanasto",
+        paras: [],
+        list: [
+          "Maksunsaaja (payee): henkilö tai yritys, jolle maksu menee.",
+          "IBAN: kansainvälinen tilinumero, jota SEPA-maksuissa käytetään.",
+          "SEPA-tilisiirto: euromääräinen tilisiirto SEPA-alueella, joka kattaa EU- ja ETA-maat sekä useita muita Euroopan maita, kuten Britannian ja Sveitsin. VoP-velvoite koskee EU-maiden pankkeja.",
+          "Maksupalveluntarjoaja (PSP): pankki tai muu laitos, joka välittää maksuja.",
+          "Pikamaksuasetus: asetus (EU) 2024/886, joka teki VoP-tarkistuksesta pakollisen.",
+        ],
+      },
+    ],
+    sources: [
+      {
+        href: sources.regulation,
+        label: "Asetus (EU) 2024/886 pikamaksuista (EUR-Lex)",
+      },
+      {
+        href: sources.epc,
+        label: "Euroopan maksuneuvoston Verification of Payee -sääntökirja",
+      },
+    ],
+    cta: {
+      title: "Lisää maksunsaajan tarkistus maksuprosessiisi",
+      text: "Kerro, mitä pankkeja ja maksuaineistoja käytät. Suunnittelemme kanssasi, miten VoP-tarkistus liitetään maksujen hyväksyntään.",
+      label: "Keskustele integraatiosta",
+    },
+  },
+  en: {
+    title: "What is Verification of Payee (VoP)? | ISECure",
+    description:
+      "Verification of Payee (VoP) checks that a payee's name matches the account number before a payment. Learn in plain language what EU regulation requires and how VoP works for company payment files.",
+    h1: "What is Verification of Payee (VoP)?",
+    intro:
+      "Verification of Payee, or VoP, checks before a payment that the recipient name you entered matches the owner of the account number. Banks in the euro area must offer this check for every ordinary euro bank transfer (a SEPA credit transfer, see the glossary below) from October 2025. If your company pays through Nordea, OP or Danske Bank, ISECure's Processing API includes VoP and runs the check for you before the payments are sent to the bank. The rest of this page explains how.",
+    sections: [
+      {
+        h2: "Why VoP exists",
+        paras: [
+          "Banks traditionally checked only that an account number was well formed. The recipient name was never compared with the account owner. That is why invoice fraud, where a criminal changes the account number on an invoice, and a simple typing error could send money to the wrong account without any warning.",
+          "The EU Instant Payments Regulation (Regulation (EU) 2024/886) changed this. It requires banks in the euro area to offer Verification of Payee for all euro SEPA credit transfers from 9 October 2025, both ordinary transfers and instant payments, which arrive within seconds. Banks in EU countries outside the euro area have until 9 July 2027. The European Payments Council, the body that sets common rules for euro payments, defines how banks answer each other's checks, so a result means the same thing at every bank.",
+        ],
+      },
+      {
+        h2: "How a check works",
+        paras: [
+          "Before you approve a payment, your bank asks the recipient's bank whether the name you entered matches the account number. The answer arrives within seconds and is always one of four results:",
+        ],
+        list: [
+          "Match: the name and account number belong together.",
+          "Close match: the name is nearly right, for example a spelling difference or a missing 'Oy'. The recipient's bank tells you the name actually on the account, so you can compare and decide.",
+          "No match: the name does not belong to that account number.",
+          "Verification not possible: the recipient's bank cannot answer, for example because it does not yet offer the service. Treat this as 'unknown', not as a pass.",
+        ],
+      },
+      {
+        h2: "What the result means for you",
+        paras: [
+          "A check never blocks a payment on its own. You decide whether to proceed regardless of the result. If you proceed after a No match and the money ends up in the wrong account, the payer rather than the bank usually carries the loss. In practice that means your company, not the bank, loses the money. Only if the bank failed to run the check properly must it refund you. That is why the result should be shown clearly to the person approving the payment, and the decision recorded.",
+        ],
+      },
+      {
+        h2: "What VoP does not do",
+        paras: [
+          "VoP compares only the name and the account number. It does not tell you whether an invoice is genuine or whether the recipient is who they claim to be. A Match is not a promise from the bank that the payment will go through, and it is not proof that a payment was made. The result applies to the moment of the check: account details can change later. Using the check requires that your company has an agreement with its bank that covers the VoP service.",
+        ],
+      },
+      {
+        h2: "Paying in batches: what changes for companies",
+        paras: [
+          "Companies usually pay in batches: the finance system creates one payment file that can contain hundreds of payments. The regulation gives companies the right to opt out of the check for payment files sent as a batch. In practice the Finnish banks offer the file check as a separate, optional service, so a company that does not use it has opted out. The risk of a wrong payment then stays with the company.",
+          "Nordea, OP and Danske Bank all offer VoP to business customers, but each does it differently. OP takes a separate check request in the same format as the payment file and answers with a result report; the actual payment file is sent afterwards. Nordea checks the file through a separate service, and your software fetches the result afterwards. Danske Bank checks each recipient one at a time, currently as a pilot for customers in Finland and Ireland. The four results are the same, but the request format, limits and agreements differ.",
+        ],
+      },
+      {
+        h2: "How ISECure runs the check for you",
+        paras: [
+          "Processing API makes the check part of preparing a payment file. Your software selects the bank and country, enters the payment details and asks for the payees to be verified. ISECure sends the request to the bank under your company's bank agreement and keeps each result attached to the exact set of payments that was checked, so nothing can change after the check without being checked again. A person reviews the Close match and No match results, corrects the payee details where needed, and then approves the file.",
+        ],
+        list: [
+          "One result model for Nordea, OP and Danske Bank payments, even though the banks' technology differs.",
+          "Each result stays attached to the payments it was checked against. Change a payment and it is checked again.",
+          "A person reviews the exceptions before the file is released to your system.",
+          "Processing API prepares and checks the payments. Sending them to the bank, and the bank's own authorisation of the payment, stays in your own system exactly as today.",
+        ],
+      },
+      {
+        h2: "Glossary",
+        paras: [],
+        list: [
+          "Payee: the person or company that receives the payment.",
+          "IBAN: the international account number used in SEPA payments.",
+          "SEPA credit transfer: a euro transfer between accounts in the SEPA area, which covers the EU and EEA countries and several other European countries such as the United Kingdom and Switzerland. The VoP obligation applies to banks in the EU.",
+          "Payment service provider (PSP): a bank or other institution that moves payments.",
+          "Instant Payments Regulation: Regulation (EU) 2024/886, which made VoP mandatory.",
+        ],
+      },
+    ],
+    sources: [
+      {
+        href: sources.regulation,
+        label: "Regulation (EU) 2024/886 on instant credit transfers (EUR-Lex)",
+      },
+      {
+        href: sources.epc,
+        label:
+          "European Payments Council: Verification of Payee scheme rulebook",
+      },
+    ],
+    cta: {
+      title: "Add payee verification to your payment flow",
+      text: "Tell us which banks and payment files you use. We will plan with you how to connect VoP to your payment approval.",
+      label: "Discuss your integration",
+    },
+  },
+  se: {
+    title: "Vad är mottagarkontroll (VoP)? | ISECure",
+    description:
+      "Verification of Payee (VoP) kontrollerar att mottagarens namn stämmer med kontonumret före en betalning. Läs på klarspråk vad EU-reglerna kräver och hur VoP fungerar för företagens betalningsfiler.",
+    h1: "Vad är mottagarkontroll (VoP)?",
+    intro:
+      "Mottagarkontroll, på bankspråk även kontroll av betalningsmottagare och på engelska Verification of Payee (VoP), kontrollerar före en betalning att det mottagarnamn du angett stämmer överens med kontoinnehavarens namn. Banker i euroområdet måste erbjuda kontrollen för varje vanlig girering i euro (SEPA-girering, se ordlistan nedan) från oktober 2025. Om ert företag betalar via Nordea, OP eller Danske Bank innehåller ISECures Processing API VoP och gör kontrollen åt er innan betalningarna skickas till banken. Resten av sidan förklarar hur.",
+    sections: [
+      {
+        h2: "Varför VoP finns",
+        paras: [
+          "Banker har traditionellt bara kontrollerat att kontonumret är korrekt uppbyggt. Mottagarens namn jämfördes aldrig med kontots ägare. Därför har fakturabedrägerier, där en brottsling byter ut kontonumret på en faktura, och enkla skrivfel kunnat skicka pengar till fel konto utan någon varning.",
+          "EU:s förordning om omedelbara betalningar, förordning (EU) 2024/886, ändrade detta. Den kräver att banker i euroområdet erbjuder mottagarkontroll för alla SEPA-gireringar i euro från den 9 oktober 2025, både vanliga gireringar och omedelbara betalningar, som kommer fram inom några sekunder. Banker i EU-länder utanför euroområdet har på sig till den 9 juli 2027. European Payments Council, det organ som sätter gemensamma regler för eurobetalningar, bestämmer hur bankerna svarar på varandras kontroller, så att ett resultat betyder samma sak i alla banker.",
+        ],
+      },
+      {
+        h2: "Så fungerar en kontroll",
+        paras: [
+          "Innan du godkänner en betalning frågar din bank mottagarens bank om namnet du angett stämmer med kontonumret. Svaret kommer inom några sekunder och är alltid ett av fyra resultat:",
+        ],
+        list: [
+          "Stämmer: namnet och kontonumret hör ihop.",
+          "Stämmer delvis: namnet ligger nära det rätta, till exempel en stavningsskillnad eller ett saknat Ab. Mottagarens bank uppger kontoinnehavarens namn, så att du kan jämföra och besluta.",
+          "Stämmer inte: namnet hör inte till det kontonumret.",
+          "Kontroll ej möjlig: mottagarens bank kan inte svara, till exempel för att den ännu inte erbjuder tjänsten. Betrakta detta som okänt, inte som godkänt.",
+        ],
+      },
+      {
+        h2: "Vad resultatet betyder för dig",
+        paras: [
+          "En kontroll stoppar aldrig en betalning i sig. Du avgör själv om betalningen ska genomföras, oavsett resultat. Om du går vidare trots resultatet Stämmer inte och pengarna hamnar på fel konto, är det vanligtvis betalaren och inte banken som bär förlusten. I praktiken betyder det att ert företag, inte banken, förlorar pengarna. Bara om banken inte gjort kontrollen korrekt måste den ersätta er. Därför bör resultatet visas tydligt för den som godkänner betalningen, och beslutet dokumenteras.",
+        ],
+      },
+      {
+        h2: "Vad VoP inte gör",
+        paras: [
+          "VoP jämför bara namnet och kontonumret. Det säger inte om en faktura är äkta eller om mottagaren verkligen är den som den utger sig för att vara. Resultatet Stämmer är inget löfte från banken om att betalningen går igenom, och det är inget bevis på en genomförd betalning. Resultatet gäller vid kontrolltillfället: kontouppgifter kan ändras senare. För att använda kontrollen krävs att ert företag har ett avtal med sin bank som omfattar VoP-tjänsten.",
+        ],
+      },
+      {
+        h2: "Filbetalningar: vad som ändras för företag",
+        paras: [
+          "Företag betalar oftast i stora omgångar via fil: ekonomisystemet skapar en betalningsfil som kan innehålla hundratals betalningar. Förordningen ger företag rätt att avstå från kontrollen för betalningsfiler som skickas samlat. I praktiken erbjuder de finländska bankerna filkontrollen som en separat, frivillig tjänst, så ett företag som inte använder den har avstått. Risken för en felaktig betalning stannar då hos företaget.",
+          "Nordea, OP och Danske Bank erbjuder alla VoP till företagskunder, men var och en gör det på sitt sätt. OP tar emot en separat kontrollförfrågan i samma format som betalningsfilen och svarar med en resultatrapport; den egentliga betalningsfilen skickas först därefter. Nordea kontrollerar filen i en separat tjänst, och er programvara hämtar resultatet efteråt. Danske Bank kontrollerar varje mottagare en i taget, tills vidare som pilot för kunder i Finland och Irland. De fyra resultaten är desamma, men förfrågningarnas format, begränsningar och avtal skiljer sig åt.",
+        ],
+      },
+      {
+        h2: "Så gör ISECure kontrollen åt er",
+        paras: [
+          "I Processing API är kontrollen en del av arbetet med att förbereda betalningsfilen. Er programvara väljer bank och land, anger betalningsuppgifterna och begär att mottagarna kontrolleras. ISECure skickar förfrågan till banken inom ramen för ert företags bankavtal och kopplar varje resultat till exakt den uppsättning betalningar som kontrollerades, så att inget kan ändras efter kontrollen utan att kontrolleras på nytt. En person går igenom resultaten Stämmer delvis och Stämmer inte, rättar mottagaruppgifterna vid behov och godkänner sedan filen.",
+        ],
+        list: [
+          "En resultatmodell för betalningar via Nordea, OP och Danske Bank, även om bankernas teknik skiljer sig åt.",
+          "Varje resultat förblir kopplat till de betalningar det kontrollerades mot. Ändras en betalning kontrolleras den på nytt.",
+          "En person granskar avvikelserna innan filen frigörs till ert system.",
+          "Processing API förbereder och kontrollerar betalningarna. Att skicka dem till banken, och bankens egen auktorisering av betalningen, stannar i ert eget system precis som i dag.",
+        ],
+      },
+      {
+        h2: "Ordlista",
+        paras: [],
+        list: [
+          "Betalningsmottagare (payee): den person eller det företag som tar emot betalningen.",
+          "IBAN: det internationella kontonummer som används i SEPA-betalningar.",
+          "SEPA-girering: en girering i euro mellan konton inom SEPA-området, som omfattar EU- och EES-länderna samt flera andra europeiska länder, till exempel Storbritannien och Schweiz. VoP-skyldigheten gäller banker i EU.",
+          "Betaltjänstleverantör (PSP): en bank eller annan institution som förmedlar betalningar.",
+          "Förordningen om omedelbara betalningar: förordning (EU) 2024/886, som gjorde VoP obligatoriskt.",
+        ],
+      },
+    ],
+    sources: [
+      {
+        href: sources.regulation,
+        label: "Förordning (EU) 2024/886 om omedelbara betalningar (EUR-Lex)",
+      },
+      {
+        href: sources.epc,
+        label: "European Payments Council: Verification of Payee-regelverket",
+      },
+    ],
+    cta: {
+      title: "Lägg till mottagarkontroll i ert betalningsflöde",
+      text: "Berätta vilka banker och betalningsfiler ni använder. Vi planerar tillsammans med er hur VoP kopplas till ert betalningsgodkännande.",
+      label: "Diskutera er integration",
+    },
+  },
+};
+
+const related = [
+  {
+    slug: "processing-api",
+    fi: "Processing API maksuaineistoille",
+    en: "Processing API for payment files",
+    se: "Processing API för betalningsfiler",
+  },
+  {
+    slug: "pain-001",
+    fi: "pain.001-maksuaineisto",
+    en: "pain.001 payment files",
+    se: "pain.001-betalningsfiler",
+  },
+  {
+    slug: "pain-002",
+    fi: "pain.002-maksupalaute",
+    en: "pain.002 payment status",
+    se: "pain.002-betalningsstatus",
+  },
+  {
+    slug: "iso-20022",
+    fi: "ISO 20022 -sanomaopas",
+    en: "ISO 20022 message guide",
+    se: "ISO 20022-meddelandeguide",
+  },
+];
+---
+
+<GuidePage {lang} slug="verification-of-payee" {content} {related} />

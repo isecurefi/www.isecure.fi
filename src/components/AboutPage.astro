@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { alternateLinks, localizedRoutes } from "../lib/seo";
 import type { Lang } from "../types";
 import Actions from "./ui/Actions.astro";
 import Button from "./ui/Button.astro";
@@ -20,7 +21,7 @@ const content = {
   fi: {
     title: "Tietoa meistä",
     description:
-      "ISECure Oy on helsinkiläinen ohjelmistoyritys, jonka pankkiyhteyspalvelu on ollut tuotannossa yli 10 vuotta ja jota käyttää yli 600 yritystä suoraan sekä integraattorit omien asiakasyritystensä palvelemiseen.",
+      "ISECure Oy on helsinkiläinen ohjelmistoyritys. Pankkiyhteyspalvelu on ollut tuotannossa yli 10 vuotta, ja sitä käyttää suoraan yli 600 yritystä sekä integraattorit.",
     intro:
       "ISECure Oy on helsinkiläinen ohjelmistoyritys, joka tarjoaa pankkiyhteydet yhtenä rajapintana ohjelmistoyrityksille. Palvelumme on ollut tuotannossa yli 10 vuotta, ja sitä käyttää yli 600 yritystä suoraan. Lisäksi integraattorit palvelevat sen kautta omia asiakasyrityksiään.",
     facts: [
@@ -38,7 +39,7 @@ const content = {
   en: {
     title: "About us",
     description:
-      "ISECure Oy is a Helsinki software company. Its bank connectivity service has run in production for over 10 years and is used directly by over 600 companies and by integrators serving their own customer companies.",
+      "ISECure Oy is a Helsinki software company. Its bank connectivity service has run in production for over 10 years and is used by over 600 companies and integrators.",
     intro:
       "ISECure Oy is a Helsinki-based software company providing bank connectivity as a single API for software companies. Our service has been in production for over 10 years and is used directly by over 600 companies. Integrators also serve their own customer companies through it.",
     facts: [
@@ -56,7 +57,7 @@ const content = {
   se: {
     title: "Om oss",
     description:
-      "ISECure Oy är ett mjukvaruföretag i Helsingfors. Bankförbindelsetjänsten har varit i produktion i över 10 år och används direkt av över 600 företag samt av integratörer som betjänar sina egna kundföretag.",
+      "ISECure Oy är ett mjukvaruföretag i Helsingfors. Bankförbindelsetjänsten har varit i produktion i över 10 år och används av över 600 företag och integratörer.",
     intro:
       "ISECure Oy är ett Helsingforsbaserat mjukvaruföretag som erbjuder bankförbindelser som ett enda API för mjukvarubolag. Vår tjänst har varit i produktion i över 10 år och används direkt av över 600 företag. Integratörer betjänar dessutom sina egna kundföretag via den.",
     facts: [
@@ -75,20 +76,13 @@ const content = {
 
 const t = content[lang];
 const awsCerts = ["SAP", "DOP", "SS", "BD", "NS", "DA", "SAA", "SOA", "CP"];
-const origin = "https://www.isecure.fi";
-const alternateLinks = [
-  { hreflang: "fi", href: `${origin}/about/` },
-  { hreflang: "en", href: `${origin}/en/about/` },
-  { hreflang: "sv", href: `${origin}/se/about/` },
-  { hreflang: "x-default", href: `${origin}/en/about/` },
-];
 ---
 
 <Layout
   title={t.title}
   lang={lang}
   description={t.description}
-  alternateLinks={alternateLinks}
+  alternateLinks={alternateLinks(localizedRoutes("about"))}
   fullWidth
 >
   <PageHero title={t.title} lead={t.intro}>

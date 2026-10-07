@@ -4,6 +4,12 @@ import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
 import Contact from "../components/Contact.astro";
 import Analytics from "../components/Analytics.astro";
+import {
+  ORGANIZATION_ID,
+  SITE_ORIGIN,
+  structuredDataGraph,
+  type JsonLdNode,
+} from "../lib/seo";
 
 import type { Lang } from "../types";
 export interface Props {
@@ -13,7 +19,9 @@ export interface Props {
   socialDescription?: string;
   keywords?: string;
   robots?: string;
-  structuredData?: Record<string, unknown>;
+  // Page-specific JSON-LD nodes (WebPage, BreadcrumbList, FAQPage, …). The
+  // site-wide Organization and WebSite nodes are always added in front.
+  structuredDataNodes?: JsonLdNode[];
   canonicalUrl?: string;
   alternateLinks?: Array<{
     hreflang: string;
@@ -68,67 +76,26 @@ const applicationName =
     : lang === "se"
       ? "ISECure WS-Kanal"
       : "ISECure WS-Kanava";
-const defaultStructuredData = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://www.isecure.fi/#organization",
-      name: "ISECure Oy",
-      url: "https://www.isecure.fi",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://www.isecure.fi/images/isecure-small-logo.png",
-        width: 161,
-        height: 61,
-      },
-      address: {
-        "@type": "PostalAddress",
-        addressCountry: "FI",
-        addressLocality: "Helsinki",
-        postalCode: "00100",
-      },
-      contactPoint: {
-        "@type": "ContactPoint",
-        telephone: "+358404835507",
-        contactType: "sales",
-        email: "sales@isecure.fi",
-        availableLanguage: ["Finnish", "English", "Swedish"],
-      },
-      sameAs: ["https://www.linkedin.com/company/1026241"],
+const defaultNodes: JsonLdNode[] = [
+  {
+    "@type": "SoftwareApplication",
+    name: applicationName,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Cloud",
+    offers: {
+      "@type": "Offer",
+      category: "Banking Integration Solutions",
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
     },
-    {
-      "@type": "WebSite",
-      "@id": "https://www.isecure.fi/#website",
-      url: "https://www.isecure.fi",
-      name: "ISECure",
-      publisher: {
-        "@id": "https://www.isecure.fi/#organization",
-      },
-      inLanguage: lang === "en" ? "en-US" : lang === "se" ? "sv-SE" : "fi-FI",
-    },
-    {
-      "@type": "SoftwareApplication",
-      name: applicationName,
-      applicationCategory: "BusinessApplication",
-      operatingSystem: "Cloud",
-      offers: {
-        "@type": "Offer",
-        category: "Banking Integration Solutions",
-        priceCurrency: "EUR",
-        availability: "https://schema.org/InStock",
-      },
-      description: socialDescription,
-      provider: {
-        "@id": "https://www.isecure.fi/#organization",
-      },
-    },
-  ],
-};
+    description: socialDescription,
+    provider: { "@id": ORGANIZATION_ID },
+  },
+];
 const structuredData = JSON.stringify(
-  Astro.props.structuredData || defaultStructuredData,
+  structuredDataGraph(lang, Astro.props.structuredDataNodes ?? defaultNodes),
 );
-const siteUrl = Astro.site ?? new globalThis.URL("https://www.isecure.fi");
+const siteUrl = Astro.site ?? new globalThis.URL(SITE_ORIGIN);
 const canonicalUrl =
   Astro.props.canonicalUrl ??
   new globalThis.URL(Astro.url.pathname, siteUrl).toString();
@@ -136,12 +103,7 @@ const socialImageUrl = new globalThis.URL(
   "/images/isecure-og-image.png",
   siteUrl,
 ).toString();
-const titleAlreadyBranded = /isecure/i.test(title);
-const fullTitle = titleAlreadyBranded
-  ? title
-  : bodyClass.includes("banking-theme-page")
-    ? `${title} | ISECure`
-    : `${title} | ISECure - Professional Bank Integration Solutions`;
+const fullTitle = /isecure/i.test(title) ? title : `${title} | ISECure`;
 ---
 
 <!doctype html>

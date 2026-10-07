@@ -639,9 +639,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
         "Processing API för kontrollerade betalningsfiler | ISECure",
       ),
       description: text(
-        "Valmistele, tarkista ja hyväksy pankille lähetettävä maksuaineisto hallitussa työnkulussa.",
-        "Prepare, check, and approve bank payment files through a controlled workflow.",
-        "Förbered, kontrollera och godkänn betalningsfiler för banken i ett kontrollerat flöde.",
+        "Valmistele, tarkista ja hyväksy pankille lähetettävä maksuaineisto hallitussa työnkulussa: lukitse hyväksytty versio ja lataa aineisto pankkiin toimitettavaksi.",
+        "Prepare, check, and approve bank payment files through a controlled workflow: lock the approved version and download the file for bank delivery.",
+        "Förbered, kontrollera och godkänn betalningsfiler för banken i ett kontrollerat flöde: lås den godkända versionen och hämta filen för överföring till banken.",
       ),
     },
   },
