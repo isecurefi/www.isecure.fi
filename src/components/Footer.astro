@@ -13,6 +13,8 @@ const t = {
   fi: {
     product: "Tuote",
     docs: "Dokumentaatio",
+    processingDocs: "Processing API -dokumentaatio",
+    simulatorDocs: "Pankkisimulaattorin API-dokumentaatio",
     pricing: "Hinnat",
     catalog: "Tuotteet",
     company: "Yritys",
@@ -37,6 +39,8 @@ const t = {
   en: {
     product: "Product",
     docs: "Documentation",
+    processingDocs: "Processing API reference",
+    simulatorDocs: "Bank Simulator API reference",
     pricing: "Pricing",
     catalog: "Products",
     company: "Company",
@@ -61,6 +65,8 @@ const t = {
   se: {
     product: "Produkt",
     docs: "Dokumentation",
+    processingDocs: "Processing API-referens",
+    simulatorDocs: "Banksimulator API-referens",
     pricing: "Priser",
     catalog: "Produkter",
     company: "Företag",
@@ -118,6 +124,8 @@ const t = {
               <a href="/wsapi_v2/">{t.docs}</a>
             </li>
             <li><a href="/wsapi_v2.json">OpenAPI</a></li>
+            <li><a href="/apis/processing/">{t.processingDocs}</a></li>
+            <li><a href="/apis/bank-simulator/">{t.simulatorDocs}</a></li>
             <li><a href={`${base}#pricing`}>{t.pricing}</a></li>
             <li><a href="https://github.com/isecurefi">GitHub</a></li>
           </ul>

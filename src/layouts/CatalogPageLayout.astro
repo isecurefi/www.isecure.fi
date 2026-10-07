@@ -23,6 +23,7 @@ interface Props {
   slug?: string;
   title?: string;
   description?: string;
+  faq?: Array<{ q: string; a: string }>;
   fullWidth?: boolean;
   bodyClass?: string;
 }
@@ -73,12 +74,14 @@ const webPage = catalogEntry && {
     description: catalogEntry.summary[lang],
   },
 };
-const faq = faqNode(
-  (record?.faq ?? []).map((item) => ({
+// FAQPage covers the catalog record's questions plus any page-specific ones.
+const faq = faqNode([
+  ...(record?.faq ?? []).map((item) => ({
     q: item.question[lang],
     a: item.answer[lang],
   })),
-);
+  ...(Astro.props.faq ?? []),
+]);
 const robots =
   record?.visibility === "draft" ? "noindex, nofollow" : "index, follow";
 ---

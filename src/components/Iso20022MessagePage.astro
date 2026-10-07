@@ -182,6 +182,24 @@ const content = {
             "ISO 20022 -sanomaluettelo: pain.002 CustomerPaymentStatusReport",
         },
       ],
+      faq: [
+        {
+          q: "Mikä on pain.002-sanoma?",
+          a: "pain.002 on ISO 20022 Customer Payment Status Report -sanoma. Pankki kertoo sillä, onko pain.001-maksuaineisto vastaanotettu, hyväksytty käsittelyyn vai hylätty.",
+        },
+        {
+          q: "Mitä eroa on pain.001:llä ja pain.002:lla?",
+          a: "pain.001 on maksuaineisto, jonka ohjelmistosi lähettää pankille. pain.002 on pankin statusvastaus kyseiseen aineistoon, erään tai tapahtumaan.",
+        },
+        {
+          q: "Vahvistaako pain.002, että maksu on maksettu?",
+          a: "Ei. Se raportoi käsittelyn tilan ja mahdollisen syykoodin. Se ei ole lopullinen vahvistus siitä, että saajan tiliä on hyvitetty; sovelluksen on tulkittava tila pankin ohjeen mukaan.",
+        },
+        {
+          q: "Mitä pain.002.001.10 tarkoittaa?",
+          a: "pain.002 nimeää sanomaperheen ja 001.10 skeemaversion. Pankin ohje ja sopimus määrittävät käytössä olevan version ja tilakoodit.",
+        },
+      ],
       cta: {
         title: "Tee maksujen seurannasta luotettava",
         text: "Kerro käyttämäsi pain.001- ja pain.002-versiot sekä pankit. Autamme rakentamaan palautteiden noudon samaan integraatioon.",
@@ -235,6 +253,24 @@ const content = {
             "ISO 20022 message catalogue: pain.002 CustomerPaymentStatusReport",
         },
       ],
+      faq: [
+        {
+          q: "What is a pain.002 message?",
+          a: "pain.002 is the ISO 20022 Customer Payment Status Report. A bank uses it to report whether a pain.001 payment file was received, accepted for processing, or rejected.",
+        },
+        {
+          q: "What is the difference between pain.001 and pain.002?",
+          a: "pain.001 is the payment initiation file your software sends to the bank. pain.002 is the bank's status response to that file, batch, or transaction.",
+        },
+        {
+          q: "Does pain.002 confirm that the payment was made?",
+          a: "No. It reports the processing status and, when supplied, a reason code. It is not a final confirmation that the creditor account has been credited; your application must interpret the status according to the bank guideline.",
+        },
+        {
+          q: "What does pain.002.001.10 mean?",
+          a: "pain.002 names the message family and 001.10 the schema version. The bank guideline and agreement determine the version and status codes in use.",
+        },
+      ],
       cta: {
         title: "Make payment tracking dependable",
         text: "Tell us your pain.001 and pain.002 versions and banks. We will help bring response retrieval into the same integration.",
@@ -286,6 +322,24 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=pain.002",
           label:
             "ISO 20022-meddelandekatalog: pain.002 CustomerPaymentStatusReport",
+        },
+      ],
+      faq: [
+        {
+          q: "Vad är ett pain.002-meddelande?",
+          a: "pain.002 är ISO 20022-meddelandet Customer Payment Status Report. Banken rapporterar med det om en pain.001-betalningsfil togs emot, godkändes för behandling eller avvisades.",
+        },
+        {
+          q: "Vad är skillnaden mellan pain.001 och pain.002?",
+          a: "pain.001 är betalningsfilen som din programvara skickar till banken. pain.002 är bankens statussvar på den filen, batchen eller transaktionen.",
+        },
+        {
+          q: "Bekräftar pain.002 att betalningen är genomförd?",
+          a: "Nej. Det rapporterar behandlingsstatus och eventuell orsakskod. Det är ingen slutlig bekräftelse på att mottagarens konto krediterats; applikationen måste tolka statusen enligt bankens anvisning.",
+        },
+        {
+          q: "Vad betyder pain.002.001.10?",
+          a: "pain.002 anger meddelandefamiljen och 001.10 schemaversionen. Bankens anvisning och avtal avgör version och statuskoder.",
         },
       ],
       cta: {
@@ -343,6 +397,24 @@ const content = {
             "ISO 20022 -sanomaluettelo: camt.054 BankToCustomerDebitCreditNotification",
         },
       ],
+      faq: [
+        {
+          q: "Mitä camt.054 tarkoittaa?",
+          a: "camt.054 on ISO 20022 Bank-to-Customer Debit/Credit Notification -sanoma. Pankki raportoi sillä yksittäiset tai ryhmitellyt tilin veloitukset ja hyvitykset, usein ennen seuraavaa camt.053-tiliotetta.",
+        },
+        {
+          q: "Mikä on camt.054.001.08?",
+          a: "camt.054 on sanomaperhe ja 001.08 skeemaversio. Pankkisopimus ja soveltamisohje määrittävät, minkä version pankki toimittaa.",
+        },
+        {
+          q: "Onko camt.054 reaaliaikainen tapahtumasyöte?",
+          a: "Ei. Saatavuus, toimitustiheys ja sisältö riippuvat pankista ja yrityssopimuksesta. camt.054 voi nopeuttaa saapuvien maksujen täsmäytystä, mutta se ei automaattisesti tarkoita reaaliaikaista virtaa.",
+        },
+        {
+          q: "Mitä eroa on camt.054:llä ja camt.053:lla?",
+          a: "camt.053 kokoaa saldot ja kirjatut tapahtumat raportointijaksolta. camt.054 ilmoittaa yksittäiset tai ryhmitellyt veloitukset ja hyvitykset tiliotteiden välillä.",
+        },
+      ],
       cta: {
         title: "Tuo pankin tapahtumailmoitukset ohjelmistoosi",
         text: "Kerro pankit, käyttötapaus ja camt.054-versiot. Selvitämme saatavuuden ja sopivan tiedostonoutomallin.",
@@ -352,7 +424,7 @@ const content = {
     en: {
       title: "What Is camt.054? Debit and Credit Notification | ISECure",
       description:
-        "camt.054 is an ISO 20022 debit and credit notification. Learn what camt054 means, how it differs from camt.053, and how the file is retrieved.",
+        "camt.054 is an ISO 20022 debit and credit notification. Learn what camt054 and camt.054.001.08 mean, how it differs from camt.053, and how it is retrieved.",
       h1: "What is camt.054? A debit and credit notification",
       intro:
         "camt.054 is the ISO 20022 Bank-to-Customer Debit/Credit Notification message. A bank can use it to report account debits and credits before the next end-of-day statement. ISECure's File Exchange API retrieves files offered by the bank through the same integration as other bank files.",
@@ -394,6 +466,24 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.054",
           label:
             "ISO 20022 message catalogue: camt.054 BankToCustomerDebitCreditNotification",
+        },
+      ],
+      faq: [
+        {
+          q: "What does camt.054 mean?",
+          a: "camt.054 is the ISO 20022 Bank-to-Customer Debit/Credit Notification. A bank uses it to report individual or grouped account debits and credits, often before the next end-of-day camt.053 statement.",
+        },
+        {
+          q: "What is camt.054.001.08?",
+          a: "camt.054 is the message family and 001.08 the schema version. The bank agreement and implementation guideline define which version the bank delivers.",
+        },
+        {
+          q: "Is camt.054 a real-time transaction feed?",
+          a: "No. Availability, delivery frequency, and content depend on the bank and corporate agreement. camt.054 can help reconcile incoming payments sooner, but it is not automatically a real-time stream.",
+        },
+        {
+          q: "What is the difference between camt.054 and camt.053?",
+          a: "camt.053 summarizes balances and booked entries for a reporting period. camt.054 notifies individual or grouped debits and credits between statements.",
         },
       ],
       cta: {
@@ -447,6 +537,24 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.054",
           label:
             "ISO 20022-meddelandekatalog: camt.054 BankToCustomerDebitCreditNotification",
+        },
+      ],
+      faq: [
+        {
+          q: "Vad betyder camt.054?",
+          a: "camt.054 är ISO 20022-meddelandet Bank-to-Customer Debit/Credit Notification. Banken rapporterar med det enskilda eller grupperade debiteringar och krediteringar på kontot, ofta före nästa camt.053-kontoutdrag.",
+        },
+        {
+          q: "Vad är camt.054.001.08?",
+          a: "camt.054 är meddelandefamiljen och 001.08 schemaversionen. Bankavtalet och implementeringsanvisningen avgör vilken version banken levererar.",
+        },
+        {
+          q: "Är camt.054 ett realtidsflöde av transaktioner?",
+          a: "Nej. Tillgänglighet, leveransfrekvens och innehåll beror på banken och företagsavtalet. camt.054 kan påskynda avstämningen av inkommande betalningar men är inte automatiskt ett realtidsflöde.",
+        },
+        {
+          q: "Vad är skillnaden mellan camt.054 och camt.053?",
+          a: "camt.053 sammanfattar saldon och bokförda transaktioner för en rapportperiod. camt.054 aviserar enskilda eller grupperade debiteringar och krediteringar mellan kontoutdragen.",
         },
       ],
       cta: {
@@ -519,6 +627,12 @@ const relatedByMessage: Record<
       en: "Processing API for payment files",
       se: "Processing API för betalningsfiler",
     },
+    {
+      slug: "pankkiyhteys",
+      fi: "Pankkiyhteysohjelma: rakenna itse vai osta",
+      en: "Secure bank integration: build or buy",
+      se: "Bankförbindelse: bygga eller köpa",
+    },
   ],
   "camt-054": [
     {
@@ -544,6 +658,12 @@ const relatedByMessage: Record<
       fi: "Processing API maksuaineistoille",
       en: "Processing API for payment files",
       se: "Processing API för betalningsfiler",
+    },
+    {
+      slug: "pankkiyhteys",
+      fi: "Pankkiyhteysohjelma: rakenna itse vai osta",
+      en: "Secure bank integration: build or buy",
+      se: "Bankförbindelse: bygga eller köpa",
     },
   ],
 };

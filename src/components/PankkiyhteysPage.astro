@@ -40,6 +40,20 @@ const content = {
         ],
       },
     ],
+    faq: [
+      {
+        q: "Mikä on pankkiyhteysohjelma?",
+        a: "Pankkiyhteysohjelma on ohjelmisto tai palvelu, joka siirtää maksuaineistot, tiliotteet ja muut pankkiaineistot yrityksen järjestelmän ja pankin välillä. Suomessa siirto tapahtuu pankkien Web Services -kanavan kautta varmenteilla allekirjoitettuina sanomina.",
+      },
+      {
+        q: "Pitääkö ohjelmistoyrityksen rakentaa oma pankkiyhteysohjelma?",
+        a: "Ei välttämättä. Pankkiyhteydet voi ostaa palveluna yhtenä REST-rajapintana, jolloin varmenteet, avainten hallinta ja pankkikohtaiset erot hoidetaan puolestasi. Oma toteutus on perusteltu lähinnä silloin, kun tarvitset vain yhden pankin ja sitoudut pitkään ylläpitoon.",
+      },
+      {
+        q: "Mitkä pankit yksi pankkiyhteysohjelman integraatio kattaa?",
+        a: "ISECuren kautta Nordean, OP:n, Danske Bankin, S-Pankin ja Ålandsbankenin sekä Samlinkin ja Crosskeyn kautta Handelsbankenin, Aktian, POP Pankin, Säästöpankin ja OmaSp:n.",
+      },
+    ],
   },
   en: {
     title: "Secure Bank Integration for Finnish Banks | ISECure",
@@ -76,6 +90,20 @@ const content = {
         ],
       },
     ],
+    faq: [
+      {
+        q: "What makes a bank integration secure?",
+        a: "Private keys and bank traffic are the sensitive parts. In ISECure's service, private keys are stored with AWS KMS encryption in a PCI DSS level environment, separate from your software team, and bank messages are signed with certificates over the banks' Web Services channel.",
+      },
+      {
+        q: "Should a software company build its own bank integration?",
+        a: "Not necessarily. Bank connectivity can be bought as one REST API, with certificates, key management, and bank-specific differences handled for you. Building in-house mainly makes sense for a single bank and a long-term maintenance commitment.",
+      },
+      {
+        q: "Which Finnish banks does one integration cover?",
+        a: "Through ISECure: Nordea, OP, Danske Bank, S-Pankki, and Ålandsbanken, plus Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP via Samlink and Crosskey.",
+      },
+    ],
   },
   se: {
     title: "Bankkonto-API för finländska banker | ISECure",
@@ -110,6 +138,20 @@ const content = {
         paras: [
           "Att bygga själv kan vara motiverat om du behöver endast en bank och har resurser att underhålla den på lång sikt. Om din produkt behöver flera banker, snabb driftsättning och en lättare compliance-börda är att köpa som tjänst oftast en snabbare och billigare väg till produktion.",
         ],
+      },
+    ],
+    faq: [
+      {
+        q: "Vad gör en bankintegration säker?",
+        a: "Privata nycklar och banktrafik är de känsliga delarna. I ISECures tjänst lagras privata nycklar med AWS KMS-kryptering i en PCI DSS-miljö, åtskilt från ditt programvaruteam, och bankmeddelanden signeras med certifikat via bankernas Web Services-kanal.",
+      },
+      {
+        q: "Behöver ett mjukvarubolag bygga sin egen bankintegration?",
+        a: "Inte nödvändigtvis. Bankförbindelser kan köpas som ett enda REST-API, där certifikat, nyckelhantering och bankspecifika skillnader sköts åt dig. Att bygga själv är främst motiverat för en enda bank och ett långsiktigt underhållsåtagande.",
+      },
+      {
+        q: "Vilka finländska banker täcker en integration?",
+        a: "Via ISECure: Nordea, OP, Danske Bank, S-Pankki och Ålandsbanken samt Handelsbanken, Aktia, POP Bank, Sparbanken och OmaSp via Samlink och Crosskey.",
       },
     ],
   },

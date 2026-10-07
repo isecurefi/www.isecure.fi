@@ -11,6 +11,7 @@ import Button from "./ui/Button.astro";
 import Callout from "./ui/Callout.astro";
 import Card from "./ui/Card.astro";
 import CardGrid from "./ui/CardGrid.astro";
+import FaqList from "./ui/FaqList.astro";
 import PageHero from "./ui/PageHero.astro";
 import Prose from "./ui/Prose.astro";
 import Section from "./ui/Section.astro";
@@ -35,6 +36,8 @@ interface LangContent {
   intro: string;
   sections: GuideSection[];
   sources?: Source[];
+  // Rendered as an accordion and published as FAQPage structured data.
+  faq?: Array<{ q: string; a: string }>;
   cta?: {
     title: string;
     text: string;
@@ -64,6 +67,11 @@ const sourcesTitle = {
   en: "Official source",
   se: "Officiell källa",
 }[lang];
+const faqTitle = {
+  fi: "Usein kysyttyä",
+  en: "Frequently asked questions",
+  se: "Vanliga frågor",
+}[lang];
 const relatedHref = (s: string) =>
   lang === "fi" ? `/${s}/` : `/${lang}/${s}/`;
 ---
@@ -74,6 +82,7 @@ const relatedHref = (s: string) =>
   description={t.description}
   {slug}
   record={catalogRecord}
+  faq={t.faq}
   fullWidth
 >
   <PageHero slot="hero" title={t.h1} lead={t.intro} />
@@ -99,6 +108,15 @@ const relatedHref = (s: string) =>
           ))
         }
       </Prose>
+
+      {
+        t.faq && t.faq.length > 0 && (
+          <section class="guide-faq">
+            <h2>{faqTitle}</h2>
+            <FaqList items={t.faq} />
+          </section>
+        )
+      }
 
       {
         t.sources && t.sources.length > 0 && (
@@ -169,9 +187,16 @@ const relatedHref = (s: string) =>
     margin-top: 2.4em;
   }
 
+  .guide-faq,
   .guide-sources {
     margin-top: 48px;
     max-width: 780px;
+  }
+
+  .guide-faq h2 {
+    color: var(--landing-ink);
+    font-size: 1.4rem;
+    margin: 0 0 16px;
   }
 
   .guide-sources h2 {

@@ -11,17 +11,6 @@ const RETIRED_SITEMAPS = [
   "https://isecure.fi/sitemap.xml",
   "http://isecure.fi/sitemap.xml",
 ];
-const INSPECTION_URLS = [
-  "https://www.isecure.fi/bank-simulator/",
-  "https://www.isecure.fi/en/bank-simulator/",
-  "https://www.isecure.fi/se/bank-simulator/",
-  "https://www.isecure.fi/camt-053/",
-  "https://www.isecure.fi/en/camt-053/",
-  "https://www.isecure.fi/se/camt-053/",
-  "https://www.isecure.fi/iso-20022/",
-  "https://www.isecure.fi/en/iso-20022/",
-  "https://www.isecure.fi/se/iso-20022/",
-];
 
 if (!KEY_FILE) {
   throw new Error(
@@ -75,6 +64,16 @@ async function inspectUrl(inspectionUrl) {
   };
 }
 
+// Every indexable URL comes from the live sitemap, so new pages are inspected
+// automatically instead of maintaining a hand-picked list here.
+async function sitemapUrls(sitemapUrl) {
+  const xml = await (await fetch(sitemapUrl)).text();
+  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/gu)].map((m) => m[1]);
+  if (!xml.includes("<sitemapindex")) return locs;
+  const nested = await Promise.all(locs.map(sitemapUrls));
+  return nested.flat();
+}
+
 function printSitemaps(sitemaps) {
   console.log("\nSearch Console sitemaps:");
   for (const sitemap of sitemaps) {
@@ -104,13 +103,20 @@ async function main() {
     );
   }
 
-  console.log("\nPublic landing-page index status:");
-  for (const url of INSPECTION_URLS) {
-    const status = await inspectUrl(url);
+  const urls = await sitemapUrls(CURRENT_SITEMAP);
+  console.log(
+    `\nIndex status of ${urls.length} sitemap URLs (problems first):`,
+  );
+  const statuses = [];
+  for (const url of urls) statuses.push({ url, ...(await inspectUrl(url)) });
+  statuses.sort((a, b) => (a.verdict === "PASS") - (b.verdict === "PASS"));
+  for (const status of statuses) {
     console.log(
-      `  ${status.verdict} | ${status.coverageState} | last crawl ${status.lastCrawlTime ?? "-"} | ${url}`,
+      `  ${status.verdict} | ${status.coverageState} | last crawl ${status.lastCrawlTime ?? "-"} | ${status.url}`,
     );
   }
+  const indexed = statuses.filter((status) => status.verdict === "PASS").length;
+  console.log(`\n${indexed}/${urls.length} sitemap URLs are indexed.`);
 
   console.log(
     "\nGoogle only supports general-page indexing requests in Search Console. The URL Inspection API is read-only; the submitted sitemap is the automated discovery path.",

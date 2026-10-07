@@ -57,6 +57,24 @@ const content = {
         label: "ISO 20022 -sanomaluettelo: camt.053 BankToCustomerStatement",
       },
     ],
+    faq: [
+      {
+        q: "Mikä on camt.053-muoto?",
+        a: "camt.053 on ISO 20022 Bank-to-Customer Statement -sanoma: konekielinen XML-tiliote, joka sisältää tilin saldot ja kirjatut tapahtumat raportointijaksolta. Suomessa se korvasi vanhan TITO-tiliotteen.",
+      },
+      {
+        q: "Mitä camt.053.001.08 tarkoittaa?",
+        a: "camt.053 nimeää sanomaperheen ja 001.08 skeemaversion. Pankit kertovat toimittamansa version soveltamisohjeissaan, ja ohjelmiston on tulkittava pankin lähettämä versio.",
+      },
+      {
+        q: "Mitä eroa on camt.053:lla ja camt.054:llä?",
+        a: "camt.053 on jaksoittainen tiliote saldoineen ja kirjattuine tapahtumineen. camt.054 on veloitus- tai hyvitysilmoitus, jonka pankki voi toimittaa ennen seuraavaa tiliotetta. Saatavuus ja toimitustiheys riippuvat pankkisopimuksesta.",
+      },
+      {
+        q: "Miten camt.053-tiliotteet noudetaan suomalaisista pankeista?",
+        a: "Tiliotteet noudetaan pankin Web Services -kanavasta allekirjoitetuilla pyynnöillä ja voimassa olevilla varmenteilla. ISECure noutaa ne tukemistaan suomalaisista pankeista yhdellä REST-rajapinnalla ja hoitaa varmenteet ja allekirjoituksen.",
+      },
+    ],
     cta: {
       title: "Tuo camt.053-tiliotteet ohjelmistoosi",
       text: "Kerro pankit, tiliotemäärät ja käyttämäsi camt.053-versiot. Suunnittelemme tiedostonoudon ja käyttöönoton kanssasi.",
@@ -66,7 +84,7 @@ const content = {
   en: {
     title: "What Is camt.053? ISO 20022 Bank Statement | ISECure",
     description:
-      "camt.053 is an ISO 20022 bank statement containing account balances and booked entries. Learn what camt053 means and how the file is retrieved.",
+      "camt.053 is the ISO 20022 bank statement format with account balances and booked entries. Learn what camt053 and camt.053.001.08 mean and how it is retrieved.",
     h1: "What is camt.053? An ISO 20022 bank statement",
     intro:
       "camt.053 is a machine-readable statement sent by an account servicer to the account owner or an authorized party. It brings account balances and booked entries into accounting or ERP software as structured XML for reconciliation and posting.",
@@ -113,6 +131,24 @@ const content = {
       {
         href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.053",
         label: "ISO 20022 message catalogue: camt.053 BankToCustomerStatement",
+      },
+    ],
+    faq: [
+      {
+        q: "What is the camt.053 format?",
+        a: "camt.053 is the ISO 20022 Bank-to-Customer Statement: a machine-readable XML bank statement with account balances and booked entries for a reporting period. In Finland it replaced the older TITO statement format.",
+      },
+      {
+        q: "What does camt.053.001.08 mean?",
+        a: "camt.053 names the message family and 001.08 the schema version. Banks state the version they deliver in their implementation guidelines, and your software must parse the version your bank sends.",
+      },
+      {
+        q: "What is the difference between camt.053 and camt.054?",
+        a: "camt.053 is the periodic statement with balances and booked entries. camt.054 is a debit or credit notification a bank may deliver before the next statement. Availability and frequency depend on the bank agreement.",
+      },
+      {
+        q: "How do I retrieve camt.053 files from Finnish banks?",
+        a: "Statements are retrieved over the bank's Web Services channel with signed requests and valid certificates. ISECure retrieves them from the supported Finnish banks through one REST API and handles certificates and signing.",
       },
     ],
     cta: {
@@ -171,6 +207,24 @@ const content = {
       {
         href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.053",
         label: "ISO 20022-meddelandekatalog: camt.053 BankToCustomerStatement",
+      },
+    ],
+    faq: [
+      {
+        q: "Vad är camt.053-formatet?",
+        a: "camt.053 är ISO 20022-meddelandet Bank-to-Customer Statement: ett maskinläsbart XML-kontoutdrag med kontosaldon och bokförda transaktioner för en rapportperiod. I Finland ersatte det det äldre TITO-formatet.",
+      },
+      {
+        q: "Vad betyder camt.053.001.08?",
+        a: "camt.053 anger meddelandefamiljen och 001.08 schemaversionen. Bankerna anger vilken version de levererar i sina implementeringsanvisningar, och programvaran måste tolka den version banken skickar.",
+      },
+      {
+        q: "Vad är skillnaden mellan camt.053 och camt.054?",
+        a: "camt.053 är det periodiska kontoutdraget med saldon och bokförda transaktioner. camt.054 är en debet- eller kreditavisering som banken kan leverera före nästa kontoutdrag. Tillgänglighet och frekvens beror på bankavtalet.",
+      },
+      {
+        q: "Hur hämtas camt.053-filer från finländska banker?",
+        a: "Kontoutdragen hämtas via bankens Web Services-kanal med signerade förfrågningar och giltiga certifikat. ISECure hämtar dem från de finländska banker vi stöder via ett REST-API och sköter certifikat och signering.",
       },
     ],
     cta: {
