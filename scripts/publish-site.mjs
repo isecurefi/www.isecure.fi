@@ -199,12 +199,16 @@ export function updateDistribution(distributionId, etag, config) {
   }
 }
 
+// Every release switch also reasserts the 404 mapping, so the deployed
+// distribution never drifts from the checked-in configuration.
 function switchOrigin(distributionId, originId, targetPath) {
   const current = getDistribution(distributionId);
   updateDistribution(
     distributionId,
     current.ETag,
-    withOriginPath(current.DistributionConfig, originId, targetPath),
+    withCustomErrorResponses(
+      withOriginPath(current.DistributionConfig, originId, targetPath),
+    ),
   );
 }
 

@@ -232,8 +232,8 @@ shapes, and never uses destructive S3 synchronization. Preview the intended swit
 `corepack yarn publish:rollback`; use `--to <full-git-revision>` only for a release whose immutable
 manifest already exists.
 
-Missing paths are served by the built `404.html` with HTTP 404. `corepack yarn cloudfront:error-pages`
-applies that CloudFront error-response mapping idempotently; `verify:production` checks it.
+Missing paths are served by the built `404.html` with HTTP 404. Each release switch reasserts
+that CloudFront error-response mapping, and `verify:production` checks it.
 
 After the new API documentation is healthy on CloudFront, run
 `scripts/legacy-redirects.sh` to reconcile the apex redirects and edge security
