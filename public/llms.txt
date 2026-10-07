@@ -19,7 +19,7 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [Home (Swedish)](https://www.isecure.fi/se/): Swedish-language product overview
 - [Products](https://www.isecure.fi/en/products/): current products with exact stage and customer access
 - [Bank Simulator](https://www.isecure.fi/en/bank-simulator/): Beta test-environment enrollment, initial camt.053 download, signed pain.001 upload, and synthetic pain.002/camt.054/updated-camt.053 feedback; registration, a paid subscription, and an access request are required
-- [Processing API](https://www.isecure.fi/en/processing-api/): separate Beta payment workflow with Nordea payment-file profiles validated using XMLdation for Finland, Sweden, Norway and Denmark in the ISECure test environment for creating, approving, generating, and downloading exact pain.001; registration, a paid subscription, and an access request are required
+- [Processing API](https://www.isecure.fi/en/processing-api/): separate Beta payment workflow for creating, checking, approving, generating, and downloading exact pain.001. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark; OP and Danske Bank Finland SEPA profiles are available with bank validation in progress. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Available to subscribed customers in the ISECure test and production environments
 - [ISO 20022 message guide](https://www.isecure.fi/en/iso-20022/): comparison of pain.001, pain.002, camt.053, and camt.054 in bank integrations
 - [Bank integration for software products](https://www.isecure.fi/en/pankkiyhteys/): adding Finnish bank connectivity to a software product, build vs. buy
 - [Finnish bank Web Services channel](https://www.isecure.fi/en/web-services/): how the corporate Web Services (WS) channel works
@@ -29,6 +29,7 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [pain.001 payment files](https://www.isecure.fi/en/pain-001/): SEPA payment initiation file delivery
 - [pain.002 payment status](https://www.isecure.fi/en/pain-002/): bank payment-status response retrieval
 - [camt.054 notifications](https://www.isecure.fi/en/camt-054/): debit and credit notification retrieval
+- [Verification of Payee (VoP)](https://www.isecure.fi/en/verification-of-payee/): plain-language guide to the EU payee name and account check for company payment files
 - [About](https://www.isecure.fi/en/about/): company information
 
 ## API documentation
@@ -45,10 +46,9 @@ The current Processing and Bank Simulator examples run separately and do not cor
 ## SDKs and tooling
 
 - [TypeScript SDK](https://github.com/isecurefi/isecure-ts-client): official TypeScript client library
-
-- [Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client): Python client library; see its README for current API coverage.
-
-The PHP SDK and the `wscli` command-line tool are also available.
+- [Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client): Python client library; see its README for current API coverage
+- [C# SDK (Beta)](https://github.com/isecurefi/isecure-cs-client): .NET client library; see its README for current API coverage
+- [PHP SDK and wscli](https://github.com/isecurefi/wscli-php): PHP client library and the `wscli` command-line tool
 
 ## Contact
 

@@ -175,6 +175,13 @@ const checks = [
     status: 301,
     location: "https://www.isecure.fi/thankyou/?source=production-check",
   },
+  {
+    name: "Missing pages return the site's 404 page with HTTP 404",
+    url: "https://www.isecure.fi/this-page-does-not-exist/",
+    status: 404,
+    contentType: "text/html",
+    contains: '<meta name="robots" content="noindex, nofollow">',
+  },
 ];
 
 let failures = 0;

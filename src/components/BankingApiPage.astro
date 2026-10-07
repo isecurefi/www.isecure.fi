@@ -5,11 +5,8 @@ import {
   SITE_ORIGIN,
   absoluteUrl,
   alternateLinks,
-  breadcrumbNode,
   faqNode,
-  localeTag,
   localizedRoutes,
-  webPageNode,
 } from "../lib/seo";
 import type { Lang } from "../types";
 import BankingApiLanding from "./BankingApiLanding.astro";
@@ -27,7 +24,6 @@ const meta = {
       "Yhdistä ohjelmistosi tukemiimme suomalaisiin pankkeihin ISECure Banking API:lla. REST API, OpenAPI sekä TypeScript-, Python-, C#- ja PHP-SDK:t pankkiaineistoille.",
     keywords:
       "pankki API, banking API, TypeScript SDK, Python SDK, C# SDK, PHP SDK, WS-Kanava API, pankki-integraatio, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
-    breadcrumb: "Pankki API ja SDK:t",
     faqSdk:
       "ISECure sisältää PHP SDK:n, TypeScript SDK:n, Python SDK:n, C# SDK:n ja wscli-työkalun REST API:n rinnalle.",
     faqTest:
@@ -39,7 +35,6 @@ const meta = {
       "Connect your software to supported Finnish banks with ISECure Banking API. REST API, OpenAPI, and TypeScript, Python, C#, and PHP SDKs for bank files.",
     keywords:
       "banking API, TypeScript SDK, Python SDK, C# SDK, PHP SDK, WS-Channel API, bank integration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
-    breadcrumb: "Banking API and SDKs",
     faqSdk:
       "ISECure includes PHP SDK, TypeScript SDK, Python SDK, C# SDK, and wscli tooling alongside the REST API.",
     faqTest:
@@ -51,7 +46,6 @@ const meta = {
       "Anslut din programvara till finländska banker som stöds med ISECure Banking API. REST API, OpenAPI samt SDK:er för TypeScript, Python, C# och PHP.",
     keywords:
       "bank API, TypeScript SDK, Python SDK, C# SDK, PHP SDK, WS-Kanal API, bankintegration, OpenAPI, SEPA, camt.053, pain.001, Nordea, OP, Danske Bank",
-    breadcrumb: "Bank API och SDK:er",
     faqSdk:
       "ISECure innehåller PHP SDK, TypeScript SDK, Python SDK, C# SDK och wscli-verktyg bredvid REST API:t.",
     faqTest:
@@ -197,21 +191,6 @@ const softwareApplication = {
     ],
   },
 };
-const structuredDataNodes = [
-  webPageNode({
-    url: pageUrl,
-    name: pageMeta.title,
-    description: pageMeta.description,
-    lang,
-    about: { "@id": softwareApplication["@id"] },
-  }),
-  softwareApplication,
-  faqNode(structuredFaqs),
-  breadcrumbNode([
-    { name: "ISECure", url: absoluteUrl("/") },
-    { name: pageMeta.breadcrumb, url: pageUrl },
-  ]),
-];
 ---
 
 <Layout
@@ -219,7 +198,8 @@ const structuredDataNodes = [
   lang={lang}
   description={pageMeta.description}
   keywords={pageMeta.keywords}
-  {structuredDataNodes}
+  webPage={{ about: { "@id": softwareApplication["@id"] } }}
+  structuredDataNodes={[softwareApplication, faqNode(structuredFaqs)]}
   canonicalUrl={pageUrl}
   alternateLinks={alternateLinks(routes)}
   bodyClass="banking-theme-page"

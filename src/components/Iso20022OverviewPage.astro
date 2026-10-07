@@ -18,6 +18,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
+const base = localizedRoutes()[lang];
 const routes = localizedRoutes("iso-20022");
 const canonicalUrl = absoluteUrl(routes[lang]);
 

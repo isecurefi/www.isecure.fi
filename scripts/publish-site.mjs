@@ -199,6 +199,15 @@ export function updateDistribution(distributionId, etag, config) {
   }
 }
 
+function switchOrigin(distributionId, originId, targetPath) {
+  const current = getDistribution(distributionId);
+  updateDistribution(
+    distributionId,
+    current.ETag,
+    withOriginPath(current.DistributionConfig, originId, targetPath),
+  );
+}
+
 function invalidate(distributionId) {
   const response = runJson("aws", [
     "cloudfront",

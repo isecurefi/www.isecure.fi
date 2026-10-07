@@ -12,8 +12,28 @@ import {
   releaseCacheControl,
   releaseNeedsUpload,
   validateDeploymentRecord,
+  withCustomErrorResponses,
   withOriginPath,
 } from "./publish-site.mjs";
+
+test("missing objects map to the site's 404 page without touching other settings", () => {
+  const config = { Origins: { Quantity: 0, Items: [] }, Comment: "keep" };
+  const updated = withCustomErrorResponses(config);
+  assert.deepEqual(config.CustomErrorResponses, undefined);
+  assert.equal(updated.Comment, "keep");
+  assert.deepEqual(
+    updated.CustomErrorResponses.Items.map((item) => [
+      item.ErrorCode,
+      item.ResponseCode,
+      item.ResponsePagePath,
+    ]),
+    [
+      [403, "404", "/404.html"],
+      [404, "404", "/404.html"],
+    ],
+  );
+  assert.deepEqual(withCustomErrorResponses(updated), updated);
+});
 
 test("stable public URLs revalidate while content-hashed assets stay immutable", () => {
   for (const path of [

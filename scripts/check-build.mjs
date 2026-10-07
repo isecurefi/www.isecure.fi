@@ -94,6 +94,33 @@ for (const file of htmlFiles) {
     if (!html.includes('<meta name="isecure-analytics" content="automatic">')) {
       failures.push(`${page}: automatic analytics marker is missing`);
     }
+    // One parseable JSON-LD graph per page; translated marketing pages must
+    // also carry the shared Organization node and a BreadcrumbList.
+    const jsonLd = [
+      ...html.matchAll(
+        /<script type="application\/ld\+json">([\s\S]*?)<\/script>/gu,
+      ),
+    ].map((match) => match[1]);
+    if (jsonLd.length !== 1) {
+      failures.push(`${page}: expected exactly one JSON-LD script`);
+    }
+    for (const text of jsonLd) {
+      try {
+        JSON.parse(text);
+      } catch {
+        failures.push(`${page}: JSON-LD does not parse`);
+      }
+    }
+    if (/hreflang=/u.test(html)) {
+      for (const required of [
+        '"@id":"https://www.isecure.fi/#organization"',
+        '"@type":"BreadcrumbList"',
+      ]) {
+        if (!jsonLd.join("").includes(required)) {
+          failures.push(`${page}: JSON-LD is missing ${required}`);
+        }
+      }
+    }
   }
 
   for (const match of html.matchAll(

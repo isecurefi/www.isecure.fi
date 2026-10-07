@@ -8,10 +8,10 @@ import {
 import {
   absoluteUrl,
   alternateLinks,
-  breadcrumbNode,
   faqNode,
   localizedRoutes,
-  webPageNode,
+  pageName,
+  type Breadcrumb,
 } from "../lib/seo";
 import Layout from "./Layout.astro";
 import type { Lang } from "../types";
@@ -52,35 +52,33 @@ const canonicalUrl = absoluteUrl(routes[lang]);
 const title = Astro.props.title ?? catalogEntry?.seo.title[lang] ?? "ISECure";
 const description =
   Astro.props.description ?? catalogEntry?.seo.description[lang] ?? "";
-const homeUrl = absoluteUrl(localizedRoutes()[lang]);
-const breadcrumbs = [{ name: "ISECure", url: homeUrl }];
-if (record?.kind === "product") {
-  breadcrumbs.push({
-    name: catalogUi[lang].products,
-    url: absoluteUrl(localizedRoutes("products")[lang]),
-  });
-}
-breadcrumbs.push({ name: title, url: canonicalUrl });
-const structuredDataNodes = [
-  webPageNode({
-    url: canonicalUrl,
-    name: title,
-    description,
-    lang,
-    about: catalogEntry && {
-      "@type": "Thing",
-      name: catalogEntry.name[lang],
-      description: catalogEntry.summary[lang],
-    },
-  }),
-  breadcrumbNode(breadcrumbs),
-  faqNode(
-    (record?.faq ?? []).map((item) => ({
-      q: item.question[lang],
-      a: item.answer[lang],
-    })),
-  ),
-].filter((node) => node !== undefined);
+// Products sit under the product index in the breadcrumb trail; guides and
+// integrations hang directly off the homepage.
+const breadcrumbs: Breadcrumb[] = [
+  { name: "ISECure", url: absoluteUrl(localizedRoutes()[lang]) },
+  ...(record?.kind === "product"
+    ? [
+        {
+          name: catalogUi[lang].products,
+          url: absoluteUrl(localizedRoutes("products")[lang]),
+        },
+      ]
+    : []),
+  { name: pageName(title), url: canonicalUrl },
+];
+const webPage = catalogEntry && {
+  about: {
+    "@type": "Thing",
+    name: catalogEntry.name[lang],
+    description: catalogEntry.summary[lang],
+  },
+};
+const faq = faqNode(
+  (record?.faq ?? []).map((item) => ({
+    q: item.question[lang],
+    a: item.answer[lang],
+  })),
+);
 const robots =
   record?.visibility === "draft" ? "noindex, nofollow" : "index, follow";
 ---
@@ -91,7 +89,9 @@ const robots =
   socialDescription={description}
   {canonicalUrl}
   alternateLinks={alternateLinks(routes)}
-  {structuredDataNodes}
+  {webPage}
+  {breadcrumbs}
+  structuredDataNodes={[faq]}
   {robots}
   {lang}
   {fullWidth}

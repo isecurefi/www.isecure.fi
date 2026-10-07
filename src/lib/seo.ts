@@ -16,6 +16,11 @@ export const localeTag = (lang: Lang): string => LOCALE_TAGS[lang];
 
 export type JsonLdNode = Record<string, unknown>;
 export type LocalizedRoutes = Record<Lang, string>;
+export type Breadcrumb = { name: string; url: string };
+
+/** Human page name for structured data: the document title without the brand suffix. */
+export const pageName = (title: string): string =>
+  title.replace(/\s*[|–-]\s*ISECure.*$/u, "").trim() || title;
 
 /** Site-relative paths of one translated page; the empty slug is the homepage. */
 export function localizedRoutes(slug = ""): LocalizedRoutes {
@@ -25,8 +30,10 @@ export function localizedRoutes(slug = ""): LocalizedRoutes {
 
 export const absoluteUrl = (path: string): string => `${SITE_ORIGIN}${path}`;
 
+export type AlternateLink = { hreflang: string; href: string };
+
 /** Reciprocal hreflang set with English as x-default for every translated page. */
-export function alternateLinks(routes: LocalizedRoutes) {
+export function alternateLinks(routes: LocalizedRoutes): AlternateLink[] {
   return [
     { hreflang: "fi", href: absoluteUrl(routes.fi) },
     { hreflang: "en", href: absoluteUrl(routes.en) },
@@ -97,9 +104,7 @@ export function webPageNode(page: {
   };
 }
 
-export function breadcrumbNode(
-  items: ReadonlyArray<{ name: string; url: string }>,
-): JsonLdNode {
+export function breadcrumbNode(items: ReadonlyArray<Breadcrumb>): JsonLdNode {
   return {
     "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({

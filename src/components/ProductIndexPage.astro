@@ -5,13 +5,7 @@ import {
   getPublicProductRecords,
 } from "../data/productRegistry";
 import Layout from "../layouts/Layout.astro";
-import {
-  absoluteUrl,
-  alternateLinks,
-  breadcrumbNode,
-  localizedRoutes,
-  webPageNode,
-} from "../lib/seo";
+import { absoluteUrl, alternateLinks, localizedRoutes } from "../lib/seo";
 import type { Lang } from "../types";
 import CatalogNavigation from "./CatalogNavigation.astro";
 import CatalogAccessSummary from "./CatalogAccessSummary.astro";
@@ -98,29 +92,21 @@ const entries = products;
 const processing = getCatalogRecord("processing-api");
 const simulator = getCatalogRecord("bank-simulation");
 const connectivity = getCatalogRecord("bank-connectivity");
-const structuredDataNodes = [
-  webPageNode({
-    url: canonicalUrl,
-    name: copy.title,
-    description: copy.description,
-    lang,
-    type: "CollectionPage",
-    extra: {
-      mainEntity: {
-        "@type": "ItemList",
-        itemListElement: entries.map((entry, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: entry.name[lang],
-          url: absoluteUrl(entry.routes[lang]),
-        })),
-      },
-    },
-  }),
-  breadcrumbNode([
-    { name: "ISECure", url: absoluteUrl(localizedRoutes()[lang]) },
-    { name: ui.products, url: canonicalUrl },
-  ]),
+const webPage = {
+  "@type": "CollectionPage",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: entries.map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: entry.name[lang],
+      url: absoluteUrl(entry.routes[lang]),
+    })),
+  },
+};
+const breadcrumbs = [
+  { name: "ISECure", url: absoluteUrl(localizedRoutes()[lang]) },
+  { name: ui.products, url: canonicalUrl },
 ];
 ---
 
@@ -130,7 +116,8 @@ const structuredDataNodes = [
   socialDescription={copy.description}
   {canonicalUrl}
   alternateLinks={alternateLinks(routes)}
-  {structuredDataNodes}
+  {webPage}
+  {breadcrumbs}
   {lang}
   bodyClass="product-index-page"
   fullWidth
