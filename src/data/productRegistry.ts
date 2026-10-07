@@ -397,9 +397,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
     qualification: {
       label: text("Testiympäristö", "Test environment", "Testmiljö"),
       scope: text(
-        "Vain pankille simulator osoitteessa https://ws-api.test.isecure.fi/v2. Simulaattorievidenssi ei todista oikean pankin toimintaa.",
-        "Only for bank simulator at https://ws-api.test.isecure.fi/v2. Simulator evidence does not prove real-bank behavior.",
-        "Endast för banken simulator på https://ws-api.test.isecure.fi/v2. Simulatorevidens bevisar inte en riktig banks beteende.",
+        "Pankkisimulaattori on luonteeltaan vain testiympäristön palvelu: sillä ei ole tuotantoversiota. Vain pankille simulator osoitteessa https://ws-api.test.isecure.fi/v2. Simulaattorievidenssi ei todista oikean pankin toimintaa.",
+        "Bank Simulator is by nature a test-environment-only service; it has no production counterpart. Only for bank simulator at https://ws-api.test.isecure.fi/v2. Simulator evidence does not prove real-bank behavior.",
+        "Banksimulatorn är till sin natur en tjänst enbart för testmiljön; den har ingen produktionsmotsvarighet. Endast för banken simulator på https://ws-api.test.isecure.fi/v2. Simulatorevidens bevisar inte en riktig banks beteende.",
       ),
       evidenceDate: "2026-08-20",
       evidenceSource:
@@ -409,16 +409,19 @@ export const catalogRecords: readonly CatalogRecord[] = [
     },
     limitations: localizedLists(
       [
+        "Vain testiympäristössä; simulaattorilla ei ole tuotantoympäristöä.",
         "Vain synteettinen testidata.",
         "Ei pankkisopimusta, tuotantokanavaa tai oikeaa maksua.",
         "Nykyinen tili, alkusaldo ja oletusskenaario ovat kiinteitä; asiakas ei vielä määritä pankkeja, tilejä, valtuutuksia tai skenaarioita.",
       ],
       [
+        "Test environment only; the simulator has no production environment.",
         "Synthetic test data only.",
         "No bank agreement, production channel, or real payment.",
         "The current account, opening balance, and default scenario are fixed; customers cannot yet configure banks, accounts, authorizations, or scenarios.",
       ],
       [
+        "Endast i testmiljön; simulatorn har ingen produktionsmiljö.",
         "Endast syntetiska testdata.",
         "Inget bankavtal, ingen produktionskanal och ingen riktig betalning.",
         "Det nuvarande kontot, startsaldot och standardscenariot är fasta; kunder kan ännu inte konfigurera banker, konton, behörigheter eller scenarier.",
@@ -502,7 +505,7 @@ export const catalogRecords: readonly CatalogRecord[] = [
       "Ett API för att kontrollera betalningsuppgifter, låsa den godkända versionen och hämta betalningsfilen för överföring till banken.",
     ),
     stage: "beta",
-    access: subscribedTestAccess,
+    access: [...subscribedTestAccess, ...subscribedProductionAccess],
     visibility: "soft-launch",
     routes: routeSet("processing-api"),
     capabilities: [
@@ -541,21 +544,34 @@ export const catalogRecords: readonly CatalogRecord[] = [
           "Genererar och hämtar samma kontrollerade fil. Det nuvarande tekniska formatet är ISO 20022 pain.001.001.09.",
         ),
       },
+      {
+        direction: "bidirectional",
+        label: text(
+          "Maksunsaajan tarkistus (VoP)",
+          "Verification of Payee (VoP)",
+          "Mottagarkontroll (VoP)",
+        ),
+        detail: text(
+          "Tarkistaa maksunsaajan nimen ja tilin vastaavuuden pankin VoP-palvelusta ennen aineiston vapautusta. Nordea, OP ja Danske Bank.",
+          "Checks the payee name and account match through the bank's VoP service before the file is released. Nordea, OP and Danske Bank.",
+          "Kontrollerar att mottagarens namn och konto stämmer via bankens VoP-tjänst innan filen frigörs. Nordea, OP och Danske Bank.",
+        ),
+      },
     ],
     qualification: {
       label: text(
-        "Nordean validoima",
-        "Nordea validated",
-        "Validerad av Nordea",
+        "Nordea, OP ja Danske Bank",
+        "Nordea, OP and Danske Bank",
+        "Nordea, OP och Danske Bank",
       ),
       scope: text(
-        "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiilit ovat Nordean validoimia Suomen, Ruotsin, Norjan ja Tanskan osalta. Saatavilla ISECuren testiympäristössä tilausasiakkaille pyynnöstä.",
-        "Processing API is in Beta. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark. Available in the ISECure test environment to subscribed customers by request.",
-        "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access är validerade av Nordea för Finland, Sverige, Norge och Danmark. Tillgängligt i ISECures testmiljö för prenumerationskunder på begäran.",
+        "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiilit ovat Nordean validoimia Suomen, Ruotsin, Norjan ja Tanskan osalta. OP:n ja Danske Bankin Suomen SEPA-maksuaineistoprofiilit ovat saatavilla; niiden pankkikohtainen validointi on kesken. Maksunsaajan tarkistus (Verification of Payee, VoP) sisältyy Nordean, OP:n ja Danske Bankin maksuihin. Saatavilla tilausasiakkaille ISECuren testi- ja tuotantoympäristöissä.",
+        "Processing API is in Beta. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA payment-file profiles are available; their bank validation is in progress. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Available to subscribed customers in the ISECure test and production environments.",
+        "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access är validerade av Nordea för Finland, Sverige, Norge och Danmark. OP:s och Danske Banks SEPA-betalningsfilsprofiler för Finland är tillgängliga; deras bankvalidering pågår. Mottagarkontroll (Verification of Payee, VoP) ingår för betalningar via Nordea, OP och Danske Bank. Tillgängligt för prenumerationskunder i ISECures test- och produktionsmiljöer.",
       ),
-      evidenceDate: "2026-09-27",
+      evidenceDate: "2026-10-07",
       evidenceSource:
-        "Product owner Beta decision; bankfiles-platform docs/compatibility.md and Nordea profile XMLdation evidence for FI/SE/NO/DK",
+        "Product owner Beta decision; bankfiles-platform docs/compatibility.md (Nordea XMLdation evidence for FI/SE/NO/DK; OP and Danske Finland SEPA overlays outbound/experimental) and docs/payee-verification-design.md (VoP for Nordea, OP and Danske Bank per product owner instruction 2026-10-07)",
       reviewOwner: "ISECure product owner",
       reviewAfter: "2026-12-20",
     },
@@ -1187,6 +1203,7 @@ export const catalogUi = {
     retired: "Poistettu",
     access: "Pääsy",
     testEnvironment: "Testiympäristö",
+    testEnvironmentOnly: "Vain testiympäristö",
     productionEnvironment: "Tuotanto",
     registrationRequired: "Rekisteröinti vaaditaan",
     registrationNotRequired: "Ei rekisteröintiä",
@@ -1219,6 +1236,7 @@ export const catalogUi = {
     retired: "Retired",
     access: "Access",
     testEnvironment: "Test environment",
+    testEnvironmentOnly: "Test environment only",
     productionEnvironment: "Production",
     registrationRequired: "Registration required",
     registrationNotRequired: "No registration required",
@@ -1251,6 +1269,7 @@ export const catalogUi = {
     retired: "Avvecklad",
     access: "Åtkomst",
     testEnvironment: "Testmiljö",
+    testEnvironmentOnly: "Endast testmiljö",
     productionEnvironment: "Produktion",
     registrationRequired: "Registrering krävs",
     registrationNotRequired: "Ingen registrering krävs",

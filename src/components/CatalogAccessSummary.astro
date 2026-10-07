@@ -18,6 +18,8 @@ interface Props {
 
 const { lang, stage, access, compact = false, card = false } = Astro.props;
 const ui = catalogUi[lang];
+// A product offered only in test (e.g. Bank Simulator) is test-only by nature.
+const testOnly = access.length === 1 && access[0].environment === "test";
 ---
 
 <div
@@ -50,7 +52,8 @@ const ui = catalogUi[lang];
     access.length > 0 ? (
       <ul aria-label={ui.access} data-card-access={card || undefined}>
         {access.map((offer) => {
-          const labels = accessOfferLabels(offer, lang);
+          const labels = [...accessOfferLabels(offer, lang)];
+          if (testOnly) labels[0] = ui.testEnvironmentOnly;
           return (
             <li>
               <strong>{labels[0]}</strong>

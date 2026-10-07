@@ -3,7 +3,7 @@
   "info": {
     "title": "ISECure Processing API",
     "version": "0.119.0",
-    "description": "Create, review and approve a payment file, then download it. Your application verifies and signs the file locally and sends it through the separate [File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile). Processing does not send payments to a bank.\n\n**Beta · Nordea validated · Test environment · Paid subscription and access approval required.**\n\nNordea validated payment-file profiles cover Finland, Sweden, Norway and Denmark. Support for other banks and profiles is qualified separately.\n\nThis reference covers 26 payment operations, session exchange and notifications on the test server. Production plugin discovery and download are a separate, narrower service; they do not make payment processing available in production.\n\n## Prepare a payment file\n\n1. **Choose the bank format and check the paying account.** Select file rules for your bank and country, then check whether the account you will pay from supports the intended payment. See the explanation below.\n2. **Create a draft.** Pass the selected account capability to `paymentBatches.createDraft()` and add payments. Use decimal strings for amounts, not floating-point numbers.\n3. **Check it.** `validate()` checks the draft; `simulate()` evaluates the proposed payment without sending it. This is separate from a [Bank Simulator](https://www.isecure.fi/apis/bank-simulator/) run.\n4. **Request review.** `finalize()` locks a revision; `submitForReview()` submits it. Keep the returned resource versions. Changes may need a new revision and fresh approval.\n5. **Approve separately.** An authorized, distinct reviewer calls `paymentApprovalRequests.decide()`. File Exchange admin/data mode alone grants no approval authority.\n6. **Release and download.** Call `paymentExports.release()`, then `get()` for the file's identity, digest, length and media type. Pass that result to `download()`; the SDK checks the bytes against it.\n7. **Sign and send.** Sign the verified bytes with your locally held private key and upload through File Exchange. Never automatically retry an upload whose outcome is unknown.\n\n### What does the first step mean?\n\nAn **export profile** defines how to write payment XML for a particular bank and country. An **account capability** describes the payment types, currencies, destinations and limits available for one paying account. Supporting a file format does not establish what that account may do.\n\n- **Find the format:** `paymentExportProfiles.list()` returns profiles admitted for your tenant. Check their bank, country, payment type, availability and qualification—not just the XML format name.\n- **Configure the account:** `paymentExportProfiles.get()` reads your current setup. If setup or a change is needed, an administrator with approval permission calls `configure()` with the profile, debtor account, company and bank-agreement details.\n- **Check the payment:** `paymentCapabilities.list()` shows visible capabilities; `resolve()` matches the account and payment requirements. Continue only with outcome `resolved` and a `selected` reference. Pass that exact reference to the draft; do not guess when no unique match is returned.\n\nNeither configuration nor selection creates a bank agreement or approves a payment. The server checks current authority on use.\n\nThe [complete SDK example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-manual-upload) shows these calls, separate logins, verified download, local signing and one confirmed upload. The [simulator example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-simulator-journey) also verifies synthetic feedback and recovery against its recorded test releases.\n\n## What success means\n\nThe export path returns `pain.001.001.09` XML, not JSON. Approval and download do not prove bank acceptance or payment completion.\n\nThe Bank Simulator returns synthetic `pain.002`, `camt.054` and `camt.053` feedback through File Exchange. Real-bank use separately requires a bank agreement, Bank Connectivity access, production credentials and a qualified bank/profile connection.\n\n\n## One ISECure account across all three APIs\n\nUse the same ISECure registration, users and initial login for File Exchange, Processing and Bank Simulator. **Do not register a second user in Processing or Bank Simulator.** Account administration remains in the existing [File Exchange API](https://www.isecure.fi/wsapi_v2/); neither new API introduces another registration or user-management route.\n\nUse these sections of the live File Exchange reference:\n\n- [Start registration](https://www.isecure.fi/wsapi_v2/#operation/InitRegister) and [create the account](https://www.isecure.fi/wsapi_v2/#operation/Register).\n- Complete [email verification](https://www.isecure.fi/wsapi_v2/#operation/VerifyEmail) and [phone verification](https://www.isecure.fi/wsapi_v2/#operation/VerifyPhone) when requested.\n- [Start login](https://www.isecure.fi/wsapi_v2/#operation/InitLogin), [sign in](https://www.isecure.fi/wsapi_v2/#operation/Login), and [answer the SMS or TOTP MFA challenge](https://www.isecure.fi/wsapi_v2/#operation/LoginMFA). Follow the challenge returned by the server; [MFA selection](https://www.isecure.fi/wsapi_v2/#operation/SelectMFA) applies only when login explicitly requests a choice.\n- Integrators use [list customer accounts](https://www.isecure.fi/wsapi_v2/#operation/ListAccounts); account lifecycle includes [password recovery](https://www.isecure.fi/wsapi_v2/#operation/InitPasswordReset), [account deletion](https://www.isecure.fi/wsapi_v2/#operation/DeleteAccount) and the [account audit history](https://www.isecure.fi/wsapi_v2/#operation/ListAuditEvents), subject to that API's authorization rules.\n\nA shared identity does not mean one interchangeable token or identical authority. Processing and Bank Simulator share a separate Processing session obtained from the completed login. Each product also checks its subscription and user permissions. File Exchange admin/data modes do not automatically grant Processing approval or simulator-management permission.\n\n## Access and authentication\n\nProcessing API is Beta, with Nordea validated payment-file profiles for Finland, Sweden, Norway and Denmark. The Bank Simulator control API is Experimental. These references document the ISECure test environment. Request access from [ISECure support](mailto:support@isecure.fi). Registration alone does not enable either product: your tenant needs the appropriate active paid subscription, and your user needs permission for each operation. A successful login does not grant payment approval or simulator management rights.\n\n[Processing API](https://www.isecure.fi/apis/processing/) and [Bank Simulator API](https://www.isecure.fi/apis/bank-simulator/) share one Processing base URL and session. [File Exchange](https://www.isecure.fi/wsapi_v2/) has a separate API and session. Your tenant is selected by the verified API key; you cannot select another tenant in a request body or URL. Resource IDs and account IDs do not grant access.\n\n1. Complete [File Exchange login](https://www.isecure.fi/wsapi_v2/), including any requested email/phone verification or MFA. Obtain the current ID token and your tenant API key.\n2. Call `POST /session` on the Processing base URL. Send the ID token directly in `Authorization` (without a prefix) and the API key in `x-api-key`. There is no request body.\n3. Check that the response audience matches the configured Processing audience. Keep `processingSession` private. It expires after 15 minutes; use `expiresAtEpochSeconds` to check expiry.\n4. On business requests send `Authorization: Processing <processingSession>`, the same `x-api-key`, and the exact `ISECure-Contract-Version` shown for that operation. JSON requests also need `Content-Type: application/json`.\n5. Exchange a new session when necessary using a current ID token. The SDK does not silently refresh or retry commands.\n\n### Connect with TypeScript\n\nInstall `isecure-ts-client@2.7.0` and use Node.js 24 or newer for these examples. The experimental `/iso20022` entry point supports both references. The root SDK continues to handle File Exchange.\n\n```ts\nimport {\n  createIso20022Client,\n  Iso20022HttpTransport,\n} from \"isecure-ts-client/iso20022\";\n\nconst transport = new Iso20022HttpTransport({\n  baseUrl: process.env.ISECURE_PROCESSING_BASE_URL!,\n  processingAudience: process.env.ISECURE_PROCESSING_AUDIENCE!,\n  // Supply fresh credentials from your completed File Exchange login.\n  bootstrapAuthentication: async () => ({\n    apiKey: process.env.ISECURE_API_KEY!,\n    idToken: process.env.ISECURE_ID_TOKEN!,\n  }),\n});\nawait transport.exchangeProcessingSession();\nconst client = createIso20022Client(transport);\n```\n\nUse `https://processing-api.test.isecure.fi` as the base URL and audience `isecure-processing-gpgtest-v1`. Keep tokens and signing keys out of source control, URLs and application logs. The SDK sets operation versions and serializes path/query objects. Operation examples below assume this `client` has been created. Where an example declares an `input`, supply the fields documented in that operation's request schema; it is a typed integration template, not a complete runnable fixture.\n\n## Safe commands and revisions\n\nOperations that require `Idempotency-Key` show it explicitly. Create a unique key for one intended command and save it before sending. If that command needs an intentional retry, reuse the same key and unchanged input. A different key can create another action. The SDK never retries automatically.\n\nOperations that require `If-Match` also show it explicitly. Pass the current resource version returned by a read or previous command as a quoted string: `expectedResourceVersion: JSON.stringify(resource.resource_version)`. For version `3`, the HTTP header is `If-Match: \"3\"`. This prevents overwriting work performed after your last read. If the version is stale, read the resource again and review the new state before deciding what to do. Do not blindly replace the header and resubmit an old approval.\n\nAn HTTP timeout or `503` may leave the outcome unknown. First inspect the resource and its events. Do not repeat an entire payment or simulation workflow merely because a response was lost. After idempotency expiry, reconcile the original outcome before creating another command.\n\n## Lists, identifiers and pagination\n\nPass filters in the named query parameters. Object parameters use the encoding documented by each operation: for example `page[page_size]=25` and `page[cursor]=...`. Keep cursors opaque, reuse the same filters, and stop when `page.next_cursor` is absent. Results belong to the returned snapshot; do not interpret pagination as a live feed.\n\nSimulator read routes use an object-valued `resource_reference` path parameter, not just a UUID. Its OpenAPI `simple` encoding is a comma-separated sequence of field names and values in schema order. The SDK encodes this for you. Use the complete reference returned by the API, including its resource type and revision where supplied.\n\nIDs in examples are synthetic. Obtain account capabilities, resource references, versions and profile choices from your authorized API responses. Do not invent production account IDs or assume that a listed profile is enabled for your account.\n\n## Errors and recovery\n\nBusiness failures can return an `issues` array with structured issue details. Authentication, access and infrastructure failures can instead return a small `code` envelope. Gateway responses can have a different shape again. Check the HTTP status before reading a success schema; do not depend on an English error message.\n\n| Status          | Meaning and next step                                                                                                                         |\n| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |\n| 400             | Invalid input, contract version or request encoding. Correct the request.                                                                     |\n| 401             | Missing, expired or invalid authentication. Complete login/session exchange again.                                                            |\n| 403             | Missing subscription, permission or API-key access. Ask the tenant administrator or ISECure support; another resource ID will not fix access. |\n| 404             | Resource is unavailable in your scope, or the operation is not published. Check the selected test deployment and reference.                   |\n| 409             | Conflicting command, reused key with different input, or operation already in progress. Inspect the existing result.                          |\n| 410             | The command or idempotency window expired. Reconcile before submitting a new command.                                                         |\n| 412             | Resource version changed. Read the latest version and review the change.                                                                      |\n| 429             | Request limit reached. Honor any retry guidance and preserve command identity.                                                                |\n| 500 / 503 / 504 | Service failure or an uncertain outcome. Inspect existing state before retrying.                                                              |\n\n## Notifications\n\n`GET /stream` returns a short Server-Sent Events (SSE) connection containing authorized event/task notifications and heartbeats. It uses the Processing session, API key and contract version `1`. Save the last completely handled event ID and pass it as `Last-Event-ID` when reconnecting. The current connection lease is at most 20 seconds; closing is normal.\n\nThe SDK provides `transport.streamProcessingEvents({ lastEventId, signal })`. It does not reconnect automatically. Notifications require their own server-side access checks and are not a complete audit history. After a gap or expired cursor, reconcile using available resource reads; simulator runs also expose their own event list. A stream message does not prove that a payment reached a real bank.\n\n## Scope and compatibility\n\nThis reference documents only the operations deployed in the reviewed test release. The SDK contains additional generated methods that this deployment does not expose. Their presence is not a support or availability promise. Request versions are per operation; the overall specification version does not replace `ISECure-Contract-Version`.\n\n[File Exchange reference](https://www.isecure.fi/wsapi_v2/) · [Processing reference](https://www.isecure.fi/apis/processing/) · [Bank Simulator reference](https://www.isecure.fi/apis/bank-simulator/) · [TypeScript SDK](https://github.com/isecurefi/isecure-ts-client)\n",
+    "description": "Create, review and approve a payment file, then download it. Your application verifies and signs the file locally and sends it through the separate [File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile). Processing does not send payments to a bank.\n\n**Beta · Nordea, OP and Danske Bank · Test and production environments · Paid subscription and access approval required.**\n\nNordea validated payment-file profiles cover Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA profiles are available; their bank validation is in progress. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Support for other banks and profiles is qualified separately.\n\nThis reference covers 26 payment operations, session exchange and notifications. The same contract is served in the test and production environments; choose the base URL and session audience for the environment you are using.\n\n## Prepare a payment file\n\n1. **Choose the bank format and check the paying account.** Select file rules for your bank and country, then check whether the account you will pay from supports the intended payment. See the explanation below.\n2. **Create a draft.** Pass the selected account capability to `paymentBatches.createDraft()` and add payments. Use decimal strings for amounts, not floating-point numbers.\n3. **Check it.** `validate()` checks the draft; `simulate()` evaluates the proposed payment without sending it. This is separate from a [Bank Simulator](https://www.isecure.fi/apis/bank-simulator/) run.\n4. **Request review.** `finalize()` locks a revision; `submitForReview()` submits it. Keep the returned resource versions. Changes may need a new revision and fresh approval.\n5. **Approve separately.** An authorized, distinct reviewer calls `paymentApprovalRequests.decide()`. File Exchange admin/data mode alone grants no approval authority.\n6. **Release and download.** Call `paymentExports.release()`, then `get()` for the file's identity, digest, length and media type. Pass that result to `download()`; the SDK checks the bytes against it.\n7. **Sign and send.** Sign the verified bytes with your locally held private key and upload through File Exchange. Never automatically retry an upload whose outcome is unknown.\n\n### What does the first step mean?\n\nAn **export profile** defines how to write payment XML for a particular bank and country. An **account capability** describes the payment types, currencies, destinations and limits available for one paying account. Supporting a file format does not establish what that account may do.\n\n- **Find the format:** `paymentExportProfiles.list()` returns profiles admitted for your tenant. Check their bank, country, payment type, availability and qualification—not just the XML format name.\n- **Configure the account:** `paymentExportProfiles.get()` reads your current setup. If setup or a change is needed, an administrator with approval permission calls `configure()` with the profile, debtor account, company and bank-agreement details.\n- **Check the payment:** `paymentCapabilities.list()` shows visible capabilities; `resolve()` matches the account and payment requirements. Continue only with outcome `resolved` and a `selected` reference. Pass that exact reference to the draft; do not guess when no unique match is returned.\n\nNeither configuration nor selection creates a bank agreement or approves a payment. The server checks current authority on use.\n\nThe [complete SDK example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-manual-upload) shows these calls, separate logins, verified download, local signing and one confirmed upload. The [simulator example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-simulator-journey) also verifies synthetic feedback and recovery against its recorded test releases.\n\n## What success means\n\nThe export path returns `pain.001.001.09` XML, not JSON. Approval and download do not prove bank acceptance or payment completion.\n\nThe Bank Simulator returns synthetic `pain.002`, `camt.054` and `camt.053` feedback through File Exchange. Real-bank use separately requires a bank agreement, Bank Connectivity access, production credentials and a qualified bank/profile connection.\n\n\n## One ISECure account across all three APIs\n\nUse the same ISECure registration, users and initial login for File Exchange, Processing and Bank Simulator. **Do not register a second user in Processing or Bank Simulator.** Account administration remains in the existing [File Exchange API](https://www.isecure.fi/wsapi_v2/); neither new API introduces another registration or user-management route.\n\nUse these sections of the live File Exchange reference:\n\n- [Start registration](https://www.isecure.fi/wsapi_v2/#operation/InitRegister) and [create the account](https://www.isecure.fi/wsapi_v2/#operation/Register).\n- Complete [email verification](https://www.isecure.fi/wsapi_v2/#operation/VerifyEmail) and [phone verification](https://www.isecure.fi/wsapi_v2/#operation/VerifyPhone) when requested.\n- [Start login](https://www.isecure.fi/wsapi_v2/#operation/InitLogin), [sign in](https://www.isecure.fi/wsapi_v2/#operation/Login), and [answer the SMS or TOTP MFA challenge](https://www.isecure.fi/wsapi_v2/#operation/LoginMFA). Follow the challenge returned by the server; [MFA selection](https://www.isecure.fi/wsapi_v2/#operation/SelectMFA) applies only when login explicitly requests a choice.\n- Integrators use [list customer accounts](https://www.isecure.fi/wsapi_v2/#operation/ListAccounts); account lifecycle includes [password recovery](https://www.isecure.fi/wsapi_v2/#operation/InitPasswordReset), [account deletion](https://www.isecure.fi/wsapi_v2/#operation/DeleteAccount) and the [account audit history](https://www.isecure.fi/wsapi_v2/#operation/ListAuditEvents), subject to that API's authorization rules.\n\nA shared identity does not mean one interchangeable token or identical authority. Processing and Bank Simulator share a separate Processing session obtained from the completed login. Each product also checks its subscription and user permissions. File Exchange admin/data modes do not automatically grant Processing approval or simulator-management permission.\n\n## Access and authentication\n\nProcessing API is Beta, with Nordea validated payment-file profiles for Finland, Sweden, Norway and Denmark, and OP and Danske Bank Finland SEPA profiles whose bank validation is in progress. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank. The Bank Simulator control API is Experimental. Processing API is available in the ISECure test and production environments; the Bank Simulator exists only in the test environment. Request access from [ISECure support](mailto:support@isecure.fi). Registration alone does not enable either product: your tenant needs the appropriate active paid subscription, and your user needs permission for each operation. A successful login does not grant payment approval or simulator management rights.\n\n[Processing API](https://www.isecure.fi/apis/processing/) and [Bank Simulator API](https://www.isecure.fi/apis/bank-simulator/) share one Processing base URL and session. [File Exchange](https://www.isecure.fi/wsapi_v2/) has a separate API and session. Your tenant is selected by the verified API key; you cannot select another tenant in a request body or URL. Resource IDs and account IDs do not grant access.\n\n1. Complete [File Exchange login](https://www.isecure.fi/wsapi_v2/), including any requested email/phone verification or MFA. Obtain the current ID token and your tenant API key.\n2. Call `POST /session` on the Processing base URL. Send the ID token directly in `Authorization` (without a prefix) and the API key in `x-api-key`. There is no request body.\n3. Check that the response audience matches the configured Processing audience. Keep `processingSession` private. It expires after 15 minutes; use `expiresAtEpochSeconds` to check expiry.\n4. On business requests send `Authorization: Processing <processingSession>`, the same `x-api-key`, and the exact `ISECure-Contract-Version` shown for that operation. JSON requests also need `Content-Type: application/json`.\n5. Exchange a new session when necessary using a current ID token. The SDK does not silently refresh or retry commands.\n\n### Connect with TypeScript\n\nInstall `isecure-ts-client@2.7.0` and use Node.js 24 or newer for these examples. The experimental `/iso20022` entry point supports both references. The root SDK continues to handle File Exchange.\n\n```ts\nimport {\n  createIso20022Client,\n  Iso20022HttpTransport,\n} from \"isecure-ts-client/iso20022\";\n\nconst transport = new Iso20022HttpTransport({\n  baseUrl: process.env.ISECURE_PROCESSING_BASE_URL!,\n  processingAudience: process.env.ISECURE_PROCESSING_AUDIENCE!,\n  // Supply fresh credentials from your completed File Exchange login.\n  bootstrapAuthentication: async () => ({\n    apiKey: process.env.ISECURE_API_KEY!,\n    idToken: process.env.ISECURE_ID_TOKEN!,\n  }),\n});\nawait transport.exchangeProcessingSession();\nconst client = createIso20022Client(transport);\n```\n\nUse `https://processing-api.test.isecure.fi` as the base URL and audience `isecure-processing-gpgtest-v1` for the test environment, or `https://processing-api.isecure.fi` and audience `isecure-processing-production-v1` for Processing API in production. Bank Simulator is test-only. Keep tokens and signing keys out of source control, URLs and application logs. The SDK sets operation versions and serializes path/query objects. Operation examples below assume this `client` has been created. Where an example declares an `input`, supply the fields documented in that operation's request schema; it is a typed integration template, not a complete runnable fixture.\n\n## Safe commands and revisions\n\nOperations that require `Idempotency-Key` show it explicitly. Create a unique key for one intended command and save it before sending. If that command needs an intentional retry, reuse the same key and unchanged input. A different key can create another action. The SDK never retries automatically.\n\nOperations that require `If-Match` also show it explicitly. Pass the current resource version returned by a read or previous command as a quoted string: `expectedResourceVersion: JSON.stringify(resource.resource_version)`. For version `3`, the HTTP header is `If-Match: \"3\"`. This prevents overwriting work performed after your last read. If the version is stale, read the resource again and review the new state before deciding what to do. Do not blindly replace the header and resubmit an old approval.\n\nAn HTTP timeout or `503` may leave the outcome unknown. First inspect the resource and its events. Do not repeat an entire payment or simulation workflow merely because a response was lost. After idempotency expiry, reconcile the original outcome before creating another command.\n\n## Lists, identifiers and pagination\n\nPass filters in the named query parameters. Object parameters use the encoding documented by each operation: for example `page[page_size]=25` and `page[cursor]=...`. Keep cursors opaque, reuse the same filters, and stop when `page.next_cursor` is absent. Results belong to the returned snapshot; do not interpret pagination as a live feed.\n\nSimulator read routes use an object-valued `resource_reference` path parameter, not just a UUID. Its OpenAPI `simple` encoding is a comma-separated sequence of field names and values in schema order. The SDK encodes this for you. Use the complete reference returned by the API, including its resource type and revision where supplied.\n\nIDs in examples are synthetic. Obtain account capabilities, resource references, versions and profile choices from your authorized API responses. Do not invent production account IDs or assume that a listed profile is enabled for your account.\n\n## Errors and recovery\n\nBusiness failures can return an `issues` array with structured issue details. Authentication, access and infrastructure failures can instead return a small `code` envelope. Gateway responses can have a different shape again. Check the HTTP status before reading a success schema; do not depend on an English error message.\n\n| Status          | Meaning and next step                                                                                                                         |\n| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |\n| 400             | Invalid input, contract version or request encoding. Correct the request.                                                                     |\n| 401             | Missing, expired or invalid authentication. Complete login/session exchange again.                                                            |\n| 403             | Missing subscription, permission or API-key access. Ask the tenant administrator or ISECure support; another resource ID will not fix access. |\n| 404             | Resource is unavailable in your scope, or the operation is not published. Check the selected test deployment and reference.                   |\n| 409             | Conflicting command, reused key with different input, or operation already in progress. Inspect the existing result.                          |\n| 410             | The command or idempotency window expired. Reconcile before submitting a new command.                                                         |\n| 412             | Resource version changed. Read the latest version and review the change.                                                                      |\n| 429             | Request limit reached. Honor any retry guidance and preserve command identity.                                                                |\n| 500 / 503 / 504 | Service failure or an uncertain outcome. Inspect existing state before retrying.                                                              |\n\n## Notifications\n\n`GET /stream` returns a short Server-Sent Events (SSE) connection containing authorized event/task notifications and heartbeats. It uses the Processing session, API key and contract version `1`. Save the last completely handled event ID and pass it as `Last-Event-ID` when reconnecting. The current connection lease is at most 20 seconds; closing is normal.\n\nThe SDK provides `transport.streamProcessingEvents({ lastEventId, signal })`. It does not reconnect automatically. Notifications require their own server-side access checks and are not a complete audit history. After a gap or expired cursor, reconcile using available resource reads; simulator runs also expose their own event list. A stream message does not prove that a payment reached a real bank.\n\n## Scope and compatibility\n\nThis reference documents only the operations deployed in the reviewed test release. The SDK contains additional generated methods that this deployment does not expose. Their presence is not a support or availability promise. Request versions are per operation; the overall specification version does not replace `ISECure-Contract-Version`.\n\n[File Exchange reference](https://www.isecure.fi/wsapi_v2/) · [Processing reference](https://www.isecure.fi/apis/processing/) · [Bank Simulator reference](https://www.isecure.fi/apis/bank-simulator/) · [TypeScript SDK](https://github.com/isecurefi/isecure-ts-client)\n",
     "contact": {
       "name": "ISECure developer support",
       "email": "support@isecure.fi",
@@ -16,7 +16,11 @@
   "servers": [
     {
       "url": "https://processing-api.test.isecure.fi",
-      "description": "ISECure test environment — Beta; Nordea validated; access by request"
+      "description": "ISECure test environment — Beta; Nordea, OP and Danske Bank; access by request"
+    },
+    {
+      "url": "https://processing-api.isecure.fi",
+      "description": "ISECure production environment — Beta; Nordea, OP and Danske Bank; paid subscription"
     }
   ],
   "tags": [
@@ -47,7 +51,9 @@
       "post": {
         "operationId": "processing_session.exchange",
         "summary": "Create a Processing session",
-        "tags": ["Session"],
+        "tags": [
+          "Session"
+        ],
         "description": "Exchange the current File Exchange ID token for a separate, audience-bound Processing session. Send the ID token without a prefix in Authorization and the tenant API key in x-api-key. There is no request body. Complete any login verification or MFA first. The session expires after 15 minutes.",
         "security": [
           {
@@ -120,7 +126,9 @@
       "get": {
         "operationId": "processing_events.stream",
         "summary": "Read event notifications",
-        "tags": ["Notifications"],
+        "tags": [
+          "Notifications"
+        ],
         "description": "Receive a bounded text/event-stream connection. The current lease is at most 20 seconds. Event and task items contain an opaque id and JSON data; heartbeats keep the connection active. Reconnect deliberately with the last completely handled ID, and reconcile resource state after a gap. Additional event/task read authority is required. This is not complete audit history.",
         "security": [
           {
@@ -135,7 +143,9 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -216,7 +226,9 @@
         "operationId": "payment_approval_requests.decide",
         "summary": "Record an approval decision",
         "description": "Approve or reject the exact request as its authorized reviewer. The server enforces assigned authority and separation of duties.\n\nRequired permission: `approve`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentApprovalRequests.decide`. Input type: [DecidePaymentApprovalRequestInput](#schema/isecure.bankfiles.payments_api.DecidePaymentApprovalRequestInput).",
-        "tags": ["Approval"],
+        "tags": [
+          "Approval"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -225,7 +237,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -529,7 +543,9 @@
         "operationId": "payment_capabilities.list",
         "summary": "List account capabilities",
         "description": "List the payment types, currencies, destinations and limits available for accounts visible to your user. Use resolve to match the proposed payment before creating a draft.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentCapabilities.list`. Input type: [PaymentCapabilityListInput](#schema/isecure.bankfiles.payments_api.PaymentCapabilityListInput).",
-        "tags": ["Account capabilities"],
+        "tags": [
+          "Account capabilities"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -538,7 +554,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -792,7 +810,9 @@
         "operationId": "payment_capabilities.get",
         "summary": "Read an account capability",
         "description": "Read the payment options and limits for one exact account capability. Its reference does not grant approval; the server checks authority again when you use it.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentCapabilities.get`. Input type: [PaymentCapabilityGetInput](#schema/isecure.bankfiles.payments_api.PaymentCapabilityGetInput).",
-        "tags": ["Account capabilities"],
+        "tags": [
+          "Account capabilities"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -801,7 +821,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -1023,7 +1045,9 @@
         "operationId": "payment_capabilities.explain",
         "summary": "Explain an account capability",
         "description": "Read the reasons and evidence behind this account capability.\n\nRequired permission: `explain`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentCapabilities.explain`. Input type: [PaymentCapabilityGetInput](#schema/isecure.bankfiles.payments_api.PaymentCapabilityGetInput).",
-        "tags": ["Account capabilities"],
+        "tags": [
+          "Account capabilities"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1032,7 +1056,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -1254,7 +1280,9 @@
         "operationId": "payment_capabilities.resolve",
         "summary": "Select a matching capability",
         "description": "Match the paying account and payment requirements to an available capability. Continue only when outcome is resolved and selected is present; ambiguous, unsupported, not-ready, expired or uncertain results must be resolved before drafting.\n\nRequired permission: `validate`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentCapabilities.resolve`. Input type: [PaymentCapabilityCriteria](#schema/isecure.bankfiles.payments_api.PaymentCapabilityCriteria).",
-        "tags": ["Account capabilities"],
+        "tags": [
+          "Account capabilities"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1263,7 +1291,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           }
         ],
@@ -1473,7 +1503,9 @@
         "operationId": "payment_export_profile_catalog.list",
         "summary": "List available export profiles",
         "description": "List bank- and country-specific payment-file rules admitted for your tenant by this deployment. Check payment type, availability and qualification status. Listing a profile does not configure it or authorize a payment.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentExportProfiles.list`. Input type: [PaymentExportProfileCatalogListInput](#schema/isecure.bankfiles.payments_api.PaymentExportProfileCatalogListInput).",
-        "tags": ["Export profiles"],
+        "tags": [
+          "Export profiles"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1482,7 +1514,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           }
         ],
@@ -1682,7 +1716,9 @@
         "operationId": "payment_export_profiles.get",
         "summary": "Read the configured export profile",
         "description": "Read the current tenant configuration: the selected bank-file profile, paying account and required company/bank-agreement details.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentExportProfiles.get`. Input type: [PaymentExportProfileGetInput](#schema/isecure.bankfiles.payments_api.PaymentExportProfileGetInput).",
-        "tags": ["Export profiles"],
+        "tags": [
+          "Export profiles"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1691,7 +1727,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           }
         ],
@@ -1891,7 +1929,9 @@
         "operationId": "payment_export_profiles.configure",
         "summary": "Configure an export profile",
         "description": "Select an admitted bank/country profile and supply the paying account, company and bank-agreement details. This requires approval authority; it does not create a bank agreement or approve a payment.\n\nRequired permission: `approve`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. \n\nSDK: `client.paymentExportProfiles.configure`. Input type: [ConfigurePaymentExportProfileInput](#schema/isecure.bankfiles.payments_api.ConfigurePaymentExportProfileInput).",
-        "tags": ["Export profiles"],
+        "tags": [
+          "Export profiles"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -1900,7 +1940,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -2170,7 +2212,9 @@
         "operationId": "payment_export_profiles.revoke",
         "summary": "Revoke an export profile",
         "description": "Revoke the selected configuration using its current version. Review dependent work before proceeding.\n\nRequired permission: `approve`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentExportProfiles.revoke`. Input type: [RevokePaymentExportProfileInput](#schema/isecure.bankfiles.payments_api.RevokePaymentExportProfileInput).",
-        "tags": ["Export profiles"],
+        "tags": [
+          "Export profiles"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -2179,7 +2223,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -2483,7 +2529,9 @@
         "operationId": "payment_exports.get",
         "summary": "Read payment-file metadata",
         "description": "Read the artifact identity, digest, byte length and media type used to verify the subsequent download.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentExports.get`. Input type: [PaymentExportGetInput](#schema/isecure.bankfiles.payments_api.PaymentExportGetInput).",
-        "tags": ["Payment files"],
+        "tags": [
+          "Payment files"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -2492,7 +2540,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -2701,7 +2751,9 @@
         "operationId": "payment_exports.download_content",
         "summary": "Download the payment file",
         "description": "Download the exact XML bytes. Use the SDK with previously read artifact authority to verify identity, digest, media type and length before signing.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. \n\nSDK: `client.paymentExports.download`. Input type: [DownloadPaymentExportContentInput](#schema/isecure.bankfiles.payments_api.DownloadPaymentExportContentInput).",
-        "tags": ["Payment files"],
+        "tags": [
+          "Payment files"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -2710,7 +2762,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -3006,7 +3060,9 @@
         "operationId": "payment_exports.release",
         "summary": "Release an approved payment file",
         "description": "Create the exact export artifact from an eligible approved revision. This does not upload it to a bank.\n\nRequired permission: `approve`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentExports.release`. Input type: [ReleasePaymentExportInput](#schema/isecure.bankfiles.payments_api.ReleasePaymentExportInput).",
-        "tags": ["Payment files"],
+        "tags": [
+          "Payment files"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -3015,7 +3071,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -3319,7 +3377,9 @@
         "operationId": "payment_orders.list",
         "summary": "List payment orders",
         "description": "List payment orders visible to your user using filters and snapshot pagination.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.list`. Input type: [PaymentOrderListInput](#schema/isecure.bankfiles.payments_api.PaymentOrderListInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -3328,7 +3388,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -3589,7 +3651,9 @@
         "operationId": "payment_orders.get",
         "summary": "Read a payment order",
         "description": "Read the current order state, references and versions before continuing its workflow.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.get`. Input type: [PaymentOrderGetInput](#schema/isecure.bankfiles.payments_api.PaymentOrderGetInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -3598,7 +3662,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -3816,7 +3882,9 @@
         "operationId": "payment_orders.explain",
         "summary": "Explain a payment order",
         "description": "Read the reasons and evidence associated with the selected payment order.\n\nRequired permission: `explain`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.explain`. Input type: [PaymentOrderGetInput](#schema/isecure.bankfiles.payments_api.PaymentOrderGetInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -3825,7 +3893,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -4043,7 +4113,9 @@
         "operationId": "payment_orders.append_transfers",
         "summary": "Add payments to a draft",
         "description": "Append payment transfers to the current draft revision.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.addPayments`. Input type: [AppendPaymentOrderTransfersInput](#schema/isecure.bankfiles.payments_api.AppendPaymentOrderTransfersInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -4052,7 +4124,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -4356,7 +4430,9 @@
         "operationId": "payment_orders.cancel_draft",
         "summary": "Cancel a draft",
         "description": "Cancel the selected draft. This does not cancel a payment already sent to a bank.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.cancelDraft`. Input type: [PaymentOrderTransitionInput](#schema/isecure.bankfiles.payments_api.PaymentOrderTransitionInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -4365,7 +4441,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -4669,7 +4747,9 @@
         "operationId": "payment_orders.correct",
         "summary": "Create a correction",
         "description": "Start a correction from the selected payment order. The corrected revision follows the applicable validation and approval process.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.createCorrection`. Input type: [PaymentOrderTransitionInput](#schema/isecure.bankfiles.payments_api.PaymentOrderTransitionInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -4678,7 +4758,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -4982,7 +5064,9 @@
         "operationId": "payment_orders.create_draft",
         "summary": "Create a payment draft",
         "description": "Start a draft using an exact account capability. You may add payment transfers later while the draft remains open.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. \n\nSDK: `client.paymentBatches.createDraft`. Input type: [PaymentOrderDraftInput](#schema/isecure.bankfiles.payments_api.PaymentOrderDraftInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -4991,7 +5075,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -5261,7 +5347,9 @@
         "operationId": "payment_orders.finalize_draft",
         "summary": "Finalize a draft",
         "description": "Lock the selected draft revision for review. Later changes require a new eligible revision.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.finalize`. Input type: [PaymentOrderTransitionInput](#schema/isecure.bankfiles.payments_api.PaymentOrderTransitionInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -5270,7 +5358,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -5574,7 +5664,9 @@
         "operationId": "payment_orders.remove_transfers",
         "summary": "Remove payments from a draft",
         "description": "Remove selected transfers from the current draft revision.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.removePayments`. Input type: [RemovePaymentOrderTransfersInput](#schema/isecure.bankfiles.payments_api.RemovePaymentOrderTransfersInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -5583,7 +5675,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -5887,7 +5981,9 @@
         "operationId": "payment_orders.revise_draft",
         "summary": "Replace a draft",
         "description": "Create the next draft revision with the supplied payment details.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.replaceDraft`. Input type: [RevisePaymentOrderInput](#schema/isecure.bankfiles.payments_api.RevisePaymentOrderInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -5896,7 +5992,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -6200,7 +6298,9 @@
         "operationId": "payment_orders.revise_transfer",
         "summary": "Update a payment",
         "description": "Change one transfer in the current draft. Use its latest resource version.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.updatePayment`. Input type: [RevisePaymentOrderTransferInput](#schema/isecure.bankfiles.payments_api.RevisePaymentOrderTransferInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -6209,7 +6309,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -6513,7 +6615,9 @@
         "operationId": "payment_orders.simulate",
         "summary": "Evaluate a payment order",
         "description": "Evaluate the selected revision without sending a payment to a bank. This operation does not create a Bank Simulator run.\n\nRequired permission: `simulate`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.simulate`. Input type: [PaymentOrderRevisionInput](#schema/isecure.bankfiles.payments_api.PaymentOrderRevisionInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -6522,7 +6626,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           }
         ],
@@ -6732,7 +6838,9 @@
         "operationId": "payment_orders.submit_for_review",
         "summary": "Request payment approval",
         "description": "Submit the finalized revision for the server-assigned approval workflow. Submission is not approval.\n\nRequired permission: `submit_for_review`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.submitForReview`. Input type: [PaymentOrderTransitionInput](#schema/isecure.bankfiles.payments_api.PaymentOrderTransitionInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -6741,7 +6849,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           },
           {
@@ -7045,7 +7155,9 @@
         "operationId": "payment_orders.validate",
         "summary": "Check a payment draft",
         "description": "Validate the exact payment-order revision and review any issues before finalizing it.\n\nRequired permission: `validate`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.validate`. Input type: [PaymentOrderRevisionInput](#schema/isecure.bankfiles.payments_api.PaymentOrderRevisionInput).",
-        "tags": ["Payment drafts"],
+        "tags": [
+          "Payment drafts"
+        ],
         "parameters": [
           {
             "name": "ISECure-Contract-Version",
@@ -7054,7 +7166,9 @@
             "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
             "schema": {
               "type": "integer",
-              "enum": [1]
+              "enum": [
+                1
+              ]
             }
           }
         ],
@@ -7284,12 +7398,21 @@
     "schemas": {
       "isecure.bankfiles.accounts_api.AccountCapabilityAvailability": {
         "type": "string",
-        "enum": ["available", "pending", "unavailable", "expired", "uncertain"],
+        "enum": [
+          "available",
+          "pending",
+          "unavailable",
+          "expired",
+          "uncertain"
+        ],
         "description": "Current account-capability resolution state; uncertainty is never silently treated as support"
       },
       "isecure.bankfiles.approvals.ApprovalDecisionKind": {
         "type": "string",
-        "enum": ["approve", "reject"]
+        "enum": [
+          "approve",
+          "reject"
+        ]
       },
       "isecure.bankfiles.observations.ExplanationFact": {
         "type": "object",
@@ -7316,7 +7439,11 @@
             "maxItems": 32
           }
         },
-        "required": ["fact_code", "safe_summary", "evidence_references"],
+        "required": [
+          "fact_code",
+          "safe_summary",
+          "evidence_references"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.observations.ExplanationResult": {
@@ -7337,7 +7464,11 @@
             "maxItems": 100
           }
         },
-        "required": ["context", "subject_reference", "facts"],
+        "required": [
+          "context",
+          "subject_reference",
+          "facts"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.ApprovalReference": {
@@ -7357,7 +7488,10 @@
             "maxLength": 128
           }
         },
-        "required": ["approval_request_id", "exact_subject_digest"],
+        "required": [
+          "approval_request_id",
+          "exact_subject_digest"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.AttemptReference": {
@@ -7378,7 +7512,11 @@
             "maximum": 2147483647
           }
         },
-        "required": ["attempt_type", "attempt_id", "attempt_ordinal"],
+        "required": [
+          "attempt_type",
+          "attempt_id",
+          "attempt_ordinal"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.AuthorizationReference": {
@@ -7394,12 +7532,19 @@
             "format": "date-time"
           }
         },
-        "required": ["authorization_decision_id", "decided_at"],
+        "required": [
+          "authorization_decision_id",
+          "decided_at"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.CancellationBoundary": {
         "type": "string",
-        "enum": ["preventable", "race_possible", "irreversible"],
+        "enum": [
+          "preventable",
+          "race_possible",
+          "irreversible"
+        ],
         "description": "Whether cancellation can still prevent, may race with, or cannot reverse an effect"
       },
       "isecure.bankfiles.operations.ExactMoney": {
@@ -7417,12 +7562,21 @@
             "maxLength": 3
           }
         },
-        "required": ["amount", "currency"],
+        "required": [
+          "amount",
+          "currency"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.IdempotencyOutcome": {
         "type": "string",
-        "enum": ["applied", "replayed", "in_progress", "mismatch", "expired"],
+        "enum": [
+          "applied",
+          "replayed",
+          "in_progress",
+          "mismatch",
+          "expired"
+        ],
         "description": "Result of applying a caller idempotency key to the normalized command input; mismatch and expiry never reapply the command"
       },
       "isecure.bankfiles.operations.IdempotencyResult": {
@@ -7441,7 +7595,10 @@
             "format": "date-time"
           }
         },
-        "required": ["outcome", "retained_until"],
+        "required": [
+          "outcome",
+          "retained_until"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.NextOperation": {
@@ -7460,7 +7617,9 @@
             "maxLength": 64
           }
         },
-        "required": ["operation_id"],
+        "required": [
+          "operation_id"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.OperationContext": {
@@ -7573,7 +7732,11 @@
       },
       "isecure.bankfiles.operations.OperationIssueSeverity": {
         "type": "string",
-        "enum": ["error", "warning", "information"],
+        "enum": [
+          "error",
+          "warning",
+          "information"
+        ],
         "description": "Presentation severity without changing whether the operation succeeded"
       },
       "isecure.bankfiles.operations.PageRequest": {
@@ -7605,7 +7768,9 @@
             "format": "uuid"
           }
         },
-        "required": ["snapshot_reference"],
+        "required": [
+          "snapshot_reference"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.PlatformIssues": {
@@ -7621,7 +7786,9 @@
             "maxItems": 1
           }
         },
-        "required": ["issues"],
+        "required": [
+          "issues"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.RequiredAction": {
@@ -7632,7 +7799,9 @@
             "type": "object",
             "properties": {
               "action_type": {
-                "enum": ["human_review"]
+                "enum": [
+                  "human_review"
+                ]
               },
               "subject_reference": {
                 "$ref": "#/components/schemas/isecure.bankfiles.operations.ResourceReference"
@@ -7642,7 +7811,11 @@
                 "maxLength": 64
               }
             },
-            "required": ["action_type", "subject_reference", "reason_code"],
+            "required": [
+              "action_type",
+              "subject_reference",
+              "reason_code"
+            ],
             "additionalProperties": false
           },
           {
@@ -7650,7 +7823,9 @@
             "type": "object",
             "properties": {
               "action_type": {
-                "enum": ["strong_authentication"]
+                "enum": [
+                  "strong_authentication"
+                ]
               },
               "action_reference": {
                 "type": "string",
@@ -7661,7 +7836,10 @@
                 "format": "date-time"
               }
             },
-            "required": ["action_type", "action_reference"],
+            "required": [
+              "action_type",
+              "action_reference"
+            ],
             "additionalProperties": false
           },
           {
@@ -7669,14 +7847,19 @@
             "type": "object",
             "properties": {
               "action_type": {
-                "enum": ["configuration"]
+                "enum": [
+                  "configuration"
+                ]
               },
               "configuration_code": {
                 "type": "string",
                 "maxLength": 64
               }
             },
-            "required": ["action_type", "configuration_code"],
+            "required": [
+              "action_type",
+              "configuration_code"
+            ],
             "additionalProperties": false
           },
           {
@@ -7684,7 +7867,9 @@
             "type": "object",
             "properties": {
               "action_type": {
-                "enum": ["retry_later"]
+                "enum": [
+                  "retry_later"
+                ]
               },
               "retry_after_seconds": {
                 "type": "integer",
@@ -7692,7 +7877,10 @@
                 "maximum": 2147483647
               }
             },
-            "required": ["action_type", "retry_after_seconds"],
+            "required": [
+              "action_type",
+              "retry_after_seconds"
+            ],
             "additionalProperties": false
           }
         ]
@@ -7722,7 +7910,10 @@
             "format": "uuid"
           }
         },
-        "required": ["resource_type", "resource_id"],
+        "required": [
+          "resource_type",
+          "resource_id"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.TaskReference": {
@@ -7752,7 +7943,12 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.CancellationBoundary"
           }
         },
-        "required": ["task_id", "attempt", "state", "cancellation_boundary"],
+        "required": [
+          "task_id",
+          "attempt",
+          "state",
+          "cancellation_boundary"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.operations.TaskState": {
@@ -7784,7 +7980,10 @@
             "maxItems": 1000
           }
         },
-        "required": ["payment_order_id", "transfers"],
+        "required": [
+          "payment_order_id",
+          "transfers"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.ConfigurePaymentExportProfileInput": {
@@ -7878,12 +8077,17 @@
             "format": "uuid"
           }
         },
-        "required": ["payment_export_id"],
+        "required": [
+          "payment_export_id"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentAccountScheme": {
         "type": "string",
-        "enum": ["iban", "domestic"]
+        "enum": [
+          "iban",
+          "domestic"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentApprovalBundleState": {
         "type": "string",
@@ -8036,7 +8240,11 @@
       },
       "isecure.bankfiles.payments_api.PaymentApprovalSubjectKind": {
         "type": "string",
-        "enum": ["order_revision", "transfer_revision", "export_preparation"]
+        "enum": [
+          "order_revision",
+          "transfer_revision",
+          "export_preparation"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentApprovalSummary": {
         "type": "object",
@@ -8063,7 +8271,11 @@
             "maxLength": 128
           }
         },
-        "required": ["state", "required_approvals", "received_approvals"],
+        "required": [
+          "state",
+          "required_approvals",
+          "received_approvals"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentAuthorizationState": {
@@ -8098,7 +8310,9 @@
             "format": "date-time"
           }
         },
-        "required": ["state"],
+        "required": [
+          "state"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentBankOutcomeState": {
@@ -8142,16 +8356,25 @@
             "maxItems": 64
           }
         },
-        "required": ["state", "issue_codes"],
+        "required": [
+          "state",
+          "issue_codes"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentBatchBookingMode": {
         "type": "string",
-        "enum": ["separate", "combined", "provider_choice"]
+        "enum": [
+          "separate",
+          "combined",
+          "provider_choice"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentBusinessType": {
         "type": "string",
-        "enum": ["credit_transfer"],
+        "enum": [
+          "credit_transfer"
+        ],
         "description": "Qualified customer-facing payment business family; unsupported families are separate aggregates"
       },
       "isecure.bankfiles.payments_api.PaymentCapabilityCriteria": {
@@ -8217,7 +8440,9 @@
             "x-isecure-json-representation": "decimal-string"
           }
         },
-        "required": ["account_capability_id"],
+        "required": [
+          "account_capability_id"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentCapabilityGetResult": {
@@ -8230,7 +8455,10 @@
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentCapabilityResource"
           }
         },
-        "required": ["context", "capability"],
+        "required": [
+          "context",
+          "capability"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentCapabilityHandle": {
@@ -8268,7 +8496,9 @@
             "type": "object",
             "properties": {
               "limit_type": {
-                "enum": ["money"]
+                "enum": [
+                  "money"
+                ]
               },
               "limit_kind_id": {
                 "type": "string",
@@ -8281,7 +8511,11 @@
                 "$ref": "#/components/schemas/isecure.bankfiles.operations.ExactMoney"
               }
             },
-            "required": ["limit_type", "limit_kind_id", "maximum"],
+            "required": [
+              "limit_type",
+              "limit_kind_id",
+              "maximum"
+            ],
             "additionalProperties": false
           },
           {
@@ -8289,7 +8523,9 @@
             "type": "object",
             "properties": {
               "limit_type": {
-                "enum": ["count"]
+                "enum": [
+                  "count"
+                ]
               },
               "limit_kind_id": {
                 "type": "string",
@@ -8301,7 +8537,11 @@
                 "maximum": 2147483647
               }
             },
-            "required": ["limit_type", "limit_kind_id", "maximum_count"],
+            "required": [
+              "limit_type",
+              "limit_kind_id",
+              "maximum_count"
+            ],
             "additionalProperties": false
           }
         ]
@@ -8332,7 +8572,9 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageRequest"
           }
         },
-        "required": ["page"],
+        "required": [
+          "page"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentCapabilityListResult": {
@@ -8353,7 +8595,11 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageResult"
           }
         },
-        "required": ["context", "capabilities", "page"],
+        "required": [
+          "context",
+          "capabilities",
+          "page"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentCapabilityResolution": {
@@ -8386,7 +8632,12 @@
             "maxItems": 64
           }
         },
-        "required": ["context", "outcome", "candidates", "issues"],
+        "required": [
+          "context",
+          "outcome",
+          "candidates",
+          "issues"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentCapabilityResolutionOutcome": {
@@ -8516,7 +8767,12 @@
       },
       "isecure.bankfiles.payments_api.PaymentChargeBearer": {
         "type": "string",
-        "enum": ["shared", "debtor", "creditor", "service_level"]
+        "enum": [
+          "shared",
+          "debtor",
+          "creditor",
+          "service_level"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentCreditor": {
         "type": "object",
@@ -8537,7 +8793,10 @@
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentPostalAddress"
           }
         },
-        "required": ["name", "identifiers"],
+        "required": [
+          "name",
+          "identifiers"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentCreditorAccount": {
@@ -8547,14 +8806,19 @@
             "type": "object",
             "properties": {
               "account_type": {
-                "enum": ["iban"]
+                "enum": [
+                  "iban"
+                ]
               },
               "iban": {
                 "type": "string",
                 "maxLength": 34
               }
             },
-            "required": ["account_type", "iban"],
+            "required": [
+              "account_type",
+              "iban"
+            ],
             "additionalProperties": false
           },
           {
@@ -8562,7 +8826,9 @@
             "type": "object",
             "properties": {
               "account_type": {
-                "enum": ["domestic"]
+                "enum": [
+                  "domestic"
+                ]
               },
               "account_scheme_id": {
                 "type": "string",
@@ -8589,14 +8855,19 @@
             "type": "object",
             "properties": {
               "agent_type": {
-                "enum": ["bic"]
+                "enum": [
+                  "bic"
+                ]
               },
               "bic": {
                 "type": "string",
                 "maxLength": 11
               }
             },
-            "required": ["agent_type", "bic"],
+            "required": [
+              "agent_type",
+              "bic"
+            ],
             "additionalProperties": false
           },
           {
@@ -8604,7 +8875,9 @@
             "type": "object",
             "properties": {
               "agent_type": {
-                "enum": ["clearing_member"]
+                "enum": [
+                  "clearing_member"
+                ]
               },
               "clearing_system_id": {
                 "type": "string",
@@ -8644,12 +8917,20 @@
             "maximum": 2147483647
           }
         },
-        "required": ["currency", "amount", "transfer_count"],
+        "required": [
+          "currency",
+          "amount",
+          "transfer_count"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentDestinationScope": {
         "type": "string",
-        "enum": ["domestic", "cross_border", "any_qualified"]
+        "enum": [
+          "domestic",
+          "cross_border",
+          "any_qualified"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentExecutionSummary": {
         "type": "object",
@@ -8668,7 +8949,9 @@
             "format": "date-time"
           }
         },
-        "required": ["state"],
+        "required": [
+          "state"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentExecutionSummaryState": {
@@ -8691,7 +8974,9 @@
             "format": "uuid"
           }
         },
-        "required": ["payment_export_id"],
+        "required": [
+          "payment_export_id"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentExportGetResult": {
@@ -8704,12 +8989,18 @@
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentExportResource"
           }
         },
-        "required": ["context", "payment_export"],
+        "required": [
+          "context",
+          "payment_export"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentExportProfileAvailabilityStatus": {
         "type": "string",
-        "enum": ["available", "unavailable"],
+        "enum": [
+          "available",
+          "unavailable"
+        ],
         "description": "Tenant-visible admission state in the current Processing release"
       },
       "isecure.bankfiles.payments_api.PaymentExportProfileCatalogEntry": {
@@ -8797,7 +9088,12 @@
             "maxItems": 64
           }
         },
-        "required": ["context", "profiles", "catalog_digest", "issues"],
+        "required": [
+          "context",
+          "profiles",
+          "catalog_digest",
+          "issues"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentExportProfileGetInput": {
@@ -8807,7 +9103,10 @@
       },
       "isecure.bankfiles.payments_api.PaymentExportProfileLifecycleState": {
         "type": "string",
-        "enum": ["active", "revoked"]
+        "enum": [
+          "active",
+          "revoked"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentExportProfileQualificationStatus": {
         "type": "string",
@@ -8975,7 +9274,11 @@
             "maxItems": 64
           }
         },
-        "required": ["context", "payment_export_profile", "issues"],
+        "required": [
+          "context",
+          "payment_export_profile",
+          "issues"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentExportReleaseResult": {
@@ -8996,7 +9299,11 @@
             "maxItems": 64
           }
         },
-        "required": ["context", "payment_export", "issues"],
+        "required": [
+          "context",
+          "payment_export",
+          "issues"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentExportResource": {
@@ -9106,7 +9413,11 @@
       },
       "isecure.bankfiles.payments_api.PaymentGroupingFeasibility": {
         "type": "string",
-        "enum": ["feasible", "infeasible", "indeterminate"]
+        "enum": [
+          "feasible",
+          "infeasible",
+          "indeterminate"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentGroupingPreview": {
         "type": "object",
@@ -9135,7 +9446,12 @@
             "maxItems": 128
           }
         },
-        "required": ["authoritative", "feasibility", "groups", "issues"],
+        "required": [
+          "authoritative",
+          "feasibility",
+          "groups",
+          "issues"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentGroupingPreviewGroup": {
@@ -9186,7 +9502,10 @@
             "maxItems": 32
           }
         },
-        "required": ["issues", "recovery"],
+        "required": [
+          "issues",
+          "recovery"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentOptionKind": {
@@ -9257,7 +9576,11 @@
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentGroupingPreview"
           }
         },
-        "required": ["context", "mutation", "grouping_preview"],
+        "required": [
+          "context",
+          "mutation",
+          "grouping_preview"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentOrderGetInput": {
@@ -9272,7 +9595,9 @@
             "format": "uuid"
           }
         },
-        "required": ["payment_order_id"],
+        "required": [
+          "payment_order_id"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentOrderGetResult": {
@@ -9285,7 +9610,10 @@
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentOrderResource"
           }
         },
-        "required": ["context", "payment_order"],
+        "required": [
+          "context",
+          "payment_order"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentOrderListInput": {
@@ -9316,7 +9644,9 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageRequest"
           }
         },
-        "required": ["page"],
+        "required": [
+          "page"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentOrderListResult": {
@@ -9337,7 +9667,11 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.PageResult"
           }
         },
-        "required": ["context", "payment_orders", "page"],
+        "required": [
+          "context",
+          "payment_orders",
+          "page"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentOrderMutationResult": {
@@ -9432,13 +9766,18 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["batch_booking"]
+                "enum": [
+                  "batch_booking"
+                ]
               },
               "mode": {
                 "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentBatchBookingMode"
               }
             },
-            "required": ["option_type", "mode"],
+            "required": [
+              "option_type",
+              "mode"
+            ],
             "additionalProperties": false
           },
           {
@@ -9446,14 +9785,19 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["category_purpose"]
+                "enum": [
+                  "category_purpose"
+                ]
               },
               "category_purpose_id": {
                 "type": "string",
                 "maxLength": 256
               }
             },
-            "required": ["option_type", "category_purpose_id"],
+            "required": [
+              "option_type",
+              "category_purpose_id"
+            ],
             "additionalProperties": false
           },
           {
@@ -9461,14 +9805,19 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["service_level"]
+                "enum": [
+                  "service_level"
+                ]
               },
               "service_level_id": {
                 "type": "string",
                 "maxLength": 256
               }
             },
-            "required": ["option_type", "service_level_id"],
+            "required": [
+              "option_type",
+              "service_level_id"
+            ],
             "additionalProperties": false
           },
           {
@@ -9476,14 +9825,19 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["local_instrument"]
+                "enum": [
+                  "local_instrument"
+                ]
               },
               "local_instrument_id": {
                 "type": "string",
                 "maxLength": 256
               }
             },
-            "required": ["option_type", "local_instrument_id"],
+            "required": [
+              "option_type",
+              "local_instrument_id"
+            ],
             "additionalProperties": false
           },
           {
@@ -9491,13 +9845,18 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["charge_bearer"]
+                "enum": [
+                  "charge_bearer"
+                ]
               },
               "charge_bearer": {
                 "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentChargeBearer"
               }
             },
-            "required": ["option_type", "charge_bearer"],
+            "required": [
+              "option_type",
+              "charge_bearer"
+            ],
             "additionalProperties": false
           }
         ]
@@ -9762,7 +10121,10 @@
             "format": "uuid"
           }
         },
-        "required": ["payment_order_id", "revision_id"],
+        "required": [
+          "payment_order_id",
+          "revision_id"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentOrderSimulationResult": {
@@ -9914,7 +10276,9 @@
             "format": "uuid"
           }
         },
-        "required": ["payment_order_id"],
+        "required": [
+          "payment_order_id"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentOrderValidationResult": {
@@ -10003,7 +10367,10 @@
             "maxLength": 256
           }
         },
-        "required": ["identifier_scheme_id", "identifier"],
+        "required": [
+          "identifier_scheme_id",
+          "identifier"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentPostalAddress": {
@@ -10027,12 +10394,19 @@
             "maxItems": 7
           }
         },
-        "required": ["country_code", "address_lines"],
+        "required": [
+          "country_code",
+          "address_lines"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentPriority": {
         "type": "string",
-        "enum": ["normal", "high", "express"]
+        "enum": [
+          "normal",
+          "high",
+          "express"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentRecoveryGuidance": {
         "type": "object",
@@ -10056,7 +10430,11 @@
             "maxItems": 16
           }
         },
-        "required": ["recovery_kind", "subject_reference", "next_operations"],
+        "required": [
+          "recovery_kind",
+          "subject_reference",
+          "next_operations"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentRecoveryKind": {
@@ -10078,7 +10456,9 @@
             "type": "object",
             "properties": {
               "remittance_type": {
-                "enum": ["unstructured"]
+                "enum": [
+                  "unstructured"
+                ]
               },
               "text_lines": {
                 "type": "array",
@@ -10090,7 +10470,10 @@
                 "maxItems": 4
               }
             },
-            "required": ["remittance_type", "text_lines"],
+            "required": [
+              "remittance_type",
+              "text_lines"
+            ],
             "additionalProperties": false
           },
           {
@@ -10098,7 +10481,9 @@
             "type": "object",
             "properties": {
               "remittance_type": {
-                "enum": ["structured_creditor_reference"]
+                "enum": [
+                  "structured_creditor_reference"
+                ]
               },
               "reference_scheme_id": {
                 "type": "string",
@@ -10109,7 +10494,11 @@
                 "maxLength": 256
               }
             },
-            "required": ["remittance_type", "reference_scheme_id", "reference"],
+            "required": [
+              "remittance_type",
+              "reference_scheme_id",
+              "reference"
+            ],
             "additionalProperties": false
           },
           {
@@ -10117,7 +10506,9 @@
             "type": "object",
             "properties": {
               "remittance_type": {
-                "enum": ["structured_document"]
+                "enum": [
+                  "structured_document"
+                ]
               },
               "documents": {
                 "type": "array",
@@ -10128,7 +10519,10 @@
                 "maxItems": 999
               }
             },
-            "required": ["remittance_type", "documents"],
+            "required": [
+              "remittance_type",
+              "documents"
+            ],
             "additionalProperties": false
           }
         ]
@@ -10152,7 +10546,10 @@
             "$ref": "#/components/schemas/isecure.bankfiles.operations.ExactMoney"
           }
         },
-        "required": ["document_type_id", "document_reference"],
+        "required": [
+          "document_type_id",
+          "document_reference"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentRemittanceKind": {
@@ -10196,7 +10593,12 @@
             "maxItems": 32
           }
         },
-        "required": ["money", "creditor", "creditor_account", "options"],
+        "required": [
+          "money",
+          "creditor",
+          "creditor_account",
+          "options"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentTransferOption": {
@@ -10206,14 +10608,19 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["purpose"]
+                "enum": [
+                  "purpose"
+                ]
               },
               "purpose_id": {
                 "type": "string",
                 "maxLength": 256
               }
             },
-            "required": ["option_type", "purpose_id"],
+            "required": [
+              "option_type",
+              "purpose_id"
+            ],
             "additionalProperties": false
           },
           {
@@ -10221,13 +10628,18 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["priority"]
+                "enum": [
+                  "priority"
+                ]
               },
               "priority": {
                 "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentPriority"
               }
             },
-            "required": ["option_type", "priority"],
+            "required": [
+              "option_type",
+              "priority"
+            ],
             "additionalProperties": false
           },
           {
@@ -10235,7 +10647,9 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["advice"]
+                "enum": [
+                  "advice"
+                ]
               },
               "advice_method_id": {
                 "type": "string",
@@ -10246,7 +10660,10 @@
                 "maxLength": 256
               }
             },
-            "required": ["option_type", "advice_method_id"],
+            "required": [
+              "option_type",
+              "advice_method_id"
+            ],
             "additionalProperties": false
           },
           {
@@ -10254,7 +10671,9 @@
             "type": "object",
             "properties": {
               "option_type": {
-                "enum": ["regulatory_reporting"]
+                "enum": [
+                  "regulatory_reporting"
+                ]
               },
               "authority_country_code": {
                 "type": "string",
@@ -10294,7 +10713,11 @@
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentTransferInput"
           }
         },
-        "required": ["payment_transfer_id", "transfer_position", "transfer"],
+        "required": [
+          "payment_transfer_id",
+          "transfer_position",
+          "transfer"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentTransferValidationSummary": {
@@ -10317,12 +10740,21 @@
             "maxItems": 64
           }
         },
-        "required": ["payment_transfer_id", "outcome", "issue_codes"],
+        "required": [
+          "payment_transfer_id",
+          "outcome",
+          "issue_codes"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentValidationOutcome": {
         "type": "string",
-        "enum": ["not_evaluated", "valid", "invalid", "indeterminate"]
+        "enum": [
+          "not_evaluated",
+          "valid",
+          "invalid",
+          "indeterminate"
+        ]
       },
       "isecure.bankfiles.payments_api.PaymentValidationSummary": {
         "type": "object",
@@ -10364,7 +10796,10 @@
             "maxLength": 128
           }
         },
-        "required": ["payment_export_id", "exact_approval_subject_digest"],
+        "required": [
+          "payment_export_id",
+          "exact_approval_subject_digest"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.RemovePaymentOrderTransfersInput": {
@@ -10385,7 +10820,10 @@
             "maxItems": 1000
           }
         },
-        "required": ["payment_order_id", "payment_transfer_ids"],
+        "required": [
+          "payment_order_id",
+          "payment_transfer_ids"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.RevisePaymentOrderInput": {
@@ -10400,7 +10838,10 @@
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentOrderDraftInput"
           }
         },
-        "required": ["payment_order_id", "draft"],
+        "required": [
+          "payment_order_id",
+          "draft"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.RevisePaymentOrderTransferInput": {
@@ -10419,7 +10860,11 @@
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentTransferInput"
           }
         },
-        "required": ["payment_order_id", "payment_transfer_id", "transfer"],
+        "required": [
+          "payment_order_id",
+          "payment_transfer_id",
+          "transfer"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.RevokePaymentExportProfileInput": {
@@ -10438,7 +10883,10 @@
             "x-isecure-json-representation": "decimal-string"
           }
         },
-        "required": ["payment_export_profile_id", "profile_revision"],
+        "required": [
+          "payment_export_profile_id",
+          "profile_revision"
+        ],
         "additionalProperties": false
       },
       "ProcessingError": {
@@ -10450,10 +10898,15 @@
           },
           "schemaVersion": {
             "type": "integer",
-            "enum": [1]
+            "enum": [
+              1
+            ]
           }
         },
-        "required": ["code", "schemaVersion"],
+        "required": [
+          "code",
+          "schemaVersion"
+        ],
         "additionalProperties": false
       },
       "ProcessingSession": {
@@ -10461,7 +10914,9 @@
         "properties": {
           "audience": {
             "type": "string",
-            "enum": ["isecure-processing-gpgtest-v1"]
+            "enum": [
+              "isecure-processing-gpgtest-v1"
+            ]
           },
           "expiresAtEpochSeconds": {
             "type": "integer",
@@ -10474,11 +10929,15 @@
           },
           "schemaVersion": {
             "type": "integer",
-            "enum": [1]
+            "enum": [
+              1
+            ]
           },
           "tokenType": {
             "type": "string",
-            "enum": ["Processing"]
+            "enum": [
+              "Processing"
+            ]
           }
         },
         "required": [
@@ -10505,7 +10964,9 @@
   "x-tagGroups": [
     {
       "name": "Getting started",
-      "tags": ["Session"]
+      "tags": [
+        "Session"
+      ]
     },
     {
       "name": "Processing API",
@@ -10519,7 +10980,9 @@
     },
     {
       "name": "Notifications",
-      "tags": ["Notifications"]
+      "tags": [
+        "Notifications"
+      ]
     }
   ]
 }

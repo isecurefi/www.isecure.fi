@@ -590,14 +590,26 @@ export function buildSpec(kind) {
       },
       license: { name: "Proprietary - all rights reserved" },
     },
-    servers: [
-      {
-        url: metadata.baseUrl,
-        description: simulator
-          ? "ISECure test environment — Experimental; access by request"
-          : "ISECure test environment — Beta; Nordea validated; access by request",
-      },
-    ],
+    servers: simulator
+      ? [
+          {
+            url: metadata.baseUrl,
+            description:
+              "ISECure test environment — Experimental; access by request",
+          },
+        ]
+      : [
+          {
+            url: metadata.baseUrl,
+            description:
+              "ISECure test environment — Beta; Nordea, OP and Danske Bank; access by request",
+          },
+          {
+            url: "https://processing-api.isecure.fi",
+            description:
+              "ISECure production environment — Beta; Nordea, OP and Danske Bank; paid subscription",
+          },
+        ],
     tags: tags.map((name) => ({ name })),
     paths,
     components: {

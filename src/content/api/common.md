@@ -13,7 +13,7 @@ A shared identity does not mean one interchangeable token or identical authority
 
 ## Access and authentication
 
-Processing API is Beta, with Nordea validated payment-file profiles for Finland, Sweden, Norway and Denmark. The Bank Simulator control API is Experimental. These references document the ISECure test environment. Request access from [ISECure support](mailto:support@isecure.fi). Registration alone does not enable either product: your tenant needs the appropriate active paid subscription, and your user needs permission for each operation. A successful login does not grant payment approval or simulator management rights.
+Processing API is Beta, with Nordea validated payment-file profiles for Finland, Sweden, Norway and Denmark, and OP and Danske Bank Finland SEPA profiles whose bank validation is in progress. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank. The Bank Simulator control API is Experimental. Processing API is available in the ISECure test and production environments; the Bank Simulator exists only in the test environment. Request access from [ISECure support](mailto:support@isecure.fi). Registration alone does not enable either product: your tenant needs the appropriate active paid subscription, and your user needs permission for each operation. A successful login does not grant payment approval or simulator management rights.
 
 [Processing API](https://www.isecure.fi/apis/processing/) and [Bank Simulator API](https://www.isecure.fi/apis/bank-simulator/) share one Processing base URL and session. [File Exchange](https://www.isecure.fi/wsapi_v2/) has a separate API and session. Your tenant is selected by the verified API key; you cannot select another tenant in a request body or URL. Resource IDs and account IDs do not grant access.
 
@@ -46,7 +46,7 @@ await transport.exchangeProcessingSession();
 const client = createIso20022Client(transport);
 ```
 
-Use `https://processing-api.test.isecure.fi` as the base URL and audience `isecure-processing-gpgtest-v1`. Keep tokens and signing keys out of source control, URLs and application logs. The SDK sets operation versions and serializes path/query objects. Operation examples below assume this `client` has been created. Where an example declares an `input`, supply the fields documented in that operation's request schema; it is a typed integration template, not a complete runnable fixture.
+Use `https://processing-api.test.isecure.fi` as the base URL and audience `isecure-processing-gpgtest-v1` for the test environment, or `https://processing-api.isecure.fi` and audience `isecure-processing-production-v1` for Processing API in production. Bank Simulator is test-only. Keep tokens and signing keys out of source control, URLs and application logs. The SDK sets operation versions and serializes path/query objects. Operation examples below assume this `client` has been created. Where an example declares an `input`, supply the fields documented in that operation's request schema; it is a typed integration template, not a complete runnable fixture.
 
 ## Safe commands and revisions
 

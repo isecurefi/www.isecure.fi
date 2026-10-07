@@ -1,6 +1,6 @@
 Configure synthetic bank accounts and scenarios, run tests, and inspect the resulting events and file references. The Bank Simulator control API uses the same base URL and Processing session as the [Processing API](https://www.isecure.fi/apis/processing/). Actual file [uploads](https://www.isecure.fi/wsapi_v2/#operation/UploadFile) and [downloads](https://www.isecure.fi/wsapi_v2/#operation/DownloadFile) use the separate [File Exchange API](https://www.isecure.fi/wsapi_v2/).
 
-**Experimental control API · Test environment · Paid subscription and access approval required.** This reference covers 21 simulator operations plus session exchange and notifications. It is for synthetic testing only; it does not create real bank accounts or authorize real payments.
+**Experimental control API · Test environment only · Paid subscription and access approval required.** This reference covers 21 simulator operations plus session exchange and notifications. Bank Simulator is by nature a test-environment-only service with no production counterpart. It is for synthetic testing only; it does not create real bank accounts or authorize real payments.
 
 The existing Beta File Exchange simulator also offers a fixed default account and scenario. This control API is the separate, configurable interface. Select `Bank: "simulator"` for File Exchange transfers; use `isecure-ts-client/iso20022` to manage workspaces and runs.
 
