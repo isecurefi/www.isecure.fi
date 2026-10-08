@@ -14,7 +14,6 @@ type PublishedSpec = typeof sourceSpec & {
 type PublishedOperation = {
   operationId?: string;
   description?: string;
-  parameters?: Array<{ name: string; description?: string }>;
   "x-code-samples"?: Array<{
     lang?: string;
     label?: string;
@@ -122,6 +121,12 @@ if (first.NextToken) {
   const next = await client.listAuditEvents({ ...query, NextToken: first.NextToken });
   console.log(next.Events);
 }`,
+  ListAccountUsage: `// Monthly totals are server-side unions; never sum daily or user counts.
+const { Usage } = await client.listAccountUsage({ Month: "2026-09" });
+console.log(Usage.UniqueAccounts, Usage.MissingDays, Usage.Issues);`,
+  ReadWorkspaceAuthority: `// The native workspace owner generates the one-use challenge and must verify
+// the signed assertion. Do not log, cache or persist it in the browser.
+const { Assertion } = await client.readWorkspaceAuthority(nativeChallenge);`,
   DeleteKey: `const result = await client.deleteKey("DBCBE671");`,
   ListKeys: `const keys = await client.listKeys();`,
   UploadKey: `const result = await client.uploadPgpKey(
@@ -255,6 +260,11 @@ Processing API is Beta, with Nordea validated payment-file profiles for Finland,
         "Read sanitized account-management evidence, newest first. Integrators see their tenant; customers see only their own account. Available in production and the test environment.",
     },
     {
+      name: "Usage",
+      description:
+        "Read daily and monthly distinct bank accounts observed in supported CAMT files.",
+    },
+    {
       name: "Integrator",
       description:
         "Manage the customer accounts associated with an integrator API key.",
@@ -269,6 +279,7 @@ Processing API is Beta, with Nordea validated payment-file profiles for Finland,
     },
     { name: "Integrator accounts", tags: ["Integrator"] },
     { name: "Audit history", tags: ["Audit"] },
+    { name: "Account usage", tags: ["Usage"] },
     { name: "Data models", tags: ["Schemas"] },
   ];
 
@@ -277,15 +288,6 @@ Processing API is Beta, with Nordea validated payment-file profiles for Finland,
       if (!HTTP_METHODS.has(method) || typeof operation !== "object") continue;
 
       const publishedOperation = operation as PublishedOperation;
-      for (const parameter of publishedOperation.parameters ?? []) {
-        // ponytail: upstream bank list omits omasp; drop once wsapi-v2 adds it.
-        if (parameter.name === "Bank" && parameter.description) {
-          parameter.description = parameter.description.replace(
-            "`spankki`, ",
-            "`spankki`, `omasp`, ",
-          );
-        }
-      }
       const operationId = publishedOperation.operationId;
       if (operationId === "ListAuditEvents") {
         publishedOperation.description = `Availability: deployed to production at https://ws-api.isecure.fi/v2 and the test environment at https://ws-api.test.isecure.fi/v2.\n\n${publishedOperation.description ?? ""}`;
