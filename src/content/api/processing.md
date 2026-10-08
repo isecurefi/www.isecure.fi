@@ -1,8 +1,8 @@
 Create, review and approve a payment file, then download it. Your application verifies and signs the file locally and sends it through the separate [File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile). Processing does not send payments to a bank.
 
-**Beta · Nordea, OP and Danske Bank · Test and production environments · Paid subscription and access approval required.**
+**Beta · Nordea, OP, Danske Bank, Säästöpankki, Oma Säästöpankki and Ålandsbanken · Test and production environments · Paid subscription and access approval required.**
 
-Nordea validated payment-file profiles cover Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA profiles are available; their bank validation is in progress. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Support for other banks and profiles is qualified separately.
+Nordea validated payment-file profiles cover Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA profiles are available; their bank validation is in progress. Säästöpankki, Oma Säästöpankki and Ålandsbanken Finland SEPA profiles are available; their bank validation has not started. POP Pankki and Aktia pain.001.001.03 profiles are implemented and planned for the Processing API; they are not yet available. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Support for other banks and profiles is qualified separately.
 
 This reference covers 26 payment operations, session exchange and notifications. The same contract is served in the test and production environments; choose the base URL and session audience for the environment you are using.
 

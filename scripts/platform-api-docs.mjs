@@ -602,12 +602,12 @@ export function buildSpec(kind) {
           {
             url: metadata.baseUrl,
             description:
-              "ISECure test environment — Beta; Nordea, OP and Danske Bank; access by request",
+              "ISECure test environment — Beta; Nordea, OP, Danske Bank, Säästöpankki, Oma Säästöpankki and Ålandsbanken; access by request",
           },
           {
             url: "https://processing-api.isecure.fi",
             description:
-              "ISECure production environment — Beta; Nordea, OP and Danske Bank; paid subscription",
+              "ISECure production environment — Beta; Nordea, OP, Danske Bank, Säästöpankki, Oma Säästöpankki and Ålandsbanken; paid subscription",
           },
         ],
     tags: tags.map((name) => ({ name })),
