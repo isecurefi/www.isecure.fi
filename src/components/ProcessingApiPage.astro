@@ -36,6 +36,9 @@ const copy = {
     statusTitle: "Tuotevaihe ja käyttöoikeus",
     statusText:
       "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiilit ovat Nordean validoimia Suomen, Ruotsin, Norjan ja Tanskan osalta. OP:n ja Danske Bankin Suomen SEPA-maksuaineistoprofiilit ovat saatavilla; niiden pankkikohtainen validointi on kesken. Säästöpankin, Oma Säästöpankin ja Ålandsbankenin Suomen SEPA-maksuaineistoprofiilit sekä POP Pankin ja Aktian pain.001.001.03-profiilit ovat saatavilla; niiden pankkikohtainen validointi ei ole vielä alkanut. Maksunsaajan tarkistus (Verification of Payee, VoP) sisältyy Nordean, OP:n ja Danske Bankin maksuihin. Saatavilla tilausasiakkaille ISECuren testi- ja tuotantoympäristöissä.",
+    pricingTitle: "Hinnoittelu (Beta)",
+    pricingText:
+      "Hinnat kuten Pankkiyhteydessä: 18 €/kk perusmaksu per integraattori, 2 €/kk per loppuasiakas (vähintään 10 asiakaslisenssiä), 200 € kertaluonteinen tuotantokäyttöönotto. Käyttöönottomaksua ei peritä nykyisiltä Pankkiyhteys-asiakkailta 31.12.2026 asti. Vuosilaskutus, hintoihin lisätään ALV.",
     flowTitle: "Näin maksuaineisto valmistuu",
     flow: [
       "Valitse pankille ja maalle sopiva maksuaineiston muoto käyttäjän käyttöoikeuksien rajoissa.",
@@ -83,6 +86,9 @@ const copy = {
     statusTitle: "Product stage and access",
     statusText:
       "Processing API is in Beta. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA payment-file profiles are available; their bank validation is in progress. Säästöpankki, Oma Säästöpankki and Ålandsbanken Finland SEPA payment-file profiles and the POP Pankki and Aktia pain.001.001.03 profiles are available; their bank validation has not started. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Available to subscribed customers in the ISECure test and production environments.",
+    pricingTitle: "Pricing (Beta)",
+    pricingText:
+      "Priced like Bank Connectivity: 18 €/month base fee per integrator, 2 €/month per end customer (minimum 10 customer licenses), 200 € one-time production onboarding. Onboarding is waived for existing Bank Connectivity customers until 31 December 2026. Annual billing, VAT added on top.",
     flowTitle: "How a payment file is prepared",
     flow: [
       "Choose the payment-file format for the bank and country within the user's access rights.",
@@ -130,6 +136,9 @@ const copy = {
     statusTitle: "Produktfas och åtkomst",
     statusText:
       "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access är validerade av Nordea för Finland, Sverige, Norge och Danmark. OP:s och Danske Banks SEPA-betalningsfilsprofiler för Finland är tillgängliga; deras bankvalidering pågår. Sparbankens, Oma Sparbanks och Ålandsbankens SEPA-betalningsfilsprofiler för Finland samt POP Bankens och Aktias pain.001.001.03-profiler är tillgängliga; deras bankvalidering har inte börjat. Mottagarkontroll (Verification of Payee, VoP) ingår för betalningar via Nordea, OP och Danske Bank. Tillgängligt för prenumerationskunder i ISECures test- och produktionsmiljöer.",
+    pricingTitle: "Prissättning (Beta)",
+    pricingText:
+      "Pris som Bank Connectivity: 18 €/mån grundavgift per integratör, 2 €/mån per slutkund (minst 10 kundlicenser), 200 € engångsavgift för produktionsonboarding. Onboardingavgiften tas inte ut av befintliga Bank Connectivity-kunder fram till 31 december 2026. Årsfakturering, moms tillkommer.",
     flowTitle: "Så förbereds en betalningsfil",
     flow: [
       "Välj betalningsfilens format för banken och landet inom användarens åtkomsträttigheter.",
@@ -198,6 +207,8 @@ const copy = {
       />
       <h2 class="status-title">{copy.statusTitle}</h2>
       <p>{copy.statusText}</p>
+      <h2 class="status-title">{copy.pricingTitle}</h2>
+      <p>{copy.pricingText}</p>
     </Card>
   </PageHero>
 
