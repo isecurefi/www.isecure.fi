@@ -1,0 +1,67 @@
+---
+// Data Processing Agreement. The legal text lives in docs/legal/*.md and is
+// rendered here unchanged so the published page and the source are one document.
+import Layout from "../layouts/Layout.astro";
+import { alternateLinks, localizedRoutes } from "../lib/seo";
+import type { Lang } from "../types";
+import PageHero from "./ui/PageHero.astro";
+import Prose from "./ui/Prose.astro";
+import Section from "./ui/Section.astro";
+import * as dpaEn from "../../docs/legal/dpa-en.md";
+import * as dpaFi from "../../docs/legal/dpa-fi.md";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const meta = {
+  fi: {
+    metaTitle: "Henkilötietojen käsittelysopimus (DPA) | ISECure",
+    description:
+      "ISECure Oy:n henkilötietojen käsittelysopimus (DPA) WS Channel API -palvelulle: käsittelyn kohde, alikäsittelijät, tietoturva, säilytysajat ja tietoturvaloukkauksista ilmoittaminen.",
+    note: "Tämä sopimus on osa palvelusopimusta. English version: /en/dpa/.",
+  },
+  en: {
+    metaTitle: "Data Processing Agreement (DPA) | ISECure",
+    description:
+      "ISECure Oy's Data Processing Agreement (DPA) for the WS Channel API: subject matter, sub-processors, security measures, retention and breach notification.",
+    note: "This agreement is an annex to the service agreement. Suomeksi: /dpa/.",
+  },
+  se: {
+    metaTitle: "Personuppgiftsbiträdesavtal (DPA) | ISECure",
+    description:
+      "ISECure Oy:s personuppgiftsbiträdesavtal (DPA) för WS Channel API. Avtalet tillhandahålls på engelska och finska.",
+    note: "Avtalet tillhandahålls på engelska (nedan) och finska: /dpa/.",
+  },
+}[lang];
+
+const doc = lang === "fi" ? dpaFi : dpaEn;
+const Content = doc.Content;
+---
+
+<Layout
+  title={meta.metaTitle}
+  lang={lang}
+  description={meta.description}
+  alternateLinks={alternateLinks(localizedRoutes("dpa"))}
+  fullWidth
+>
+  <PageHero width="narrow" title={doc.frontmatter.title}>
+    <p class="legal-note">{meta.note}</p>
+  </PageHero>
+
+  <Section width="narrow">
+    <Prose>
+      <Content />
+    </Prose>
+  </Section>
+</Layout>
+
+<style>
+  .legal-note {
+    color: var(--landing-muted);
+    margin: 18px 0 0;
+  }
+</style>
