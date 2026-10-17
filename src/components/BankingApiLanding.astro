@@ -130,10 +130,11 @@ const content = {
     pricingEyebrow: "Hinnoittelu",
     pricingTitle: "Pankkiyhteyden hinnoittelu",
     pricingLead:
-      "Kiinteä perusmaksu ja pankkitilikohtaiset lisenssit. Ei transaktio- eikä volyymimaksuja.",
+      "Hinnat ovat integraattoria kohden. Kiinteä perusmaksu ja lisenssit loppuasiakkaiden tileistä. Ei transaktio- eikä volyymimaksuja.",
     pricingFromLabel: "Alkaen",
     pricingFrom: "38 € / kk",
-    pricingFromNote: "Sisältää perusmaksun ja 10 pankkitililisenssiä.",
+    pricingFromNote:
+      "Integraattoria kohden. Sisältää perusmaksun ja 10 tililisenssiä.",
     pricingAnalogy: "Pankkiyhteydet laajakaistaliittymän hinnalla.",
     pricingIncluded: [
       "Testiympäristö ja SDK:t ilman maksua",
@@ -146,20 +147,21 @@ const content = {
       {
         value: "18 € / kk",
         label: "Perusmaksu",
-        text: "Palvelun kiinteä kuukausimaksu.",
+        text: "Yksi per integraattori, loppuasiakkaiden määrästä riippumatta.",
       },
       {
         value: "2 € / tili / kk",
         label: "Pankkitililisenssi",
-        text: "Lisenssit myydään 10 tilin paketeissa.",
+        text: "Loppuasiakkaidenne pankkitileistä; jokainen tili on vähintään 1 lisenssi myös ilman pankkiyhteyttä. 10 tilin paketeissa.",
       },
       {
         value: "200 €",
         label: "Tuotantokäyttöönotto",
-        text: "Kertaluonteinen maksu uuden asiakkaan tuotantokäyttöönotosta.",
+        text: "Kertaluonteinen, per integraattori. Ei peritä loppuasiakkaista.",
       },
     ],
-    pricingExample: "Esimerkki: 20 pankkitiliä = 18 € + 40 € = 58 €/kk.",
+    pricingExample:
+      "Esimerkki: loppuasiakkailla yhteensä 20 tiliä = 18 € + 40 € = 58 €/kk.",
     pricingNote:
       "Vuosilaskutus · Tililisenssit 10 lisenssin paketeissa · Hintoihin lisätään ALV",
     faqTitle: "Usein kysyttyä",
@@ -183,7 +185,7 @@ const content = {
       },
       {
         q: "Miten hinnoittelu määräytyy?",
-        a: "Perusmaksu on 18 €/kk ja pankkitililisenssi 2 €/tili/kk. Lisenssit myydään 10 tilin paketeissa. Uuden asiakkaan tuotantokäyttöönotto on kertaluonteinen 200 €. Laskutus vuosittain, ja hintoihin lisätään arvonlisävero.",
+        a: "Hinnat ovat integraattoria kohden. Perusmaksu 18 €/kk kattaa kaikki loppuasiakkaanne. Pankkitililisenssi 2 €/tili/kk lasketaan loppuasiakkaidenne tileistä; jokainen loppuasiakastili on vähintään 1 lisenssi myös ilman pankkiyhteyttä. Lisenssit myydään 10 tilin paketeissa. Tuotantokäyttöönotto 200 € peritään kerran integraattorilta, ei loppuasiakkaista. Laskutus vuosittain, ja hintoihin lisätään arvonlisävero.",
       },
       {
         q: "Missä data ja avaimet sijaitsevat?",
@@ -285,10 +287,11 @@ const content = {
     pricingEyebrow: "Pricing",
     pricingTitle: "Bank Connectivity pricing",
     pricingLead:
-      "A fixed base fee plus per-bank-account licenses. No transaction or volume fees.",
+      "Priced per integrator. A fixed base fee plus licenses for your end customers' accounts. No transaction or volume fees.",
     pricingFromLabel: "From",
     pricingFrom: "38 € / month",
-    pricingFromNote: "Includes the base fee and 10 bank account licenses.",
+    pricingFromNote:
+      "Per integrator. Includes the base fee and 10 account licenses.",
     pricingAnalogy: "Bank connectivity for the price of a broadband line.",
     pricingIncluded: [
       "Free test environment and SDKs",
@@ -301,20 +304,21 @@ const content = {
       {
         value: "18 € / month",
         label: "Base fee",
-        text: "Fixed monthly fee for the service.",
+        text: "One per integrator, regardless of how many end customers.",
       },
       {
         value: "2 € / account / month",
         label: "Bank account license",
-        text: "Licenses are sold in packages of 10 accounts.",
+        text: "For your end customers' bank accounts; every account is at least 1 license, even without a bank connection. Sold in packages of 10.",
       },
       {
         value: "200 €",
         label: "Production onboarding",
-        text: "One-time fee for new customer production onboarding.",
+        text: "One-time, per integrator. Never charged for adding end customers.",
       },
     ],
-    pricingExample: "Example: 20 bank accounts = 18 € + 40 € = 58 €/month.",
+    pricingExample:
+      "Example: 20 end-customer accounts in total = 18 € + 40 € = 58 €/month.",
     pricingNote:
       "Annual billing · Account licenses in packages of 10 · VAT added on top",
     faqTitle: "Frequently asked questions",
@@ -338,7 +342,7 @@ const content = {
       },
       {
         q: "How does pricing work?",
-        a: "The base fee is 18 €/month and bank account licenses are 2 €/account/month. Licenses are sold in packages of 10 accounts. New customer production onboarding is a one-time 200 €. Billing is annual, and VAT is added on top.",
+        a: "Prices are per integrator. The 18 €/month base fee covers all your end customers. Bank account licenses are 2 €/account/month, counted across your end customers' accounts; every end-customer account is at least 1 license, even without a bank connection. Licenses are sold in packages of 10. Production onboarding is a one-time 200 € per integrator, never per end customer. Billing is annual, and VAT is added on top.",
       },
       {
         q: "Where are data and keys hosted?",
@@ -440,10 +444,11 @@ const content = {
     pricingEyebrow: "Prissättning",
     pricingTitle: "Priser för bankanslutning",
     pricingLead:
-      "Fast grundavgift och licenser per bankkonto. Inga transaktions- eller volymavgifter.",
+      "Pris per integratör. Fast grundavgift plus licenser för era slutkunders konton. Inga transaktions- eller volymavgifter.",
     pricingFromLabel: "Från",
     pricingFrom: "38 € / mån",
-    pricingFromNote: "Inkluderar grundavgiften och 10 bankkontolicenser.",
+    pricingFromNote:
+      "Per integratör. Inkluderar grundavgiften och 10 kontolicenser.",
     pricingAnalogy: "Bankförbindelser till priset av en bredbandsanslutning.",
     pricingIncluded: [
       "Testmiljö och SDK:er utan avgift",
@@ -456,20 +461,21 @@ const content = {
       {
         value: "18 € / mån",
         label: "Grundavgift",
-        text: "Fast månadsavgift för tjänsten.",
+        text: "En per integratör, oavsett antal slutkunder.",
       },
       {
         value: "2 € / konto / mån",
         label: "Bankkontolicens",
-        text: "Licenserna säljs i paket om 10 konton.",
+        text: "För era slutkunders bankkonton; varje konto är minst 1 licens, även utan bankanslutning. Säljs i paket om 10.",
       },
       {
         value: "200 €",
         label: "Produktionsonboarding",
-        text: "Engångsavgift för nya kunders produktionsonboarding.",
+        text: "Engångsavgift per integratör. Tas aldrig ut för nya slutkunder.",
       },
     ],
-    pricingExample: "Exempel: 20 bankkonton = 18 € + 40 € = 58 €/mån.",
+    pricingExample:
+      "Exempel: 20 slutkundskonton totalt = 18 € + 40 € = 58 €/mån.",
     pricingNote:
       "Årsfakturering · Kontolicenser i paket om 10 · Moms tillkommer",
     faqTitle: "Vanliga frågor",
@@ -493,7 +499,7 @@ const content = {
       },
       {
         q: "Hur fungerar prissättningen?",
-        a: "Grundavgiften är 18 €/mån och bankkontolicenser kostar 2 €/konto/mån. Licenserna säljs i paket om 10 konton. Produktionsonboarding för nya kunder är en engångsavgift på 200 €. Fakturering sker årsvis och moms tillkommer.",
+        a: "Priserna gäller per integratör. Grundavgiften 18 €/mån täcker alla era slutkunder. Bankkontolicenser kostar 2 €/konto/mån och räknas på era slutkunders konton; varje slutkundskonto är minst 1 licens, även utan bankanslutning. Licenserna säljs i paket om 10. Produktionsonboarding är en engångsavgift på 200 € per integratör, aldrig per slutkund. Fakturering sker årsvis och moms tillkommer.",
       },
       {
         q: "Var finns data och nycklar?",
