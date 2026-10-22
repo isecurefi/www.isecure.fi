@@ -2,13 +2,15 @@
 title: "Henkilötietojen käsittelysopimus (DPA)"
 ---
 
-**Versio 1.0.1 — 18.10.2026**
+**Versio 1.1.0 — 22.10.2026**
 
 Tämä henkilötietojen käsittelysopimus ("Käsittelysopimus") on liite Sopimuksessa nimetyn asiakkaan
 ("Asiakas", rekisterinpitäjä) ja ISECure Oy:n, Y-tunnus FI22963369, Helsinki ("ISECure", käsittelijä)
 väliseen palvelusopimukseen ("Sopimus"). Se toteuttaa EU:n yleisen tietosuoja-asetuksen 2016/679
 ("tietosuoja-asetus") 28 artiklan vaatimukset. Jos tämä Käsittelysopimus ja Sopimus ovat ristiriidassa
 henkilötietojen käsittelyn osalta, tämä Käsittelysopimus on etusijalla.
+
+Tätä versiota sovelletaan, kun siitä sovitaan Asiakkaan kanssa. Julkaiseminen ei muuta olemassa olevaa sopimusta automaattisesti.
 
 ## 1. Käsittelyn kohde ja luonne
 
@@ -19,7 +21,7 @@ kuin niitä sisältyy pankkiaineistoihin ja tilitietoihin, jotka Asiakas lähett
 Käsittely kuvataan liitteessä 1.
 
 ISECure ei lue, analysoi tai käytä pankkiaineistojen sisältöä omiin tarkoituksiinsa muutoin kuin
-laskeakseen yhteenlaskettuja käyttömääriä (kuten havaittujen pankkitilien ja aineistojen lukumääriä)
+laskeakseen yhteenlaskettuja käyttömääriä (kuten käyttäjätilien, liitettyjen pankkitilien ja aineistojen lukumääriä)
 laskutusta ja lisensointia varten. ISECuren
 ohjelmistot, joita Asiakas ajaa omilla laitteillaan (kuten ISECure Admin App), käsittelevät tietoja
 paikallisesti Asiakkaan hallinnassa, eikä tämä Käsittelysopimus koske niitä.
@@ -117,14 +119,35 @@ tapahtumatunnuksen, ei koskaan aineistojen sisältöä tai avainmateriaalia.
 
 ## 11. Tarkastusoikeus
 
-ISECure antaa Asiakkaan käyttöön tiedot, jotka ovat tarpeen tämän Käsittelysopimuksen noudattamisen
-osoittamiseksi. ISECure vastaa kohtuullisiin kirjallisiin kysymyksiin ja toimittaa saatavilla olevat
-kuvaukset tietoturvatoimenpiteistään ja alikäsittelijöistään. Jos tämä ei riitä, Asiakas tai
-salassapitoon sitoutunut ja ISECuren hyväksymä riippumaton tarkastaja voi tarkastaa ISECuren
-käsittelyn kerran kalenterivuodessa vähintään 30 päivän kirjallisella ennakkoilmoituksella,
-tavanomaisena työaikana ja palvelua häiritsemättä. Tarkastus rajoittuu ISECuren omaan toimintaan;
-AWS tarkastetaan AWS:n julkaisemien vaatimustenmukaisuusraporttien perusteella. Asiakas vastaa
-omista tarkastuskustannuksistaan.
+ISECure antaa tämän Käsittelysopimuksen noudattamisen osoittamiseen tarvittavat tiedot, vastaa
+kohtuullisiin kirjallisiin kysymyksiin ja toimittaa saatavilla olevat tietoturva- ja
+alikäsittelijäkuvaukset ilman lisämaksua.
+
+Jos tiedot eivät riitä, Asiakas voi tarkastaa ISECuren käsittelyn itse tai valita riippumattoman,
+salassapitoon sitoutuneen tarkastajan. Osapuolet sopivat laajuudesta ja käytännön
+tietoturvajärjestelyistä. Tavanomainen tarkastus tehdään kerran kalenterivuodessa vähintään
+30 päivän kirjallisella ennakkoilmoituksella, normaalina työaikana ja mahdollisimman vähän palvelua
+häiriten. Lisätarkastukset tai lyhyempi ilmoitusaika ovat sallittuja, kun ne ovat kohtuudella tarpeen
+henkilötietojen tietoturvaloukkauksen, epäillyn laiminlyönnin tai valvontaviranomaisen vaatimuksen
+vuoksi. Asiakas valitsee asianmukaisen tarkastustavan kuultuaan ISECurea. AWS:n vaatimustenmukaisuus
+arvioidaan tavallisesti sen julkaisemista raporteista; ISECure auttaa hankkimaan lisänäyttöä, jos se
+on kohtuudella tarpeen.
+
+Pyydetyn tavanomaisen tarkastuksen perusmaksu on 2 000 euroa ja sovellettava arvonlisävero, kun
+tarkastus vaatii ISECuren henkilöstön työaikaa. Maksu kattaa yhteensä enintään kahdeksan tuntia
+valmistelua, osallistumista ja jälkityötä. ISECure toimittaa laajuuden ja työmääräarvion kirjallisesti
+ennen tarkastusta. Jos työmäärä on olennaisesti pienempi, maksua alennetaan vastaamaan tarvittavaa
+työtä. Lisäajasta tai kuluista veloitetaan vain etukäteen kirjallisesti sovittaessa. ISECure laskuttaa
+tarkastuksen jälkeen 30 päivän maksuehdolla. Pelkkä kalenterivuoden kuluminen ei aiheuta
+tarkastusmaksua. Asiakas maksaa oman tarkastajansa kulut. Samasta työstä ei veloiteta uudelleen
+kohdan 8 perusteella.
+
+ISECure ei peri tätä maksua valvontaviranomaisen edellyttämästä tarkastuksesta tai tarkastuksesta,
+joka on tarpeen ISECuren tai sen alikäsittelijän Käsittelysopimuksen rikkomisen selvittämiseksi tai
+korjaamisen varmistamiseksi. Jos rikkominen vahvistuu maksullisessa tarkastuksessa, ISECure palauttaa
+siihen liittyvän työn maksun. Maksujen on oltava kohtuullisia ja suhteessa työmäärään. Ne eivät saa
+estää tai viivästyttää tarkastusoikeuden käyttämistä; maksuriita käsitellään erikseen. Järjestelyt
+eivät rajoita pakottavia tarkastus- tai tiedonsaantioikeuksia.
 
 ## 12. Vastuu ja yleiset ehdot
 
@@ -204,9 +227,10 @@ Luettelon muutoksista ilmoitetaan kohdan 6 mukaisesti.
 
 ## Liite 4 — Muutoshistoria
 
-| Versio | Päivä      | Muutos                                                                                                                                                                                                                     |
-| ------ | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.0.0  | 17.10.2026 | Ensimmäinen julkaistu versio.                                                                                                                                                                                              |
-| 1.0.1  | 18.10.2026 | Tarkennukset: varmuuskopioiden 35 päivän ikkuna, pankkisanomalokin sijainti ja pääsy, tapahtumalokin kentät ja rooli, testiympäristö, AWS:n siirtoperuste ja tekstiviestireititys. Ei muutoksia osapuolten velvoitteisiin. |
+| Versio | Päivä      | Muutos                                                                                                                                                                                                                                                                                                    |
+| ------ | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0.0  | 17.10.2026 | Ensimmäinen julkaistu versio.                                                                                                                                                                                                                                                                             |
+| 1.0.1  | 18.10.2026 | Tarkennukset: varmuuskopioiden 35 päivän ikkuna, pankkisanomalokin sijainti ja pääsy, tapahtumalokin kentät ja rooli, testiympäristö, AWS:n siirtoperuste ja tekstiviestireititys. Ei muutoksia osapuolten velvoitteisiin.                                                                                |
+| 1.1.0  | 22.10.2026 | Käyttömäärien laskennan tarkennus. Tarkastusjärjestelyjen muutos: henkilöstön työaikaa vaativan tavanomaisen tarkastuksen maksu 2 000 euroa ja sovellettava arvonlisävero, laajuus- ja kulurajaukset sekä tarpeelliset tarkastusoikeudet turvaavat poikkeukset. Sovelletaan Asiakkaan kanssa sovittaessa. |
 
 Aiemmat versiot saa pyynnöstä.

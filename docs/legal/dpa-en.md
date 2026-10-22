@@ -2,13 +2,15 @@
 title: "Data Processing Agreement (DPA)"
 ---
 
-**Version 1.0.1 — 18 October 2026**
+**Version 1.1.0 — 22 October 2026**
 
 This Data Processing Agreement ("DPA") is an annex to the service agreement ("Agreement") between
 the customer named in the Agreement ("Customer", the controller) and ISECure Oy, Business ID
 FI22963369, Helsinki, Finland ("ISECure", the processor). It implements Article 28 of the EU General
 Data Protection Regulation 2016/679 ("GDPR"). If this DPA and the Agreement conflict on the
 processing of personal data, this DPA prevails.
+
+This version applies when agreed with the Customer. Publishing it does not change an existing agreement automatically.
 
 ## 1. Subject matter and nature of the processing
 
@@ -19,7 +21,7 @@ in the bank files and account data the Customer sends through the service. The p
 described in Annex 1.
 
 ISECure does not read, analyse or use the content of bank files for its own purposes, other than
-computing aggregated usage figures (such as counts of observed bank accounts and files) for billing
+computing aggregated usage figures (such as counts of user accounts, connected bank accounts and files) for billing
 and licensing. ISECure
 software that the Customer runs on its own devices (such as the ISECure Admin App) processes data
 locally under the Customer's control and is not covered by this DPA.
@@ -113,13 +115,33 @@ timestamp and a technical request identifier, never file content or key material
 
 ## 11. Audit
 
-ISECure makes available to the Customer the information necessary to demonstrate compliance with
-this DPA. ISECure answers reasonable written questions and provides available descriptions of its
-security measures and sub-processors. If this is not sufficient, the Customer, or an independent
-auditor bound by confidentiality and approved by ISECure, may audit ISECure's processing once per
-calendar year, with at least 30 days' written notice, during normal business hours and without
-disrupting the service. Audits are limited to ISECure's own operations; AWS is audited through the
-compliance reports AWS publishes. The Customer bears its own audit costs.
+ISECure provides the information needed to show compliance with this DPA, answers reasonable
+written questions and supplies available security and sub-processor descriptions without an
+additional fee.
+
+If that information is insufficient, the Customer may audit ISECure's processing itself or appoint
+an independent auditor bound by confidentiality. The parties agree the scope and practical security
+arrangements. Routine audits take place once per calendar year, with at least 30 days' written
+notice, during normal business hours and with minimal disruption. Additional audits or shorter
+notice are allowed where reasonably needed because of a personal-data breach, suspected
+non-compliance or a supervisory authority's requirement. The Customer chooses the appropriate
+audit method after consulting ISECure. AWS assurance is normally reviewed through its published
+compliance reports; ISECure helps obtain further evidence if reasonably needed.
+
+For a requested routine audit requiring ISECure staff time, the standard fee is EUR 2,000 plus
+applicable VAT. This covers up to eight hours in total for preparation, participation and follow-up.
+ISECure supplies the scope and work estimate in writing before the audit. If the work is materially
+smaller, the fee is reduced to reflect the work required. Additional time or expenses are chargeable
+only if agreed in writing in advance. ISECure invoices after the audit, with payment due in 30 days.
+No audit fee is charged merely because a calendar year has passed. The Customer pays its own
+auditor's costs. The same work is not charged again under Section 8.
+
+ISECure does not charge this fee for an audit required by a supervisory authority or needed to
+investigate or verify correction of ISECure's or its sub-processor's breach of this DPA. If such a
+breach is confirmed during a paid audit, ISECure refunds the fee for the work relating to that breach.
+Fees must remain reasonable and proportionate to the work. They must not prevent or delay the
+exercise of audit rights; any fee dispute is handled separately. Mandatory audit and information
+rights remain unaffected by these arrangements.
 
 ## 12. Liability and general
 
@@ -195,9 +217,10 @@ Changes to this list are notified under Section 6.
 
 ## Annex 4 — Change log
 
-| Version | Date            | Change                                                                                                                                                                                                                  |
-| ------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.0.0   | 17 October 2026 | First published version.                                                                                                                                                                                                |
-| 1.0.1   | 18 October 2026 | Clarifications: 35-day backup window, location and access of the bank message log, audit event fields and controller role, test environment, AWS transfer basis and SMS routing. No change to the parties' obligations. |
+| Version | Date            | Change                                                                                                                                                                                                                                            |
+| ------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.0.0   | 17 October 2026 | First published version.                                                                                                                                                                                                                          |
+| 1.0.1   | 18 October 2026 | Clarifications: 35-day backup window, location and access of the bank message log, audit event fields and controller role, test environment, AWS transfer basis and SMS routing. No change to the parties' obligations.                           |
+| 1.1.0   | 22 October 2026 | Clarified usage counters. Revised audit arrangements: EUR 2,000 plus applicable VAT for a routine audit requiring staff time, scope and cost safeguards, and exceptions preserving necessary audit rights. Applies when agreed with the Customer. |
 
 Earlier versions are available on request.
