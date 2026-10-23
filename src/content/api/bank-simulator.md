@@ -4,6 +4,21 @@ Configure synthetic bank accounts and scenarios, run tests, and inspect the resu
 
 The existing Beta File Exchange simulator also offers a fixed default account and scenario. This control API is the separate, configurable interface. Select `Bank: "simulator"` for File Exchange transfers; use `isecure-ts-client/iso20022` to manage workspaces and runs.
 
+## Immediate balance replies through File Exchange
+
+The Beta File Exchange simulator accepts signed OP-style `camt.060.001.02` balance queries
+and returns a `camt.052.001.02` report in the optional Base64 `Content` field of the
+UploadFile HTTP 201 response. It creates no separate downloadable response file.
+Use the normal authenticated File Exchange client with `Bank: "simulator"` and enabled
+simulator access. TypeScript SDK 4.5.2 exposes this field as `result.Content`.
+
+This query reads the authenticated tenant's fixed-account synthetic ledger. Booked and
+available balances are equal because this simulator does not model holds or credit lines.
+A new request ID reads current balances; replaying the same request returns the original
+observation. This does not query a configurable Processing workspace or a real bank.
+The separate OP TP1 1SS protocol is not implemented. Other banks may use different
+request formats or DownloadFile for balance queries.
+
 ## The main concepts
 
 | Concept    | Plain meaning                                                                                |

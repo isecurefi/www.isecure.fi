@@ -93,8 +93,10 @@ Console.WriteLine(files.FileDescriptors.Count);`,
 // with your own signer; register its public key on the admin account.
 var bytes = await File.ReadAllBytesAsync(paymentFile);
 var signature = await File.ReadAllTextAsync(signatureFile);
-await client.UploadFileAsync(bytes, "payment.xml", "pain.001.001.09", signature);
-// Use a file type accepted by your bank. Poll separately for feedback.
+var result = await client.UploadFileAsync(bytes, "payment.xml", "pain.001.001.09", signature);
+var inlineContentBase64 = result.Content; // null for acknowledgement-only replies
+// Use a file type accepted by your bank. Follow its feedback protocol; an inline
+// result does not imply a separate downloadable file.
 // After a timeout, check status before retrying: the upload may have succeeded.`,
   DownloadFile: `// Requires an authenticated data client. descriptor came from ListFilesAsync.
 var file = await client.DownloadFileAsync(descriptor.FileType, descriptor.FileReference);

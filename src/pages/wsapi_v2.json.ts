@@ -101,7 +101,9 @@ const certificate = await client.enrollCert({
   FileName: "payment.xml",
   FileType: "pain.001.001.03",
   Signature: "<detached PGP signature>",
-});`,
+});
+// Some banks return the result inline instead of creating a downloadable file.
+const inlineContentBase64 = result.Content; // undefined for acknowledgement-only replies`,
   DeleteFile: `const result = await client.deleteFile(
   "pain.001.001.03",
   "file-reference",
