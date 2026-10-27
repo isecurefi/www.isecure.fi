@@ -27,6 +27,8 @@ interface GuideSection {
   // Element path → meaning rows, rendered as a two-column table.
   fields?: Array<[string, string]>;
   fieldsHeaders?: [string, string];
+  // First column renders as <code> unless set to false.
+  fieldsCode?: boolean;
   // Shortened illustrative XML, rendered verbatim.
   xml?: string;
 }
@@ -68,9 +70,9 @@ const t = content[lang];
 const catalogRecord = catalogId ? getCatalogRecord(catalogId) : undefined;
 const relatedTitle = { fi: "Lue myös", en: "See also", se: "Läs även" }[lang];
 const sourcesTitle = {
-  fi: "Virallinen lähde",
-  en: "Official source",
-  se: "Officiell källa",
+  fi: "Lähteet",
+  en: "Sources",
+  se: "Källor",
 }[lang];
 const faqTitle = {
   fi: "Usein kysyttyä",
@@ -126,7 +128,19 @@ const relatedHref = (s: string) =>
                     {s.fields.map(([path, meaning]) => (
                       <tr>
                         <td>
-                          <code>{path}</code>
+                          {s.fieldsCode === false ? (
+                            path
+                          ) : (
+                            <code>
+                              {path.split("/").map((part, i) => (
+                                <>
+                                  {i > 0 && "/"}
+                                  {i > 0 && <wbr />}
+                                  {part}
+                                </>
+                              ))}
+                            </code>
+                          )}
                         </td>
                         <td>{meaning}</td>
                       </tr>

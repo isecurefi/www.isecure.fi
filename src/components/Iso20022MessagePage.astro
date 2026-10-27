@@ -307,6 +307,45 @@ const content = {
           ],
         },
         {
+          h2: "Milloin pankit muodostavat pain.002-palautteen ja kuinka monta kertaa",
+          paras: [
+            "Suomalaiset pankit eivät muodosta yhtä pain.002-palautetta per aineisto. Finanssialan ISO 20022 Payments Guide määrittelee kaksi palautetta: rakenteen validoinnin (Group Status ACTC tai RJCT) ja sisällön tarkistuksen (ACCP, PART tai RJCT sekä RJCT jokaiselle hylätylle tapahtumalle), ja toteaa käsittelyn vaihtelevan pankeittain. Pankkien palvelukuvaukset lisäävät kolmannen vaiheen eräpäivänä, jolloin hylätyt tai katteettomat maksut raportoidaan. Yksi pain.001 tuottaa siis yleensä kaksi tai kolme pain.002-tiedostoa, ja enemmän, jos aineistossa on useita eräpäiviä tai kate tulee tilille myöhässä.",
+            "Suurin ero pankkien välillä on onnistuneiden maksujen raportointi. OP ja Nordea ilmoittavat hyväksytyt maksut pain.002:lla vain, jos siitä on sovittu sopimuksessa, ja Samlink-pankit muodostavat maksatusvaiheen palautteen vain hylkäyksistä. Toteutuneet veloitukset raportoidaan muuten camt.054-ilmoituksella tai camt.053-tiliotteella.",
+            "Kaikki tarkistamamme julkaistut suomalaiset kuvaukset tarjoavat pain.002-palautteen, ja OP, Nordea ja Samlink-pankit lähettävät vastaanottovaiheen palautteen aina. S-Pankki, Ålandsbanken ja Aktia eivät julkaise pain.002-ajoituksen kuvausta avoimesti, joten palautetyypit ja aikataulu kannattaa varmistaa pankin Web Services -sopimuksesta. Taulukko kokoaa julkiset dokumentit lokakuussa 2026.",
+          ],
+          fieldsHeaders: [
+            "Pankki tai ohje",
+            "Vaiheet ja ajoitus julkaistussa kuvauksessa",
+          ],
+          fieldsCode: false,
+          fields: [
+            [
+              "Finanssialan ohje (kesäkuu 2025)",
+              "Rakenteen validointi: ACTC tai RJCT. Sisällön tarkistus: ACCP, PART tai RJCT sekä RJCT hylätylle tapahtumalle. Tarkistusten tarkkuus riippuu pankista.",
+            ],
+            [
+              "OP (C2B-asiakasohje, lokakuu 2026)",
+              "Kolme vaihetta, annetaan aina: skeemavalidointi heti Web Services -vastaussanomassa (ACTC tai RJCT); vastaanottopalaute noin 30 minuuttia lähetyksestä (ACCP, PART tai RJCT); maksatuksen palaute maksun hylkääntyessä veloituskäsittelyssä, puolen tunnin välein hylätyistä SEPA-pikasiirroista ja klo 21.20 katteettomiksi jääneistä (PDNG päivän aikana, RJCT klo 21.20). Onnistuneesti veloitetut maksut tulevat pain.002:lle vain sopimuksen mukaan; camt.054-palaute muodostetaan klo 12, 15, 18 ja 21.30.",
+            ],
+            [
+              "Samlink-pankit: Säästöpankki, OmaSp, POP, Handelsbanken (maaliskuu 2024)",
+              "Kanavapalaute heti skeemavalidoinnista; vastaanottopalaute aina koko aineistosta; maksatuspalaute eräpäivänä vain, jos erä tai tapahtuma hylätään, viimeistään eräpäivän päättyessä. Useita maksatuspalautteita, jos aineistossa on useita eräpäiviä.",
+            ],
+            [
+              "Nordea (Corporate Access Payables, kesäkuu 2025; Suomen liite, toukokuu 2026)",
+              "Ensimmäinen pain.002 vahvistaa vastaanoton ja annetaan aina. Lisäpalautteet, kun sisällön tarkistus löytää virheitä, eräpäivä muuttuu tai maksu odottaa vahvistusta. Eräpäivän hylkäykset raportoidaan, jos yritys on valinnut sen; sisällön tarkistuksen voi tilata vain hylätyistä tai myös hyväksytyistä ja muutetuista. Suomi: katteen puuttuessa pain.002 noin klo 20.00 CET, toistetaan päivittäin enintään viisi lisäpankkipäivää, sitten hylkäyspalaute.",
+            ],
+            [
+              "Danske Bank (pain.002.001.03- ja .10-ohjeet)",
+              "Julkiset sanomakuvaukset määrittelevät ryhmä-, erä- ja tapahtumatason tilat (ACTC, ACCP, ACSP, ACSC, PDNG, PART, RJCT) ja syykoodilistan. Toimitusaikoja ei kerrota julkisessa ohjeessa.",
+            ],
+            [
+              "S-Pankki, Ålandsbanken, Aktia",
+              "Julkista pain.002-ajoituksen kuvausta ei löytynyt. Sovi palautetyypit ja aikataulu Web Services -sopimuksessa.",
+            ],
+          ],
+        },
+        {
           h2: "Status ei ole reaaliaikainen lupaus",
           paras: [
             "Palaute on saatavilla, kun pankki muodostaa ja tarjoaa tiedoston. ISECure ei muuta pankin statusta eikä lupaa jatkuvaa reaaliaikaista seurantaa. Pankkisopimus, tiedostotyypit ja palautteiden aikataulu sovitaan pankin kanssa.",
@@ -318,6 +357,33 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=pain.002",
           label:
             "ISO 20022 -sanomaluettelo: pain.002 CustomerPaymentStatusReport",
+        },
+        {
+          href: "https://www.finanssiala.fi/wp-content/uploads/2025/06/iso-20022-payments-guide-2025-en.pdf",
+          label: "Finanssiala: ISO 20022 Payments Guide, 18.6.2025, luku 6",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/2980783/C2B%20asiakasohje%20pain%2003%20joulukuu%202025.pdf/1072228b-be9e-ae4f-3d5b-40edce4b9052?t=1764683634504",
+          label: "OP: C2B-palvelut, pain 03 -asiakasohje, luvut 2.1, 2.5 ja 4",
+        },
+        {
+          href: "https://samlink.fi/app/uploads/2024/03/SEPA-Credit-Transfer-ISO-20022-Application-Guideline-pain001.001.09_WEB.pdf",
+          label:
+            "Samlink: Outgoing payments service description pain.001.001.09 / pain.002.001.10, 11.3.2024, luku 4.1",
+        },
+        {
+          href: "https://www.nordea.com/en/doc/corporate-access-payables-service-description.pdf",
+          label:
+            "Nordea: Corporate Access Payables service description, 25.6.2025, luku 7.3",
+        },
+        {
+          href: "https://www.nordea.com/sites/default/files/2026-05/corporate-access-payables-country-appendix-finland.pdf",
+          label:
+            "Nordea: Corporate Access Payables – Appendix Finland, 18.5.2026, luku 2.5",
+        },
+        {
+          href: "https://danskeci.com/-/media/pdf/danskeci-com/payment/iso-20022-xml/pain,-d-,002,-d-,001,-d-,03.pdf?rev=1cfe0e06d84649a2920cbb6582327f46&hash=0FADF6787A56A5C1C14336DE11B686AD",
+          label: "Danske Bank: pain.002.001.03 Message Implementation Guide",
         },
       ],
       faq: [
@@ -336,6 +402,14 @@ const content = {
         {
           q: "Mitä pain.002.001.10 tarkoittaa?",
           a: "pain.002 nimeää sanomaperheen ja 001.10 skeemaversion. Pankin ohje ja sopimus määrittävät käytössä olevan version ja tilakoodit.",
+        },
+        {
+          q: "Kuinka monta pain.002-tiedostoa yksi pain.001 tuottaa?",
+          a: "Yleensä kaksi tai kolme: rakenteen validoinnin palaute heti lähetyksen jälkeen, sisällön tarkistuksen palaute pian sen jälkeen (OP:lla noin 30 minuuttia) ja maksatusvaiheen palaute eräpäivänä, kun jokin hylätään tai jää katteettomaksi. Useita eräpäiviä sisältävät aineistot ja katetta odottavat maksut tuottavat enemmän.",
+        },
+        {
+          q: "Lähettävätkö kaikki suomalaiset pankit pain.002-palautteen?",
+          a: "OP, Nordea, Danske Bank ja Samlink-pankit kuvaavat pain.002:n julkisissa ohjeissaan, ja OP, Nordea ja Samlink lähettävät vastaanottovaiheen palautteen aina. Se, raportoidaanko hyväksytyt maksut ja milloin, riippuu pankista ja Web Services -sopimuksesta. S-Pankki, Ålandsbanken ja Aktia eivät julkaise ajoituskuvausta avoimesti.",
         },
       ],
       cta: {
@@ -453,6 +527,45 @@ const content = {
           ],
         },
         {
+          h2: "When banks generate pain.002 and how many times",
+          paras: [
+            "Finnish banks do not create one pain.002 per file. The national ISO 20022 Payments Guide defines two reports: one for structure validation (Group Status ACTC or RJCT) and one for content validation (ACCP, PART or RJCT, with RJCT on each rejected transaction), and notes that processing varies between banks. Bank service descriptions add a third stage on the execution date, when rejected or unfunded payments are reported. One pain.001 therefore normally produces two to three pain.002 files, and more when it contains several due dates or funds arrive late.",
+            "Successful execution is where banks differ most. OP and Nordea report accepted payments in pain.002 only when this is agreed in the contract, and Samlink banks create payment-stage feedback only for rejections. Confirmed debits are otherwise reported in camt.054 or on the camt.053 statement.",
+            "Every published Finnish specification we checked provides pain.002, and OP, Nordea and the Samlink banks always send the reception-stage report. S-Pankki, Ålandsbanken and Aktia do not publish a pain.002 timing specification openly, so confirm the feedback types and schedule in the bank's Web Services agreement. The table summarises the public documents as of October 2026.",
+          ],
+          fieldsHeaders: [
+            "Bank or guideline",
+            "Stages and timing in the published specification",
+          ],
+          fieldsCode: false,
+          fields: [
+            [
+              "Finance Finland guide (June 2025)",
+              "Structure validation: ACTC or RJCT. Content validation: ACCP, PART or RJCT, with RJCT per rejected transaction. The precision of both checks depends on the bank.",
+            ],
+            [
+              "OP (C2B customer guide, October 2026)",
+              "Three stages, always delivered: schema validation immediately in the Web Services response (ACTC or RJCT); reception feedback about 30 minutes after upload (ACCP, PART or RJCT); payment feedback when a payment is rejected in debit processing, half-hourly for rejected SEPA instant payments, and at 21.20 for payments left unfunded (PDNG during the day, RJCT at 21.20). Successfully debited payments appear in pain.002 only if agreed; camt.054 feedback is produced at 12, 15, 18 and 21.30.",
+            ],
+            [
+              "Samlink banks: Säästöpankki, OmaSp, POP, Handelsbanken (March 2024)",
+              "Channel feedback immediately on schema validation; reception feedback always, for the whole dataset; payment feedback on the due date only if a batch or transaction is rejected, at the end of the due date at the latest. Several payment feedbacks when the file holds several due dates.",
+            ],
+            [
+              "Nordea (Corporate Access Payables, June 2025; Finland appendix, May 2026)",
+              "The first pain.002 confirms reception and is always provided. Further reports follow when content validation finds errors, the execution date changes or a payment awaits confirmation. Execution-day rejections are reported if chosen by the company; content validation can be ordered as rejected-only or as accepted, changed and rejected. Finland: insufficient funds produce a pain.002 at about 20.00 CET, repeated daily for up to five more banking days, then a rejection report.",
+            ],
+            [
+              "Danske Bank (pain.002.001.03 and .10 guides)",
+              "Public message implementation guides define group, payment and transaction level statuses (ACTC, ACCP, ACSP, ACSC, PDNG, PART, RJCT) and a reason-code list. Delivery timing is not stated in the public guide.",
+            ],
+            [
+              "S-Pankki, Ålandsbanken, Aktia",
+              "No public pain.002 timing specification found. Agree the feedback types and schedule in the Web Services agreement.",
+            ],
+          ],
+        },
+        {
           h2: "Status is not a real-time promise",
           paras: [
             "A response is available when the bank creates and publishes the file. ISECure does not change the bank's status or promise continuous real-time tracking. The bank agreement defines file types and response schedules.",
@@ -464,6 +577,35 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=pain.002",
           label:
             "ISO 20022 message catalogue: pain.002 CustomerPaymentStatusReport",
+        },
+        {
+          href: "https://www.finanssiala.fi/wp-content/uploads/2025/06/iso-20022-payments-guide-2025-en.pdf",
+          label:
+            "Finance Finland: ISO 20022 Payments Guide, 18 June 2025, section 6",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/2980783/C2B%20asiakasohje%20pain%2003%20joulukuu%202025.pdf/1072228b-be9e-ae4f-3d5b-40edce4b9052?t=1764683634504",
+          label:
+            "OP: C2B-palvelut, pain 03 customer guide, sections 2.1, 2.5 and 4",
+        },
+        {
+          href: "https://samlink.fi/app/uploads/2024/03/SEPA-Credit-Transfer-ISO-20022-Application-Guideline-pain001.001.09_WEB.pdf",
+          label:
+            "Samlink: Outgoing payments service description pain.001.001.09 / pain.002.001.10, 11 March 2024, section 4.1",
+        },
+        {
+          href: "https://www.nordea.com/en/doc/corporate-access-payables-service-description.pdf",
+          label:
+            "Nordea: Corporate Access Payables service description, 25 June 2025, section 7.3",
+        },
+        {
+          href: "https://www.nordea.com/sites/default/files/2026-05/corporate-access-payables-country-appendix-finland.pdf",
+          label:
+            "Nordea: Corporate Access Payables – Appendix Finland, 18 May 2026, section 2.5",
+        },
+        {
+          href: "https://danskeci.com/-/media/pdf/danskeci-com/payment/iso-20022-xml/pain,-d-,002,-d-,001,-d-,03.pdf?rev=1cfe0e06d84649a2920cbb6582327f46&hash=0FADF6787A56A5C1C14336DE11B686AD",
+          label: "Danske Bank: pain.002.001.03 Message Implementation Guide",
         },
       ],
       faq: [
@@ -482,6 +624,14 @@ const content = {
         {
           q: "What does pain.002.001.10 mean?",
           a: "pain.002 names the message family and 001.10 the schema version. The bank guideline and agreement determine the version and status codes in use.",
+        },
+        {
+          q: "How many pain.002 files does one pain.001 produce?",
+          a: "Usually two or three: a structure-validation report right after upload, a content-validation report shortly after (about 30 minutes at OP), and a payment-stage report on the due date when something is rejected or unfunded. Files with several due dates, or payments waiting for funds, produce more.",
+        },
+        {
+          q: "Do all Finnish banks send pain.002?",
+          a: "OP, Nordea, Danske Bank and the Samlink banks document pain.002 in their public specifications, and OP, Nordea and Samlink always send the reception-stage report. Whether accepted payments are reported, and when, depends on the bank and the Web Services agreement. S-Pankki, Ålandsbanken and Aktia do not publish a timing specification openly.",
         },
       ],
       cta: {
@@ -596,6 +746,45 @@ const content = {
           ],
         },
         {
+          h2: "När bankerna skapar pain.002 och hur många gånger",
+          paras: [
+            "Finländska banker skapar inte en pain.002 per fil. Den nationella ISO 20022 Payments Guide definierar två rapporter: en för strukturvalidering (Group Status ACTC eller RJCT) och en för innehållskontroll (ACCP, PART eller RJCT, med RJCT för varje avvisad transaktion), och påpekar att behandlingen varierar mellan bankerna. Bankernas tjänstebeskrivningar lägger till ett tredje steg på förfallodagen, då avvisade betalningar och betalningar utan täckning rapporteras. En pain.001 ger därför normalt två till tre pain.002-filer, och fler om filen innehåller flera förfallodagar eller täckning kommer in sent.",
+            "Störst skillnad gäller lyckade betalningar. OP och Nordea rapporterar godkända betalningar i pain.002 endast om det avtalats, och Samlink-bankerna skapar återkoppling i betalningssteget endast vid avvisningar. Genomförda debiteringar rapporteras annars i camt.054 eller på camt.053-kontoutdraget.",
+            "Alla publicerade finländska specifikationer vi granskade erbjuder pain.002, och OP, Nordea och Samlink-bankerna skickar alltid rapporten i mottagningssteget. S-Pankki, Ålandsbanken och Aktia publicerar ingen öppen specifikation av pain.002-tidpunkter, så bekräfta återkopplingstyper och tidtabell i bankens Web Services-avtal. Tabellen sammanfattar de offentliga dokumenten i oktober 2026.",
+          ],
+          fieldsHeaders: [
+            "Bank eller riktlinje",
+            "Steg och tidpunkter i den publicerade specifikationen",
+          ],
+          fieldsCode: false,
+          fields: [
+            [
+              "Finance Finlands guide (juni 2025)",
+              "Strukturvalidering: ACTC eller RJCT. Innehållskontroll: ACCP, PART eller RJCT, med RJCT per avvisad transaktion. Kontrollernas noggrannhet beror på banken.",
+            ],
+            [
+              "OP (C2B-kundanvisning, oktober 2026)",
+              "Tre steg, levereras alltid: schemavalidering omedelbart i Web Services-svaret (ACTC eller RJCT); mottagningsåterkoppling cirka 30 minuter efter sändning (ACCP, PART eller RJCT); betalningsåterkoppling när en betalning avvisas vid debitering, varje halvtimme för avvisade SEPA-expressbetalningar och kl. 21.20 för betalningar utan täckning (PDNG under dagen, RJCT kl. 21.20). Lyckade debiteringar ingår i pain.002 endast enligt avtal; camt.054-återkoppling skapas kl. 12, 15, 18 och 21.30.",
+            ],
+            [
+              "Samlink-bankerna: Sparbanken, OmaSp, POP, Handelsbanken (mars 2024)",
+              "Kanalåterkoppling omedelbart vid schemavalidering; mottagningsåterkoppling alltid, för hela datamängden; betalningsåterkoppling på förfallodagen endast om en batch eller transaktion avvisas, senast vid förfallodagens slut. Flera betalningsåterkopplingar om filen har flera förfallodagar.",
+            ],
+            [
+              "Nordea (Corporate Access Payables, juni 2025; Finlandsbilaga, maj 2026)",
+              "Den första pain.002 bekräftar mottagandet och levereras alltid. Ytterligare rapporter när innehållskontrollen hittar fel, förfallodagen ändras eller en betalning väntar på bekräftelse. Avvisningar på förfallodagen rapporteras om företaget valt det; innehållskontroll kan beställas som endast avvisade eller som godkända, ändrade och avvisade. Finland: vid bristande täckning skapas en pain.002 cirka kl. 20.00 CET, upprepad dagligen i upp till fem ytterligare bankdagar, därefter en avvisningsrapport.",
+            ],
+            [
+              "Danske Bank (pain.002.001.03- och .10-guider)",
+              "Offentliga meddelandeguider definierar statusar på grupp-, betalnings- och transaktionsnivå (ACTC, ACCP, ACSP, ACSC, PDNG, PART, RJCT) och en orsakskodlista. Leveranstider anges inte i den offentliga guiden.",
+            ],
+            [
+              "S-Pankki, Ålandsbanken, Aktia",
+              "Ingen offentlig specifikation av pain.002-tidpunkter hittades. Avtala återkopplingstyper och tidtabell i Web Services-avtalet.",
+            ],
+          ],
+        },
+        {
           h2: "Status är inget realtidslöfte",
           paras: [
             "Ett svar är tillgängligt när banken skapar och publicerar filen. ISECure ändrar inte bankens status och lovar inte kontinuerlig realtidsuppföljning. Bankavtalet definierar filtyper och svarstider.",
@@ -607,6 +796,35 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=pain.002",
           label:
             "ISO 20022-meddelandekatalog: pain.002 CustomerPaymentStatusReport",
+        },
+        {
+          href: "https://www.finanssiala.fi/wp-content/uploads/2025/06/iso-20022-payments-guide-2025-en.pdf",
+          label:
+            "Finance Finland: ISO 20022 Payments Guide, 18 juni 2025, avsnitt 6",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/2980783/C2B%20asiakasohje%20pain%2003%20joulukuu%202025.pdf/1072228b-be9e-ae4f-3d5b-40edce4b9052?t=1764683634504",
+          label:
+            "OP: C2B-palvelut, pain 03 kundanvisning, avsnitt 2.1, 2.5 och 4",
+        },
+        {
+          href: "https://samlink.fi/app/uploads/2024/03/SEPA-Credit-Transfer-ISO-20022-Application-Guideline-pain001.001.09_WEB.pdf",
+          label:
+            "Samlink: Outgoing payments service description pain.001.001.09 / pain.002.001.10, 11 mars 2024, avsnitt 4.1",
+        },
+        {
+          href: "https://www.nordea.com/en/doc/corporate-access-payables-service-description.pdf",
+          label:
+            "Nordea: Corporate Access Payables service description, 25 juni 2025, avsnitt 7.3",
+        },
+        {
+          href: "https://www.nordea.com/sites/default/files/2026-05/corporate-access-payables-country-appendix-finland.pdf",
+          label:
+            "Nordea: Corporate Access Payables – Appendix Finland, 18 maj 2026, avsnitt 2.5",
+        },
+        {
+          href: "https://danskeci.com/-/media/pdf/danskeci-com/payment/iso-20022-xml/pain,-d-,002,-d-,001,-d-,03.pdf?rev=1cfe0e06d84649a2920cbb6582327f46&hash=0FADF6787A56A5C1C14336DE11B686AD",
+          label: "Danske Bank: pain.002.001.03 Message Implementation Guide",
         },
       ],
       faq: [
@@ -625,6 +843,14 @@ const content = {
         {
           q: "Vad betyder pain.002.001.10?",
           a: "pain.002 anger meddelandefamiljen och 001.10 schemaversionen. Bankens anvisning och avtal avgör version och statuskoder.",
+        },
+        {
+          q: "Hur många pain.002-filer ger en pain.001?",
+          a: "Vanligen två eller tre: en strukturvalideringsrapport direkt efter sändning, en innehållskontrollrapport strax därefter (cirka 30 minuter hos OP) och en rapport i betalningssteget på förfallodagen när något avvisas eller saknar täckning. Filer med flera förfallodagar, eller betalningar som väntar på täckning, ger fler.",
+        },
+        {
+          q: "Skickar alla finländska banker pain.002?",
+          a: "OP, Nordea, Danske Bank och Samlink-bankerna dokumenterar pain.002 i sina offentliga specifikationer, och OP, Nordea och Samlink skickar alltid rapporten i mottagningssteget. Om godkända betalningar rapporteras, och när, beror på banken och Web Services-avtalet. S-Pankki, Ålandsbanken och Aktia publicerar ingen öppen tidsspecifikation.",
         },
       ],
       cta: {

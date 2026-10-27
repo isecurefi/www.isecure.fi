@@ -48,6 +48,8 @@
   .ui-prose :global(code) {
     background: var(--landing-soft);
     border-radius: 4px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
     color: var(--landing-ink);
     font-size: 0.9em;
     padding: 0.1em 0.35em;
@@ -61,10 +63,6 @@
     margin: 1.5em 0;
     overflow-x: auto;
     padding: 14px 16px;
-  }
-
-  .ui-prose :global(td code) {
-    overflow-wrap: anywhere;
   }
 
   .ui-prose :global(table) {
