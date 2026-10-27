@@ -42,6 +42,7 @@ const copy = {
       "Palauttaa synteettiset pain.002-, camt.054- ja camt.053-aineistot.",
     connectivityText:
       "Kohdistaa saman File Exchange API:n erikseen pätevöityyn oikeaan pankkiyhteyteen.",
+    guideLabel: "Vertailu: pankkiyhteysohjelma itse rakennettuna vai palveluna",
     journeyLimit:
       "Nykyiset esimerkit ajetaan erikseen. Simulaattorievidenssi ei ole pankin hyväksyntä tai tuotantopätevyys.",
   },
@@ -62,6 +63,7 @@ const copy = {
     simulatorText: "Returns synthetic pain.002, camt.054, and camt.053 files.",
     connectivityText:
       "Targets a separately qualified real-bank connection through the same File Exchange API.",
+    guideLabel: "Comparison: bank connectivity built in-house or as a service",
     journeyLimit:
       "The current examples run separately. Simulator evidence is not bank acceptance or production qualification.",
   },
@@ -83,6 +85,7 @@ const copy = {
       "Returnerar syntetiska pain.002-, camt.054- och camt.053-filer.",
     connectivityText:
       "Riktar samma File Exchange API mot en separat kvalificerad riktig bankanslutning.",
+    guideLabel: "Jämförelse: bankförbindelse byggd själv eller som tjänst",
     journeyLimit:
       "De nuvarande exemplen körs separat. Simulatorevidens är inte bankens godkännande eller produktionskvalificering.",
   },
@@ -168,6 +171,11 @@ const breadcrumbs = [
         <span>{copy.connectivityText}</span>
       </li>
     </ol>
+    <p>
+      <a href={lang === "fi" ? "/pankkiyhteys/" : `/${lang}/pankkiyhteys/`}
+        >{copy.guideLabel}</a
+      >
+    </p>
     <Callout tone="note">{copy.journeyLimit}</Callout>
   </Section>
 

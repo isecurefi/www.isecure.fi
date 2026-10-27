@@ -11,6 +11,69 @@ interface Props {
 
 const { lang, messageType } = Astro.props;
 
+const camt054Xml = `<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.054.001.02">
+  <BkToCstmrDbtCdtNtfctn>
+    <GrpHdr>
+      <MsgId>NTFCTN-20260126-014</MsgId>
+      <CreDtTm>2026-01-26T14:05:00</CreDtTm>
+    </GrpHdr>
+    <Ntfctn>
+      <Id>2026-01-26-014</Id>
+      <CreDtTm>2026-01-26T14:05:00</CreDtTm>
+      <Acct><Id><IBAN>FI2112345600000785</IBAN></Id></Acct>
+      <Ntry>
+        <Amt Ccy="EUR">3480.00</Amt>
+        <CdtDbtInd>CRDT</CdtDbtInd>
+        <Sts>BOOK</Sts>
+        <BookgDt><Dt>2026-01-26</Dt></BookgDt>
+        <ValDt><Dt>2026-01-26</Dt></ValDt>
+        <BkTxCd>
+          <Domn><Cd>PMNT</Cd><Fmly><Cd>RCDT</Cd><SubFmlyCd>ESCT</SubFmlyCd></Fmly></Domn>
+        </BkTxCd>
+        <NtryDtls>
+          <Btch><NbOfTxs>2</NbOfTxs></Btch>
+          <TxDtls>
+            <Refs><EndToEndId>INV-10452</EndToEndId></Refs>
+            <AmtDtls><TxAmt><Amt Ccy="EUR">1240.00</Amt></TxAmt></AmtDtls>
+            <RltdPties><Dbtr><Nm>Example Oy</Nm></Dbtr></RltdPties>
+            <RmtInf><Strd><CdtrRefInf><Ref>RF7010452</Ref></CdtrRefInf></Strd></RmtInf>
+          </TxDtls>
+          <!-- second TxDtls (2240.00 EUR) omitted -->
+        </NtryDtls>
+      </Ntry>
+    </Ntfctn>
+  </BkToCstmrDbtCdtNtfctn>
+</Document>`;
+
+const pain002Xml = `<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03">
+  <CstmrPmtStsRpt>
+    <GrpHdr>
+      <MsgId>STS-20260126-0917</MsgId>
+      <CreDtTm>2026-01-26T09:17:00</CreDtTm>
+    </GrpHdr>
+    <OrgnlGrpInfAndSts>
+      <OrgnlMsgId>PAYRUN-2026-01-26</OrgnlMsgId>
+      <OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId>
+      <GrpSts>PART</GrpSts>
+    </OrgnlGrpInfAndSts>
+    <OrgnlPmtInfAndSts>
+      <OrgnlPmtInfId>BATCH-1</OrgnlPmtInfId>
+      <TxInfAndSts>
+        <OrgnlEndToEndId>SUP-20771</OrgnlEndToEndId>
+        <TxSts>ACCP</TxSts>
+      </TxInfAndSts>
+      <TxInfAndSts>
+        <OrgnlEndToEndId>SUP-20772</OrgnlEndToEndId>
+        <TxSts>RJCT</TxSts>
+        <StsRsnInf>
+          <Rsn><Cd>AC01</Cd></Rsn>
+          <AddtlInf>Incorrect account number</AddtlInf>
+        </StsRsnInf>
+      </TxInfAndSts>
+    </OrgnlPmtInfAndSts>
+  </CstmrPmtStsRpt>
+</Document>`;
+
 const content = {
   "pain-001": {
     fi: {
@@ -157,6 +220,81 @@ const content = {
           ],
         },
         {
+          h2: "pain.002-raportin keskeiset elementit",
+          paras: [
+            "pain.002 viittaa lähetettyyn pain.001-aineistoon kolmella tasolla: koko tiedosto, maksuerä ja yksittäinen maksu. Alla olevat polut löytyvät sekä pain.002.001.03- että 001.10-versiosta. Pankin soveltamisohje määrittää, millä tasoilla ja mitä statuksia pankki palauttaa.",
+            "Lyhennetty esimerkki on havainnollistava, ei pankin tuottama aineisto.",
+          ],
+          fields: [
+            [
+              "GrpHdr/MsgId, GrpHdr/CreDtTm",
+              "Statusraportin tunniste ja luontiaika.",
+            ],
+            [
+              "OrgnlGrpInfAndSts/OrgnlMsgId",
+              "Sen pain.001-aineiston MsgId, johon raportti vastaa. Kohdista vastaus lähetettyyn tiedostoon tällä.",
+            ],
+            [
+              "OrgnlGrpInfAndSts/OrgnlMsgNmId",
+              "Alkuperäisen sanoman tyyppi, esimerkiksi pain.001.001.03.",
+            ],
+            ["OrgnlGrpInfAndSts/GrpSts", "Koko tiedoston status."],
+            [
+              "OrgnlPmtInfAndSts/OrgnlPmtInfId, PmtInfSts",
+              "Maksuerän tunniste pain.001:stä ja erän status.",
+            ],
+            [
+              "TxInfAndSts/OrgnlEndToEndId",
+              "Yksittäisen maksun EndToEndId; avain maksutason statuksen kohdistamiseen.",
+            ],
+            ["TxInfAndSts/TxSts", "Yksittäisen maksun status."],
+            [
+              "StsRsnInf/Rsn/Cd",
+              "ISO-syykoodi hylkäykselle tai odottavalle tilalle, esimerkiksi AC01 (virheellinen tilinumero), AM04 (kate ei riitä) tai RR04 (viranomaissyy).",
+            ],
+            ["StsRsnInf/AddtlInf", "Pankin vapaamuotoinen selite."],
+          ],
+          xml: pain002Xml,
+        },
+        {
+          h2: "pain.002-statuskoodit",
+          paras: [
+            "GrpSts, PmtInfSts ja TxSts käyttävät samaa ISO 20022 -koodistoa. Pankki ja sen soveltamisohje määrittävät, mitkä koodit pankki lähettää ja millä tasolla.",
+          ],
+          fieldsHeaders: ["Koodi", "Merkitys"],
+          fields: [
+            [
+              "RCVD",
+              "Received: pankki on vastaanottanut aineiston, mutta ei vielä tarkistanut sitä.",
+            ],
+            [
+              "ACTC",
+              "AcceptedTechnicalValidation: syntaksi- ja skeematarkistus läpäisty.",
+            ],
+            [
+              "ACCP",
+              "AcceptedCustomerProfile: pankin asiakastarkistukset, kuten sopimus ja käyttövaltuudet, läpäisty.",
+            ],
+            [
+              "ACSP",
+              "AcceptedSettlementInProcess: hyväksytty, katteensiirto käynnissä.",
+            ],
+            [
+              "ACSC",
+              "AcceptedSettlementCompleted: veloitettu maksajan tililtä.",
+            ],
+            [
+              "PDNG",
+              "Pending: odottaa lisätarkistuksia tai myöhempää eräpäivää.",
+            ],
+            [
+              "PART",
+              "PartiallyAccepted: osa tiedoston tai erän maksuista hylättiin.",
+            ],
+            ["RJCT", "Rejected: hylätty; syy on StsRsnInf/Rsn/Cd-elementissä."],
+          ],
+        },
+        {
           h2: "Nouto yhdellä pankki-integraatiolla",
           paras: [
             "ISECure hoitaa pankin Web Services -yhteyden, varmenteet ja tiedostonoudon. Ohjelmistosi listaa ja lataa pankin palauttamat pain.002-aineistot REST API:n, SDK:n tai tiedostosynkronoinnin kautta ja yhdistää ne alkuperäiseen pain.001-aineistoon.",
@@ -228,6 +366,81 @@ const content = {
           ],
         },
         {
+          h2: "Key elements of a pain.002 report",
+          paras: [
+            "pain.002 refers back to the submitted pain.001 at three levels: the whole file, a payment batch and an individual payment. The paths below exist in both pain.002.001.03 and 001.10. The bank's implementation guideline defines at which levels and with which statuses the bank responds.",
+            "The shortened example is illustrative, not a file produced by a bank.",
+          ],
+          fields: [
+            [
+              "GrpHdr/MsgId, GrpHdr/CreDtTm",
+              "Identifier and creation time of the status report.",
+            ],
+            [
+              "OrgnlGrpInfAndSts/OrgnlMsgId",
+              "MsgId of the pain.001 file the report answers. Use it to match the response to the sent file.",
+            ],
+            [
+              "OrgnlGrpInfAndSts/OrgnlMsgNmId",
+              "Message type of the original, such as pain.001.001.03.",
+            ],
+            ["OrgnlGrpInfAndSts/GrpSts", "Status of the whole file."],
+            [
+              "OrgnlPmtInfAndSts/OrgnlPmtInfId, PmtInfSts",
+              "Payment batch identifier from the pain.001 and the batch status.",
+            ],
+            [
+              "TxInfAndSts/OrgnlEndToEndId",
+              "EndToEndId of the individual payment; the key for matching a transaction-level status.",
+            ],
+            ["TxInfAndSts/TxSts", "Status of the individual payment."],
+            [
+              "StsRsnInf/Rsn/Cd",
+              "ISO reason code for a rejection or pending state, such as AC01 (incorrect account number), AM04 (insufficient funds) or RR04 (regulatory reason).",
+            ],
+            ["StsRsnInf/AddtlInf", "Free-text explanation from the bank."],
+          ],
+          xml: pain002Xml,
+        },
+        {
+          h2: "pain.002 status codes",
+          paras: [
+            "GrpSts, PmtInfSts and TxSts share the same ISO 20022 code set. Which codes a bank sends, and at which level, is defined by the bank and its implementation guideline.",
+          ],
+          fieldsHeaders: ["Code", "Meaning"],
+          fields: [
+            [
+              "RCVD",
+              "Received: the bank has received the file but not yet validated it.",
+            ],
+            [
+              "ACTC",
+              "AcceptedTechnicalValidation: syntax and schema checks passed.",
+            ],
+            [
+              "ACCP",
+              "AcceptedCustomerProfile: the bank's customer checks, such as agreement and authorisations, passed.",
+            ],
+            [
+              "ACSP",
+              "AcceptedSettlementInProcess: accepted, settlement in progress.",
+            ],
+            [
+              "ACSC",
+              "AcceptedSettlementCompleted: debited from the payer's account.",
+            ],
+            [
+              "PDNG",
+              "Pending: awaiting further checks or a later execution date.",
+            ],
+            [
+              "PART",
+              "PartiallyAccepted: some payments in the file or batch were rejected.",
+            ],
+            ["RJCT", "Rejected: see StsRsnInf/Rsn/Cd for the reason."],
+          ],
+        },
+        {
           h2: "Retrieval through one bank integration",
           paras: [
             "ISECure handles the bank's Web Services connection, certificates, and file retrieval. Your software lists and downloads pain.002 files through the REST API, SDK, or file synchronization, then reconciles them with the original pain.001 file.",
@@ -296,6 +509,78 @@ const content = {
           paras: [
             "En rapport kan gälla hela filen, en betalningsbatch eller en enskild transaktion. Den innehåller status och, när banken anger den, en orsakskod. Vanliga statusar beskriver mottagning, behandling, godkännande eller avvisning, men tillgänglighet och detaljnivå varierar.",
             "pain.002 är inte en kontotransaktion eller en universell slutlig bekräftelse på att mottagarens konto har krediterats. Applikationen måste tolka status enligt bankens anvisning och den egna betalningsprocessen.",
+          ],
+        },
+        {
+          h2: "Centrala element i en pain.002-rapport",
+          paras: [
+            "pain.002 hänvisar tillbaka till den inskickade pain.001 på tre nivåer: hela filen, en betalningsbatch och en enskild betalning. Sökvägarna nedan finns i både pain.002.001.03 och 001.10. Bankens tillämpningsanvisning avgör på vilka nivåer och med vilka statusar banken svarar.",
+            "Det förkortade exemplet är illustrativt, inte en fil från en bank.",
+          ],
+          fields: [
+            [
+              "GrpHdr/MsgId, GrpHdr/CreDtTm",
+              "Statusrapportens identifierare och skapandetid.",
+            ],
+            [
+              "OrgnlGrpInfAndSts/OrgnlMsgId",
+              "MsgId för den pain.001-fil som rapporten svarar på. Använd den för att matcha svaret mot den skickade filen.",
+            ],
+            [
+              "OrgnlGrpInfAndSts/OrgnlMsgNmId",
+              "Det ursprungliga meddelandets typ, till exempel pain.001.001.03.",
+            ],
+            ["OrgnlGrpInfAndSts/GrpSts", "Status för hela filen."],
+            [
+              "OrgnlPmtInfAndSts/OrgnlPmtInfId, PmtInfSts",
+              "Betalningsbatchens identifierare från pain.001 och batchens status.",
+            ],
+            [
+              "TxInfAndSts/OrgnlEndToEndId",
+              "EndToEndId för den enskilda betalningen; nyckeln för att matcha status på transaktionsnivå.",
+            ],
+            ["TxInfAndSts/TxSts", "Status för den enskilda betalningen."],
+            [
+              "StsRsnInf/Rsn/Cd",
+              "ISO-orsakskod för avvisning eller väntande status, till exempel AC01 (felaktigt kontonummer), AM04 (otillräckliga medel) eller RR04 (regulatorisk orsak).",
+            ],
+            ["StsRsnInf/AddtlInf", "Bankens fritextförklaring."],
+          ],
+          xml: pain002Xml,
+        },
+        {
+          h2: "pain.002-statuskoder",
+          paras: [
+            "GrpSts, PmtInfSts och TxSts använder samma ISO 20022-kodlista. Vilka koder banken skickar, och på vilken nivå, avgörs av banken och dess tillämpningsanvisning.",
+          ],
+          fieldsHeaders: ["Kod", "Betydelse"],
+          fields: [
+            [
+              "RCVD",
+              "Received: banken har tagit emot filen men inte ännu validerat den.",
+            ],
+            [
+              "ACTC",
+              "AcceptedTechnicalValidation: syntax- och schemakontroller godkända.",
+            ],
+            [
+              "ACCP",
+              "AcceptedCustomerProfile: bankens kundkontroller, såsom avtal och behörigheter, godkända.",
+            ],
+            ["ACSP", "AcceptedSettlementInProcess: godkänd, avveckling pågår."],
+            [
+              "ACSC",
+              "AcceptedSettlementCompleted: debiterad från betalarens konto.",
+            ],
+            [
+              "PDNG",
+              "Pending: väntar på ytterligare kontroller eller ett senare förfallodatum.",
+            ],
+            [
+              "PART",
+              "PartiallyAccepted: en del av betalningarna i filen eller batchen avvisades.",
+            ],
+            ["RJCT", "Rejected: avvisad; orsaken finns i StsRsnInf/Rsn/Cd."],
           ],
         },
         {
@@ -372,6 +657,47 @@ const content = {
           ],
         },
         {
+          h2: "camt.054-ilmoituksen keskeiset elementit",
+          paras: [
+            "camt.054 käyttää samaa Ntry- ja TxDtls-rakennetta kuin camt.053, mutta siinä ei ole Bal-saldoelementtejä. Alla olevat polut löytyvät sekä camt.054.001.02- että 001.08-versiosta; versiossa 08 tila on muodossa Sts/Cd. Pankin soveltamisohje määrittää täytettävät valinnaiset elementit.",
+            "Lyhennetty esimerkki on havainnollistava, ei pankin tuottama aineisto.",
+          ],
+          fields: [
+            ["GrpHdr/MsgId", "Ilmoitussanoman yksilöivä tunniste."],
+            [
+              "Ntfctn/Id, Ntfctn/CreDtTm",
+              "Ilmoituksen tunniste ja luontiaika.",
+            ],
+            [
+              "Ntfctn/Acct/Id/IBAN",
+              "Tili, jota veloitukset tai hyvitykset koskevat.",
+            ],
+            [
+              "Ntfctn/Ntry",
+              "Yksi ilmoitettu kirjaus: Amt ja Ccy, CdtDbtInd (CRDT/DBIT), Sts, BookgDt ja ValDt.",
+            ],
+            [
+              "Ntry/BkTxCd",
+              "Pankkitapahtumakoodi, joka luokittelee kirjauksen.",
+            ],
+            [
+              "Ntry/NtryDtls/Btch/NbOfTxs",
+              "Tapahtumien määrä, kun kirjaus on koonti, esimerkiksi usean viitemaksun yhteissumma.",
+            ],
+            [
+              "NtryDtls/TxDtls/AmtDtls/TxAmt",
+              "Yksittäisen tapahtuman summa koontikirjauksen sisällä.",
+            ],
+            ["TxDtls/Refs/EndToEndId", "Maksajan end-to-end-viite."],
+            ["TxDtls/RltdPties/Dbtr/Nm", "Maksajan nimi."],
+            [
+              "TxDtls/RmtInf/Strd/CdtrRefInf/Ref",
+              "Rakenteinen viite laskuun kohdistamiseen.",
+            ],
+          ],
+          xml: camt054Xml,
+        },
+        {
           h2: "Näin camt.054 noudetaan",
           paras: [
             "ISECure hoitaa pankin WS-kanavan, varmenteet, allekirjoitukset ja tiedostonoudon. Ohjelmistosi listaa ja lataa raaka-aineiston REST API:n, SDK:n tai tiedostosynkronoinnin kautta ja käsittelee pankin toimittaman ISO 20022 XML:n.",
@@ -443,6 +769,41 @@ const content = {
           ],
         },
         {
+          h2: "Key elements of a camt.054 notification",
+          paras: [
+            "camt.054 reuses the Ntry and TxDtls structure of camt.053 but carries no Bal balance elements. The paths below exist in both camt.054.001.02 and 001.08; in version 08 the status is nested as Sts/Cd. The bank's implementation guideline defines which optional elements it fills.",
+            "The shortened example is illustrative, not a file produced by a bank.",
+          ],
+          fields: [
+            ["GrpHdr/MsgId", "Unique identifier of the notification message."],
+            [
+              "Ntfctn/Id, Ntfctn/CreDtTm",
+              "Notification identifier and creation time.",
+            ],
+            ["Ntfctn/Acct/Id/IBAN", "Account the debits or credits concern."],
+            [
+              "Ntfctn/Ntry",
+              "One notified entry: Amt with Ccy, CdtDbtInd (CRDT/DBIT), Sts, BookgDt and ValDt.",
+            ],
+            ["Ntry/BkTxCd", "Bank transaction code classifying the entry."],
+            [
+              "Ntry/NtryDtls/Btch/NbOfTxs",
+              "Number of transactions when the entry is a batch, such as a lump-sum credit of several reference payments.",
+            ],
+            [
+              "NtryDtls/TxDtls/AmtDtls/TxAmt",
+              "Amount of a single transaction inside a batch entry.",
+            ],
+            ["TxDtls/Refs/EndToEndId", "Payer's end-to-end reference."],
+            ["TxDtls/RltdPties/Dbtr/Nm", "Payer name."],
+            [
+              "TxDtls/RmtInf/Strd/CdtrRefInf/Ref",
+              "Structured creditor reference for matching to an invoice.",
+            ],
+          ],
+          xml: camt054Xml,
+        },
+        {
           h2: "How camt.054 is retrieved",
           paras: [
             "ISECure handles the bank's WS channel, certificates, signing, and file retrieval. Your software lists and downloads the raw file through the REST API, SDK, or file synchronization, then processes the ISO 20022 XML delivered by the bank.",
@@ -512,6 +873,44 @@ const content = {
             "camt.053 är ett kontoutdrag som sammanfattar saldon och bokförda poster för en rapportperiod. camt.054 är en avisering om enskilda eller grupperade debiteringar och krediteringar. När banken erbjuder filen kan programvaran stämma av inkommande betalningar tidigare.",
             "Tillgänglighet, leveransfrekvens, innehåll och schemaversion beror på banken och företagsavtalet. camt.054 betyder därför inte automatiskt ett transaktionsflöde i realtid.",
           ],
+        },
+        {
+          h2: "Centrala element i en camt.054-avisering",
+          paras: [
+            "camt.054 återanvänder Ntry- och TxDtls-strukturen från camt.053 men saknar Bal-saldoelement. Sökvägarna nedan finns i både camt.054.001.02 och 001.08; i version 08 är statusen nästlad som Sts/Cd. Bankens tillämpningsanvisning avgör vilka valfria element den fyller i.",
+            "Det förkortade exemplet är illustrativt, inte en fil från en bank.",
+          ],
+          fields: [
+            ["GrpHdr/MsgId", "Unik identifierare för aviseringsmeddelandet."],
+            [
+              "Ntfctn/Id, Ntfctn/CreDtTm",
+              "Aviseringens identifierare och skapandetid.",
+            ],
+            [
+              "Ntfctn/Acct/Id/IBAN",
+              "Kontot som debiteringarna eller krediteringarna gäller.",
+            ],
+            [
+              "Ntfctn/Ntry",
+              "En aviserad post: Amt med Ccy, CdtDbtInd (CRDT/DBIT), Sts, BookgDt och ValDt.",
+            ],
+            ["Ntry/BkTxCd", "Banktransaktionskod som klassificerar posten."],
+            [
+              "Ntry/NtryDtls/Btch/NbOfTxs",
+              "Antal transaktioner när posten är en samlingspost, till exempel en klumpsumma av flera referensbetalningar.",
+            ],
+            [
+              "NtryDtls/TxDtls/AmtDtls/TxAmt",
+              "Beloppet för en enskild transaktion inom en samlingspost.",
+            ],
+            ["TxDtls/Refs/EndToEndId", "Betalarens end-to-end-referens."],
+            ["TxDtls/RltdPties/Dbtr/Nm", "Betalarens namn."],
+            [
+              "TxDtls/RmtInf/Strd/CdtrRefInf/Ref",
+              "Strukturerad kreditorreferens för avstämning mot faktura.",
+            ],
+          ],
+          xml: camt054Xml,
         },
         {
           h2: "Så hämtas camt.054",

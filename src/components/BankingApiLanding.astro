@@ -70,6 +70,7 @@ const content = {
     ],
     whyEyebrow: "Integraatiomalli",
     whyTitle: "Miksi tämä on helpompaa kuin pankkikohtaiset integraatiot",
+    whyLink: "Pankkiyhteysohjelma: rakenna itse vai osta palveluna",
     whyLead:
       "Pankkiyhteys ei ole vain tiedoston lähettämistä. Tuotantokelpoinen integraatio vaatii varmenteet, pankkikohtaiset erot, auditoinnin, tilinhallinnan, oikeudet, virhetilanteet ja turvallisen avaintenhallinnan.",
     benefits: [
@@ -227,6 +228,7 @@ const content = {
     ],
     whyEyebrow: "Integration model",
     whyTitle: "Why this is simpler than bank-by-bank integrations",
+    whyLink: "Bank connectivity: build or buy as a service",
     whyLead:
       "Bank connectivity is more than uploading a file. A production-ready integration needs certificates, bank-specific behavior, account management, permissions, audit trails, error handling, and secure key management.",
     benefits: [
@@ -384,6 +386,7 @@ const content = {
     ],
     whyEyebrow: "Integrationsmodell",
     whyTitle: "Varför detta är enklare än bankvisa integrationer",
+    whyLink: "Bankförbindelse: bygga själv eller köpa som tjänst",
     whyLead:
       "Bankförbindelser handlar inte bara om att skicka en fil. En produktionsklar integration kräver certifikat, bankvisa beteenden, revision, felhantering och säker nyckelhantering.",
     benefits: [
@@ -616,7 +619,13 @@ const t = content[lang];
         eyebrow={t.whyEyebrow}
         title={t.whyTitle}
         lead={t.whyLead}
-      />
+      >
+        <p>
+          <a href={lang === "fi" ? "/pankkiyhteys/" : `/${lang}/pankkiyhteys/`}
+            >{t.whyLink}</a
+          >
+        </p>
+      </SectionHeading>
       <FeatureGrid
         columns={2}
         items={t.benefits.map((benefit, index) => ({

@@ -42,6 +42,7 @@
     "api:validate": "node scripts/validate-openapi.mjs && node scripts/validate-platform-openapi.mjs",
     "gsc": "node --env-file=.env scripts/gsc-pull.mjs",
     "gsc:reconcile": "node --env-file=.env scripts/gsc-manage.mjs",
+    "indexnow": "node scripts/indexnow.mjs",
     "growth:report": "node --env-file=.env scripts/growth-report.mjs",
     "analytics:configure": "node --env-file=.env scripts/analytics-configure.mjs",
     "lint": "yarn eslint \"src/**/*.{js,ts,astro}\" \"scripts/**/*.{js,mjs}\"",

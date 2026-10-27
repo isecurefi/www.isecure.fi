@@ -24,6 +24,11 @@ interface GuideSection {
   h2: string;
   paras: string[];
   list?: string[];
+  // Element path → meaning rows, rendered as a two-column table.
+  fields?: Array<[string, string]>;
+  fieldsHeaders?: [string, string];
+  // Shortened illustrative XML, rendered verbatim.
+  xml?: string;
 }
 interface Source {
   href: string;
@@ -72,6 +77,11 @@ const faqTitle = {
   en: "Frequently asked questions",
   se: "Vanliga frågor",
 }[lang];
+const defaultFieldHeaders = {
+  fi: ["Elementti", "Merkitys"],
+  en: ["Element", "Meaning"],
+  se: ["Element", "Betydelse"],
+}[lang];
 const relatedHref = (s: string) =>
   lang === "fi" ? `/${s}/` : `/${lang}/${s}/`;
 ---
@@ -104,6 +114,27 @@ const relatedHref = (s: string) =>
                   ))}
                 </ul>
               )}
+              {s.fields && (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>{(s.fieldsHeaders ?? defaultFieldHeaders)[0]}</th>
+                      <th>{(s.fieldsHeaders ?? defaultFieldHeaders)[1]}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {s.fields.map(([path, meaning]) => (
+                      <tr>
+                        <td>
+                          <code>{path}</code>
+                        </td>
+                        <td>{meaning}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+              {s.xml && <pre set:text={s.xml} />}
             </section>
           ))
         }

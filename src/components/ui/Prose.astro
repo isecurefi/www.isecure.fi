@@ -53,6 +53,20 @@
     padding: 0.1em 0.35em;
   }
 
+  .ui-prose :global(pre) {
+    background: var(--landing-soft);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 1.5em 0;
+    overflow-x: auto;
+    padding: 14px 16px;
+  }
+
+  .ui-prose :global(td code) {
+    overflow-wrap: anywhere;
+  }
+
   .ui-prose :global(table) {
     border-collapse: collapse;
     margin: 1.5em 0;
