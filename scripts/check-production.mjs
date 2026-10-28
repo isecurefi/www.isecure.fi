@@ -136,6 +136,18 @@ const checks = [
       "https://www.isecure.fi:443/wsapi_v2.json?source=production-check",
   },
   {
+    name: "Legacy apex Swagger UI redirects to the API reference",
+    url: "https://isecure.fi/ws-api/?source=production-check",
+    status: 301,
+    location: "https://www.isecure.fi:443/wsapi_v2/?source=production-check",
+  },
+  {
+    name: "Legacy sitemap path redirects to the sitemap index",
+    url: "https://www.isecure.fi/sitemap.xml",
+    status: 301,
+    location: "https://www.isecure.fi/sitemap-index.xml",
+  },
+  {
     name: "Legacy statement files are blocked",
     url: "https://isecure.fi/tiliote/kuvaus.pdf",
     status: 403,

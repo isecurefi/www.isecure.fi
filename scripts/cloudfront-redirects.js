@@ -44,6 +44,7 @@ function handler(event) {
   }
 
   var map = {
+    "/sitemap.xml": "/sitemap-index.xml",
     "/thankyou.html": "/thankyou/",
     "/ws-kanava.html": "/web-services/",
     "/ws-api.html": "/",

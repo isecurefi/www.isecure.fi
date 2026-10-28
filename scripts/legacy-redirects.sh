@@ -86,6 +86,10 @@ API_DOCS_HTML_RULE=$(ensure_api_docs_rule \
   '["/wsapi_v2","/wsapi_v2/","/wsapi_v2/index.html"]' '/wsapi_v2/')
 API_DOCS_JSON_RULE=$(ensure_api_docs_rule \
   '/wsapi_v2.json' 6 '["/wsapi_v2.json"]' '/wsapi_v2.json')
+# The apex still hosts an old Swagger UI copy under /ws-api/. API documentation
+# never redirects to the homepage, so send it to the canonical reference.
+LEGACY_SWAGGER_RULE=$(ensure_api_docs_rule \
+  '/ws-api/*' 7 '["/ws-api","/ws-api/*"]' '/wsapi_v2/')
 
 echo "== 3/9 ALB: reconcile the intended apex rules"
 aws elbv2 modify-rule --region "$REGION" --rule-arn "$WS_REDIRECT_RULE" \
@@ -99,7 +103,8 @@ aws elbv2 set-rule-priorities --region "$REGION" --rule-priorities \
   "RuleArn=$WS_REDIRECT_RULE,Priority=3" \
   "RuleArn=$INDEX_EN_REDIRECT_RULE,Priority=4" \
   "RuleArn=$API_DOCS_HTML_RULE,Priority=5" \
-  "RuleArn=$API_DOCS_JSON_RULE,Priority=6" >/dev/null
+  "RuleArn=$API_DOCS_JSON_RULE,Priority=6" \
+  "RuleArn=$LEGACY_SWAGGER_RULE,Priority=7" >/dev/null
 aws elbv2 modify-target-group --region "$REGION" \
   --target-group-arn "$TARGET_GROUP_ARN" \
   --matcher 'HttpCode=200-399' >/dev/null
@@ -185,5 +190,7 @@ test "$(curl -sS -o /dev/null -w '%{http_code}' https://www.isecure.fi/camt-053)
 test "$(curl -sS -o /dev/null -w '%{http_code}' https://www.isecure.fi/iso-20022)" = 301
 test "$(curl -sS -o /dev/null -w '%{http_code}' https://www.isecure.fi/thankyou.html)" = 301
 test "$(curl -sS -o /dev/null -w '%{redirect_url}' https://www.isecure.fi/en/ws-api/)" = 'https://www.isecure.fi/en/'
+test "$(curl -sS -o /dev/null -w '%{redirect_url}' 'https://isecure.fi/ws-api/?source=reconcile')" = 'https://www.isecure.fi:443/wsapi_v2/?source=reconcile'
+test "$(curl -sS -o /dev/null -w '%{redirect_url}' https://www.isecure.fi/sitemap.xml)" = 'https://www.isecure.fi/sitemap-index.xml'
 test "$(curl -sS -o /dev/null -w '%{redirect_url}' https://www.isecure.fi/ws-channel/)" = 'https://www.isecure.fi/web-services/'
 echo "Reconciliation complete. Retired S3 backups: $BACKUP_DIR"

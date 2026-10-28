@@ -52,6 +52,11 @@ const cases = [
     expected: "https://www.isecure.fi/en/?source=old-link",
   },
   {
+    name: "legacy sitemap path points to the sitemap index",
+    uri: "/sitemap.xml",
+    expected: "https://www.isecure.fi/sitemap-index.xml",
+  },
+  {
     name: "retired WS channel alias redirects to the Web Services page",
     uri: "/ws-channel/",
     expected: "https://www.isecure.fi/web-services/",
