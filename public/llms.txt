@@ -6,7 +6,7 @@ ISECure Oy (Helsinki, Finland) is used by Finnish accounting and ERP software pr
 
 Security and operations: private key storage uses AWS KMS encryption in a PCI DSS level system, and the service is hosted separately from the customer software team to reduce exposure and compliance scope. PKI certificate enrollment, renewals, and import/export/storage are handled by ISECure, file materials can require PGP signatures, and bank traffic goes through a hardened interface for sensitive financial operations.
 
-Supported bank connectivity: Nordea, OP, Danske Bank, S-Pankki/LähiTapiola, and Ålandsbanken directly; Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections.
+Supported bank connectivity: Nordea, OP, Danske Bank, S-Pankki, and Ålandsbanken directly; Handelsbanken, Aktia, POP Bank, Savings Bank, and OmaSP through Samlink and Crosskey connections.
 
 Implementation note: ISECure does not filter or process bank file types as product-specific materials. Bank files pass through the service; bank agreements, credentials, and certificates are still required.
 

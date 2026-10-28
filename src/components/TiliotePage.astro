@@ -137,6 +137,15 @@ const content = {
         ],
       },
       {
+        h2: "Mitä suomalaisten pankkien ohjeet sanovat camt.053:sta",
+        paras: [
+          "Finanssialan ISO 20022 Transaction Reporting Guide (versio 1.4, elokuu 2020) määrittelee camt.053:n pankin viralliseksi tiliotteeksi, jonka kirjanpitolautakunta on hyväksynyt. Se raportoi kirjatut tapahtumat, niiden erittelyt ja saldot; päivänsisäiseen raportointiin käytetään camt.052:ta.",
+          "OP:n XML-tiliraportoinnin asiakasohje (huhtikuu 2016) kuvaa kolme camt.053-aineistoa: tiliote (TI), uusintatiliote (TU) ja konsernitiliote (KT). Nouto edellyttää kirjallista sopimusta, jossa sovitaan camt-versio ja pakkaamattoman aineiston enimmäiskoko; sitä suuremmat aineistot jaetaan osiin.",
+          "Nordean Corporate Access Account Reporting -ohje (versio 1.8, marraskuu 2021) kattaa Suomen, Ruotsin, Norjan ja Tanskan. Yksi tiedosto sisältää yhden sanoman, ja kirjaus sisältää yhden tai useamman tapahtumaerittelyn asiakkaan valitseman kirjaustavan mukaan. Danske Bankin CGI-ohje (versio 7.0, syyskuu 2026) rakentuu Common Global Implementation -suosituksen ja Suomen kansallisten suositusten päälle. Samlinkin Web Services -palvelukuvaus (versio 1.5, heinäkuu 2025) listaa XML-tiliotteen aineistotyypillä XT.",
+          "Kaikki alla luetellut dokumentit kuvaavat version camt.053.001.02.",
+        ],
+      },
+      {
         h2: "Tiliotteet ISECuren kautta",
         paras: [
           "ISECure noutaa camt.053-tiliotteet tukemiltamme suomalaisilta pankeilta yhdellä REST-rajapinnalla. Hoidamme varmenteet ja allekirjoitukset, joten ohjelmistosi saa tiliotteet valmiina yhdestä paikasta samalla integraatiolla.",
@@ -147,6 +156,31 @@ const content = {
       {
         href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.053",
         label: "ISO 20022 -sanomaluettelo: camt.053 BankToCustomerStatement",
+      },
+      {
+        href: "https://www.finanssiala.fi/wp-content/uploads/2021/03/ISO-20022-Transaction-Reporting-Guide-2020.pdf",
+        label:
+          "Finanssiala: ISO 20022 Transaction Reporting Guide, versio 1.4, 25.8.2020",
+      },
+      {
+        href: "https://www.op.fi/documents/10208/66230/B2C-tiliraportoinnin-asiakasohje-042016/27a98c75-d2b9-4c5e-a5c4-845de6a84154",
+        label:
+          "OP: Yrityksen pankkiyhteys -kanavasta noudettavien XML-tiliraportointiaineistojen asiakasohje, huhtikuu 2016",
+      },
+      {
+        href: "https://www.nordea.com/en/doc/caar-camt-053-001-02-account-statement-standard-v1.80.pdf",
+        label:
+          "Nordea: Corporate Access Account Reporting, camt.053.001.02 Account Statement Standard, MIG 1.8, 9.11.2021",
+      },
+      {
+        href: "https://danskeci.com/-/media/pdf/danskeci-com/iso-20022-xml/camt,-d-,053,-d-,001,-d-,02-cgi.pdf?rev=6be4277d69fe43119f807507beceae0a&hash=E3E23B40B9B1213EA94F04E451CE3B89",
+        label:
+          "Danske Bank: camt.053.001.02 CGI Message Implementation Guide, versio 7.0, 9.9.2026",
+      },
+      {
+        href: "https://samlink.fi/app/uploads/2025/10/WSPalvelukuvausSp.pdf",
+        label:
+          "Samlink: Säästöpankit Web Services -yhteys, palvelukuvaus versio 1.5, 4.7.2025",
       },
     ],
     faq: [
@@ -258,6 +292,15 @@ const content = {
         ],
       },
       {
+        h2: "What Finnish bank specifications say about camt.053",
+        paras: [
+          "Finance Finland's ISO 20022 Transaction Reporting Guide (version 1.4, August 2020) defines camt.053 as the official account statement supplied by the bank and approved by the Finnish Accounting Standards Board. It reports booked transactions, their specifying transactions and balances; intraday reporting uses camt.052.",
+          "OP's XML account reporting guide (April 2016) describes three camt.053 files: statement (TI), re-issued statement (TU) and group account statement (KT). Retrieval requires a written agreement that fixes the camt version and the maximum uncompressed file size; larger files are split.",
+          "Nordea's Corporate Access Account Reporting guide (version 1.8, November 2021) covers Finland, Sweden, Norway and Denmark. One file holds one message, and each entry holds one or more transaction details depending on the booking option the customer has chosen. Danske Bank's CGI guide (version 7.0, September 2026) builds on the Common Global Implementation recommendation and the Finnish national recommendations. Samlink's Web Services service description (version 1.5, July 2025) lists the XML statement as file type XT.",
+          "Every document listed below describes version camt.053.001.02.",
+        ],
+      },
+      {
         h2: "Statements through ISECure",
         paras: [
           "ISECure retrieves camt.053 statements from the Finnish banks we support through one REST API. We handle certificates and signing, so your software gets statements from one place with the same integration.",
@@ -268,6 +311,31 @@ const content = {
       {
         href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.053",
         label: "ISO 20022 message catalogue: camt.053 BankToCustomerStatement",
+      },
+      {
+        href: "https://www.finanssiala.fi/wp-content/uploads/2021/03/ISO-20022-Transaction-Reporting-Guide-2020.pdf",
+        label:
+          "Finance Finland: ISO 20022 Transaction Reporting Guide, version 1.4, 25 August 2020",
+      },
+      {
+        href: "https://www.op.fi/documents/10208/66230/B2C-tiliraportoinnin-asiakasohje-042016/27a98c75-d2b9-4c5e-a5c4-845de6a84154",
+        label:
+          "OP: Customer guide for XML account reporting files retrieved from the corporate bank connection channel, April 2016",
+      },
+      {
+        href: "https://www.nordea.com/en/doc/caar-camt-053-001-02-account-statement-standard-v1.80.pdf",
+        label:
+          "Nordea: Corporate Access Account Reporting, camt.053.001.02 Account Statement Standard, MIG 1.8, 9 November 2021",
+      },
+      {
+        href: "https://danskeci.com/-/media/pdf/danskeci-com/iso-20022-xml/camt,-d-,053,-d-,001,-d-,02-cgi.pdf?rev=6be4277d69fe43119f807507beceae0a&hash=E3E23B40B9B1213EA94F04E451CE3B89",
+        label:
+          "Danske Bank: camt.053.001.02 CGI Message Implementation Guide, version 7.0, 9 September 2026",
+      },
+      {
+        href: "https://samlink.fi/app/uploads/2025/10/WSPalvelukuvausSp.pdf",
+        label:
+          "Samlink: Säästöpankit Web Services connection, service description version 1.5, 4 July 2025",
       },
     ],
     faq: [
@@ -382,6 +450,15 @@ const content = {
         ],
       },
       {
+        h2: "Vad de finländska bankernas specifikationer säger om camt.053",
+        paras: [
+          "Finance Finlands ISO 20022 Transaction Reporting Guide (version 1.4, augusti 2020) definierar camt.053 som bankens officiella kontoutdrag, godkänt av bokföringsnämnden. Det rapporterar bokförda transaktioner, deras specifikationer och saldon; för rapportering under dagen används camt.052.",
+          "OP:s kundanvisning för XML-kontorapportering (april 2016) beskriver tre camt.053-filer: kontoutdrag (TI), nytt kontoutdrag (TU) och koncernkontoutdrag (KT). Hämtning kräver ett skriftligt avtal där camt-versionen och den okomprimerade filens maximistorlek fastställs; större filer delas upp.",
+          "Nordeas Corporate Access Account Reporting-guide (version 1.8, november 2021) täcker Finland, Sverige, Norge och Danmark. En fil innehåller ett meddelande, och varje post innehåller en eller flera transaktionsdetaljer beroende på det bokföringsalternativ kunden valt. Danske Banks CGI-guide (version 7.0, september 2026) bygger på Common Global Implementation-rekommendationen och de finländska nationella rekommendationerna. Samlinks Web Services-tjänstebeskrivning (version 1.5, juli 2025) listar XML-kontoutdraget som filtyp XT.",
+          "Alla dokument nedan beskriver version camt.053.001.02.",
+        ],
+      },
+      {
         h2: "Kontoutdrag via ISECure",
         paras: [
           "ISECure hämtar camt.053-kontoutdrag från de finländska banker vi stöder via ett REST-API. Vi sköter certifikaten och signeringen, så din programvara får kontoutdragen från ett ställe med samma integration.",
@@ -392,6 +469,31 @@ const content = {
       {
         href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.053",
         label: "ISO 20022-meddelandekatalog: camt.053 BankToCustomerStatement",
+      },
+      {
+        href: "https://www.finanssiala.fi/wp-content/uploads/2021/03/ISO-20022-Transaction-Reporting-Guide-2020.pdf",
+        label:
+          "Finance Finland: ISO 20022 Transaction Reporting Guide, version 1.4, 25 augusti 2020",
+      },
+      {
+        href: "https://www.op.fi/documents/10208/66230/B2C-tiliraportoinnin-asiakasohje-042016/27a98c75-d2b9-4c5e-a5c4-845de6a84154",
+        label:
+          "OP: Kundanvisning för XML-kontorapporteringsfiler som hämtas via företagets bankförbindelsekanal, april 2016",
+      },
+      {
+        href: "https://www.nordea.com/en/doc/caar-camt-053-001-02-account-statement-standard-v1.80.pdf",
+        label:
+          "Nordea: Corporate Access Account Reporting, camt.053.001.02 Account Statement Standard, MIG 1.8, 9 november 2021",
+      },
+      {
+        href: "https://danskeci.com/-/media/pdf/danskeci-com/iso-20022-xml/camt,-d-,053,-d-,001,-d-,02-cgi.pdf?rev=6be4277d69fe43119f807507beceae0a&hash=E3E23B40B9B1213EA94F04E451CE3B89",
+        label:
+          "Danske Bank: camt.053.001.02 CGI Message Implementation Guide, version 7.0, 9 september 2026",
+      },
+      {
+        href: "https://samlink.fi/app/uploads/2025/10/WSPalvelukuvausSp.pdf",
+        label:
+          "Samlink: Sparbankerna Web Services-anslutning, tjänstebeskrivning version 1.5, 4 juli 2025",
       },
     ],
     faq: [

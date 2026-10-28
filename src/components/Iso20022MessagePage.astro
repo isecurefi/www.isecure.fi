@@ -936,6 +936,14 @@ const content = {
           ],
         },
         {
+          h2: "Mitä suomalaisten pankkien ohjeet sanovat camt.054:stä",
+          paras: [
+            "Finanssialan ISO 20022 Transaction Reporting Guide (versio 1.4, elokuu 2020) määrittelee, että camt.054 sisältää vain erittelytapahtumat ilman saldotietoja ja että se korvaa muun muassa vanhan Saapuvat viitemaksut -kuvauksen. Sanomalla voidaan eritellä sekä saapuvia että lähteviä maksuja.",
+            "OP:n XML-tiliraportoinnin asiakasohje (huhtikuu 2016) nimeää camt.054:n viitepalvelun tapahtumaluetteloksi (TL), joka sisältää OP:ssa ainoastaan viitteelliset tapahtumat. Lähtevistä maksuista OP:n C2B-asiakasohje (lokakuu 2026) kuvaa erillisen camt.054-palautteen onnistuneesti maksetuista maksuista, joka muodostetaan klo 12, 15, 18 ja 21.30, jos siitä on sovittu.",
+            "Nordean Corporate Access -ohje (versio 1.9, elokuu 2022) kuvaa camt.054:n hyvitysilmoituksena saapuneista maksuista; Suomessa se kattaa viitteelliset ja viitteettömät SEPA-maksut, suoramaksut, SEPA-suoraveloitukset ja ulkomaanmaksut. Nordean Suomen liite (toukokuu 2026) lisää, että veloitusilmoitus camt.054 toimitetaan pankkipäivinä klo 23 CET mennessä ja että tiedot toteutuneista maksuista päivittyvät noin klo 07.00, 14.00 ja 17.30 CET. Danske Bankin CGI-ohje (versio 7.0, syyskuu 2026) ja Samlinkin palvelukuvaus (versio 1.5, heinäkuu 2025, aineistotyypit XE ja XM) kuvaavat niin ikään version camt.054.001.02.",
+          ],
+        },
+        {
           h2: "Processing API ei laajenna camt.054-tukea",
           paras: [
             "Tuotannossa oleva ISECure REST API — File Exchange kuljettaa camt.054-tiedoston muuttamatta sen sisältöä. Erillisen Processing API:n tämänhetkinen julkinen testikuvaus koskee pain.001-maksuaineiston muodostamista; se ei lupaa camt.054-normalisointia tai pankki- ja versiokohtaista tukea.",
@@ -947,6 +955,40 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.054",
           label:
             "ISO 20022 -sanomaluettelo: camt.054 BankToCustomerDebitCreditNotification",
+        },
+        {
+          href: "https://www.finanssiala.fi/wp-content/uploads/2021/03/ISO-20022-Transaction-Reporting-Guide-2020.pdf",
+          label:
+            "Finanssiala: ISO 20022 Transaction Reporting Guide, versio 1.4, 25.8.2020",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/66230/B2C-tiliraportoinnin-asiakasohje-042016/27a98c75-d2b9-4c5e-a5c4-845de6a84154",
+          label:
+            "OP: XML-tiliraportointiaineistojen asiakasohje, huhtikuu 2016, luku 4",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/2980783/C2B%20asiakasohje%20pain%2003%20joulukuu%202025.pdf/1072228b-be9e-ae4f-3d5b-40edce4b9052?t=1764683634504",
+          label: "OP: C2B-palvelut, pain 03 -asiakasohje, luvut 2.1 ja 4.4",
+        },
+        {
+          href: "https://www.nordea.com/en/doc/nordea-caar-camt.054.001.02-credit-notification.pdf",
+          label:
+            "Nordea: Corporate Access Account Reporting, camt.054.001.02 Credit Notification, MIG 1.9, 1.8.2022",
+        },
+        {
+          href: "https://www.nordea.com/sites/default/files/2026-05/corporate-access-payables-country-appendix-finland.pdf",
+          label:
+            "Nordea: Corporate Access Payables – Appendix Finland, 18.5.2026, luku 2.8.1",
+        },
+        {
+          href: "https://danskeci.com/-/media/pdf/danskeci-com/iso-20022-xml/camt,-d-,054,-d-,001,-d-,02-cgi.pdf?rev=f9662aee312c4a53a7ea1fcf69620802&hash=1A85E0C6CFFCA746911348A72F370A00",
+          label:
+            "Danske Bank: camt.054.001.02 CGI Message Implementation Guide, versio 7.0, 9.9.2026",
+        },
+        {
+          href: "https://samlink.fi/app/uploads/2025/10/WSPalvelukuvausSp.pdf",
+          label:
+            "Samlink: Säästöpankit Web Services -yhteys, palvelukuvaus versio 1.5, 4.7.2025",
         },
       ],
       faq: [
@@ -1042,6 +1084,14 @@ const content = {
           ],
         },
         {
+          h2: "What Finnish bank specifications say about camt.054",
+          paras: [
+            "Finance Finland's ISO 20022 Transaction Reporting Guide (version 1.4, August 2020) states that camt.054 contains only specifying transactions and no balance data, and that it replaced the older Incoming reference payments description among others. The message can specify both incoming and outgoing payments.",
+            "OP's XML account reporting guide (April 2016) names camt.054 the reference service transaction list (TL), which at OP contains only reference payment transactions. For outgoing payments, OP's C2B customer guide (October 2026) describes a separate camt.054 feedback on successfully paid invoices, produced at 12, 15, 18 and 21.30 when agreed.",
+            "Nordea's Corporate Access guide (version 1.9, August 2022) describes camt.054 as a credit notification of received payments; for Finland it covers reference and non-reference SEPA payments, direct payments, SEPA direct debits and cross-border payments. Nordea's Finland appendix (May 2026) adds that the debit notification camt.054 is delivered on banking days by 23 CET, with executed-payment information updated at about 07.00, 14.00 and 17.30 CET. Danske Bank's CGI guide (version 7.0, September 2026) and Samlink's service description (version 1.5, July 2025, file types XE and XM) likewise describe version camt.054.001.02.",
+          ],
+        },
+        {
           h2: "Processing API does not expand camt.054 support",
           paras: [
             "The production ISECure REST API — File Exchange transports camt.054 without changing its content. The current public test scope of the separate Processing API covers pain.001 payment generation; it does not promise camt.054 normalization or bank- and version-specific support.",
@@ -1053,6 +1103,41 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.054",
           label:
             "ISO 20022 message catalogue: camt.054 BankToCustomerDebitCreditNotification",
+        },
+        {
+          href: "https://www.finanssiala.fi/wp-content/uploads/2021/03/ISO-20022-Transaction-Reporting-Guide-2020.pdf",
+          label:
+            "Finance Finland: ISO 20022 Transaction Reporting Guide, version 1.4, 25 August 2020",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/66230/B2C-tiliraportoinnin-asiakasohje-042016/27a98c75-d2b9-4c5e-a5c4-845de6a84154",
+          label:
+            "OP: Customer guide for XML account reporting files, April 2016, section 4",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/2980783/C2B%20asiakasohje%20pain%2003%20joulukuu%202025.pdf/1072228b-be9e-ae4f-3d5b-40edce4b9052?t=1764683634504",
+          label:
+            "OP: C2B-palvelut, pain 03 customer guide, sections 2.1 and 4.4",
+        },
+        {
+          href: "https://www.nordea.com/en/doc/nordea-caar-camt.054.001.02-credit-notification.pdf",
+          label:
+            "Nordea: Corporate Access Account Reporting, camt.054.001.02 Credit Notification, MIG 1.9, 1 August 2022",
+        },
+        {
+          href: "https://www.nordea.com/sites/default/files/2026-05/corporate-access-payables-country-appendix-finland.pdf",
+          label:
+            "Nordea: Corporate Access Payables – Appendix Finland, 18 May 2026, section 2.8.1",
+        },
+        {
+          href: "https://danskeci.com/-/media/pdf/danskeci-com/iso-20022-xml/camt,-d-,054,-d-,001,-d-,02-cgi.pdf?rev=f9662aee312c4a53a7ea1fcf69620802&hash=1A85E0C6CFFCA746911348A72F370A00",
+          label:
+            "Danske Bank: camt.054.001.02 CGI Message Implementation Guide, version 7.0, 9 September 2026",
+        },
+        {
+          href: "https://samlink.fi/app/uploads/2025/10/WSPalvelukuvausSp.pdf",
+          label:
+            "Samlink: Säästöpankit Web Services connection, service description version 1.5, 4 July 2025",
         },
       ],
       faq: [
@@ -1151,6 +1236,14 @@ const content = {
           ],
         },
         {
+          h2: "Vad de finländska bankernas specifikationer säger om camt.054",
+          paras: [
+            "Finance Finlands ISO 20022 Transaction Reporting Guide (version 1.4, augusti 2020) anger att camt.054 endast innehåller specificerande transaktioner utan saldouppgifter och att den bland annat ersatte den äldre beskrivningen för inkommande referensbetalningar. Meddelandet kan specificera både inkommande och utgående betalningar.",
+            "OP:s kundanvisning för XML-kontorapportering (april 2016) kallar camt.054 referenstjänstens transaktionsförteckning (TL), som hos OP endast innehåller referensbetalningar. För utgående betalningar beskriver OP:s C2B-kundanvisning (oktober 2026) en separat camt.054-återkoppling om betalda fakturor, som skapas kl. 12, 15, 18 och 21.30 när det avtalats.",
+            "Nordeas Corporate Access-guide (version 1.9, augusti 2022) beskriver camt.054 som en kreditavisering om mottagna betalningar; för Finland täcker den SEPA-betalningar med och utan referens, direktbetalningar, SEPA-direktdebiteringar och utlandsbetalningar. Nordeas Finlandsbilaga (maj 2026) tillägger att debetaviseringen camt.054 levereras på bankdagar senast kl. 23 CET och att uppgifter om genomförda betalningar uppdateras cirka kl. 07.00, 14.00 och 17.30 CET. Danske Banks CGI-guide (version 7.0, september 2026) och Samlinks tjänstebeskrivning (version 1.5, juli 2025, filtyperna XE och XM) beskriver likaså version camt.054.001.02.",
+          ],
+        },
+        {
           h2: "Processing API utökar inte stödet för camt.054",
           paras: [
             "ISECure REST API — File Exchange i produktion transporterar camt.054 utan att ändra innehållet. Den nuvarande offentliga testomfattningen för det separata Processing API:t gäller generering av pain.001-betalningar; den lovar inte camt.054-normalisering eller bank- och versionsspecifikt stöd.",
@@ -1162,6 +1255,40 @@ const content = {
           href: "https://www.iso20022.org/iso-20022-message-definitions?search=camt.054",
           label:
             "ISO 20022-meddelandekatalog: camt.054 BankToCustomerDebitCreditNotification",
+        },
+        {
+          href: "https://www.finanssiala.fi/wp-content/uploads/2021/03/ISO-20022-Transaction-Reporting-Guide-2020.pdf",
+          label:
+            "Finance Finland: ISO 20022 Transaction Reporting Guide, version 1.4, 25 augusti 2020",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/66230/B2C-tiliraportoinnin-asiakasohje-042016/27a98c75-d2b9-4c5e-a5c4-845de6a84154",
+          label:
+            "OP: Kundanvisning för XML-kontorapporteringsfiler, april 2016, avsnitt 4",
+        },
+        {
+          href: "https://www.op.fi/documents/10208/2980783/C2B%20asiakasohje%20pain%2003%20joulukuu%202025.pdf/1072228b-be9e-ae4f-3d5b-40edce4b9052?t=1764683634504",
+          label: "OP: C2B-palvelut, pain 03 kundanvisning, avsnitt 2.1 och 4.4",
+        },
+        {
+          href: "https://www.nordea.com/en/doc/nordea-caar-camt.054.001.02-credit-notification.pdf",
+          label:
+            "Nordea: Corporate Access Account Reporting, camt.054.001.02 Credit Notification, MIG 1.9, 1 augusti 2022",
+        },
+        {
+          href: "https://www.nordea.com/sites/default/files/2026-05/corporate-access-payables-country-appendix-finland.pdf",
+          label:
+            "Nordea: Corporate Access Payables – Appendix Finland, 18 maj 2026, avsnitt 2.8.1",
+        },
+        {
+          href: "https://danskeci.com/-/media/pdf/danskeci-com/iso-20022-xml/camt,-d-,054,-d-,001,-d-,02-cgi.pdf?rev=f9662aee312c4a53a7ea1fcf69620802&hash=1A85E0C6CFFCA746911348A72F370A00",
+          label:
+            "Danske Bank: camt.054.001.02 CGI Message Implementation Guide, version 7.0, 9 september 2026",
+        },
+        {
+          href: "https://samlink.fi/app/uploads/2025/10/WSPalvelukuvausSp.pdf",
+          label:
+            "Samlink: Sparbankerna Web Services-anslutning, tjänstebeskrivning version 1.5, 4 juli 2025",
         },
       ],
       faq: [

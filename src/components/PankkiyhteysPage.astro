@@ -14,6 +14,20 @@ const content = {
       "Kun ERP-, taloushallinto- tai rahoitustuotteesi tarvitsee suomalaiset pankkiyhteydet, edessä on valinta: rakentaa pankkiyhteysohjelma itse jokaiseen pankkiin vai käyttää yhtä valmista API-palvelua. Tämä sivu vertailee vaihtoehtoja ohjelmistoyrityksen näkökulmasta.",
     sections: [
       {
+        h2: "Mikä pankkiyhteysohjelma on ja mitä se tekee",
+        paras: [
+          "Pankkiyhteysohjelma on ohjelmisto tai palvelu, joka hoitaa yrityksen ja pankin välisen aineistoliikenteen. Se lähettää maksuaineistot (pain.001) pankkiin ja noutaa pankista tiliotteet (camt.053), saapuvien viitemaksujen ja muiden tapahtumien ilmoitukset (camt.054) sekä maksupalautteet (pain.002). Suomessa liikenne kulkee pankkien Web Services -kanavan kautta, ja jokainen sanoma allekirjoitetaan pankin myöntämällä varmenteella.",
+          "Perinteinen pankkiyhteysohjelma asennetaan yrityksen omalle koneelle tai palvelimelle ja ajetaan ajastetusti. Ohjelmistoyritys, joka tarjoaa taloushallinnon, laskutuksen tai ERP:n tuotetta sadoille asiakkaille, tarvitsee saman toiminnallisuuden tuotteen sisään: jokaisen loppuasiakkaan pankkiyhteydet, varmenteet ja aineistot on hallittava keskitetysti ja turvallisesti.",
+        ],
+        list: [
+          "Tuki kaikille asiakkaidesi pankeille yhdellä rajapinnalla",
+          "Varmenteiden haku, uusinta ja säilytys ilman manuaalityötä",
+          "Aineistojen nouto ja lähetys ajastetusti tai API-kutsulla",
+          "Lokitus ja valvonta, josta näkee mikä aineisto on noudettu ja milloin",
+          "Yksityiset avaimet erillään tuotteen omasta ympäristöstä",
+        ],
+      },
+      {
         h2: "Mitä itse rakentaminen vaatii",
         paras: [
           "Oma toteutus tarkoittaa Web Services -yhteyden rakentamista jokaiseen pankkiin erikseen: varmennehakemukset, avainten hallinta, sanomien allekirjoitus ja pankkikohtaisten erojen käsittely. Lisäksi varmenteet vanhenevat ja pankkien rajapinnat muuttuvat, joten ylläpito on jatkuvaa.",
