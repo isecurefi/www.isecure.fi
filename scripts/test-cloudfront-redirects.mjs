@@ -45,6 +45,17 @@ const cases = [
     querystring: { source: { value: "old-page" } },
     expected: "https://www.isecure.fi/en/processing-api/?source=old-page",
   },
+  {
+    name: "retired WS API marketing alias redirects home",
+    uri: "/en/ws-api/index.html",
+    querystring: { source: { value: "old-link" } },
+    expected: "https://www.isecure.fi/en/?source=old-link",
+  },
+  {
+    name: "retired WS channel alias redirects to the Web Services page",
+    uri: "/ws-channel/",
+    expected: "https://www.isecure.fi/web-services/",
+  },
 ];
 
 let failures = 0;

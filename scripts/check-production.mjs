@@ -170,6 +170,18 @@ const checks = [
     location: "https://www.isecure.fi/en/",
   },
   {
+    name: "Retired WS API alias redirects home",
+    url: "https://www.isecure.fi/en/ws-api/?source=production-check",
+    status: 301,
+    location: "https://www.isecure.fi/en/?source=production-check",
+  },
+  {
+    name: "Retired WS channel alias redirects to the Web Services page",
+    url: "https://www.isecure.fi/ws-channel/index.html",
+    status: 301,
+    location: "https://www.isecure.fi/web-services/",
+  },
+  {
     name: "Legacy thank-you page redirects to the current route",
     url: "https://www.isecure.fi/thankyou.html?source=production-check",
     status: 301,

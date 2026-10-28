@@ -167,6 +167,8 @@ aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths \
   '/thankyou.html' '/thankyou/*' '/ws-kanava.html' '/ws-api.html' \
   '/tiliote*' '/en/tiliote*' '/se/tiliote*' \
   '/banking-api*' '/en/banking-api*' '/se/banking-api*' \
+  '/ws-api*' '/en/ws-api*' '/se/ws-api*' \
+  '/ws-channel*' '/en/ws-channel*' '/se/ws-channel*' \
   '/camt-053*' '/en/camt-053*' '/se/camt-053*' \
   '/iso-20022*' '/en/iso-20022*' '/se/iso-20022*' >/dev/null
 
@@ -180,4 +182,6 @@ test "$(curl -sS -o /dev/null -w '%{http_code}' https://isecure.fi/tilivuosi2011
 test "$(curl -sS -o /dev/null -w '%{http_code}' https://www.isecure.fi/camt-053)" = 301
 test "$(curl -sS -o /dev/null -w '%{http_code}' https://www.isecure.fi/iso-20022)" = 301
 test "$(curl -sS -o /dev/null -w '%{http_code}' https://www.isecure.fi/thankyou.html)" = 301
+test "$(curl -sS -o /dev/null -w '%{redirect_url}' https://www.isecure.fi/en/ws-api/)" = 'https://www.isecure.fi/en/'
+test "$(curl -sS -o /dev/null -w '%{redirect_url}' https://www.isecure.fi/ws-channel/)" = 'https://www.isecure.fi/web-services/'
 echo "Reconciliation complete. Retired S3 backups: $BACKUP_DIR"

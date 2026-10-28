@@ -15,8 +15,6 @@ export default defineConfig({
       filter: (page) =>
         !page.includes("/thankyou/") &&
         !draftCatalogPaths.has(new URL(page).pathname) &&
-        !page.includes("/ws-api/") &&
-        !page.includes("/ws-channel/") &&
         !page.includes("/images/logo-candidates/"),
     }),
   ],

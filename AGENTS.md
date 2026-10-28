@@ -82,8 +82,10 @@ or a marketing alias. Keep the recoverable EC2 source until the CloudFront copy
 and redirects have been stable and verified. Preserve mappings for old
 operation and schema anchors when changing the documentation renderer.
 
-The Astro routes `/ws-api/` and `/ws-channel/` are legacy marketing aliases,
-not the API reference. Do not confuse them with `/wsapi_v2/`.
+The former marketing aliases `/ws-api/` and `/ws-channel/` (and their `en`/`se`
+variants) are retired: the CloudFront function redirects them to the homepage
+and `/web-services/`. Do not recreate them as routes and do not confuse them
+with `/wsapi_v2/`.
 
 ## Legacy apex and sensitive paths
 

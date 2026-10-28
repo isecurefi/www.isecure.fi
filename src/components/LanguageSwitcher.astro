@@ -41,14 +41,7 @@ const currentPath = Astro.url.pathname.replace("/index.html", "/");
     const path = window.location.pathname;
 
     // Special cases for Finnish
-    if (
-      path === "/" ||
-      path === "/index.html" ||
-      path === "/ws-channel" ||
-      path === "/ws-api" ||
-      path.startsWith("/ws-channel/") ||
-      path.startsWith("/ws-api/")
-    ) {
+    if (path === "/" || path === "/index.html") {
       return "fi";
     }
 

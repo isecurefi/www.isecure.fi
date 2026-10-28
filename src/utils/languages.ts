@@ -11,12 +11,7 @@ export function getLanguageFromUrl(url: URL | null): Lang {
   const path = url.pathname;
 
   // Special cases for Finnish
-  if (
-    path === "/" ||
-    path === "/index.html" ||
-    path === "/ws-channel/index.html" ||
-    path === "/ws-api/index.html"
-  ) {
+  if (path === "/" || path === "/index.html") {
     return "fi";
   }
 
