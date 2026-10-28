@@ -76,7 +76,9 @@ test "$(curl -sS -o "$DOCS_TMP" -w '%{http_code}' https://www.isecure.fi/wsapi_v
 grep -q 'data-renderer="scalar"' "$DOCS_TMP"
 grep -q 'data-reference-only="true"' "$DOCS_TMP"
 test "$(curl -sS -o "$OPENAPI_TMP" -w '%{http_code}' https://www.isecure.fi/wsapi_v2.json)" = 200
-jq -e '.swagger == "2.0" and .info.version == "v2.7.0"' "$OPENAPI_TMP" >/dev/null
+# The published document must match the committed mirror, not a fixed version.
+EXPECTED_API_VERSION=$(jq -r '.info.version' "$SCRIPT_DIR/../src/data/wsapi_v2.json")
+jq -e --arg v "$EXPECTED_API_VERSION" '.swagger == "2.0" and .info.version == $v' "$OPENAPI_TMP" >/dev/null
 
 echo "== 2/9 ALB: migrate API documentation to CloudFront"
 API_DOCS_HTML_RULE=$(ensure_api_docs_rule \
