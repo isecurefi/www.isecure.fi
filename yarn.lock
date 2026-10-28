@@ -6997,7 +6997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:^0.34.0 || ^0.35.0, sharp@npm:^0.35.3":
+"sharp@npm:^0.34.0 || ^0.35.0":
   version: 0.35.3
   resolution: "sharp@npm:0.35.3"
   dependencies:
@@ -8053,7 +8053,6 @@ __metadata:
     postcss: "npm:^8.5.25"
     prettier: "npm:^3.9.6"
     prettier-plugin-astro: "npm:^0.14.1"
-    sharp: "npm:^0.35.3"
     typescript: "npm:^5.9.3"
     typescript-eslint: "npm:^8.66.0"
   languageName: unknown
