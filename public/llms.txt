@@ -48,6 +48,7 @@ The current Processing and Bank Simulator examples run separately and do not cor
 - [TypeScript SDK](https://github.com/isecurefi/isecure-ts-client): official TypeScript client library
 - [Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client): Python client library; see its README for current API coverage
 - [C# SDK (Beta)](https://github.com/isecurefi/isecure-cs-client): .NET client library; see its README for current API coverage
+- [Rust SDK (Beta)](https://github.com/isecurefi/isecure-rust-client): transport-neutral Rust client; see its README for source installation and current API coverage; not published on crates.io
 - [PHP SDK and wscli](https://github.com/isecurefi/wscli-php): PHP client library and the `wscli` command-line tool
 
 ## Contact
