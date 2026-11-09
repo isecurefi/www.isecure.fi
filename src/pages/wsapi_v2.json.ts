@@ -43,28 +43,22 @@ if (result.status === "verification_accepted") {
 }`,
   Register: `const registration = await client.register();
 console.log(registration.ApiKey);`,
-  InitPasswordReset: `// Requests the recovery code; this does not return an encryption challenge.
-const result = await client.initPasswordReset();
-if (result.ResponseCode !== "00") throw new Error(result.ResponseText);`,
-  PasswordReset: `import { AxiosTransport, type InitLoginResponse } from "isecure-ts-client";
-
-// First call initPasswordReset() and ask the user for the recovery code.
-// Then request a fresh InitLogin challenge for password encryption.
-const { BaseUrl, Email, Mode } = client.props;
-const base = BaseUrl.replace(/\\/+$/, "");
-const { data } = await new AxiosTransport().request<InitLoginResponse>({
-  method: "GET",
-  url: base + "/session/" + encodeURIComponent(Email) + "/" + Mode,
-});
-if (data.ResponseCode !== "00" || !data.Challenge) {
-  throw new Error(data.ResponseText || "Missing password encryption challenge");
+  InitPasswordReset: `// TypeScript v5: requests the recovery code and retains reset-bound discovery.
+const initialization = await client.initPasswordReset();
+if (initialization.ResponseCode !== "00" || !initialization.Challenge) {
+  throw new Error(initialization.ResponseText || "Missing reset challenge");
 }
+// Keep this client and initialization in memory until the user enters the code.`,
+  PasswordReset: `// TypeScript v5 default profile; do not fetch an InitLogin challenge.
+// Call initPasswordReset() once, then ask the user for its recovery code.
+const initialization = await client.initPasswordReset();
+if (initialization.ResponseCode !== "00" || !initialization.Challenge) {
+  throw new Error(initialization.ResponseText || "Missing reset challenge");
+}
+// Application-provided prompt; do not log or persist the code or challenge.
+const code = await readRecoveryCode();
 const newPassword = process.env.ISECURE_NEW_PASSWORD!;
-const result = await client.passwordReset(
-  "123456",
-  newPassword,
-  data.Challenge,
-);
+const result = await client.passwordReset(code, newPassword, initialization.Challenge);
 if (result.ResponseCode !== "00") throw new Error(result.ResponseText);
 client.updateProps({ Password: newPassword });
 const state = await client.login(); // Complete any returned MFA challenge.`,
@@ -208,11 +202,11 @@ export const GET: APIRoute = () => {
   );
   const sdkDescription = `Client SDKs:
 
-- [TypeScript SDK (GA)](${TYPESCRIPT_SDK_URL}): supports Node.js and modern browser bundlers. Install with \`npm install isecure-ts-client\`.
-- [Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client): see its README for installation and current API coverage.
-- [C# / .NET 10 SDK (Beta)](${CSHARP_SDK_URL}): registration, SMS/TOTP authentication, certificate enrollment and discovery, and signed file exchange. Follow the [C# quickstart](${CSHARP_SDK_URL}#tldr-make-your-first-api-call) to install from source; no NuGet release is published. See [preview coverage](${CSHARP_SDK_URL}/blob/main/docs/preview-scope.md) for the supported operations. Certificate import/export/sharing, password reset, and the separate Processing API are outside this preview.
+- [TypeScript SDK v5 (GA)](${TYPESCRIPT_SDK_URL}): supports Node.js and modern browser bundlers. Install with \`npm install isecure-ts-client\`.
+- [Python SDK 1.0.0 (Beta)](https://github.com/isecurefi/isecure-py-client/releases/tag/v1.0.0): install the wheel from the GitHub release; stronger password authentication is the default, with explicit legacy selection. See its README for API coverage.
+- [C# / .NET 10 SDK 1.0.0 (Beta)](${CSHARP_SDK_URL}/releases/tag/v1.0.0): install the NuGet package asset from the GitHub release. Registration, SMS/TOTP authentication, password reset, certificate enrollment and discovery, and signed file exchange are supported. Stronger password authentication is the default, with explicit legacy selection. NuGet.org publication is separate. See [coverage](${CSHARP_SDK_URL}/blob/main/docs/preview-scope.md) for remaining limits; the separate Processing API is outside this SDK.
 - [Rust SDK (Beta)](https://github.com/isecurefi/isecure-rust-client): transport-neutral Rust client for File Exchange. See its README for source installation and current API coverage; no crates.io release is published.
-- [PHP client and SDK (Legacy)](https://github.com/isecurefi/wscli-php): command-line client and PHP SDK. See its README for installation and usage.
+- [PHP SDK 3.0.0 and legacy CLI](https://github.com/isecurefi/wscli-php/releases/tag/v3.0.0): the PasswordProfile helper defaults to the stronger profile with explicit legacy selection. Existing CLI and raw generated-client authentication remain legacy; follow the migration guide.
 
 C# operation samples assume a configured \`ISECureClient\` and application-supplied inputs. Authentication samples use \`AuthResult.Status\` to determine the next step; only \`Authenticated\` permits protected operations. Authentication refusals return \`Failed\`; transport/protocol errors and protected-operation refusals throw typed SDK exceptions. See the [C# authentication guide](${CSHARP_SDK_URL}/blob/main/docs/authentication.md) and [error handling](${CSHARP_SDK_URL}/blob/main/docs/errors.md).`;
   // Keep SDK discovery beside the existing SDK links, before the first example.

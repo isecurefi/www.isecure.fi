@@ -1,4 +1,4 @@
-// Only operations implemented by the Experimental C# facade belong here.
+// Only operations implemented by the C# facade belong here.
 export const CSHARP_SDK_URL = "https://github.com/isecurefi/isecure-cs-client";
 
 const register = `// One call performs InitRegister and Register; do not call it twice.
@@ -21,6 +21,14 @@ export const CSHARP_SDK_SAMPLES: Record<string, string> = {
   Register: register,
   InitLogin: login,
   Login: login,
+  InitPasswordReset: `// C# 1.0.0 default: sends the code and keeps reset discovery in memory.
+await client.InitPasswordResetAsync();
+// Ask for the recovery code, then call ResetPasswordAsync on this same client.`,
+  PasswordReset: `// After InitPasswordResetAsync; code and newPassword are application inputs.
+// The client uses its reset-bound discovery; do not request a login challenge.
+await client.ResetPasswordAsync(code, newPassword);
+var state = await client.LoginAsync(newPassword);
+// Complete MFA/verification; only Authenticated permits protected operations.`,
   LoginMFA: `// state is the previous login/selection result; code is the requested SMS/TOTP code.
 if (state.Status == AuthStatus.NeedsMfa)
 {
