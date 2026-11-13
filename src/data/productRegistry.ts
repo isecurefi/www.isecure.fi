@@ -496,16 +496,16 @@ export const catalogRecords: readonly CatalogRecord[] = [
     name: text("Processing API", "Processing API", "Processing API"),
     buyerJob: text(
       "Valmistele pankin maksuaineistot hallitusti.",
-      "Prepare bank payment files with control and approval.",
-      "Förbered bankens betalningsfiler med kontroll och godkännande.",
+      "Prepare and validate bank payment files.",
+      "Förbered och kontrollera bankens betalningsfiler.",
     ),
     summary: text(
-      "Rajapinta maksutietojen tarkistamiseen, hyväksytyn version lukitsemiseen ja pankille lähetettävän maksuaineiston lataamiseen.",
-      "An API for checking payment details, locking the approved version, and downloading the payment file for bank delivery.",
-      "Ett API för att kontrollera betalningsuppgifter, låsa den godkända versionen och hämta betalningsfilen för överföring till banken.",
+      "Rajapinta maksutietojen tarkistamiseen, luonnoksen viimeistelyyn ja pankille lähetettävän XML-tiedoston muodostamiseen.",
+      "An API for checking payment details, finalizing a version, and downloading the payment file for bank delivery.",
+      "Ett API för att kontrollera betalningsuppgifter, slutföra en version och hämta betalningsfilen för överföring till banken.",
     ),
     stage: "beta",
-    access: [...subscribedTestAccess, ...subscribedProductionAccess],
+    access: [...subscribedProductionAccess],
     visibility: "soft-launch",
     routes: routeSet("processing-api"),
     capabilities: [
@@ -521,14 +521,14 @@ export const catalogRecords: readonly CatalogRecord[] = [
       {
         direction: "bidirectional",
         label: text(
-          "Tarkistus ja hyväksyntä",
-          "Checks and approval",
-          "Kontroll och godkännande",
+          "Tarkistus ja viimeistely",
+          "Validation and finalization",
+          "Kontroll och slutförande",
         ),
         detail: text(
-          "Tarkistaa pakolliset tiedot ja lukitsee yhden muuttumattoman version henkilön hyväksyttäväksi.",
-          "Checks the required details and locks one unchanged version for a person to approve.",
-          "Kontrollerar obligatoriska uppgifter och låser en oförändrad version som en person kan godkänna.",
+          "Tarkistaa maksutiedot ja viimeistelee version, josta tiedosto muodostetaan.",
+          "Checks payment details and finalizes the version used to generate the file.",
+          "Kontrollerar betalningsuppgifterna och slutför versionen som filen skapas från.",
         ),
       },
       {
@@ -544,19 +544,6 @@ export const catalogRecords: readonly CatalogRecord[] = [
           "Genererar och hämtar samma kontrollerade fil. Det nuvarande tekniska formatet är ISO 20022 pain.001.001.09.",
         ),
       },
-      {
-        direction: "bidirectional",
-        label: text(
-          "Maksunsaajan tarkistus (VoP)",
-          "Verification of Payee (VoP)",
-          "Mottagarkontroll (VoP)",
-        ),
-        detail: text(
-          "Tarkistaa maksunsaajan nimen ja tilin vastaavuuden pankin VoP-palvelusta ennen aineiston vapautusta. Nordea, OP ja Danske Bank.",
-          "Checks the payee name and account match through the bank's VoP service before the file is released. Nordea, OP and Danske Bank.",
-          "Kontrollerar att mottagarens namn och konto stämmer via bankens VoP-tjänst innan filen frigörs. Nordea, OP och Danske Bank.",
-        ),
-      },
     ],
     qualification: {
       label: text(
@@ -565,9 +552,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
         "Nordea, OP, Danske Bank, Sparbanken, Oma Sparbank, Ålandsbanken, POP Banken och Aktia",
       ),
       scope: text(
-        "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiilit ovat Nordean validoimia Suomen, Ruotsin, Norjan ja Tanskan osalta. OP:n ja Danske Bankin Suomen SEPA-maksuaineistoprofiilit ovat saatavilla; niiden pankkikohtainen validointi on kesken. Säästöpankin, Oma Säästöpankin ja Ålandsbankenin Suomen SEPA-maksuaineistoprofiilit sekä POP Pankin ja Aktian pain.001.001.03-profiilit ovat saatavilla; niiden pankkikohtainen validointi ei ole vielä alkanut. Maksunsaajan tarkistus (Verification of Payee, VoP) sisältyy Nordean, OP:n ja Danske Bankin maksuihin. Saatavilla tilausasiakkaille ISECuren testi- ja tuotantoympäristöissä.",
-        "Processing API is in Beta. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA payment-file profiles are available; their bank validation is in progress. Säästöpankki, Oma Säästöpankki and Ålandsbanken Finland SEPA payment-file profiles and the POP Pankki and Aktia pain.001.001.03 profiles are available; their bank validation has not started. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Available to subscribed customers in the ISECure test and production environments.",
-        "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access är validerade av Nordea för Finland, Sverige, Norge och Danmark. OP:s och Danske Banks SEPA-betalningsfilsprofiler för Finland är tillgängliga; deras bankvalidering pågår. Sparbankens, Oma Sparbanks och Ålandsbankens SEPA-betalningsfilsprofiler för Finland samt POP Bankens och Aktias pain.001.001.03-profiler är tillgängliga; deras bankvalidering har inte börjat. Mottagarkontroll (Verification of Payee, VoP) ingår för betalningar via Nordea, OP och Danske Bank. Tillgängligt för prenumerationskunder i ISECures test- och produktionsmiljöer.",
+        "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiilit ovat Nordean validoimia Suomen, Ruotsin, Norjan ja Tanskan osalta. OP:n ja Danske Bankin Suomen SEPA-maksuaineistoprofiilit ovat saatavilla; niiden pankkikohtainen validointi on kesken. Säästöpankin, Oma Säästöpankin ja Ålandsbankenin Suomen SEPA-maksuaineistoprofiilit sekä POP Pankin ja Aktian pain.001.001.03-profiilit ovat saatavilla; niiden pankkikohtainen validointi ei ole vielä alkanut. Processing API on saatavilla vain tuotannossa erikseen käyttöönotetuille tilausasiakkaille. Testipalvelu on poistettu käytöstä. Maksunsaajan tarkistus (VoP) ei kuulu nykyiseen tuotantojulkaisuun.",
+        "Processing API is in Beta. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA payment-file profiles are available; their bank validation is in progress. Säästöpankki, Oma Säästöpankki and Ålandsbanken Finland SEPA payment-file profiles and the POP Pankki and Aktia pain.001.001.03 profiles are available; their bank validation has not started. Processing API is available only in production for separately onboarded subscribers. The test service has been retired. Verification of Payee (VoP) is not part of the current production release.",
+        "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access är validerade av Nordea för Finland, Sverige, Norge och Danmark. OP:s och Danske Banks SEPA-betalningsfilsprofiler för Finland är tillgängliga; deras bankvalidering pågår. Sparbankens, Oma Sparbanks och Ålandsbankens SEPA-betalningsfilsprofiler för Finland samt POP Bankens och Aktias pain.001.001.03-profiler är tillgängliga; deras bankvalidering har inte börjat. Processing API är endast tillgängligt i produktion för prenumerationskunder med separat onboarding. Testtjänsten har avvecklats. Mottagarkontroll (VoP) ingår inte i den nuvarande produktionsversionen.",
       ),
       evidenceDate: "2026-10-08",
       evidenceSource:
@@ -578,21 +565,21 @@ export const catalogRecords: readonly CatalogRecord[] = [
     limitations: localizedLists(
       [
         "Processing API ei lähetä maksua pankkiin.",
-        "Hyväksyntä koskee valmisteltua tiedostoa eikä ole pankin hyväksyntä tai toteutunut maksu.",
+        "Tiedoston muodostaminen ei hyväksy maksua eikä todista pankin hyväksyntää.",
         "Asiakkaan yksityinen allekirjoitusavain säilyy omassa sovelluksessa.",
-        "Processing API ja File Exchange käyttävät erillisiä istuntoja; nykyinen esimerkki lähettää kerran mutta ei nouda tai täsmäytä pankin palautetta.",
+        "Processing API ja File Exchange käyttävät erillisiä istuntoja; nykyinen esimerkki muodostaa XML-tiedoston lähettämättä sitä pankkiin.",
       ],
       [
         "Processing API does not submit a payment to a bank.",
-        "Approval applies to the prepared file; it is not bank authorization or a completed payment.",
+        "File generation does not approve a payment or prove bank acceptance.",
         "The customer's private signing key stays in their own application.",
-        "Processing API and File Exchange use separate sessions; the current example uploads once but does not retrieve or correlate bank feedback.",
+        "Processing API and File Exchange use separate sessions; the current example generates XML without sending it to a bank.",
       ],
       [
         "Processing API skickar inte en betalning till banken.",
-        "Godkännandet gäller den förberedda filen; det är inte bankens auktorisering eller en genomförd betalning.",
+        "Filgenerering godkänner inte en betalning och bevisar inte bankens godkännande.",
         "Kundens privata signeringsnyckel stannar i den egna applikationen.",
-        "Processing API och File Exchange använder separata sessioner; det nuvarande exemplet laddar upp en gång men hämtar eller korrelerar inte bankrespons.",
+        "Processing API och File Exchange använder separata sessioner; det nuvarande exemplet genererar XML utan att skicka den till banken.",
       ],
     ),
     cta: {
@@ -623,9 +610,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
           "Skickar Processing API filen till banken?",
         ),
         answer: text(
-          "Ei. Processing API muodostaa ja vapauttaa tarkistetun maksuaineiston. Pankkiin lähettäminen on Pankkiyhteydet-tuotteen erillinen tehtävä.",
-          "No. Processing API creates and releases the checked payment file. Sending it to a bank is a separate responsibility of Bank Connectivity.",
-          "Nej. Processing API skapar och frigör den kontrollerade betalningsfilen. Överföring till banken är ett separat ansvar för Bankförbindelser.",
+          "Ei. Processing API valmistelee ja muodostaa tarkistetun maksuaineiston. Pankkiin lähettäminen on Pankkiyhteydet-tuotteen erillinen tehtävä.",
+          "No. Processing API prepares and generates the checked payment file. Sending it to a bank is a separate responsibility of Bank Connectivity.",
+          "Nej. Processing API förbereder och genererar den kontrollerade betalningsfilen. Överföring till banken är ett separat ansvar för Bankförbindelser.",
         ),
       },
     ],
@@ -639,9 +626,9 @@ export const catalogRecords: readonly CatalogRecord[] = [
         "Processing API för kontrollerade betalningsfiler | ISECure",
       ),
       description: text(
-        "Valmistele, tarkista ja hyväksy pankille lähetettävä maksuaineisto hallitussa työnkulussa: lukitse hyväksytty versio ja lataa aineisto pankkiin toimitettavaksi.",
-        "Prepare, check, and approve bank payment files through a controlled workflow: lock the approved version and download the file for bank delivery.",
-        "Förbered, kontrollera och godkänn betalningsfiler för banken i ett kontrollerat flöde: lås den godkända versionen och hämta filen för överföring till banken.",
+        "Valmistele ja tarkista maksutiedot, viimeistele versio ja muodosta XML. Tuotantokäyttö edellyttää käyttöönottoa; pankkiin lähetys on erillinen vaihe.",
+        "Prepare and validate payment details, finalize a version and generate XML. Production onboarding is required; bank upload is separate.",
+        "Förbered och kontrollera betalningsuppgifter, slutför en version och generera XML. Produktionsåtkomst kräver onboarding; banköverföring är ett separat steg.",
       ),
     },
   },

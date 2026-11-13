@@ -75,3 +75,23 @@ test("OpenAPI 3.0 conversion preserves exact values and rejects unsupported sche
     assert.equal(spec.servers[0].url, "https://processing-api.test.isecure.fi");
   }
 });
+
+test("Processing links current SDK guidance without claiming the retained schema is deployed", () => {
+  const spec = buildSpec("processing");
+  assert.match(spec.info.description, /Historical HTTP schema snapshot/);
+  assert.match(
+    spec.info.description,
+    /not a complete reference for today's production deployment/,
+  );
+  assert.match(
+    spec.info.description,
+    /isecure-ts-client\/blob\/main\/docs\/processing\.md/,
+  );
+  assert.match(spec.info.description, /examples\/processing-generate-file/);
+  assert.doesNotMatch(
+    spec.info.description,
+    /isecure-ts-client@2\.7\.0|same contract is served in the test and production/,
+  );
+  assert.equal(spec.servers.length, 1);
+  assert.match(spec.servers[0].description, /Retired test service/);
+});

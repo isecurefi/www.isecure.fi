@@ -581,8 +581,9 @@ export function buildSpec(kind) {
       description:
         read(`src/content/api/${kind}.md`) +
         "\n\n" +
-        common +
-        (simulator ? read("src/content/api/simulator-workflow.md") : ""),
+        (simulator
+          ? common + read("src/content/api/simulator-workflow.md")
+          : ""),
       contact: {
         name: "ISECure developer support",
         email: "support@isecure.fi",
@@ -602,12 +603,7 @@ export function buildSpec(kind) {
           {
             url: metadata.baseUrl,
             description:
-              "ISECure test environment — Beta; Nordea, OP, Danske Bank, Säästöpankki, Oma Säästöpankki, Ålandsbanken, POP Pankki and Aktia; access by request",
-          },
-          {
-            url: "https://processing-api.isecure.fi",
-            description:
-              "ISECure production environment — Beta; Nordea, OP, Danske Bank, Säästöpankki, Oma Säästöpankki, Ålandsbanken, POP Pankki and Aktia; paid subscription",
+              "Retired test service — historical schema snapshot; do not call",
           },
         ],
     tags: tags.map((name) => ({ name })),

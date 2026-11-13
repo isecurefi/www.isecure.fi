@@ -779,37 +779,37 @@ const processingApiPages = [
     "/processing-api/",
     "fi",
     "Valmistele pankin maksuaineistot hallitusti",
-    "Testiympäristö",
+    "Tuotanto",
     "Rekisteröinti vaaditaan",
     "Maksullinen tilaus vaaditaan",
-    "Pyydä käyttöoikeus",
+    "Normaali käyttöönotto",
   ],
   [
     "en/processing-api/index.html",
     "/en/processing-api/",
     "en",
-    "Prepare bank payment files with control and approval",
-    "Test environment",
+    "Prepare and validate bank payment files",
+    "Production",
     "Registration required",
     "Paid subscription required",
-    "Request access",
+    "Standard onboarding",
   ],
   [
     "se/processing-api/index.html",
     "/se/processing-api/",
     "sv",
-    "Förbered bankens betalningsfiler med kontroll och godkännande",
-    "Testmiljö",
+    "Förbered och kontrollera bankens betalningsfiler",
+    "Produktion",
     "Registrering krävs",
     "Betald prenumeration krävs",
-    "Begär åtkomst",
+    "Normal onboarding",
   ],
 ];
 const processingApiUrls = processingApiPages.map(
   ([, canonicalPath]) => `https://www.isecure.fi${canonicalPath}`,
 );
 const processingExampleUrl =
-  "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-manual-upload/README.md";
+  "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-generate-file/README.md";
 for (const [
   relativeFile,
   canonicalPath,
@@ -880,12 +880,12 @@ for (const [
     failures.push(`${relativeFile}: Bank Simulator test-path link is missing`);
   }
   if (
-    !/Nykyiset Processing- ja Pankkisimulaattori-esimerkit ajetaan erikseen|current Processing and Bank Simulator examples run separately|nuvarande Processing- och Banksimulator-exemplen körs separat/iu.test(
+    !/Vanha Processing–Pankkisimulaattori-esimerkki edellyttää poistettua testipalvelua|historical Processing-to-Simulator example requires the retired test service|historiska Processing–Banksimulator-exemplet kräver den avvecklade testtjänsten/iu.test(
       html,
     )
   ) {
     failures.push(
-      `${relativeFile}: separate-example and feedback-reconciliation boundary is missing`,
+      `${relativeFile}: retired Processing example boundary is missing`,
     );
   }
 }
@@ -1022,7 +1022,7 @@ if (!llmsText.includes("https://www.isecure.fi/en/processing-api/")) {
 }
 for (const requiredAccessStatement of [
   "Beta test-environment enrollment",
-  "Beta payment workflow",
+  "Beta payment preparation",
   "registration, a paid subscription, and an access request are required",
 ]) {
   if (!llmsText.includes(requiredAccessStatement)) {

@@ -1,35 +1,46 @@
-Create, review and approve a payment file, then download it. Your application verifies and signs the file locally and sends it through the separate [File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile). Processing does not send payments to a bank.
+## Current SDK guide and production access
 
-**Beta · Nordea, OP, Danske Bank, Säästöpankki, Oma Säästöpankki, Ålandsbanken, POP Pankki and Aktia · Test and production environments · Paid subscription and access approval required.**
+Use the [Processing SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)
+for current setup, authentication, errors and examples. Processing is included in the published
+`isecure-ts-client` package through its experimental `/iso20022` entry point.
 
-Nordea validated payment-file profiles cover Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA profiles are available; their bank validation is in progress. Säästöpankki, Oma Säästöpankki and Ålandsbanken Finland SEPA profiles and the POP Pankki and Aktia pain.001.001.03 profiles are available; their bank validation has not started. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Support for other banks and profiles is qualified separately.
+**Availability checked 12 November 2026:** Processing runs only in production at
+`https://processing-api.isecure.fi`, with audience `isecure-processing-production-v1`.
+The former test service was retired on 17 October 2026. Production registration alone does not
+provide Processing access: ISECure must provision the tenant subscription, database, permissions
+and API usage-plan access.
 
-This reference covers 26 payment operations, session exchange and notifications. The same contract is served in the test and production environments; choose the base URL and session audience for the environment you are using.
+The standard path is to configure an export profile, create and validate a draft, finalize its
+revision, then generate and download payment XML. See the
+[generation example](https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-generate-file/README.md).
+It creates Processing records but does not send anything to a bank. Authorization, signing and
+upload happen separately through [File Exchange](https://www.isecure.fi/wsapi_v2/#operation/UploadFile).
+Generating a file does not prove bank acceptance or payment completion.
 
-## Prepare a payment file
+## Historical HTTP schema snapshot
 
-1. **Choose the bank format and check the paying account.** Select file rules for your bank and country, then check whether the account you will pay from supports the intended payment. See the explanation below.
-2. **Create a draft.** Pass the selected account capability to `paymentBatches.createDraft()` and add payments. Use decimal strings for amounts, not floating-point numbers.
-3. **Check it.** `validate()` checks the draft; `simulate()` evaluates the proposed payment without sending it. This is separate from a [Bank Simulator](https://www.isecure.fi/apis/bank-simulator/) run.
-4. **Request review.** `finalize()` locks a revision; `submitForReview()` submits it. Keep the returned resource versions. Changes may need a new revision and fresh approval.
-5. **Approve separately.** An authorized, distinct reviewer calls `paymentApprovalRequests.decide()`. File Exchange admin/data mode alone grants no approval authority.
-6. **Release and download.** Call `paymentExports.release()`, then `get()` for the file's identity, digest, length and media type. Pass that result to `download()`; the SDK checks the bytes against it.
-7. **Sign and send.** Sign the verified bytes with your locally held private key and upload through File Exchange. Never automatically retry an upload whose outcome is unknown.
+The operation schemas below are retained from the test release verified on 20 September 2026.
+**They are not a complete reference for today's production deployment.** In particular, this
+snapshot does not contain the current `generate_file` operation. Its notification stream and
+historical approval workflow must not be assumed available in production. VoP, observation and
+hosted Integration methods in the SDK are also outside the current production route set.
 
-### What does the first step mean?
+Use the SDK guide for the current generation flow. Updating this HTTP schema snapshot requires a
+separate import and review of the exact production release; the snapshot's recorded source has not
+been relabelled as current. The historical server entry below is retired and must not be called.
 
-An **export profile** defines how to write payment XML for a particular bank and country. An **account capability** describes the payment types, currencies, destinations and limits available for one paying account. Supporting a file format does not establish what that account may do.
+## Account and session
 
-- **Find the format:** `paymentExportProfiles.list()` returns profiles admitted for your tenant. Check their bank, country, payment type, availability and qualification—not just the XML format name.
-- **Configure the account:** `paymentExportProfiles.get()` reads your current setup. If setup or a change is needed, an administrator with approval permission calls `configure()` with the profile, debtor account, company and bank-agreement details.
-- **Check the payment:** `paymentCapabilities.list()` shows visible capabilities; `resolve()` matches the account and payment requirements. Continue only with outcome `resolved` and a `selected` reference. Pass that exact reference to the draft; do not guess when no unique match is returned.
+Use your production File Exchange account. Start with [InitRegister](https://www.isecure.fi/wsapi_v2/#operation/InitRegister)
+and [Register](https://www.isecure.fi/wsapi_v2/#operation/Register) if needed; then complete
+[Login](https://www.isecure.fi/wsapi_v2/#operation/Login) and any requested
+[LoginMFA](https://www.isecure.fi/wsapi_v2/#operation/LoginMFA). Account management, including
+[ListAccounts](https://www.isecure.fi/wsapi_v2/#operation/ListAccounts) and
+[DeleteAccount](https://www.isecure.fi/wsapi_v2/#operation/DeleteAccount), stays in File Exchange.
 
-Neither configuration nor selection creates a bank agreement or approves a payment. The server checks current authority on use.
+Processing exchanges the current ID token and API key for a separate Processing session.
+The SDK guide shows the production URL and audience, session cleanup, required revisions and
+safe handling of uncertain commands. Never log tokens, private keys or payment contents.
 
-The [complete SDK example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-manual-upload) shows these calls, separate logins, verified download, local signing and one confirmed upload. The [simulator example](https://github.com/isecurefi/isecure-ts-client/tree/main/examples/processing-simulator-journey) also verifies synthetic feedback and recovery against its recorded test releases.
-
-## What success means
-
-The export path returns `pain.001.001.09` XML, not JSON. Approval and download do not prove bank acceptance or payment completion.
-
-The Bank Simulator returns synthetic `pain.002`, `camt.054` and `camt.053` feedback through File Exchange. Real-bank use separately requires a bank agreement, Bank Connectivity access, production credentials and a qualified bank/profile connection.
+The independent [Bank Simulator](https://www.isecure.fi/apis/bank-simulator/) and
+[File Exchange](https://www.isecure.fi/wsapi_v2/) have separate service boundaries.

@@ -27,15 +27,17 @@ if (simulatorRecord.visibility === "none") {
   throw new Error("Bank Simulator must have a public route");
 }
 const exampleUrl =
-  "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-manual-upload/README.md";
+  "https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-generate-file/README.md";
+const sdkGuideUrl =
+  "https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md";
 const copy = {
   fi: {
     eyebrow: "Processing API",
     heading: "Valmistele pankin maksuaineistot hallitusti",
-    lead: "Processing API auttaa ohjelmistoasi muodostamaan pankille lähetettävän maksuaineiston hallitulla työnkululla jo ennen oikean pankkisopimuksen ja tuotantovarmenteiden valmistumista. Se tarkistaa maksutiedot, lukitsee hyväksytyn version ja antaa sovelluksesi ladata täsmälleen saman tiedoston paikallista allekirjoitusta varten.",
+    lead: "Processing API auttaa ohjelmistoasi muodostamaan pankille lähetettävän maksuaineiston hallitulla työnkululla jo ennen oikean pankkisopimuksen ja tuotantovarmenteiden valmistumista. Se tarkistaa maksutiedot, lukitsee viimeistellyn version ja antaa sovelluksesi ladata täsmälleen saman tiedoston paikallista allekirjoitusta varten.",
     statusTitle: "Tuotevaihe ja käyttöoikeus",
     statusText:
-      "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiilit ovat Nordean validoimia Suomen, Ruotsin, Norjan ja Tanskan osalta. OP:n ja Danske Bankin Suomen SEPA-maksuaineistoprofiilit ovat saatavilla; niiden pankkikohtainen validointi on kesken. Säästöpankin, Oma Säästöpankin ja Ålandsbankenin Suomen SEPA-maksuaineistoprofiilit sekä POP Pankin ja Aktian pain.001.001.03-profiilit ovat saatavilla; niiden pankkikohtainen validointi ei ole vielä alkanut. Maksunsaajan tarkistus (Verification of Payee, VoP) sisältyy Nordean, OP:n ja Danske Bankin maksuihin. Saatavilla tilausasiakkaille ISECuren testi- ja tuotantoympäristöissä.",
+      "Processing API on Beta-vaiheessa. Nordean Corporate Access -maksuaineistoprofiilit ovat Nordean validoimia Suomen, Ruotsin, Norjan ja Tanskan osalta. OP:n ja Danske Bankin Suomen SEPA-maksuaineistoprofiilit ovat saatavilla; niiden pankkikohtainen validointi on kesken. Säästöpankin, Oma Säästöpankin ja Ålandsbankenin Suomen SEPA-maksuaineistoprofiilit sekä POP Pankin ja Aktian pain.001.001.03-profiilit ovat saatavilla; niiden pankkikohtainen validointi ei ole vielä alkanut. Processing API on saatavilla vain tuotannossa erikseen käyttöönotetuille tilausasiakkaille. Testipalvelu on poistettu käytöstä. Maksunsaajan tarkistus (VoP) ei kuulu nykyiseen tuotantojulkaisuun.",
     pricingTitle: "Hinnoittelu (Beta)",
     pricingText:
       "Hinnat kuten Pankkiyhteydessä: 18 €/kk perusmaksu per integraattori, 2 €/kk per loppuasiakas (vähintään 10 asiakaslisenssiä), 200 € kertaluonteinen tuotantokäyttöönotto. Käyttöönottomaksua ei peritä nykyisiltä Pankkiyhteys-asiakkailta 31.12.2026 asti. Vuosilaskutus, hintoihin lisätään ALV.",
@@ -43,19 +45,19 @@ const copy = {
     flow: [
       "Valitse pankille ja maalle sopiva maksuaineiston muoto käyttäjän käyttöoikeuksien rajoissa.",
       "Luo maksuerä ja lisää tai korjaa siihen kuuluvat maksut.",
-      "Tarkista pakolliset tiedot ja lukitse yksi muuttumaton versio henkilön hyväksyttäväksi.",
-      "Lataa hyväksynnän jälkeen täsmälleen sama tiedosto. Nykyinen tekninen tulostusmuoto on ISO 20022 pain.001.001.09, ja TypeScript SDK tarkistaa, ettei ladattu tiedosto ole muuttunut.",
+      "Tarkista maksutiedot ja viimeistele versio XML-tiedoston muodostamista varten.",
+      "Muodosta ja lataa viimeistellyn version tiedosto. Nykyinen tekninen tulostusmuoto on ISO 20022 pain.001.001.09, ja TypeScript SDK tarkistaa, ettei ladattu tiedosto ole muuttunut.",
     ],
     boundaryTitle: "Mihin Processing API:n vastuu päättyy",
     boundaries: [
       "Processing API ja Bank Connectivity käyttävät erillisiä kirjautumisistuntoja.",
       "Bank Connectivity hoitaa erikseen pankkivarmenteet sekä pankkitiedostojen listauksen, latauksen ja lähetyksen.",
       "Asiakkaan yksityinen allekirjoitusavain säilyy omassa sovelluksessa. Processing API ei vastaanota avainta eikä lähetä maksua pankkiin.",
-      "ISECuren työnkulussa annettu hyväksyntä koskee valmisteltua tiedostoa. Se ei ole pankin hyväksyntä eikä todiste toteutuneesta maksusta.",
+      "Tiedoston muodostaminen ei hyväksy maksua. Lähetys edellyttää File Exchange -rajapinnan vaatimia PGP-allekirjoituksia.",
     ],
     relationshipTitle: "Valitse allekirjoituksen jälkeen testi tai tuotanto",
     processingLabel: "Processing API",
-    processing: "Luo ja vapauttaa tarkistetun maksuaineiston.",
+    processing: "Valmistelee ja muodostaa tarkistetun maksuaineiston.",
     localLabel: "Asiakkaan sovellus",
     local:
       "Tarkistaa ja allekirjoittaa ladatun tiedoston asiakkaan hallinnassa.",
@@ -66,7 +68,7 @@ const copy = {
     testPath:
       "Lähetä allekirjoitettu synteettinen tiedosto pankille simulator erillisellä File Exchange -istunnolla ja nouda pain.002-, camt.054- ja päivitetty camt.053-aineisto.",
     testPathLimit:
-      "Nykyiset Processing- ja Pankkisimulaattori-esimerkit ajetaan erikseen. Ne eivät vielä täsmäytä palautetta automaattisesti tai turvallisesti toista epävarmaa lähetystä.",
+      "Vanha Processing–Pankkisimulaattori-esimerkki edellyttää poistettua testipalvelua. Nykyinen aineistonmuodostusesimerkki ei lähetä tiedostoja. File Exchange -simulaattori on erillinen palvelu.",
     testPathLink: "Avaa Pankkisimulaattori",
     productionPathTitle: "Tuotantopolku · Bank Connectivity",
     productionPath:
@@ -75,17 +77,18 @@ const copy = {
       "Simulaattorin palaute on synteettistä eikä todista oikean pankin hyväksyntää, toteutunutta maksua tai tuotantokelpoisuutta.",
     exampleTitle: "Aja nykyinen Processing-esimerkki",
     exampleText:
-      "Esimerkki valmistelee ja lataa tarkistetun maksuaineiston, allekirjoittaa sen asiakkaan sovelluksessa ja lähettää sen kerran erillisen vahvistuksen jälkeen. Se ei nouda tai täsmäytä pankin tai simulaattorin palautetta.",
+      "SDK-esimerkki määrittää profiilin, luo ja tarkistaa luonnoksen, viimeistelee sen ja muodostaa XML-tiedoston. Se luo tietoja Processing-palveluun mutta ei lähetä mitään pankkiin.",
     exampleLabel: "Avaa Processing API -esimerkki",
+    sdkLabel: "TypeScript SDK -käyttöohje",
     docsLabel: "Avaa Bank Connectivity -rajapinnan dokumentaatio",
   },
   en: {
     eyebrow: "Processing API",
-    heading: "Prepare bank payment files with control and approval",
-    lead: "Processing API helps your software prepare bank payment files through a controlled workflow before the real bank agreement and production certificates are ready. It checks the payment details, locks the approved version, and lets your application download the exact same file for local signing.",
+    heading: "Prepare and validate bank payment files",
+    lead: "Processing API helps your software prepare bank payment files through a controlled workflow before the real bank agreement and production certificates are ready. It checks the payment details, finalizes a version, and lets your application download the exact same file for local signing.",
     statusTitle: "Product stage and access",
     statusText:
-      "Processing API is in Beta. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA payment-file profiles are available; their bank validation is in progress. Säästöpankki, Oma Säästöpankki and Ålandsbanken Finland SEPA payment-file profiles and the POP Pankki and Aktia pain.001.001.03 profiles are available; their bank validation has not started. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Available to subscribed customers in the ISECure test and production environments.",
+      "Processing API is in Beta. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark. OP and Danske Bank Finland SEPA payment-file profiles are available; their bank validation is in progress. Säästöpankki, Oma Säästöpankki and Ålandsbanken Finland SEPA payment-file profiles and the POP Pankki and Aktia pain.001.001.03 profiles are available; their bank validation has not started. Processing API is available only in production for separately onboarded subscribers. The test service has been retired. Verification of Payee (VoP) is not part of the current production release.",
     pricingTitle: "Pricing (Beta)",
     pricingText:
       "Priced like Bank Connectivity: 18 €/month base fee per integrator, 2 €/month per end customer (minimum 10 customer licenses), 200 € one-time production onboarding. Onboarding is waived for existing Bank Connectivity customers until 31 December 2026. Annual billing, VAT added on top.",
@@ -93,19 +96,19 @@ const copy = {
     flow: [
       "Choose the payment-file format for the bank and country within the user's access rights.",
       "Create a payment batch and add or correct its payments.",
-      "Check the required details and lock one unchanged version for a person to approve.",
-      "After approval, download the exact same file. The current technical output is ISO 20022 pain.001.001.09, and the TypeScript SDK verifies that the downloaded file has not changed.",
+      "Validate the payment details and finalize the version used to generate XML.",
+      "Generate and download the file for that finalized version. The current technical output is ISO 20022 pain.001.001.09, and the TypeScript SDK verifies that the downloaded file has not changed.",
     ],
     boundaryTitle: "Where Processing API's responsibility ends",
     boundaries: [
       "Processing API and Bank Connectivity use separate sign-in sessions.",
       "Bank Connectivity separately handles bank certificates and bank-file listing, download, and upload.",
       "The customer's private signing key stays in their own application. Processing API never receives the key and does not submit a payment to a bank.",
-      "Approval in the ISECure workflow applies to the prepared file. It is not bank authorization or proof of a completed payment.",
+      "Generating a file does not approve a payment. Upload requires the PGP signatures enforced by File Exchange.",
     ],
     relationshipTitle: "Choose test or production after signing",
     processingLabel: "Processing API",
-    processing: "Creates and releases the checked payment file.",
+    processing: "Prepares and generates the checked payment file.",
     localLabel: "Customer application",
     local:
       "Verifies and signs the downloaded file under the customer's control.",
@@ -116,7 +119,7 @@ const copy = {
     testPath:
       "Upload the signed synthetic file to bank simulator through a separate File Exchange session, then retrieve pain.002, camt.054, and the updated camt.053.",
     testPathLimit:
-      "The current Processing and Bank Simulator examples run separately. They do not yet correlate feedback automatically or safely retry an uncertain upload.",
+      "The historical Processing-to-Simulator example requires the retired test service. The current generation example uploads nothing. The File Exchange simulator is a separate service.",
     testPathLink: "Open Bank Simulator",
     productionPathTitle: "Production path · Bank Connectivity",
     productionPath:
@@ -125,17 +128,18 @@ const copy = {
       "Simulator feedback is synthetic; it does not prove real-bank acceptance, a completed payment, or production qualification.",
     exampleTitle: "Run the current Processing example",
     exampleText:
-      "The example prepares and downloads a checked payment file, signs it in the customer's application, and uploads it once after separate confirmation. It does not retrieve or correlate bank or simulator feedback.",
+      "The SDK example configures a profile, creates and validates a draft, finalizes it and generates XML. It creates Processing records but sends nothing to a bank.",
     exampleLabel: "Open the Processing API example",
+    sdkLabel: "TypeScript SDK guide",
     docsLabel: "Open the Bank Connectivity API documentation",
   },
   se: {
     eyebrow: "Processing API",
-    heading: "Förbered bankens betalningsfiler med kontroll och godkännande",
-    lead: "Processing API hjälper er programvara att skapa betalningsfiler för banken i ett kontrollerat flöde innan det riktiga bankavtalet och produktionscertifikaten är klara. Det kontrollerar betalningsuppgifterna, låser den godkända versionen och låter er applikation hämta exakt samma fil för lokal signering.",
+    heading: "Förbered och kontrollera bankens betalningsfiler",
+    lead: "Processing API hjälper er programvara att skapa betalningsfiler för banken i ett kontrollerat flöde innan det riktiga bankavtalet och produktionscertifikaten är klara. Det kontrollerar betalningsuppgifterna, slutför en version och låter er applikation hämta exakt samma fil för lokal signering.",
     statusTitle: "Produktfas och åtkomst",
     statusText:
-      "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access är validerade av Nordea för Finland, Sverige, Norge och Danmark. OP:s och Danske Banks SEPA-betalningsfilsprofiler för Finland är tillgängliga; deras bankvalidering pågår. Sparbankens, Oma Sparbanks och Ålandsbankens SEPA-betalningsfilsprofiler för Finland samt POP Bankens och Aktias pain.001.001.03-profiler är tillgängliga; deras bankvalidering har inte börjat. Mottagarkontroll (Verification of Payee, VoP) ingår för betalningar via Nordea, OP och Danske Bank. Tillgängligt för prenumerationskunder i ISECures test- och produktionsmiljöer.",
+      "Processing API är i Beta. Betalningsfilsprofiler för Nordea Corporate Access är validerade av Nordea för Finland, Sverige, Norge och Danmark. OP:s och Danske Banks SEPA-betalningsfilsprofiler för Finland är tillgängliga; deras bankvalidering pågår. Sparbankens, Oma Sparbanks och Ålandsbankens SEPA-betalningsfilsprofiler för Finland samt POP Bankens och Aktias pain.001.001.03-profiler är tillgängliga; deras bankvalidering har inte börjat. Processing API är endast tillgängligt i produktion för prenumerationskunder med separat onboarding. Testtjänsten har avvecklats. Mottagarkontroll (VoP) ingår inte i den nuvarande produktionsversionen.",
     pricingTitle: "Prissättning (Beta)",
     pricingText:
       "Pris som Bank Connectivity: 18 €/mån grundavgift per integratör, 2 €/mån per slutkund (minst 10 kundlicenser), 200 € engångsavgift för produktionsonboarding. Onboardingavgiften tas inte ut av befintliga Bank Connectivity-kunder fram till 31 december 2026. Årsfakturering, moms tillkommer.",
@@ -143,19 +147,19 @@ const copy = {
     flow: [
       "Välj betalningsfilens format för banken och landet inom användarens åtkomsträttigheter.",
       "Skapa en betalningsbatch och lägg till eller korrigera dess betalningar.",
-      "Kontrollera de obligatoriska uppgifterna och lås en oförändrad version som en person kan godkänna.",
-      "Hämta exakt samma fil efter godkännandet. Det nuvarande tekniska utdataformatet är ISO 20022 pain.001.001.09, och TypeScript SDK:t kontrollerar att den hämtade filen inte har ändrats.",
+      "Kontrollera betalningsuppgifterna och slutför versionen för XML-generering.",
+      "Generera och hämta filen för den slutförda versionen. Det nuvarande tekniska utdataformatet är ISO 20022 pain.001.001.09, och TypeScript SDK:t kontrollerar att den hämtade filen inte har ändrats.",
     ],
     boundaryTitle: "Var Processing API:s ansvar slutar",
     boundaries: [
       "Processing API och Bank Connectivity använder separata inloggningssessioner.",
       "Bank Connectivity hanterar separat bankcertifikat samt listning, hämtning och uppladdning av bankfiler.",
       "Kundens privata signeringsnyckel stannar i den egna applikationen. Processing API tar aldrig emot nyckeln och skickar inte en betalning till banken.",
-      "Godkännandet i ISECures flöde gäller den förberedda filen. Det är inte bankens auktorisering eller bevis på en genomförd betalning.",
+      "Att generera en fil godkänner inte en betalning. Uppladdning kräver de PGP-signaturer som File Exchange kontrollerar.",
     ],
     relationshipTitle: "Välj test eller produktion efter signeringen",
     processingLabel: "Processing API",
-    processing: "Skapar och frigör den kontrollerade betalningsfilen.",
+    processing: "Förbereder och genererar den kontrollerade betalningsfilen.",
     localLabel: "Kundens applikation",
     local: "Verifierar och signerar den hämtade filen under kundens kontroll.",
     exchangeLabel: "Välj destination",
@@ -165,7 +169,7 @@ const copy = {
     testPath:
       "Ladda upp den signerade syntetiska filen till banken simulator via en separat File Exchange-session och hämta sedan pain.002, camt.054 och den uppdaterade camt.053-filen.",
     testPathLimit:
-      "De nuvarande Processing- och Banksimulator-exemplen körs separat. De korrelerar ännu inte respons automatiskt och upprepar inte en osäker uppladdning säkert.",
+      "Det historiska Processing–Banksimulator-exemplet kräver den avvecklade testtjänsten. Det nuvarande genereringsexemplet laddar inte upp filer. File Exchange-simulatorn är en separat tjänst.",
     testPathLink: "Öppna Banksimulatorn",
     productionPathTitle: "Produktionsflöde · Bank Connectivity",
     productionPath:
@@ -174,8 +178,9 @@ const copy = {
       "Simulatorresponsen är syntetisk; den bevisar inte en riktig banks godkännande, en genomförd betalning eller produktionskvalificering.",
     exampleTitle: "Kör det nuvarande Processing-exemplet",
     exampleText:
-      "Exemplet förbereder och hämtar en kontrollerad betalningsfil, signerar den i kundens applikation och laddar upp den en gång efter separat bekräftelse. Det hämtar eller korrelerar inte bankens eller simulatorns respons.",
+      "SDK-exemplet konfigurerar en profil, skapar och kontrollerar ett utkast, slutför det och genererar XML. Det skapar poster i Processing men skickar inget till banken.",
     exampleLabel: "Öppna Processing API-exemplet",
+    sdkLabel: "Guide för TypeScript SDK",
     docsLabel: "Öppna dokumentationen för Bank Connectivity API",
   },
 }[lang];
@@ -276,6 +281,9 @@ const copy = {
             data-analytics-source="processing-api-example"
           >
             {copy.exampleLabel}
+          </Button>
+          <Button href={sdkGuideUrl} external variant="secondary">
+            {copy.sdkLabel}
           </Button>
           <Button
             variant="secondary"

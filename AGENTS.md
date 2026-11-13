@@ -186,13 +186,17 @@ export in OpenAPI 3.0.3. Reuse `ApiReferenceScript.astro` and `ApiDocsLayout.ast
 for all three references. Keep the existing File Exchange contract and legacy
 anchors compatible.
 
-The new references describe only the pinned, deployed test surface. Never publish
-the full generated platform contract as available. Follow the explicit sync and
+The references retain pinned historical test schemas. Processing test was retired on
+2026-10-17; current customer guidance must use the production-only SDK generation path.
+Do not label the retained Processing snapshot as current or restore its retired test access.
+Never publish the full generated platform contract as available. Follow the explicit sync and
 review procedure in README.md; normal builds remain offline and reject drift.
 Registration, initial authentication and account management must link to the live
 File Exchange reference. Processing session exchange and product authorization
-remain separately documented. The canonical test server is
-`https://processing-api.test.isecure.fi`; do not substitute an API Gateway URL.
+remain separately documented. The recorded test server
+`https://processing-api.test.isecure.fi` is historical metadata, not an active Processing endpoint.
+Current Processing uses `https://processing-api.isecure.fi`; importing its HTTP contract requires
+reviewed exact-release evidence. Keep the independent Simulator service separate.
 
 The user authorized public product discovery on the homepage: the primary
 navigation uses Products instead of Home, and the concise overview reuses public

@@ -293,9 +293,11 @@ node scripts/check-api-sdk-samples.mjs /absolute/path/to/isecure-ts-client
 This checks all 49 distinct session, notification and product-operation samples,
 plus the worked simulator workflow. Normal validation rejects generated drift,
 missing references, unreviewed operations and loss of authentication requirements.
-Both products use `https://processing-api.test.isecure.fi`; the existing Processing
-audience stays unchanged. DNS/TLS and API mapping are managed by the separate
-`isecure-processing-test-domain` CloudFormation stack in the test AWS account.
+The retained schema metadata names the retired `https://processing-api.test.isecure.fi`
+service. Processing currently runs only in production. Its reference introduction links to the
+[current SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)
+and labels the schema snapshot as historical. Do not restore a production server entry until
+the current production contract has been imported and reviewed.
 
 The authoritative platform model stays in OpenAPI 3.1. The public publisher
 converts its `const` constraints to equivalent one-value `enum` constraints for
