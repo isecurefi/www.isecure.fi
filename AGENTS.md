@@ -186,17 +186,18 @@ export in OpenAPI 3.0.3. Reuse `ApiReferenceScript.astro` and `ApiDocsLayout.ast
 for all three references. Keep the existing File Exchange contract and legacy
 anchors compatible.
 
-The references retain pinned historical test schemas. Processing test was retired on
-2026-10-17; current customer guidance must use the production-only SDK generation path.
-Do not label the retained Processing snapshot as current or restore its retired test access.
-Never publish the full generated platform contract as available. Follow the explicit sync and
-review procedure in README.md; normal builds remain offline and reject drift.
-Registration, initial authentication and account management must link to the live
-File Exchange reference. Processing session exchange and product authorization
-remain separately documented. The recorded test server
-`https://processing-api.test.isecure.fi` is historical metadata, not an active Processing endpoint.
-Current Processing uses `https://processing-api.isecure.fi`; importing its HTTP contract requires
-reviewed exact-release evidence. Keep the independent Simulator service separate.
+Processing uses a separately pinned production source in `processing-api.source.json` and
+`processing-api.source-metadata.json`. The Bank Simulator retains its separate historical source;
+never overwrite one product's snapshot when updating the other. Processing test was retired on
+2026-10-17. Use `https://processing-api.isecure.fi`, never an AWS internal URL or the retired test
+endpoint, for current Processing guidance. Keep the independent Simulator service separate.
+
+Use the exact-release sync documented in README.md. It verifies the branded API mapping, deployed
+route set, CloudFormation release, stored gateway artifact and live Lambda code hash against the
+recorded source revision. Never publish future platform operations as available. Normal builds
+remain offline and reject source/spec drift. Registration and account management link to File
+Exchange; the Processing session and operation permissions remain separate. A docs update never
+changes API deployment, DNS or tenant access.
 
 The user authorized public product discovery on the homepage: the primary
 navigation uses Products instead of Home, and the concise overview reuses public

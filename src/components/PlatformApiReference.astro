@@ -3,16 +3,18 @@ import ApiDocsLayout from "../layouts/ApiDocsLayout.astro";
 import ApiReferenceScript from "./ApiReferenceScript.astro";
 import processing from "../data/processing.openapi.json";
 import simulator from "../data/bank-simulator.openapi.json";
-import metadata from "../data/platform-api.source-metadata.json";
+import simulatorMetadata from "../data/platform-api.source-metadata.json";
+import processingMetadata from "../data/processing-api.source-metadata.json";
 interface Props {
   kind: "processing" | "bank-simulator";
 }
 const { kind } = Astro.props;
+const metadata = kind === "processing" ? processingMetadata : simulatorMetadata;
 const spec = kind === "processing" ? processing : simulator;
 const title = `${spec.info.title} documentation`;
 const description =
   kind === "processing"
-    ? "Current Processing TypeScript SDK guide and production onboarding, with a clearly labelled historical HTTP schema snapshot."
+    ? "Production Processing API reference: prepare and validate payments, generate XML, authenticate and handle errors. Includes TypeScript SDK examples and OpenAPI schemas."
     : "Configure synthetic bank accounts and scenarios, run tests and inspect results. Experimental test API reference with authentication, TypeScript examples and OpenAPI 3.0 schemas.";
 const specPath = `/apis/${kind}/openapi.json`;
 const specUrl = `${specPath}?revision=${metadata.repositoryRevision}`;

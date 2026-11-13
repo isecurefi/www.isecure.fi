@@ -2,6 +2,7 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
+import { buildSnapshot, productionSource } from "./platform-api-source.mjs";
 const args = Object.fromEntries(
   process.argv.slice(2).map((a) => {
     const i = a.indexOf("=");
@@ -19,94 +20,54 @@ const bytes = execFileSync(
   { cwd: args["--repository"], maxBuffer: 40 * 1024 * 1024 },
 );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
-if (hash(bytes) !== manifest.generatedOpenApi.sha256)
+if (
+  args["--product"] !== "processing" &&
+  hash(bytes) !== manifest.generatedOpenApi.sha256
+)
   throw new Error("Release source digest differs from Git");
 const original = JSON.parse(bytes);
 const deployed = JSON.parse(readFileSync(args["--gateway-export"], "utf8"));
+if (args["--product"] === "processing") {
+  for (const key of ["--binding", "--gateway-document"]) {
+    if (!args[key]) throw new Error(`Required ${key}=... for production`);
+  }
+  const result = productionSource({
+    sourceBytes: bytes,
+    manifest,
+    deployed,
+    gatewayBytes: readFileSync(args["--gateway-document"]),
+    binding: JSON.parse(readFileSync(args["--binding"], "utf8")),
+  });
+  for (const [file, value] of [
+    ["processing-api.source.json", result.snapshot],
+    ["processing-api.source-metadata.json", result.metadata],
+  ]) {
+    writeFileSync(
+      new URL(`../src/data/${file}`, import.meta.url),
+      JSON.stringify(value, null, 2) + "\n",
+    );
+  }
+  console.log(
+    `Pinned ${result.metadata.operationCount} production payment operations from ${result.metadata.repositoryRevision}`,
+  );
+  process.exit(0);
+}
+if (args["--product"]) throw new Error("Unknown product selection");
 if (deployed.info.description !== manifest.releaseId)
   throw new Error("Gateway and release manifest differ");
-const publicExtensions = new Set([
-  "x-isecure-minimum",
-  "x-isecure-maximum",
-  "x-isecure-json-representation",
-]);
-function clean(v) {
-  if (Array.isArray(v)) return v.map(clean);
-  if (!v || typeof v !== "object") return v;
-  return Object.fromEntries(
-    Object.entries(v)
-      .filter(([k]) => !k.startsWith("x-") || publicExtensions.has(k))
-      .map(([k, x]) => [k, clean(x)]),
-  );
-}
-const paths = {};
-const operations = {};
 const versions = new Set();
 for (const [path, item] of Object.entries(deployed.paths)) {
   for (const [method, operation] of Object.entries(item)) {
-    if (method === "options") continue;
     if (!["get", "post", "put", "patch", "delete"].includes(method)) continue;
-    const uri = operation["x-amazon-apigateway-integration"]?.uri ?? "";
-    const match = uri.match(
+    const match = operation["x-amazon-apigateway-integration"]?.uri?.match(
       /function:isecure-processing-gpgtest-v1:(\d+)\/(?:response-streaming-)?invocations$/,
     );
     if (!match) throw new Error(`Unexpected integration for ${method} ${path}`);
     versions.add(match[1]);
-    if (path === "/session" || path === "/stream") continue;
-    const source = original.paths[path]?.[method];
-    if (!source || source.operationId !== operation.operationId)
-      throw new Error(`No source match for ${method} ${path}`);
-    if (!/^(payment_|simulation_)/.test(source.operationId))
-      throw new Error(`Unreviewed product ${source.operationId}`);
-    paths[path] ??= {};
-    paths[path][method] = clean(source);
-    operations[source.operationId] = Object.fromEntries(
-      [
-        "version",
-        "contractDigest",
-        "input",
-        "result",
-        "permission",
-        "idempotency",
-        "expectedVersion",
-        "pagination",
-      ].map((k) => [k, source["x-isecure-operation"][k]]),
-    );
   }
 }
 if (versions.size !== 1) throw new Error("Deployment mixes Lambda versions");
-const schemas = {};
-function visit(x) {
-  if (Array.isArray(x)) {
-    x.forEach(visit);
-    return;
-  }
-  if (!x || typeof x !== "object") return;
-  if (x.$ref) {
-    const name = x.$ref.replace("#/components/schemas/", "");
-    if (!Object.hasOwn(schemas, name)) {
-      if (!original.components.schemas[name])
-        throw new Error(`Missing ${name}`);
-      schemas[name] = clean(original.components.schemas[name]);
-      visit(schemas[name]);
-    }
-  }
-  Object.values(x).forEach(visit);
-}
-visit(paths);
-Object.values(operations).forEach((o) =>
-  visit({ $ref: `#/components/schemas/${o.input}` }),
-);
-const snapshot = {
-  info: original.info,
-  paths,
-  components: {
-    schemas: Object.fromEntries(
-      Object.entries(schemas).sort(([a], [b]) => a.localeCompare(b)),
-    ),
-  },
-  operations,
-};
+const snapshot = buildSnapshot(original, deployed);
 const metadata = {
   schemaVersion: 1,
   releaseId: manifest.releaseId,
@@ -120,7 +81,7 @@ const metadata = {
   baseUrl: "https://processing-api.test.isecure.fi",
   audience: "isecure-processing-gpgtest-v1",
   sdkVersion: "2.7.0",
-  operationCount: Object.keys(operations).length,
+  operationCount: Object.keys(snapshot.operations).length,
 };
 for (const [file, value] of [
   ["platform-api.source.json", snapshot],

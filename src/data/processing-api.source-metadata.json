@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "releaseId": "r-f20c19c52-1793115925",
+  "repositoryRevision": "f20c19c529185efb6fb88b7f108d411ee9afeece",
+  "sourceDateEpoch": 1793115925,
+  "sourceFile": "generated/processing/openapi.json",
+  "sourceSha256": "88a6ed969cc8cd457625d0dca388fcea589701039e8219c1cd729cec06a7c0c5",
+  "snapshotSha256": "77b9c27eb9b0e779b1123ba57f5bb10a7ce1bac1419452b740cd5bebedc9b3e8",
+  "lambdaVersion": "$LATEST",
+  "lambdaCodeSha256": "cf2c1befc299468b81a9d4a343782e793fb6e21261fffbadfd687de9a2d49ad5",
+  "gatewayDocumentSha256": "de0e65df54dfb1263845cd7b2d09a49d0a68660588e03a3df98ef9cff068c84d",
+  "gatewayDeploymentId": "07625h",
+  "verifiedAt": "2026-11-13",
+  "baseUrl": "https://processing-api.isecure.fi",
+  "audience": "isecure-processing-production-v1",
+  "sdkVersion": "5.0.2",
+  "operationCount": 27,
+  "sessionSchemaVersions": [1, 2],
+  "streaming": false
+}

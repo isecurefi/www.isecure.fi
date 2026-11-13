@@ -247,8 +247,8 @@ files.
 
 The public references at `/apis/processing/` and `/apis/bank-simulator/` use the
 same self-hosted Scalar renderer as File Exchange. Each has an OpenAPI 3.0.3
-export at `openapi.json` below its route. Their published scope is the reviewed
-test deployment, not the complete generated platform model. Both explain the
+export at `openapi.json` below its route. Processing follows the verified production release;
+Bank Simulator retains its separate snapshot. Neither exposes the complete generated platform model. Both explain the
 shared ISECure identity and link to the live File Exchange registration, login,
 MFA and account-management operations. The separate Processing session and
 product permissions remain explicit.
@@ -260,8 +260,9 @@ Source examples and private infrastructure extensions are not imported. Numeric
 representation extensions are retained. No build fetches a floating upstream
 contract.
 
-To admit another deployed release, export that exact API Gateway stage and use
-its existing release manifest with `yarn api:sync:products`:
+For the legacy combined test snapshot, the original import remains available for explicit
+review of historical evidence. Do not use it to update Processing production or restore the retired
+test deployment. The production command is shown below. Legacy command:
 
 ```sh
 corepack yarn api:sync:products \
@@ -290,14 +291,38 @@ package with:
 node scripts/check-api-sdk-samples.mjs /absolute/path/to/isecure-ts-client
 ```
 
-This checks all 49 distinct session, notification and product-operation samples,
+This checks the distinct session, notification and product-operation samples,
 plus the worked simulator workflow. Normal validation rejects generated drift,
 missing references, unreviewed operations and loss of authentication requirements.
-The retained schema metadata names the retired `https://processing-api.test.isecure.fi`
-service. Processing currently runs only in production. Its reference introduction links to the
-[current SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)
-and labels the schema snapshot as historical. Do not restore a production server entry until
-the current production contract has been imported and reviewed.
+Processing uses the separately pinned `processing-api.source.json` and
+`processing-api.source-metadata.json`. The existing `platform-api.source*` files continue to own
+the Bank Simulator snapshot. The production sync never overwrites Simulator data.
+
+For Processing, collect read-only evidence for the current CloudFormation release: its release
+manifest and versioned gateway document, the stage's Gateway export with integrations, branded
+base-path mapping, and live Lambda configuration. Build the private binding receipt from those
+reads, including runtime/source/release identity, code hash, artifact keys/versions, stage and
+verification date. Never put raw configurations, credentials or customer data in this repository.
+
+```sh
+corepack yarn api:sync:products --product=processing \
+  --repository=/absolute/path/to/bankfiles-platform \
+  --manifest=/private/evidence/release-manifest.json \
+  --gateway-export=/private/evidence/gateway-export.json \
+  --gateway-document=/private/evidence/release-gateway.json \
+  --binding=/private/evidence/binding.json
+corepack yarn api:generate:products
+corepack yarn api:validate
+```
+
+The production guard checks the exact account, stage, branded mapping, source revision, runtime
+hash, artifact versions and deployed route inventory. The current integration invokes `$LATEST`,
+so provenance records the observed code hash rather than claiming an immutable Lambda version.
+Recheck the deployment and code hash before publication. The source snapshot contains only the
+27 deployed payment operations and reachable schemas; session schemas are reviewed against the
+same host source. No event stream is added where none is deployed. The generator converts OpenAPI
+3.1 schemas to 3.0.3 for Scalar without altering the request contract. Production uses
+`https://processing-api.isecure.fi`; no DNS or service change is part of this publication.
 
 The authoritative platform model stays in OpenAPI 3.1. The public publisher
 converts its `const` constraints to equivalent one-value `enum` constraints for

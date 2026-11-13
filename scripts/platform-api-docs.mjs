@@ -8,6 +8,16 @@ export const source = JSON.parse(read("src/data/platform-api.source.json"));
 export const metadata = JSON.parse(
   read("src/data/platform-api.source-metadata.json"),
 );
+export const processingSource = JSON.parse(
+  read("src/data/processing-api.source.json"),
+);
+export const processingMetadata = JSON.parse(
+  read("src/data/processing-api.source-metadata.json"),
+);
+export const sourceFor = (kind) =>
+  kind === "processing" ? processingSource : source;
+export const metadataFor = (kind) =>
+  kind === "processing" ? processingMetadata : metadata;
 export const sha256 = (value) =>
   createHash("sha256").update(value).digest("hex");
 const common = read("src/content/api/common.md");
@@ -113,7 +123,11 @@ const copy = {
   ],
   "payment_orders.finalize_draft": [
     "Finalize a draft",
-    "Lock the selected draft revision for review. Later changes require a new eligible revision.",
+    "Finalize the selected draft revision for file generation. Later changes require a new eligible revision. A configured approval workflow is a separate path.",
+  ],
+  "payment_orders.generate_file": [
+    "Generate and download payment XML",
+    "Generate XML for the exact finalized order revision and current export-profile revision. No Processing approval is required. This read does not release a retained export or submit a payment to a bank. The SDK verifies the returned identity, digest, length and XML media type before returning bytes.",
   ],
   "payment_orders.submit_for_review": [
     "Request payment approval",
@@ -332,7 +346,7 @@ export function schemaClosure(value, available) {
     Object.entries(schemas).sort(([a], [b]) => a.localeCompare(b)),
   );
 }
-function sample(id) {
+function sample(id, source) {
   const m = source.operations[id];
   const method = sdkCall(id);
   const options = [];
@@ -477,10 +491,12 @@ const stream = {
 };
 export function buildSpec(kind) {
   const simulator = kind === "bank-simulator";
+  const source = sourceFor(kind);
+  const metadata = metadataFor(kind);
   const name = simulator ? "Bank Simulator API" : "Processing API";
   const paths = {
     "/session": structuredClone(session),
-    "/stream": structuredClone(stream),
+    ...(simulator ? { "/stream": structuredClone(stream) } : {}),
   };
   for (const [path, item] of Object.entries(source.paths)) {
     for (const [method, original] of Object.entries(item)) {
@@ -495,7 +511,7 @@ export function buildSpec(kind) {
       op.security = security;
       op.description = `${description}\n\nRequired permission: \`${meta.permission}\`, plus an active ${simulator ? "Bank Simulation" : "Processing"} subscription. The server checks account/resource scope on every call.\n\nSend \`ISECure-Contract-Version: ${meta.version}\`. ${meta.idempotency === "required" ? "Persist an Idempotency-Key for this command." : "This operation does not accept an Idempotency-Key."} ${meta.expectedVersion === "required" ? "Send the current resource version in If-Match." : ""}\n\nSDK: \`client.${sdkCall(id)}\`. Input type: [${meta.input.split(".").at(-1)}](#schema/${meta.input}).`;
       op["x-codeSamples"] = [
-        { lang: "ts", label: "TypeScript SDK", source: sample(id) },
+        { lang: "ts", label: "TypeScript SDK", source: sample(id, source) },
       ];
       op["x-isecure-contract-version"] = meta.version;
       op["x-isecure-contract-digest"] = meta.contractDigest;
@@ -518,6 +534,12 @@ export function buildSpec(kind) {
         504: "Gateway timeout; the command outcome may be unknown.",
       }))
         op.responses[status] ??= response(description, ref("ProcessingError"));
+      if (!simulator && id === "payment_orders.generate_file") {
+        op.responses[412] ??= response(
+          "The order or profile revision is stale or not eligible for generation. Read the current state before proceeding.",
+          ref("ProcessingError"),
+        );
+      }
       op.responses.default = {
         description:
           "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
@@ -529,6 +551,22 @@ export function buildSpec(kind) {
       };
       paths[path] = { [method]: op };
     }
+  }
+  if (!simulator) {
+    paths["/session"].post.parameters = [
+      {
+        name: "ISECure-Session-Schema-Version",
+        in: "header",
+        required: false,
+        schema: { type: "integer", enum: [1, 2], default: 1 },
+        description:
+          "Omit or send 1 for the standard session. Send 2 to include tenant, legal entity and actor scope. Scope identifies context; it grants no authority.",
+      },
+    ];
+    paths["/session"].post.responses[200] = response(
+      "Keep the token private. Schema 2 adds scope; schema 1 remains the default.",
+      { oneOf: [ref("ProcessingSession"), ref("ProcessingScopedSession")] },
+    );
   }
   const extra = {
     ProcessingError: codeEnvelope,
@@ -562,6 +600,22 @@ export function buildSpec(kind) {
   const used = Object.values(paths)
     .flatMap((p) => Object.values(p))
     .filter((o) => source.operations[o.operationId]);
+  if (!simulator) {
+    const scoped = structuredClone(extra.ProcessingSession);
+    scoped.properties.schemaVersion = { type: "integer", const: 2 };
+    scoped.properties.scope = {
+      type: "object",
+      properties: {
+        tenantId: { type: "string", format: "uuid" },
+        legalEntityId: { type: "string", format: "uuid" },
+        actorId: { type: "string", format: "uuid" },
+      },
+      required: ["tenantId", "legalEntityId", "actorId"],
+      additionalProperties: false,
+    };
+    scoped.required.push("scope");
+    extra.ProcessingScopedSession = scoped;
+  }
   const schemas = schemaClosure(
     [paths, ...used.map((o) => ref(source.operations[o.operationId].input))],
     { ...source.components.schemas, ...extra },
@@ -603,7 +657,7 @@ export function buildSpec(kind) {
           {
             url: metadata.baseUrl,
             description:
-              "Retired test service — historical schema snapshot; do not call",
+              "ISECure production — separate tenant onboarding and Processing subscription required",
           },
         ],
     tags: tags.map((name) => ({ name })),
@@ -650,7 +704,9 @@ export function buildSpec(kind) {
         name: name,
         tags: tags.filter((t) => t !== "Session" && t !== "Notifications"),
       },
-      { name: "Notifications", tags: ["Notifications"] },
+      ...(simulator
+        ? [{ name: "Notifications", tags: ["Notifications"] }]
+        : []),
     ],
   });
 }

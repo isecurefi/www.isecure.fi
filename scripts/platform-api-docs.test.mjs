@@ -72,26 +72,50 @@ test("OpenAPI 3.0 conversion preserves exact values and rejects unsupported sche
     const spec = buildSpec(kind);
     assert.equal(spec.openapi, "3.0.3");
     assert.ok(!JSON.stringify(spec).includes('"const":'));
-    assert.equal(spec.servers[0].url, "https://processing-api.test.isecure.fi");
+    assert.equal(
+      spec.servers[0].url,
+      kind === "processing"
+        ? "https://processing-api.isecure.fi"
+        : "https://processing-api.test.isecure.fi",
+    );
   }
 });
 
-test("Processing links current SDK guidance without claiming the retained schema is deployed", () => {
+test("production reference includes generation, scoped login and only deployed routes", () => {
   const spec = buildSpec("processing");
-  assert.match(spec.info.description, /Historical HTTP schema snapshot/);
-  assert.match(
-    spec.info.description,
-    /not a complete reference for today's production deployment/,
+  assert.equal(Object.keys(spec.paths).length, 28);
+  assert.equal(spec.paths["/stream"], undefined);
+  assert.equal(spec.servers.length, 1);
+  assert.equal(spec.servers[0].url, "https://processing-api.isecure.fi");
+  const op = spec.paths["/v1/payment-orders:generate-file"].post;
+  assert.equal(op.operationId, "payment_orders.generate_file");
+  assert.ok(op.responses[200].content["application/xml"]);
+  assert.ok(op.responses[412].content["application/json"]);
+  assert.match(op["x-codeSamples"][0].source, /paymentBatches.generateFile/);
+  assert.ok(
+    !op.parameters.some((p) =>
+      ["Idempotency-Key", "If-Match"].includes(p.name),
+    ),
+  );
+  assert.deepEqual(
+    spec.paths["/session"].post.parameters[0].schema.enum,
+    [1, 2],
+  );
+  assert.equal(
+    spec.paths["/session"].post.responses[200].content["application/json"]
+      .schema.oneOf.length,
+    2,
+  );
+  assert.deepEqual(
+    spec.components.schemas.ProcessingScopedSession.properties.scope.required,
+    ["tenantId", "legalEntityId", "actorId"],
   );
   assert.match(
     spec.info.description,
     /isecure-ts-client\/blob\/main\/docs\/processing\.md/,
   );
-  assert.match(spec.info.description, /examples\/processing-generate-file/);
   assert.doesNotMatch(
     spec.info.description,
-    /isecure-ts-client@2\.7\.0|same contract is served in the test and production/,
+    /Historical HTTP schema snapshot|isecure-ts-client@2\.7\.0/,
   );
-  assert.equal(spec.servers.length, 1);
-  assert.match(spec.servers[0].description, /Retired test service/);
 });

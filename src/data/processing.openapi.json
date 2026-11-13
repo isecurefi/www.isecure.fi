@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "ISECure Processing API",
-    "version": "0.119.0",
-    "description": "## Current SDK guide and production access\n\nUse the [Processing SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)\nfor current setup, authentication, errors and examples. Processing is included in the published\n`isecure-ts-client` package through its experimental `/iso20022` entry point.\n\n**Availability checked 12 November 2026:** Processing runs only in production at\n`https://processing-api.isecure.fi`, with audience `isecure-processing-production-v1`.\nThe former test service was retired on 17 October 2026. Production registration alone does not\nprovide Processing access: ISECure must provision the tenant subscription, database, permissions\nand API usage-plan access.\n\nThe standard path is to configure an export profile, create and validate a draft, finalize its\nrevision, then generate and download payment XML. See the\n[generation example](https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-generate-file/README.md).\nIt creates Processing records but does not send anything to a bank. Authorization, signing and\nupload happen separately through [File Exchange](https://www.isecure.fi/wsapi_v2/#operation/UploadFile).\nGenerating a file does not prove bank acceptance or payment completion.\n\n## Historical HTTP schema snapshot\n\nThe operation schemas below are retained from the test release verified on 20 September 2026.\n**They are not a complete reference for today's production deployment.** In particular, this\nsnapshot does not contain the current `generate_file` operation. Its notification stream and\nhistorical approval workflow must not be assumed available in production. VoP, observation and\nhosted Integration methods in the SDK are also outside the current production route set.\n\nUse the SDK guide for the current generation flow. Updating this HTTP schema snapshot requires a\nseparate import and review of the exact production release; the snapshot's recorded source has not\nbeen relabelled as current. The historical server entry below is retired and must not be called.\n\n## Account and session\n\nUse your production File Exchange account. Start with [InitRegister](https://www.isecure.fi/wsapi_v2/#operation/InitRegister)\nand [Register](https://www.isecure.fi/wsapi_v2/#operation/Register) if needed; then complete\n[Login](https://www.isecure.fi/wsapi_v2/#operation/Login) and any requested\n[LoginMFA](https://www.isecure.fi/wsapi_v2/#operation/LoginMFA). Account management, including\n[ListAccounts](https://www.isecure.fi/wsapi_v2/#operation/ListAccounts) and\n[DeleteAccount](https://www.isecure.fi/wsapi_v2/#operation/DeleteAccount), stays in File Exchange.\n\nProcessing exchanges the current ID token and API key for a separate Processing session.\nThe SDK guide shows the production URL and audience, session cleanup, required revisions and\nsafe handling of uncertain commands. Never log tokens, private keys or payment contents.\n\nThe independent [Bank Simulator](https://www.isecure.fi/apis/bank-simulator/) and\n[File Exchange](https://www.isecure.fi/wsapi_v2/) have separate service boundaries.\n\n\n",
+    "version": "0.139.0",
+    "description": "Prepare and validate payments, finalize a version, then generate the payment XML. Your application\nverifies and signs those bytes locally and uploads them through the separate\n[File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile).\nProcessing does not send payments to a bank.\n\n**Production · Beta · Paid subscription and separate onboarding required.**\nUse `https://processing-api.isecure.fi` with audience `isecure-processing-production-v1`.\nThere is no active Processing test deployment. The independent Bank Simulator remains a separate\nservice with its own access requirements.\n\n## What this reference covers\n\nThis reference matches the **27 payment operations and session exchange** in the production\nrelease checked on **13 November 2026**. The OpenAPI schemas come from that release's exact source\nrevision; deployment identity and the Lambda code hash were checked before publication.\nIt includes `payment_orders.generate_file`. It does not advertise an event stream, VoP,\nstatement observations or hosted Integration setup, which are absent from this deployment.\n\nApproval and retained-export routes are listed because they are deployed, but they require a\nseparately configured approval policy. The current production onboarding flow uses file generation\nwithout Processing approval. A route being listed does not grant permission or configure that policy.\n\n## Get access and sign in\n\nUse your production File Exchange account. [Start registration](https://www.isecure.fi/wsapi_v2/#operation/InitRegister)\nand [register](https://www.isecure.fi/wsapi_v2/#operation/Register) if needed. ISECure must then\nprovision your Processing subscription, tenant database, permissions and API usage-plan access.\nRegistration alone does not enable Processing.\n\n1. Complete [Login](https://www.isecure.fi/wsapi_v2/#operation/Login) and any requested\n   [LoginMFA](https://www.isecure.fi/wsapi_v2/#operation/LoginMFA). Keep the current **ID token** and API key.\n2. Call `POST /session` with the ID token directly in `Authorization` (no prefix) and the API key\n   in `x-api-key`. There is no request body. Check the returned audience and expiry.\n3. For business requests, use `Authorization: Processing <processingSession>`, the same `x-api-key`,\n   and the operation's `ISECure-Contract-Version`. JSON bodies need `Content-Type: application/json`.\n4. Clear the separate Processing session on sign-out or account changes. Exchange a new session\n   when needed; the SDK does not silently refresh it or retry commands.\n\nSession schema 1 is the default. Send `ISECure-Session-Schema-Version: 2` to also receive the tenant,\nlegal entity and actor identifiers. Those identifiers describe the signed-in context; they grant no\nextra access. Sessions expire after 15 minutes; use `expiresAtEpochSeconds` rather than guessing.\n\nAccount administration stays in File Exchange, including\n[ListAccounts](https://www.isecure.fi/wsapi_v2/#operation/ListAccounts) and\n[DeleteAccount](https://www.isecure.fi/wsapi_v2/#operation/DeleteAccount).\n\n## Use the TypeScript SDK\n\nThe published `isecure-ts-client@5.0.2` includes Processing through its experimental `/iso20022`\nentry point. Use Node.js 24 or newer, or a supported browser bundler. Its contract versions and\ndigests match all 27 payment operations in this deployment; this comparison is not a new live\ncustomer qualification. The SDK interface remains experimental.\n\nSee the [Processing SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)\nfor connection code. Operation examples below assume an authenticated client named `client` and\nits `Iso20022HttpTransport` named `transport`. Where an example declares `input`, supply the fields\nshown in the request schema; these are typed templates, not complete payment fixtures.\n\nThe [generation example](https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-generate-file/README.md)\nconfigures a profile, creates and validates a draft, finalizes it and generates XML. It creates\nProcessing records but does not upload anything to a bank.\n\n## Generate a payment file\n\n1. Use `paymentExportProfiles.list()` to find a bank format available to your tenant. A format's\n   availability does not establish which services your bank agreement allows.\n2. Configure the paying account and bank-agreement details. Resolve an account capability and use\n   its exact selected reference when creating a draft.\n3. Add payments with decimal-string amounts, validate them, correct any issues and finalize the draft.\n4. Call `paymentBatches.generateFile()` with the finalized order revision and current profile revision.\n5. The SDK verifies the returned file identity, SHA-256 digest, length and XML media type. Separately\n   authorize, sign and upload the unchanged bytes through File Exchange when intended.\n\nThe generation endpoint returns XML, not a JSON document or an S3 URL. It requires read permission\nand Processing access, but no Processing approval. Generation does not release a retained export,\nchange approval state or prove bank acceptance. Contract size bounds do not override gateway,\nLambda or client response-size limits.\n\n## Errors and retries\n\nEvery operation below lists its required permission, contract version and request headers.\nCommands marked with `Idempotency-Key` need a saved key for the same intended command. Where\n`If-Match` is required, use the quoted current resource version. If the version is stale, read and\nreview the latest state before preparing another command.\n\nA timeout can leave a command's outcome unknown. Read the current resource before retrying;\nnever invent a new idempotency key just to bypass uncertainty. A Processing idempotency key does\nnot make a bank upload safe to repeat. The Processing SDK does not retry automatically and has a\n30-second default timeout, separate from the WS Channel client's timeout.\n\nExpect `401` for invalid sessions, `403` for missing access, `412` for stale versions and `429` for\nrequest limits. Inspect the actual response and operation-specific issues; a gateway may return a\ndifferent error shape from the service. Keep credentials, tokens, signed links and payment contents\nout of logs. Preserve only safe error metadata for support.\n\n[File Exchange reference](https://www.isecure.fi/wsapi_v2/) ·\n[Bank Simulator reference](https://www.isecure.fi/apis/bank-simulator/) ·\n[SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)\n\n\n",
     "contact": {
       "name": "ISECure developer support",
       "email": "support@isecure.fi",
@@ -15,16 +15,13 @@
   },
   "servers": [
     {
-      "url": "https://processing-api.test.isecure.fi",
-      "description": "Retired test service — historical schema snapshot; do not call"
+      "url": "https://processing-api.isecure.fi",
+      "description": "ISECure production — separate tenant onboarding and Processing subscription required"
     }
   ],
   "tags": [
     {
       "name": "Session"
-    },
-    {
-      "name": "Notifications"
     },
     {
       "name": "Approval"
@@ -57,11 +54,18 @@
         ],
         "responses": {
           "200": {
-            "description": "Keep processingSession private; validate the audience and expiry before use.",
+            "description": "Keep the token private. Schema 2 adds scope; schema 1 remains the default.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProcessingSession"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProcessingSession"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingScopedSession"
+                    }
+                  ]
                 }
               }
             }
@@ -113,100 +117,18 @@
             "label": "TypeScript SDK",
             "source": "const session = await transport.exchangeProcessingSession();\n// Returns expiry and audience metadata; the transport keeps the token private."
           }
-        ]
-      }
-    },
-    "/stream": {
-      "get": {
-        "operationId": "processing_events.stream",
-        "summary": "Read event notifications",
-        "tags": ["Notifications"],
-        "description": "Receive a bounded text/event-stream connection. The current lease is at most 20 seconds. Event and task items contain an opaque id and JSON data; heartbeats keep the connection active. Reconnect deliberately with the last completely handled ID, and reconcile resource state after a gap. Additional event/task read authority is required. This is not complete audit history.",
-        "security": [
-          {
-            "processingSession": [],
-            "tenantApiKey": []
-          }
         ],
         "parameters": [
           {
-            "name": "ISECure-Contract-Version",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "enum": [1]
-            }
-          },
-          {
-            "name": "Last-Event-ID",
+            "name": "ISECure-Session-Schema-Version",
             "in": "header",
             "required": false,
-            "description": "Opaque cursor from the last completely handled stream item.",
             "schema": {
-              "type": "string",
-              "maxLength": 2048
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Finite SSE lease. Cache-Control: private, no-store, no-cache.",
-            "content": {
-              "text/event-stream": {
-                "schema": {
-                  "type": "string"
-                },
-                "example": ": heartbeat\n\n"
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid cursor or request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Processing session is invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Required read authority is missing.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Notifications are unavailable.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "ts",
-            "label": "TypeScript SDK",
-            "source": "for await (const item of transport.streamProcessingEvents()) {\n  if (item.kind === \"heartbeat\") continue;\n  // Handle item.data, then save item.id for your next connection.\n}"
+              "type": "integer",
+              "enum": [1, 2],
+              "default": 1
+            },
+            "description": "Omit or send 1 for the standard session. Send 2 to include tenant, legal entity and actor scope. Scope identifies context; it grants no authority."
           }
         ]
       }
@@ -787,6 +709,225 @@
         "x-isecure-permission": "read"
       }
     },
+    "/v1/payment-capabilities:resolve": {
+      "post": {
+        "operationId": "payment_capabilities.resolve",
+        "summary": "Select a matching capability",
+        "description": "Match the paying account and payment requirements to an available capability. Continue only when outcome is resolved and selected is present; ambiguous, unsupported, not-ready, expired or uncertain results must be resolved before drafting.\n\nRequired permission: `validate`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentCapabilities.resolve`. Input type: [PaymentCapabilityCriteria](#schema/isecure.bankfiles.payments_api.PaymentCapabilityCriteria).",
+        "tags": ["Account capabilities"],
+        "parameters": [
+          {
+            "name": "ISECure-Contract-Version",
+            "in": "header",
+            "required": true,
+            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
+            "schema": {
+              "type": "integer",
+              "enum": [1]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentCapabilityCriteria"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "processingSession": [],
+            "tenantApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful task result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentCapabilityResolution"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Typed request or validation issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Typed authorization or policy issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The tenant-scoped resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Request rate limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The handler violated its generated result contract.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway timeout; the command outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "ts",
+            "label": "TypeScript SDK",
+            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in PaymentCapabilityCriteria.\ndeclare const input: Parameters<typeof client.paymentCapabilities.resolve>[0];\nconst result = await client.paymentCapabilities.resolve(input);"
+          }
+        ],
+        "x-isecure-contract-version": 1,
+        "x-isecure-contract-digest": "sha256:15dc4c7169d02a11a7334b44002298ad0726e70dddc4c6d437c42bcea04cebdf",
+        "x-isecure-permission": "validate"
+      }
+    },
     "/v1/payment-capabilities/{account_capability_id}": {
       "get": {
         "operationId": "payment_capabilities.get",
@@ -1247,225 +1388,6 @@
         "x-isecure-contract-version": 1,
         "x-isecure-contract-digest": "sha256:6fa22b380da3cbf75d8f4ea4dd930957bae7467361c05f13206192324ed4b607",
         "x-isecure-permission": "explain"
-      }
-    },
-    "/v1/payment-capabilities:resolve": {
-      "post": {
-        "operationId": "payment_capabilities.resolve",
-        "summary": "Select a matching capability",
-        "description": "Match the paying account and payment requirements to an available capability. Continue only when outcome is resolved and selected is present; ambiguous, unsupported, not-ready, expired or uncertain results must be resolved before drafting.\n\nRequired permission: `validate`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentCapabilities.resolve`. Input type: [PaymentCapabilityCriteria](#schema/isecure.bankfiles.payments_api.PaymentCapabilityCriteria).",
-        "tags": ["Account capabilities"],
-        "parameters": [
-          {
-            "name": "ISECure-Contract-Version",
-            "in": "header",
-            "required": true,
-            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
-            "schema": {
-              "type": "integer",
-              "enum": [1]
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentCapabilityCriteria"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "processingSession": [],
-            "tenantApiKey": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful task result.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentCapabilityResolution"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Typed request or validation issue.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication is missing or invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Typed authorization or policy issue.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "The tenant-scoped resource was not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Request rate limit reached.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "The handler violated its generated result contract.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Gateway timeout; the command outcome may be unknown.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "ts",
-            "label": "TypeScript SDK",
-            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in PaymentCapabilityCriteria.\ndeclare const input: Parameters<typeof client.paymentCapabilities.resolve>[0];\nconst result = await client.paymentCapabilities.resolve(input);"
-          }
-        ],
-        "x-isecure-contract-version": 1,
-        "x-isecure-contract-digest": "sha256:15dc4c7169d02a11a7334b44002298ad0726e70dddc4c6d437c42bcea04cebdf",
-        "x-isecure-permission": "validate"
       }
     },
     "/v1/payment-export-profile-catalog": {
@@ -2478,224 +2400,6 @@
         "x-isecure-permission": "approve"
       }
     },
-    "/v1/payment-exports/{payment_export_id}": {
-      "get": {
-        "operationId": "payment_exports.get",
-        "summary": "Read payment-file metadata",
-        "description": "Read the artifact identity, digest, byte length and media type used to verify the subsequent download.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentExports.get`. Input type: [PaymentExportGetInput](#schema/isecure.bankfiles.payments_api.PaymentExportGetInput).",
-        "tags": ["Payment files"],
-        "parameters": [
-          {
-            "name": "ISECure-Contract-Version",
-            "in": "header",
-            "required": true,
-            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
-            "schema": {
-              "type": "integer",
-              "enum": [1]
-            }
-          },
-          {
-            "name": "payment_export_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "security": [
-          {
-            "processingSession": [],
-            "tenantApiKey": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful task result.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentExportGetResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Typed request or validation issue.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication is missing or invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Typed authorization or policy issue.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "The tenant-scoped resource was not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Request rate limit reached.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "The handler violated its generated result contract.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Gateway timeout; the command outcome may be unknown.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "ts",
-            "label": "TypeScript SDK",
-            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in PaymentExportGetInput.\ndeclare const input: Parameters<typeof client.paymentExports.get>[0];\nconst result = await client.paymentExports.get(input);"
-          }
-        ],
-        "x-isecure-contract-version": 1,
-        "x-isecure-contract-digest": "sha256:4948c65e5610a2b8770b63bea703263baab60e41069ef05b73dbdb8525fe2122",
-        "x-isecure-permission": "read"
-      }
-    },
     "/v1/payment-exports:download-content": {
       "post": {
         "operationId": "payment_exports.download_content",
@@ -3314,6 +3018,224 @@
         "x-isecure-permission": "approve"
       }
     },
+    "/v1/payment-exports/{payment_export_id}": {
+      "get": {
+        "operationId": "payment_exports.get",
+        "summary": "Read payment-file metadata",
+        "description": "Read the artifact identity, digest, byte length and media type used to verify the subsequent download.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentExports.get`. Input type: [PaymentExportGetInput](#schema/isecure.bankfiles.payments_api.PaymentExportGetInput).",
+        "tags": ["Payment files"],
+        "parameters": [
+          {
+            "name": "ISECure-Contract-Version",
+            "in": "header",
+            "required": true,
+            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
+            "schema": {
+              "type": "integer",
+              "enum": [1]
+            }
+          },
+          {
+            "name": "payment_export_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "security": [
+          {
+            "processingSession": [],
+            "tenantApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful task result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentExportGetResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Typed request or validation issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Typed authorization or policy issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The tenant-scoped resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Request rate limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The handler violated its generated result contract.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway timeout; the command outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "ts",
+            "label": "TypeScript SDK",
+            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in PaymentExportGetInput.\ndeclare const input: Parameters<typeof client.paymentExports.get>[0];\nconst result = await client.paymentExports.get(input);"
+          }
+        ],
+        "x-isecure-contract-version": 1,
+        "x-isecure-contract-digest": "sha256:4948c65e5610a2b8770b63bea703263baab60e41069ef05b73dbdb8525fe2122",
+        "x-isecure-permission": "read"
+      }
+    },
     "/v1/payment-orders": {
       "get": {
         "operationId": "payment_orders.list",
@@ -3582,460 +3504,6 @@
         "x-isecure-contract-version": 1,
         "x-isecure-contract-digest": "sha256:da80266be8672929f2ee0d21973f83badd65306566c5e2434851aec37365f6ae",
         "x-isecure-permission": "read"
-      }
-    },
-    "/v1/payment-orders/{payment_order_id}": {
-      "get": {
-        "operationId": "payment_orders.get",
-        "summary": "Read a payment order",
-        "description": "Read the current order state, references and versions before continuing its workflow.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.get`. Input type: [PaymentOrderGetInput](#schema/isecure.bankfiles.payments_api.PaymentOrderGetInput).",
-        "tags": ["Payment drafts"],
-        "parameters": [
-          {
-            "name": "ISECure-Contract-Version",
-            "in": "header",
-            "required": true,
-            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
-            "schema": {
-              "type": "integer",
-              "enum": [1]
-            }
-          },
-          {
-            "name": "payment_order_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "revision_id",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "security": [
-          {
-            "processingSession": [],
-            "tenantApiKey": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful task result.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentOrderGetResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Typed request or validation issue.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication is missing or invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Typed authorization or policy issue.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "The tenant-scoped resource was not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Request rate limit reached.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "The handler violated its generated result contract.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Gateway timeout; the command outcome may be unknown.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "ts",
-            "label": "TypeScript SDK",
-            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in PaymentOrderGetInput.\ndeclare const input: Parameters<typeof client.paymentBatches.get>[0];\nconst result = await client.paymentBatches.get(input);"
-          }
-        ],
-        "x-isecure-contract-version": 1,
-        "x-isecure-contract-digest": "sha256:662bc78d1ba71acbca206a4004ccef039ca7a6b5bd199e4a308e48b50e21e367",
-        "x-isecure-permission": "read"
-      }
-    },
-    "/v1/payment-orders/{payment_order_id}/explanation": {
-      "get": {
-        "operationId": "payment_orders.explain",
-        "summary": "Explain a payment order",
-        "description": "Read the reasons and evidence associated with the selected payment order.\n\nRequired permission: `explain`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.explain`. Input type: [PaymentOrderGetInput](#schema/isecure.bankfiles.payments_api.PaymentOrderGetInput).",
-        "tags": ["Payment drafts"],
-        "parameters": [
-          {
-            "name": "ISECure-Contract-Version",
-            "in": "header",
-            "required": true,
-            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
-            "schema": {
-              "type": "integer",
-              "enum": [1]
-            }
-          },
-          {
-            "name": "payment_order_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "revision_id",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "security": [
-          {
-            "processingSession": [],
-            "tenantApiKey": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful task result.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/isecure.bankfiles.observations.ExplanationResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Typed request or validation issue.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication is missing or invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Typed authorization or policy issue.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "The tenant-scoped resource was not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Request rate limit reached.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "The handler violated its generated result contract.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
-                        },
-                        {
-                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
-                        }
-                      ]
-                    },
-                    {
-                      "$ref": "#/components/schemas/ProcessingError"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Gateway timeout; the command outcome may be unknown.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessingError"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "ts",
-            "label": "TypeScript SDK",
-            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in PaymentOrderGetInput.\ndeclare const input: Parameters<typeof client.paymentBatches.explain>[0];\nconst result = await client.paymentBatches.explain(input);"
-          }
-        ],
-        "x-isecure-contract-version": 1,
-        "x-isecure-contract-digest": "sha256:67ae1c8eb3c0b955a7991d3272a4e756cfec31eddab2111befe1db401551a760",
-        "x-isecure-permission": "explain"
       }
     },
     "/v1/payment-orders:append-transfers": {
@@ -5260,7 +4728,7 @@
       "post": {
         "operationId": "payment_orders.finalize_draft",
         "summary": "Finalize a draft",
-        "description": "Lock the selected draft revision for review. Later changes require a new eligible revision.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.finalize`. Input type: [PaymentOrderTransitionInput](#schema/isecure.bankfiles.payments_api.PaymentOrderTransitionInput).",
+        "description": "Finalize the selected draft revision for file generation. Later changes require a new eligible revision. A configured approval workflow is a separate path.\n\nRequired permission: `propose`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. Persist an Idempotency-Key for this command. Send the current resource version in If-Match.\n\nSDK: `client.paymentBatches.finalize`. Input type: [PaymentOrderTransitionInput](#schema/isecure.bankfiles.payments_api.PaymentOrderTransitionInput).",
         "tags": ["Payment drafts"],
         "parameters": [
           {
@@ -5567,6 +5035,261 @@
         "x-isecure-contract-version": 1,
         "x-isecure-contract-digest": "sha256:e8c22ad4b5dae182cefa00329de60625d382371b90452890952b4aa69dcec268",
         "x-isecure-permission": "propose"
+      }
+    },
+    "/v1/payment-orders:generate-file": {
+      "post": {
+        "operationId": "payment_orders.generate_file",
+        "summary": "Generate and download payment XML",
+        "description": "Generate XML for the exact finalized order revision and current export-profile revision. No Processing approval is required. This read does not release a retained export or submit a payment to a bank. The SDK verifies the returned identity, digest, length and XML media type before returning bytes.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.generateFile`. Input type: [GeneratePaymentOrderFileInput](#schema/isecure.bankfiles.payments_api.GeneratePaymentOrderFileInput).",
+        "tags": ["Payment drafts"],
+        "parameters": [
+          {
+            "name": "ISECure-Contract-Version",
+            "in": "header",
+            "required": true,
+            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
+            "schema": {
+              "type": "integer",
+              "enum": [1]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/isecure.bankfiles.payments_api.GeneratePaymentOrderFileInput"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "processingSession": [],
+            "tenantApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful bounded immutable content result.",
+            "headers": {
+              "ISECure-Artifact-Id": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "ISECure-Artifact-Sha256": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "Content-Length": {
+                "required": true,
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 16777216
+                }
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "maxLength": 16777216
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Typed request or validation issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Typed authorization or policy issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The tenant-scoped resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "The order or profile revision is stale or not eligible for generation. Read the current state before proceeding.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Request rate limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The handler violated its generated result contract.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway timeout; the command outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "ts",
+            "label": "TypeScript SDK",
+            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in GeneratePaymentOrderFileInput.\ndeclare const input: Parameters<typeof client.paymentBatches.generateFile>[0];\nconst result = await client.paymentBatches.generateFile(input);"
+          }
+        ],
+        "x-isecure-contract-version": 1,
+        "x-isecure-contract-digest": "sha256:46d88871b7f49928b0b661cc160ba0824cd2087abfc4bff1f71fb4139b9da087",
+        "x-isecure-permission": "read"
       }
     },
     "/v1/payment-orders:remove-transfers": {
@@ -7258,6 +6981,460 @@
         "x-isecure-contract-digest": "sha256:6d91419100ea2b95abf52467f476b092fa14886eaeaa25d93556b27458d59f3e",
         "x-isecure-permission": "validate"
       }
+    },
+    "/v1/payment-orders/{payment_order_id}": {
+      "get": {
+        "operationId": "payment_orders.get",
+        "summary": "Read a payment order",
+        "description": "Read the current order state, references and versions before continuing its workflow.\n\nRequired permission: `read`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.get`. Input type: [PaymentOrderGetInput](#schema/isecure.bankfiles.payments_api.PaymentOrderGetInput).",
+        "tags": ["Payment drafts"],
+        "parameters": [
+          {
+            "name": "ISECure-Contract-Version",
+            "in": "header",
+            "required": true,
+            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
+            "schema": {
+              "type": "integer",
+              "enum": [1]
+            }
+          },
+          {
+            "name": "payment_order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "revision_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "security": [
+          {
+            "processingSession": [],
+            "tenantApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful task result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentOrderGetResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Typed request or validation issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Typed authorization or policy issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The tenant-scoped resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Request rate limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The handler violated its generated result contract.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway timeout; the command outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "ts",
+            "label": "TypeScript SDK",
+            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in PaymentOrderGetInput.\ndeclare const input: Parameters<typeof client.paymentBatches.get>[0];\nconst result = await client.paymentBatches.get(input);"
+          }
+        ],
+        "x-isecure-contract-version": 1,
+        "x-isecure-contract-digest": "sha256:662bc78d1ba71acbca206a4004ccef039ca7a6b5bd199e4a308e48b50e21e367",
+        "x-isecure-permission": "read"
+      }
+    },
+    "/v1/payment-orders/{payment_order_id}/explanation": {
+      "get": {
+        "operationId": "payment_orders.explain",
+        "summary": "Explain a payment order",
+        "description": "Read the reasons and evidence associated with the selected payment order.\n\nRequired permission: `explain`, plus an active Processing subscription. The server checks account/resource scope on every call.\n\nSend `ISECure-Contract-Version: 1`. This operation does not accept an Idempotency-Key. \n\nSDK: `client.paymentBatches.explain`. Input type: [PaymentOrderGetInput](#schema/isecure.bankfiles.payments_api.PaymentOrderGetInput).",
+        "tags": ["Payment drafts"],
+        "parameters": [
+          {
+            "name": "ISECure-Contract-Version",
+            "in": "header",
+            "required": true,
+            "description": "Explicit generated operation-contract version; omission never selects mutable latest.",
+            "schema": {
+              "type": "integer",
+              "enum": [1]
+            }
+          },
+          {
+            "name": "payment_order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "revision_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "security": [
+          {
+            "processingSession": [],
+            "tenantApiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful task result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/isecure.bankfiles.observations.ExplanationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Typed request or validation issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Typed authorization or policy issue.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The tenant-scoped resource was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Request rate limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The handler violated its generated result contract.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "A required runtime adapter is unavailable or the outcome is indeterminate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentIssues"
+                        },
+                        {
+                          "$ref": "#/components/schemas/isecure.bankfiles.operations.PlatformIssues"
+                        }
+                      ]
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProcessingError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway timeout; the command outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessingError"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "ts",
+            "label": "TypeScript SDK",
+            "source": "// Use the authenticated client from the introduction.\n// Supply the fields shown in PaymentOrderGetInput.\ndeclare const input: Parameters<typeof client.paymentBatches.explain>[0];\nconst result = await client.paymentBatches.explain(input);"
+          }
+        ],
+        "x-isecure-contract-version": 1,
+        "x-isecure-contract-digest": "sha256:67ae1c8eb3c0b955a7991d3272a4e756cfec31eddab2111befe1db401551a760",
+        "x-isecure-permission": "explain"
+      }
     }
   },
   "components": {
@@ -7879,6 +8056,39 @@
           }
         },
         "required": ["payment_export_id"],
+        "additionalProperties": false
+      },
+      "isecure.bankfiles.payments_api.GeneratePaymentOrderFileInput": {
+        "type": "object",
+        "description": "Generate a file from exactly these current order and export-profile revisions; no approval or bank submission is requested",
+        "properties": {
+          "payment_order_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "order_revision_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "payment_export_profile_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "profile_revision": {
+            "type": "string",
+            "pattern": "^-?(?:0|[1-9][0-9]*)$",
+            "maxLength": 20,
+            "x-isecure-minimum": "-9223372036854775808",
+            "x-isecure-maximum": "9223372036854775807",
+            "x-isecure-json-representation": "decimal-string"
+          }
+        },
+        "required": [
+          "payment_order_id",
+          "order_revision_id",
+          "payment_export_profile_id",
+          "profile_revision"
+        ],
         "additionalProperties": false
       },
       "isecure.bankfiles.payments_api.PaymentAccountScheme": {
@@ -9066,6 +9276,10 @@
           "state": {
             "$ref": "#/components/schemas/isecure.bankfiles.payments_api.PaymentExportState"
           },
+          "proposed_submission_date": {
+            "type": "string",
+            "format": "date"
+          },
           "prepared_at": {
             "type": "string",
             "format": "date-time"
@@ -9197,6 +9411,7 @@
           "service_level",
           "local_instrument",
           "charge_bearer",
+          "proposed_submission_date",
           "purpose",
           "priority",
           "advice",
@@ -9498,6 +9713,21 @@
               }
             },
             "required": ["option_type", "charge_bearer"],
+            "additionalProperties": false
+          },
+          {
+            "title": "proposed_submission_date",
+            "type": "object",
+            "properties": {
+              "option_type": {
+                "enum": ["proposed_submission_date"]
+              },
+              "proposed_submission_date": {
+                "type": "string",
+                "format": "date"
+              }
+            },
+            "required": ["option_type", "proposed_submission_date"],
             "additionalProperties": false
           }
         ]
@@ -10456,12 +10686,66 @@
         "required": ["code", "schemaVersion"],
         "additionalProperties": false
       },
+      "ProcessingScopedSession": {
+        "type": "object",
+        "properties": {
+          "audience": {
+            "type": "string",
+            "enum": ["isecure-processing-production-v1"]
+          },
+          "expiresAtEpochSeconds": {
+            "type": "integer",
+            "description": "UTC expiry as Unix seconds."
+          },
+          "processingSession": {
+            "type": "string",
+            "readOnly": true,
+            "description": "Secret opaque credential. Use only in the Authorization header with the Processing prefix."
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "enum": [2]
+          },
+          "tokenType": {
+            "type": "string",
+            "enum": ["Processing"]
+          },
+          "scope": {
+            "type": "object",
+            "properties": {
+              "tenantId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "legalEntityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "actorId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "required": ["tenantId", "legalEntityId", "actorId"],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "audience",
+          "expiresAtEpochSeconds",
+          "processingSession",
+          "schemaVersion",
+          "tokenType",
+          "scope"
+        ],
+        "additionalProperties": false
+      },
       "ProcessingSession": {
         "type": "object",
         "properties": {
           "audience": {
             "type": "string",
-            "enum": ["isecure-processing-gpgtest-v1"]
+            "enum": ["isecure-processing-production-v1"]
           },
           "expiresAtEpochSeconds": {
             "type": "integer",
@@ -10497,10 +10781,10 @@
     "url": "https://github.com/isecurefi/isecure-ts-client"
   },
   "x-isecure-source": {
-    "revision": "e24fc78ffd2c6c3cb564433b910a27da930dfd41",
-    "sha256": "5b6fa8753178e8f66fcb1bc9b9bae52d1cff591dab655276e673019cc8223057",
-    "deployment": "processing-2fb9a78a9ef95b7405a4537d",
-    "verifiedAt": "2026-09-20"
+    "revision": "f20c19c529185efb6fb88b7f108d411ee9afeece",
+    "sha256": "88a6ed969cc8cd457625d0dca388fcea589701039e8219c1cd729cec06a7c0c5",
+    "deployment": "r-f20c19c52-1793115925",
+    "verifiedAt": "2026-11-13"
   },
   "x-tagGroups": [
     {
@@ -10516,10 +10800,6 @@
         "Payment files",
         "Payment drafts"
       ]
-    },
-    {
-      "name": "Notifications",
-      "tags": ["Notifications"]
     }
   ]
 }

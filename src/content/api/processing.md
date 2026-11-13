@@ -1,46 +1,98 @@
-## Current SDK guide and production access
+Prepare and validate payments, finalize a version, then generate the payment XML. Your application
+verifies and signs those bytes locally and uploads them through the separate
+[File Exchange API](https://www.isecure.fi/wsapi_v2/#operation/UploadFile).
+Processing does not send payments to a bank.
 
-Use the [Processing SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)
-for current setup, authentication, errors and examples. Processing is included in the published
-`isecure-ts-client` package through its experimental `/iso20022` entry point.
+**Production · Beta · Paid subscription and separate onboarding required.**
+Use `https://processing-api.isecure.fi` with audience `isecure-processing-production-v1`.
+There is no active Processing test deployment. The independent Bank Simulator remains a separate
+service with its own access requirements.
 
-**Availability checked 12 November 2026:** Processing runs only in production at
-`https://processing-api.isecure.fi`, with audience `isecure-processing-production-v1`.
-The former test service was retired on 17 October 2026. Production registration alone does not
-provide Processing access: ISECure must provision the tenant subscription, database, permissions
-and API usage-plan access.
+## What this reference covers
 
-The standard path is to configure an export profile, create and validate a draft, finalize its
-revision, then generate and download payment XML. See the
-[generation example](https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-generate-file/README.md).
-It creates Processing records but does not send anything to a bank. Authorization, signing and
-upload happen separately through [File Exchange](https://www.isecure.fi/wsapi_v2/#operation/UploadFile).
-Generating a file does not prove bank acceptance or payment completion.
+This reference matches the **27 payment operations and session exchange** in the production
+release checked on **13 November 2026**. The OpenAPI schemas come from that release's exact source
+revision; deployment identity and the Lambda code hash were checked before publication.
+It includes `payment_orders.generate_file`. It does not advertise an event stream, VoP,
+statement observations or hosted Integration setup, which are absent from this deployment.
 
-## Historical HTTP schema snapshot
+Approval and retained-export routes are listed because they are deployed, but they require a
+separately configured approval policy. The current production onboarding flow uses file generation
+without Processing approval. A route being listed does not grant permission or configure that policy.
 
-The operation schemas below are retained from the test release verified on 20 September 2026.
-**They are not a complete reference for today's production deployment.** In particular, this
-snapshot does not contain the current `generate_file` operation. Its notification stream and
-historical approval workflow must not be assumed available in production. VoP, observation and
-hosted Integration methods in the SDK are also outside the current production route set.
+## Get access and sign in
 
-Use the SDK guide for the current generation flow. Updating this HTTP schema snapshot requires a
-separate import and review of the exact production release; the snapshot's recorded source has not
-been relabelled as current. The historical server entry below is retired and must not be called.
+Use your production File Exchange account. [Start registration](https://www.isecure.fi/wsapi_v2/#operation/InitRegister)
+and [register](https://www.isecure.fi/wsapi_v2/#operation/Register) if needed. ISECure must then
+provision your Processing subscription, tenant database, permissions and API usage-plan access.
+Registration alone does not enable Processing.
 
-## Account and session
+1. Complete [Login](https://www.isecure.fi/wsapi_v2/#operation/Login) and any requested
+   [LoginMFA](https://www.isecure.fi/wsapi_v2/#operation/LoginMFA). Keep the current **ID token** and API key.
+2. Call `POST /session` with the ID token directly in `Authorization` (no prefix) and the API key
+   in `x-api-key`. There is no request body. Check the returned audience and expiry.
+3. For business requests, use `Authorization: Processing <processingSession>`, the same `x-api-key`,
+   and the operation's `ISECure-Contract-Version`. JSON bodies need `Content-Type: application/json`.
+4. Clear the separate Processing session on sign-out or account changes. Exchange a new session
+   when needed; the SDK does not silently refresh it or retry commands.
 
-Use your production File Exchange account. Start with [InitRegister](https://www.isecure.fi/wsapi_v2/#operation/InitRegister)
-and [Register](https://www.isecure.fi/wsapi_v2/#operation/Register) if needed; then complete
-[Login](https://www.isecure.fi/wsapi_v2/#operation/Login) and any requested
-[LoginMFA](https://www.isecure.fi/wsapi_v2/#operation/LoginMFA). Account management, including
+Session schema 1 is the default. Send `ISECure-Session-Schema-Version: 2` to also receive the tenant,
+legal entity and actor identifiers. Those identifiers describe the signed-in context; they grant no
+extra access. Sessions expire after 15 minutes; use `expiresAtEpochSeconds` rather than guessing.
+
+Account administration stays in File Exchange, including
 [ListAccounts](https://www.isecure.fi/wsapi_v2/#operation/ListAccounts) and
-[DeleteAccount](https://www.isecure.fi/wsapi_v2/#operation/DeleteAccount), stays in File Exchange.
+[DeleteAccount](https://www.isecure.fi/wsapi_v2/#operation/DeleteAccount).
 
-Processing exchanges the current ID token and API key for a separate Processing session.
-The SDK guide shows the production URL and audience, session cleanup, required revisions and
-safe handling of uncertain commands. Never log tokens, private keys or payment contents.
+## Use the TypeScript SDK
 
-The independent [Bank Simulator](https://www.isecure.fi/apis/bank-simulator/) and
-[File Exchange](https://www.isecure.fi/wsapi_v2/) have separate service boundaries.
+The published `isecure-ts-client@5.0.2` includes Processing through its experimental `/iso20022`
+entry point. Use Node.js 24 or newer, or a supported browser bundler. Its contract versions and
+digests match all 27 payment operations in this deployment; this comparison is not a new live
+customer qualification. The SDK interface remains experimental.
+
+See the [Processing SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)
+for connection code. Operation examples below assume an authenticated client named `client` and
+its `Iso20022HttpTransport` named `transport`. Where an example declares `input`, supply the fields
+shown in the request schema; these are typed templates, not complete payment fixtures.
+
+The [generation example](https://github.com/isecurefi/isecure-ts-client/blob/main/examples/processing-generate-file/README.md)
+configures a profile, creates and validates a draft, finalizes it and generates XML. It creates
+Processing records but does not upload anything to a bank.
+
+## Generate a payment file
+
+1. Use `paymentExportProfiles.list()` to find a bank format available to your tenant. A format's
+   availability does not establish which services your bank agreement allows.
+2. Configure the paying account and bank-agreement details. Resolve an account capability and use
+   its exact selected reference when creating a draft.
+3. Add payments with decimal-string amounts, validate them, correct any issues and finalize the draft.
+4. Call `paymentBatches.generateFile()` with the finalized order revision and current profile revision.
+5. The SDK verifies the returned file identity, SHA-256 digest, length and XML media type. Separately
+   authorize, sign and upload the unchanged bytes through File Exchange when intended.
+
+The generation endpoint returns XML, not a JSON document or an S3 URL. It requires read permission
+and Processing access, but no Processing approval. Generation does not release a retained export,
+change approval state or prove bank acceptance. Contract size bounds do not override gateway,
+Lambda or client response-size limits.
+
+## Errors and retries
+
+Every operation below lists its required permission, contract version and request headers.
+Commands marked with `Idempotency-Key` need a saved key for the same intended command. Where
+`If-Match` is required, use the quoted current resource version. If the version is stale, read and
+review the latest state before preparing another command.
+
+A timeout can leave a command's outcome unknown. Read the current resource before retrying;
+never invent a new idempotency key just to bypass uncertainty. A Processing idempotency key does
+not make a bank upload safe to repeat. The Processing SDK does not retry automatically and has a
+30-second default timeout, separate from the WS Channel client's timeout.
+
+Expect `401` for invalid sessions, `403` for missing access, `412` for stale versions and `429` for
+request limits. Inspect the actual response and operation-specific issues; a gateway may return a
+different error shape from the service. Keep credentials, tokens, signed links and payment contents
+out of logs. Preserve only safe error metadata for support.
+
+[File Exchange reference](https://www.isecure.fi/wsapi_v2/) ·
+[Bank Simulator reference](https://www.isecure.fi/apis/bank-simulator/) ·
+[SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md)
