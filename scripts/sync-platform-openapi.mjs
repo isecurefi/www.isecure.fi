@@ -10,6 +10,10 @@ const args = Object.fromEntries(
 );
 for (const k of ["--repository", "--manifest", "--gateway-export"])
   if (!args[k]) throw new Error(`Required ${k}=...`);
+const production = args["--stage"] === "production";
+if (args["--stage"] && !production) throw new Error("Unsupported stage");
+if (production && !/^\d+\.\d+\.\d+$/.test(args["--sdk-version"] ?? ""))
+  throw new Error("Exact SDK version required");
 const manifest = JSON.parse(readFileSync(args["--manifest"], "utf8"));
 if (!/^[a-f0-9]{40}$/.test(manifest.repositoryRevision))
   throw new Error("Exact source revision required");
@@ -23,7 +27,15 @@ if (hash(bytes) !== manifest.generatedOpenApi.sha256)
   throw new Error("Release source digest differs from Git");
 const original = JSON.parse(bytes);
 const deployed = JSON.parse(readFileSync(args["--gateway-export"], "utf8"));
-if (deployed.info.description !== manifest.releaseId)
+if (
+  production &&
+  !/^[a-f0-9]{64}$/.test(manifest.gatewayDocument?.sha256 ?? "")
+)
+  throw new Error("Exact deployed gateway document digest required");
+const expectedDescription = production
+  ? `${manifest.releaseId} ${manifest.gatewayDocument.sha256}`
+  : manifest.releaseId;
+if (deployed.info.description !== expectedDescription)
   throw new Error("Gateway and release manifest differ");
 const publicExtensions = new Set([
   "x-isecure-minimum",
@@ -47,16 +59,24 @@ for (const [path, item] of Object.entries(deployed.paths)) {
     if (method === "options") continue;
     if (!["get", "post", "put", "patch", "delete"].includes(method)) continue;
     const uri = operation["x-amazon-apigateway-integration"]?.uri ?? "";
-    const match = uri.match(
-      /function:isecure-processing-gpgtest-v1:(\d+)\/(?:response-streaming-)?invocations$/,
-    );
+    const match = production
+      ? uri.match(
+          /^arn:aws:apigateway:eu-west-1:lambda:path\/2015-03-31\/functions\/arn:aws:lambda:eu-west-1:507820410808:function:isecure-processing-production-v1(\$LATEST)?\/invocations$/,
+        )
+      : uri.match(
+          /function:isecure-processing-gpgtest-v1:(\d+)\/(?:response-streaming-)?invocations$/,
+        );
     if (!match) throw new Error(`Unexpected integration for ${method} ${path}`);
-    versions.add(match[1]);
+    versions.add(production ? "cloudformation" : match[1]);
     if (path === "/session" || path === "/stream") continue;
     const source = original.paths[path]?.[method];
     if (!source || source.operationId !== operation.operationId)
       throw new Error(`No source match for ${method} ${path}`);
-    if (!/^(payment_|simulation_)/.test(source.operationId))
+    if (
+      !(production ? /^payment_/ : /^(payment_|simulation_)/).test(
+        source.operationId,
+      )
+    )
       throw new Error(`Unreviewed product ${source.operationId}`);
     paths[path] ??= {};
     paths[path][method] = clean(source);
@@ -117,14 +137,26 @@ const metadata = {
   snapshotSha256: hash(JSON.stringify(snapshot)),
   lambdaVersion: [...versions][0],
   verifiedAt: args["--verified-at"] ?? new Date().toISOString().slice(0, 10),
-  baseUrl: "https://processing-api.test.isecure.fi",
-  audience: "isecure-processing-gpgtest-v1",
-  sdkVersion: "2.7.0",
+  baseUrl: production
+    ? "https://processing-api.isecure.fi"
+    : "https://processing-api.test.isecure.fi",
+  audience: production
+    ? "isecure-processing-production-v1"
+    : "isecure-processing-gpgtest-v1",
+  sdkVersion: production ? args["--sdk-version"] : "2.7.0",
   operationCount: Object.keys(operations).length,
 };
 for (const [file, value] of [
-  ["platform-api.source.json", snapshot],
-  ["platform-api.source-metadata.json", metadata],
+  [
+    production ? "processing-api.source.json" : "platform-api.source.json",
+    snapshot,
+  ],
+  [
+    production
+      ? "processing-api.source-metadata.json"
+      : "platform-api.source-metadata.json",
+    metadata,
+  ],
 ])
   writeFileSync(
     new URL(`../src/data/${file}`, import.meta.url),

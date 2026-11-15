@@ -8,6 +8,14 @@ export const source = JSON.parse(read("src/data/platform-api.source.json"));
 export const metadata = JSON.parse(
   read("src/data/platform-api.source-metadata.json"),
 );
+export const processingSource = JSON.parse(
+  read("src/data/processing-api.source.json"),
+);
+export const processingMetadata = JSON.parse(
+  read("src/data/processing-api.source-metadata.json"),
+);
+const legacySource = source;
+const legacyMetadata = metadata;
 export const sha256 = (value) =>
   createHash("sha256").update(value).digest("hex");
 const common = read("src/content/api/common.md");
@@ -51,13 +59,21 @@ const copy = {
     "List available export profiles",
     "List bank- and country-specific payment-file rules admitted for your tenant by this deployment. Check payment type, availability and qualification status. Listing a profile does not configure it or authorize a payment.",
   ],
+  "payment_export_profiles.list": [
+    "List saved export configurations",
+    "List independently versioned bank configurations visible to your tenant. This is separate from the bank-format catalogue. Use page_size and next_after_profile_id for bounded pagination.",
+  ],
+  "payment_orders.generate_file": [
+    "Generate a finalized payment file",
+    "Render exact XML from one finalized batch and its bound configuration revision. This requires neither a second approver nor bank submission. Verify the SDK integrity result before signing and sending separately.",
+  ],
   "payment_export_profiles.get": [
     "Read the configured export profile",
-    "Read the current tenant configuration: the selected bank-file profile, paying account and required company/bank-agreement details.",
+    "Read one saved configuration by its explicit ID, including its exact revision and capability handle.",
   ],
   "payment_export_profiles.configure": [
     "Configure an export profile",
-    "Select an admitted bank/country profile and supply the paying account, company and bank-agreement details. This requires approval authority; it does not create a bank agreement or approve a payment.",
+    "Create an independent configuration without an ID, or revise an existing ID with its expected_resource_version. Several configurations may coexist, including for the same bank/account. Use the returned capability when creating a batch. Profile-fixed defaults come from the server; OP does not require initiating_party_customer_id. Configuration neither creates a bank agreement nor approves a payment.",
   ],
   "payment_export_profiles.revoke": [
     "Revoke an export profile",
@@ -224,7 +240,7 @@ const sdkNames = {
   payment_orders: "paymentBatches",
   payment_capabilities: "paymentCapabilities",
   payment_approval_requests: "paymentApprovalRequests",
-  payment_export_profile_catalog: "paymentExportProfiles",
+  payment_export_profile_catalog: "paymentExportProfileCatalog",
   payment_export_profiles: "paymentExportProfiles",
   payment_exports: "paymentExports",
 };
@@ -332,7 +348,7 @@ export function schemaClosure(value, available) {
     Object.entries(schemas).sort(([a], [b]) => a.localeCompare(b)),
   );
 }
-function sample(id) {
+function sample(id, source) {
   const m = source.operations[id];
   const method = sdkCall(id);
   const options = [];
@@ -342,10 +358,7 @@ function sample(id) {
     options.push(
       "expectedResourceVersion: JSON.stringify(currentResourceVersion)",
     );
-  if (
-    id === "payment_export_profile_catalog.list" ||
-    id === "payment_export_profiles.get"
-  )
+  if (id === "payment_export_profile_catalog.list")
     return `const result = await client.${method}();`;
   if (id === "simulation_capabilities.list")
     return 'const result = await client.simulationCapabilities.list({\n  data_admission_mode: "synthetic",\n  page: { page_size: 25 },\n});';
@@ -477,10 +490,12 @@ const stream = {
 };
 export function buildSpec(kind) {
   const simulator = kind === "bank-simulator";
+  const source = simulator ? legacySource : processingSource;
+  const metadata = simulator ? legacyMetadata : processingMetadata;
   const name = simulator ? "Bank Simulator API" : "Processing API";
   const paths = {
     "/session": structuredClone(session),
-    "/stream": structuredClone(stream),
+    ...(simulator ? { "/stream": structuredClone(stream) } : {}),
   };
   for (const [path, item] of Object.entries(source.paths)) {
     for (const [method, original] of Object.entries(item)) {
@@ -495,7 +510,7 @@ export function buildSpec(kind) {
       op.security = security;
       op.description = `${description}\n\nRequired permission: \`${meta.permission}\`, plus an active ${simulator ? "Bank Simulation" : "Processing"} subscription. The server checks account/resource scope on every call.\n\nSend \`ISECure-Contract-Version: ${meta.version}\`. ${meta.idempotency === "required" ? "Persist an Idempotency-Key for this command." : "This operation does not accept an Idempotency-Key."} ${meta.expectedVersion === "required" ? "Send the current resource version in If-Match." : ""}\n\nSDK: \`client.${sdkCall(id)}\`. Input type: [${meta.input.split(".").at(-1)}](#schema/${meta.input}).`;
       op["x-codeSamples"] = [
-        { lang: "ts", label: "TypeScript SDK", source: sample(id) },
+        { lang: "ts", label: "TypeScript SDK", source: sample(id, source) },
       ];
       op["x-isecure-contract-version"] = meta.version;
       op["x-isecure-contract-digest"] = meta.contractDigest;
@@ -581,7 +596,19 @@ export function buildSpec(kind) {
       description:
         read(`src/content/api/${kind}.md`) +
         "\n\n" +
-        common +
+        common
+          .replaceAll("{{SDK_VERSION}}", metadata.sdkVersion)
+          .replaceAll("{{BASE_URL}}", metadata.baseUrl)
+          .replaceAll(
+            "{{AUDIENCE_CONFIGURATION}}",
+            simulator ? `  processingAudience: "${metadata.audience}",` : "",
+          )
+          .replace(
+            "{{NOTIFICATIONS}}",
+            simulator
+              ? "## Notifications\n\nThe retained test deployment exposes GET /stream for authorized notifications. Keep its last event ID and reconcile resource state after gaps; notifications do not prove bank acceptance."
+              : "## Notifications\n\nThis production release does not expose GET /stream. Refresh state through the documented resource reads.",
+          ) +
         (simulator ? read("src/content/api/simulator-workflow.md") : ""),
       contact: {
         name: "ISECure developer support",
@@ -599,11 +626,6 @@ export function buildSpec(kind) {
           },
         ]
       : [
-          {
-            url: metadata.baseUrl,
-            description:
-              "ISECure test environment — Beta; Nordea, OP, Danske Bank, Säästöpankki, Oma Säästöpankki, Ålandsbanken, POP Pankki and Aktia; access by request",
-          },
           {
             url: "https://processing-api.isecure.fi",
             description:

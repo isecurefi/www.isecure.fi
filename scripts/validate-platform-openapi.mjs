@@ -4,8 +4,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   buildSpec,
-  source,
-  metadata,
+  source as legacySource,
+  metadata as legacyMetadata,
+  processingSource,
+  processingMetadata,
   sha256,
   schemaClosure,
   toOpenApi30,
@@ -21,18 +23,29 @@ const validateStandard = ajv.compile(
     ),
   ),
 );
-assert.match(metadata.repositoryRevision, /^[a-f0-9]{40}$/);
-assert.match(metadata.sourceSha256, /^[a-f0-9]{64}$/);
-assert.equal(
-  metadata.snapshotSha256,
-  sha256(JSON.stringify(source)),
-  "Pinned source snapshot changed; perform an explicit release sync",
-);
-assert.equal(Object.keys(source.operations).length, metadata.operationCount);
+for (const [source, metadata] of [
+  [legacySource, legacyMetadata],
+  [processingSource, processingMetadata],
+]) {
+  assert.match(
+    metadata.verifiedAt,
+    /^\d{4}-\d{2}-\d{2}$/,
+    "Unverified candidate cannot be published",
+  );
+  assert.match(metadata.repositoryRevision, /^[a-f0-9]{40}$/);
+  assert.match(metadata.sourceSha256, /^[a-f0-9]{64}$/);
+  assert.equal(
+    metadata.snapshotSha256,
+    sha256(JSON.stringify(source)),
+    "Pinned source snapshot changed; perform an explicit release sync",
+  );
+  assert.equal(Object.keys(source.operations).length, metadata.operationCount);
+}
 for (const [kind, count] of [
-  ["processing", 26],
+  ["processing", 28],
   ["bank-simulator", 21],
 ]) {
+  const source = kind === "processing" ? processingSource : legacySource;
   const expected = buildSpec(kind);
   assert.ok(
     validateStandard(expected),
@@ -50,7 +63,10 @@ for (const [kind, count] of [
     `${kind} docs drift: run yarn api:generate:products`,
   );
   assert.equal(expected.openapi, "3.0.3");
-  assert.equal(Object.keys(expected.paths).length, count + 2);
+  assert.equal(
+    Object.keys(expected.paths).length,
+    count + (kind === "processing" ? 1 : 2),
+  );
   const ids = new Set();
   for (const [path, item] of Object.entries(expected.paths))
     for (const [method, op] of Object.entries(item)) {

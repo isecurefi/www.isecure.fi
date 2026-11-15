@@ -1,6 +1,6 @@
 ## One ISECure account across all three APIs
 
-Use the same ISECure registration, users and initial login for File Exchange, Processing and Bank Simulator. **Do not register a second user in Processing or Bank Simulator.** Account administration remains in the existing [File Exchange API](https://www.isecure.fi/wsapi_v2/); neither new API introduces another registration or user-management route.
+Within one environment, use the same ISECure registration, users and initial login for File Exchange, Processing and Bank Simulator. Test and production have separate accounts and credentials. **Do not register a second user in Processing or Bank Simulator.** Account administration remains in the existing [File Exchange API](https://www.isecure.fi/wsapi_v2/); neither new API introduces another registration or user-management route.
 
 Use these sections of the live File Exchange reference:
 
@@ -13,9 +13,9 @@ A shared identity does not mean one interchangeable token or identical authority
 
 ## Access and authentication
 
-Processing API is Beta, with Nordea validated payment-file profiles for Finland, Sweden, Norway and Denmark, OP and Danske Bank Finland SEPA profiles whose bank validation is in progress, and Säästöpankki, Oma Säästöpankki, Ålandsbanken (Finland SEPA) and POP Pankki and Aktia (pain.001.001.03) profiles whose bank validation has not started. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank. The Bank Simulator control API is Experimental. Processing API is available in the ISECure test and production environments; the Bank Simulator exists only in the test environment. Request access from [ISECure support](mailto:support@isecure.fi). Registration alone does not enable either product: your tenant needs the appropriate active paid subscription, and your user needs permission for each operation. A successful login does not grant payment approval or simulator management rights.
+Processing API is Beta and the Bank Simulator control API is Experimental. Check the bank-format catalogue for the exact availability and qualification of each profile. Access requires an active product entitlement and permission for the requested operation. A successful login does not grant payment approval or simulator-management rights.
 
-[Processing API](https://www.isecure.fi/apis/processing/) and [Bank Simulator API](https://www.isecure.fi/apis/bank-simulator/) share one Processing base URL and session. [File Exchange](https://www.isecure.fi/wsapi_v2/) has a separate API and session. Your tenant is selected by the verified API key; you cannot select another tenant in a request body or URL. Resource IDs and account IDs do not grant access.
+Within the same environment, [Processing API](https://www.isecure.fi/apis/processing/) and [Bank Simulator API](https://www.isecure.fi/apis/bank-simulator/) use the Processing session mechanism. This Processing reference covers production; Bank Simulator covers the test environment. Sessions do not cross environments. [File Exchange](https://www.isecure.fi/wsapi_v2/) has a separate API and session. Your tenant is selected by the verified API key; you cannot select another tenant in a request body or URL. Resource IDs and account IDs do not grant access.
 
 1. Complete [File Exchange login](https://www.isecure.fi/wsapi_v2/), including any requested email/phone verification or MFA. Obtain the current ID token and your tenant API key.
 2. Call `POST /session` on the Processing base URL. Send the ID token directly in `Authorization` (without a prefix) and the API key in `x-api-key`. There is no request body.
@@ -25,7 +25,7 @@ Processing API is Beta, with Nordea validated payment-file profiles for Finland,
 
 ### Connect with TypeScript
 
-Install `isecure-ts-client@2.7.0` and use Node.js 24 or newer for these examples. The experimental `/iso20022` entry point supports both references. The root SDK continues to handle File Exchange.
+Install `isecure-ts-client@{{SDK_VERSION}}` and use Node.js 24 or newer for these examples. The experimental `/iso20022` entry point supports both references. The root SDK continues to handle File Exchange.
 
 ```ts
 import {
@@ -34,8 +34,8 @@ import {
 } from "isecure-ts-client/iso20022";
 
 const transport = new Iso20022HttpTransport({
-  baseUrl: process.env.ISECURE_PROCESSING_BASE_URL!,
-  processingAudience: process.env.ISECURE_PROCESSING_AUDIENCE!,
+  baseUrl: "{{BASE_URL}}",
+{{AUDIENCE_CONFIGURATION}}
   // Supply fresh credentials from your completed File Exchange login.
   bootstrapAuthentication: async () => ({
     apiKey: process.env.ISECURE_API_KEY!,
@@ -58,7 +58,7 @@ An HTTP timeout or `503` may leave the outcome unknown. First inspect the resour
 
 ## Lists, identifiers and pagination
 
-Pass filters in the named query parameters. Object parameters use the encoding documented by each operation: for example `page[page_size]=25` and `page[cursor]=...`. Keep cursors opaque, reuse the same filters, and stop when `page.next_cursor` is absent. Results belong to the returned snapshot; do not interpret pagination as a live feed.
+Pass filters in the named query parameters. Object parameters use the encoding documented by each operation: for example `page[page_size]=25` and `page[cursor]=...`. Keep cursors opaque, reuse the same filters, and stop when `page.next_cursor` is absent. Follow each operation's pagination contract; pagination is not a live feed. Saved payment configurations use `after_profile_id` and `next_after_profile_id` instead.
 
 Simulator read routes use an object-valued `resource_reference` path parameter, not just a UUID. Its OpenAPI `simple` encoding is a comma-separated sequence of field names and values in schema order. The SDK encodes this for you. Use the complete reference returned by the API, including its resource type and revision where supplied.
 
@@ -73,21 +73,17 @@ Business failures can return an `issues` array with structured issue details. Au
 | 400             | Invalid input, contract version or request encoding. Correct the request.                                                                     |
 | 401             | Missing, expired or invalid authentication. Complete login/session exchange again.                                                            |
 | 403             | Missing subscription, permission or API-key access. Ask the tenant administrator or ISECure support; another resource ID will not fix access. |
-| 404             | Resource is unavailable in your scope, or the operation is not published. Check the selected test deployment and reference.                   |
+| 404             | Resource is unavailable in your scope, or the operation is not published. Check the selected deployment and reference.                        |
 | 409             | Conflicting command, reused key with different input, or operation already in progress. Inspect the existing result.                          |
 | 410             | The command or idempotency window expired. Reconcile before submitting a new command.                                                         |
 | 412             | Resource version changed. Read the latest version and review the change.                                                                      |
 | 429             | Request limit reached. Honor any retry guidance and preserve command identity.                                                                |
 | 500 / 503 / 504 | Service failure or an uncertain outcome. Inspect existing state before retrying.                                                              |
 
-## Notifications
-
-`GET /stream` returns a short Server-Sent Events (SSE) connection containing authorized event/task notifications and heartbeats. It uses the Processing session, API key and contract version `1`. Save the last completely handled event ID and pass it as `Last-Event-ID` when reconnecting. The current connection lease is at most 20 seconds; closing is normal.
-
-The SDK provides `transport.streamProcessingEvents({ lastEventId, signal })`. It does not reconnect automatically. Notifications require their own server-side access checks and are not a complete audit history. After a gap or expired cursor, reconcile using available resource reads; simulator runs also expose their own event list. A stream message does not prove that a payment reached a real bank.
+{{NOTIFICATIONS}}
 
 ## Scope and compatibility
 
-This reference documents only the operations deployed in the reviewed test release. The SDK contains additional generated methods that this deployment does not expose. Their presence is not a support or availability promise. Request versions are per operation; the overall specification version does not replace `ISECure-Contract-Version`.
+This reference documents only the operations in its separately pinned deployment. The SDK contains additional generated methods that this deployment does not expose. Their presence is not a support or availability promise. Request versions are per operation; the overall specification version does not replace `ISECure-Contract-Version`.
 
 [File Exchange reference](https://www.isecure.fi/wsapi_v2/) · [Processing reference](https://www.isecure.fi/apis/processing/) · [Bank Simulator reference](https://www.isecure.fi/apis/bank-simulator/) · [TypeScript SDK](https://github.com/isecurefi/isecure-ts-client)

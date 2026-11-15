@@ -186,7 +186,8 @@ export in OpenAPI 3.0.3. Reuse `ApiReferenceScript.astro` and `ApiDocsLayout.ast
 for all three references. Keep the existing File Exchange contract and legacy
 anchors compatible.
 
-The new references describe only the pinned, deployed test surface. Never publish
+Processing uses its separately pinned, deployed production snapshot; Bank Simulator retains its
+independent test snapshot. Do not publish a stream or operation absent from the selected deployment. Never publish
 the full generated platform contract as available. Follow the explicit sync and
 review procedure in README.md; normal builds remain offline and reject drift.
 Registration, initial authentication and account management must link to the live

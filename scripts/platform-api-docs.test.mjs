@@ -72,6 +72,41 @@ test("OpenAPI 3.0 conversion preserves exact values and rejects unsupported sche
     const spec = buildSpec(kind);
     assert.equal(spec.openapi, "3.0.3");
     assert.ok(!JSON.stringify(spec).includes('"const":'));
-    assert.equal(spec.servers[0].url, "https://processing-api.test.isecure.fi");
+    assert.equal(
+      spec.servers[0].url,
+      kind === "processing"
+        ? "https://processing-api.isecure.fi"
+        : "https://processing-api.test.isecure.fi",
+    );
   }
+});
+
+test("production profile examples and endpoint follow the deployed independent-configurations contract", () => {
+  const spec = buildSpec("processing");
+  assert.ok(!spec.paths["/stream"]);
+  assert.ok(!spec.info.description.includes("processingAudience:"));
+  assert.ok(
+    buildSpec("bank-simulator").info.description.includes(
+      'processingAudience: "isecure-processing-gpgtest-v1"',
+    ),
+  );
+  assert.equal(spec.servers.length, 1);
+  const operations = Object.values(spec.paths).flatMap(Object.values);
+  const catalogue = operations.find(
+    (op) => op.operationId === "payment_export_profile_catalog.list",
+  );
+  assert.match(
+    catalogue["x-codeSamples"][0].source,
+    /paymentExportProfileCatalog\.list/,
+  );
+  const get = operations.find(
+    (op) => op.operationId === "payment_export_profiles.get",
+  );
+  assert.ok(!get["x-codeSamples"][0].source.includes(".get()"));
+  assert.ok(
+    operations.some((op) => op.operationId === "payment_export_profiles.list"),
+  );
+  assert.ok(
+    operations.some((op) => op.operationId === "payment_orders.generate_file"),
+  );
 });

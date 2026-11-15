@@ -1036,7 +1036,7 @@ if (/gpgtest|Banking Data API|\/data-api\//iu.test(llmsText)) {
 }
 
 for (const [kind, count] of [
-  ["processing", 28],
+  ["processing", 29],
   ["bank-simulator", 23],
 ]) {
   const route = `apis/${kind}`;
