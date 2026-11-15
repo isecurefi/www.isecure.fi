@@ -14,8 +14,10 @@ export const processingSource = JSON.parse(
 export const processingMetadata = JSON.parse(
   read("src/data/processing-api.source-metadata.json"),
 );
-const legacySource = source;
-const legacyMetadata = metadata;
+export const sourceFor = (kind) =>
+  kind === "processing" ? processingSource : source;
+export const metadataFor = (kind) =>
+  kind === "processing" ? processingMetadata : metadata;
 export const sha256 = (value) =>
   createHash("sha256").update(value).digest("hex");
 const common = read("src/content/api/common.md");
@@ -62,10 +64,6 @@ const copy = {
   "payment_export_profiles.list": [
     "List saved export configurations",
     "List independently versioned bank configurations visible to your tenant. This is separate from the bank-format catalogue. Use page_size and next_after_profile_id for bounded pagination.",
-  ],
-  "payment_orders.generate_file": [
-    "Generate a finalized payment file",
-    "Render exact XML from one finalized batch and its bound configuration revision. This requires neither a second approver nor bank submission. Verify the SDK integrity result before signing and sending separately.",
   ],
   "payment_export_profiles.get": [
     "Read the configured export profile",
@@ -129,7 +127,11 @@ const copy = {
   ],
   "payment_orders.finalize_draft": [
     "Finalize a draft",
-    "Lock the selected draft revision for review. Later changes require a new eligible revision.",
+    "Finalize the selected draft revision for file generation. Later changes require a new eligible revision. A configured approval workflow is a separate path.",
+  ],
+  "payment_orders.generate_file": [
+    "Generate and download payment XML",
+    "Generate XML for the exact finalized order revision and current export-profile revision. No Processing approval is required. This read does not release a retained export or submit a payment to a bank. The SDK verifies the returned identity, digest, length and XML media type before returning bytes.",
   ],
   "payment_orders.submit_for_review": [
     "Request payment approval",
@@ -490,8 +492,8 @@ const stream = {
 };
 export function buildSpec(kind) {
   const simulator = kind === "bank-simulator";
-  const source = simulator ? legacySource : processingSource;
-  const metadata = simulator ? legacyMetadata : processingMetadata;
+  const source = sourceFor(kind);
+  const metadata = metadataFor(kind);
   const name = simulator ? "Bank Simulator API" : "Processing API";
   const paths = {
     "/session": structuredClone(session),
@@ -533,6 +535,12 @@ export function buildSpec(kind) {
         504: "Gateway timeout; the command outcome may be unknown.",
       }))
         op.responses[status] ??= response(description, ref("ProcessingError"));
+      if (!simulator && id === "payment_orders.generate_file") {
+        op.responses[412] ??= response(
+          "The order or profile revision is stale or not eligible for generation. Read the current state before proceeding.",
+          ref("ProcessingError"),
+        );
+      }
       op.responses.default = {
         description:
           "An upstream gateway may return another error shape. Inspect HTTP status and do not parse it as a successful result.",
@@ -544,6 +552,22 @@ export function buildSpec(kind) {
       };
       paths[path] = { [method]: op };
     }
+  }
+  if (!simulator) {
+    paths["/session"].post.parameters = [
+      {
+        name: "ISECure-Session-Schema-Version",
+        in: "header",
+        required: false,
+        schema: { type: "integer", enum: [1, 2], default: 1 },
+        description:
+          "Omit or send 1 for the standard session. Send 2 to include tenant, legal entity and actor scope. Scope identifies context; it grants no authority.",
+      },
+    ];
+    paths["/session"].post.responses[200] = response(
+      "Keep the token private. Schema 2 adds scope; schema 1 remains the default.",
+      { oneOf: [ref("ProcessingSession"), ref("ProcessingScopedSession")] },
+    );
   }
   const extra = {
     ProcessingError: codeEnvelope,
@@ -577,6 +601,22 @@ export function buildSpec(kind) {
   const used = Object.values(paths)
     .flatMap((p) => Object.values(p))
     .filter((o) => source.operations[o.operationId]);
+  if (!simulator) {
+    const scoped = structuredClone(extra.ProcessingSession);
+    scoped.properties.schemaVersion = { type: "integer", const: 2 };
+    scoped.properties.scope = {
+      type: "object",
+      properties: {
+        tenantId: { type: "string", format: "uuid" },
+        legalEntityId: { type: "string", format: "uuid" },
+        actorId: { type: "string", format: "uuid" },
+      },
+      required: ["tenantId", "legalEntityId", "actorId"],
+      additionalProperties: false,
+    };
+    scoped.required.push("scope");
+    extra.ProcessingScopedSession = scoped;
+  }
   const schemas = schemaClosure(
     [paths, ...used.map((o) => ref(source.operations[o.operationId].input))],
     { ...source.components.schemas, ...extra },
@@ -596,20 +636,9 @@ export function buildSpec(kind) {
       description:
         read(`src/content/api/${kind}.md`) +
         "\n\n" +
-        common
-          .replaceAll("{{SDK_VERSION}}", metadata.sdkVersion)
-          .replaceAll("{{BASE_URL}}", metadata.baseUrl)
-          .replaceAll(
-            "{{AUDIENCE_CONFIGURATION}}",
-            simulator ? `  processingAudience: "${metadata.audience}",` : "",
-          )
-          .replace(
-            "{{NOTIFICATIONS}}",
-            simulator
-              ? "## Notifications\n\nThe retained test deployment exposes GET /stream for authorized notifications. Keep its last event ID and reconcile resource state after gaps; notifications do not prove bank acceptance."
-              : "## Notifications\n\nThis production release does not expose GET /stream. Refresh state through the documented resource reads.",
-          ) +
-        (simulator ? read("src/content/api/simulator-workflow.md") : ""),
+        (simulator
+          ? common + read("src/content/api/simulator-workflow.md")
+          : ""),
       contact: {
         name: "ISECure developer support",
         email: "support@isecure.fi",
@@ -627,9 +656,9 @@ export function buildSpec(kind) {
         ]
       : [
           {
-            url: "https://processing-api.isecure.fi",
+            url: metadata.baseUrl,
             description:
-              "ISECure production environment — Beta; Nordea, OP, Danske Bank, Säästöpankki, Oma Säästöpankki, Ålandsbanken, POP Pankki and Aktia; paid subscription",
+              "ISECure production — separate tenant onboarding and Processing subscription required",
           },
         ],
     tags: tags.map((name) => ({ name })),
@@ -676,7 +705,9 @@ export function buildSpec(kind) {
         name: name,
         tags: tags.filter((t) => t !== "Session" && t !== "Notifications"),
       },
-      { name: "Notifications", tags: ["Notifications"] },
+      ...(simulator
+        ? [{ name: "Notifications", tags: ["Notifications"] }]
+        : []),
     ],
   });
 }

@@ -4,10 +4,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   buildSpec,
-  source as legacySource,
-  metadata as legacyMetadata,
-  processingSource,
-  processingMetadata,
+  sourceFor,
+  metadataFor,
   sha256,
   schemaClosure,
   toOpenApi30,
@@ -23,15 +21,13 @@ const validateStandard = ajv.compile(
     ),
   ),
 );
-for (const [source, metadata] of [
-  [legacySource, legacyMetadata],
-  [processingSource, processingMetadata],
+for (const [kind, count, hostRoutes] of [
+  ["processing", 28, 1],
+  ["bank-simulator", 21, 2],
 ]) {
-  assert.match(
-    metadata.verifiedAt,
-    /^\d{4}-\d{2}-\d{2}$/,
-    "Unverified candidate cannot be published",
-  );
+  const source = sourceFor(kind),
+    metadata = metadataFor(kind);
+  assert.match(metadata.verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
   assert.match(metadata.repositoryRevision, /^[a-f0-9]{40}$/);
   assert.match(metadata.sourceSha256, /^[a-f0-9]{64}$/);
   assert.equal(
@@ -40,12 +36,6 @@ for (const [source, metadata] of [
     "Pinned source snapshot changed; perform an explicit release sync",
   );
   assert.equal(Object.keys(source.operations).length, metadata.operationCount);
-}
-for (const [kind, count] of [
-  ["processing", 28],
-  ["bank-simulator", 21],
-]) {
-  const source = kind === "processing" ? processingSource : legacySource;
   const expected = buildSpec(kind);
   assert.ok(
     validateStandard(expected),
@@ -63,10 +53,7 @@ for (const [kind, count] of [
     `${kind} docs drift: run yarn api:generate:products`,
   );
   assert.equal(expected.openapi, "3.0.3");
-  assert.equal(
-    Object.keys(expected.paths).length,
-    count + (kind === "processing" ? 1 : 2),
-  );
+  assert.equal(Object.keys(expected.paths).length, count + hostRoutes);
   const ids = new Set();
   for (const [path, item] of Object.entries(expected.paths))
     for (const [method, op] of Object.entries(item)) {
@@ -129,6 +116,6 @@ for (const [kind, count] of [
     );
   assert.ok(expected.info.description.includes("separate Processing session"));
   console.log(
-    `PASS ${kind}: OpenAPI 3.0, ${count} product operations + session/stream, pinned source, closed schema references, shared identity links and SDK examples`,
+    `PASS ${kind}: OpenAPI 3.0, ${count} product operations + ${hostRoutes} host routes, pinned source, closed schema references, shared identity links and SDK examples`,
   );
 }

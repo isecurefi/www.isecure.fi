@@ -3,12 +3,31 @@ import ts from "typescript";
 import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { buildSpec } from "./platform-api-docs.mjs";
+import { buildSpec, processingSource } from "./platform-api-docs.mjs";
+import { pathToFileURL } from "node:url";
 const sdk = process.argv[2];
 if (!sdk)
   throw new Error(
     "Pass the SDK package directory to type-check every published operation sample",
   );
+const { iso20022Operations } = await import(
+  pathToFileURL(resolve(sdk, "dist/generated/iso20022-contracts.js")).href
+);
+for (const [id, operation] of Object.entries(processingSource.operations)) {
+  const installed = iso20022Operations[id];
+  if (
+    !installed ||
+    installed.version !== operation.version ||
+    installed.contractDigest !== operation.contractDigest
+  ) {
+    throw new Error(
+      `Published SDK contract differs from deployed Processing operation: ${id}`,
+    );
+  }
+}
+console.log(
+  `PASS ${Object.keys(processingSource.operations).length} Processing SDK contract versions and digests match`,
+);
 const dir = mkdtempSync(join(tmpdir(), "isecure-doc-samples-"));
 const sdkImport = JSON.stringify(resolve(sdk, "dist/iso20022/index.js"));
 const prelude = `import {createIso20022Client,Iso20022HttpTransport} from ${sdkImport};\ndeclare const transport: Iso20022HttpTransport;\nconst client=createIso20022Client(transport);\n`;

@@ -168,6 +168,10 @@ Production uses the existing S3/CloudFront workflow, not OpenAI Sites:
   `ELBSecurityPolicy-TLS13-1-2-Res-2021-06`; do not weaken it when changing
   legacy routing.
 
+Before publication, fetch the current remote branch and inspect the active website release. The
+candidate must include that deployed revision in its Git ancestry; the publisher rejects stale or
+divergent history. Merge newer changes and preserve unrelated local work before building.
+
 Build from a clean commit and use `yarn deploy`; it uploads one immutable revision prefix, records
 the predecessor, switches the CloudFront origin path, invalidates caches, verifies the exact release
 manifest, and automatically restores the predecessor on failure. Use `yarn publish:plan` for the
@@ -186,14 +190,18 @@ export in OpenAPI 3.0.3. Reuse `ApiReferenceScript.astro` and `ApiDocsLayout.ast
 for all three references. Keep the existing File Exchange contract and legacy
 anchors compatible.
 
-Processing uses its separately pinned, deployed production snapshot; Bank Simulator retains its
-independent test snapshot. Do not publish a stream or operation absent from the selected deployment. Never publish
-the full generated platform contract as available. Follow the explicit sync and
-review procedure in README.md; normal builds remain offline and reject drift.
-Registration, initial authentication and account management must link to the live
-File Exchange reference. Processing session exchange and product authorization
-remain separately documented. The canonical test server is
-`https://processing-api.test.isecure.fi`; do not substitute an API Gateway URL.
+Processing uses a separately pinned production source in `processing-api.source.json` and
+`processing-api.source-metadata.json`. The Bank Simulator retains its separate historical source;
+never overwrite one product's snapshot when updating the other. Processing test was retired on
+2026-10-17. Use `https://processing-api.isecure.fi`, never an AWS internal URL or the retired test
+endpoint, for current Processing guidance. Keep the independent Simulator service separate.
+
+Use the exact-release sync documented in README.md. It verifies the branded API mapping, deployed
+route set, CloudFormation release, stored gateway artifact and live Lambda code hash against the
+recorded source revision. Never publish future platform operations as available. Normal builds
+remain offline and reject source/spec drift. Registration and account management link to File
+Exchange; the Processing session and operation permissions remain separate. A docs update never
+changes API deployment, DNS or tenant access.
 
 The user authorized public product discovery on the homepage: the primary
 navigation uses Products instead of Home, and the concise overview reuses public

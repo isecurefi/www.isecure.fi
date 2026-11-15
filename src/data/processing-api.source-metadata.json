@@ -1,15 +1,20 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "releaseId": "r-54b8ac0a4-1794726517",
   "repositoryRevision": "54b8ac0a4f3b0a8f9dc861b8b67a4041a140366b",
   "sourceDateEpoch": 1794726517,
   "sourceFile": "generated/processing/openapi.json",
   "sourceSha256": "46530fe0d7e2ea8fd60bc89df9cb575270d97948e1bc6c798185d2db9fdec4f0",
-  "snapshotSha256": "f128d753459cc4337a4645f5f2e17af6ba910b69eb12813b79c6bd2281b5f824",
-  "lambdaVersion": "cloudformation",
+  "snapshotSha256": "8fed9081bff00ace4a95dbceb9ba7b6cfa9f42dc68801ced49188f7afb81b6f8",
+  "lambdaVersion": "$LATEST",
+  "lambdaCodeSha256": "e0d74dbf1abb0cb93a10db676bb1bddf6c11000de4650f083baa4ef4db5b8b5c",
+  "gatewayDocumentSha256": "0cb6ffe41e8017ba1c9a48e02909e50961344c8d3e6d9dc8aa57bb82a27341f4",
+  "gatewayDeploymentId": "gwx4em",
   "verifiedAt": "2026-11-15",
   "baseUrl": "https://processing-api.isecure.fi",
   "audience": "isecure-processing-production-v1",
   "sdkVersion": "5.1.0",
-  "operationCount": 28
+  "operationCount": 28,
+  "sessionSchemaVersions": [1, 2],
+  "streaming": false
 }

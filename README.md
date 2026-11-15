@@ -247,43 +247,32 @@ files.
 
 The public references at `/apis/processing/` and `/apis/bank-simulator/` use the
 same self-hosted Scalar renderer as File Exchange. Each has an OpenAPI 3.0.3
-export at `openapi.json` below its route. Processing documents its reviewed production deployment; Bank Simulator documents
-its independent test deployment. Neither publishes the complete platform model. Both explain the
+export at `openapi.json` below its route. Processing follows the verified production release;
+Bank Simulator retains its separate snapshot. Neither exposes the complete generated platform model. Both explain the
 shared ISECure identity and link to the live File Exchange registration, login,
 MFA and account-management operations. The separate Processing session and
 product permissions remain explicit.
 
-`src/data/processing-api.source-metadata.json` pins the production Processing source
-revision and artifact digest; `processing-api.source.json` retains its reviewed operations.
-The corresponding `platform-api.source*` files retain the independent Bank Simulator
-test snapshot. Each snapshot includes SDK input shapes and schema dependencies.
+`src/data/platform-api.source-metadata.json` pins the exact platform source
+revision and original artifact digest. `platform-api.source.json` retains only
+reviewed deployed operations, SDK input shapes and their schema dependencies.
 Source examples and private infrastructure extensions are not imported. Numeric
 representation extensions are retained. No build fetches a floating upstream
 contract.
 
-To admit another deployed release, export that exact API Gateway stage and use
-its existing release manifest with `yarn api:sync:products`:
+For the legacy combined test snapshot, the original import remains available for explicit
+review of historical evidence. Do not use it to update Processing production or restore the retired
+test deployment. The production command is shown below. Legacy command:
 
 ```sh
 corepack yarn api:sync:products \
   --repository=/absolute/path/to/bankfiles-platform \
   --manifest=/absolute/path/to/processing-release-manifest.json \
-  --gateway-export=/absolute/path/to/deployed-openapi.json \
-  --stage=production --sdk-version=5.1.0
+  --gateway-export=/absolute/path/to/deployed-openapi.json
 corepack yarn api:generate:products
 corepack yarn prettier --write src/data/*.json
 corepack yarn api:validate
 ```
-
-Omit `--stage=production` only when deliberately refreshing the separate test snapshot.
-Export the actual deployed stage after live qualification; a synthesized candidate is not
-deployment evidence. Candidate metadata must retain `verifiedAt: "unverified-candidate"`
-until the release has been verified; publication validation rejects that state.
-
-For the CloudFormation production release, the retained documentation manifest includes
-`gatewayDocument.sha256` from its release input as well as `generatedOpenApi.sha256`
-from the source manifest. The deployed gateway description must match both the release
-ID and gateway digest exactly.
 
 The sync checks the manifest's source digest against the exact Git commit and
 matches every published operation to the deployed gateway. Review the allowed
@@ -302,13 +291,38 @@ package with:
 node scripts/check-api-sdk-samples.mjs /absolute/path/to/isecure-ts-client
 ```
 
-This checks every distinct session, notification and product-operation sample,
+This checks the distinct session, notification and product-operation samples,
 plus the worked simulator workflow. Normal validation rejects generated drift,
 missing references, unreviewed operations and loss of authentication requirements.
-Processing uses `https://processing-api.isecure.fi`; Bank Simulator uses
-`https://processing-api.test.isecure.fi`. Production DNS/TLS and mapping belong to
-the Processing CloudFormation release/DNS stacks. The separate
-`isecure-processing-test-domain` stack owns the test domain.
+Processing uses the separately pinned `processing-api.source.json` and
+`processing-api.source-metadata.json`. The existing `platform-api.source*` files continue to own
+the Bank Simulator snapshot. The production sync never overwrites Simulator data.
+
+For Processing, collect read-only evidence for the current CloudFormation release: its release
+manifest and versioned gateway document, the stage's Gateway export with integrations, branded
+base-path mapping, and live Lambda configuration. Build the private binding receipt from those
+reads, including runtime/source/release identity, code hash, artifact keys/versions, stage and
+verification date. Never put raw configurations, credentials or customer data in this repository.
+
+```sh
+corepack yarn api:sync:products --product=processing \
+  --repository=/absolute/path/to/bankfiles-platform \
+  --manifest=/private/evidence/release-manifest.json \
+  --gateway-export=/private/evidence/gateway-export.json \
+  --gateway-document=/private/evidence/release-gateway.json \
+  --binding=/private/evidence/binding.json
+corepack yarn api:generate:products
+corepack yarn api:validate
+```
+
+The production guard checks the exact account, stage, branded mapping, source revision, runtime
+hash, artifact versions and deployed route inventory. The current integration invokes `$LATEST`,
+so provenance records the observed code hash rather than claiming an immutable Lambda version.
+Recheck the deployment and code hash before publication. The source snapshot contains only the
+28 deployed payment operations and reachable schemas; session schemas are reviewed against the
+same host source. No event stream is added where none is deployed. The generator converts OpenAPI
+3.1 schemas to 3.0.3 for Scalar without altering the request contract. Production uses
+`https://processing-api.isecure.fi`; no DNS or service change is part of this publication.
 
 The authoritative platform model stays in OpenAPI 3.1. The public publisher
 converts its `const` constraints to equivalent one-value `enum` constraints for

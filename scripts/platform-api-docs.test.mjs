@@ -81,15 +81,49 @@ test("OpenAPI 3.0 conversion preserves exact values and rejects unsupported sche
   }
 });
 
+test("production reference includes generation, scoped login and only deployed routes", () => {
+  const spec = buildSpec("processing");
+  assert.equal(Object.keys(spec.paths).length, 29);
+  assert.equal(spec.paths["/stream"], undefined);
+  assert.equal(spec.servers.length, 1);
+  assert.equal(spec.servers[0].url, "https://processing-api.isecure.fi");
+  const op = spec.paths["/v1/payment-orders:generate-file"].post;
+  assert.equal(op.operationId, "payment_orders.generate_file");
+  assert.ok(op.responses[200].content["application/xml"]);
+  assert.ok(op.responses[412].content["application/json"]);
+  assert.match(op["x-codeSamples"][0].source, /paymentBatches.generateFile/);
+  assert.ok(
+    !op.parameters.some((p) =>
+      ["Idempotency-Key", "If-Match"].includes(p.name),
+    ),
+  );
+  assert.deepEqual(
+    spec.paths["/session"].post.parameters[0].schema.enum,
+    [1, 2],
+  );
+  assert.equal(
+    spec.paths["/session"].post.responses[200].content["application/json"]
+      .schema.oneOf.length,
+    2,
+  );
+  assert.deepEqual(
+    spec.components.schemas.ProcessingScopedSession.properties.scope.required,
+    ["tenantId", "legalEntityId", "actorId"],
+  );
+  assert.match(
+    spec.info.description,
+    /isecure-ts-client\/blob\/main\/docs\/processing\.md/,
+  );
+  assert.doesNotMatch(
+    spec.info.description,
+    /Historical HTTP schema snapshot|isecure-ts-client@2\.7\.0/,
+  );
+});
+
 test("production profile examples and endpoint follow the deployed independent-configurations contract", () => {
   const spec = buildSpec("processing");
   assert.ok(!spec.paths["/stream"]);
   assert.ok(!spec.info.description.includes("processingAudience:"));
-  assert.ok(
-    buildSpec("bank-simulator").info.description.includes(
-      'processingAudience: "isecure-processing-gpgtest-v1"',
-    ),
-  );
   assert.equal(spec.servers.length, 1);
   const operations = Object.values(spec.paths).flatMap(Object.values);
   const catalogue = operations.find(

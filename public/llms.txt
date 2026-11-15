@@ -19,7 +19,7 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [Home (Swedish)](https://www.isecure.fi/se/): Swedish-language product overview
 - [Products](https://www.isecure.fi/en/products/): current products with exact stage and customer access
 - [Bank Simulator](https://www.isecure.fi/en/bank-simulator/): Beta test-environment enrollment, initial camt.053 download, signed pain.001 upload, and synthetic pain.002/camt.054/updated-camt.053 feedback; registration, a paid subscription, and an access request are required
-- [Processing API](https://www.isecure.fi/en/processing-api/): separate Beta payment workflow for creating, checking, approving, generating, and downloading exact pain.001. Nordea Corporate Access payment-file profiles are Nordea validated for Finland, Sweden, Norway and Denmark; OP and Danske Bank Finland SEPA profiles are available with bank validation in progress. Verification of Payee (VoP) is included for Nordea, OP and Danske Bank payments. Available to subscribed customers in the ISECure test and production environments
+- [Processing API](https://www.isecure.fi/en/processing-api/): Beta payment preparation, validation and XML generation, available only in production with separate onboarding and subscription. Processing test is retired. Bank upload is separate. VoP is not part of the current production release. [TypeScript SDK guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/processing.md).
 - [ISO 20022 message guide](https://www.isecure.fi/en/iso-20022/): comparison of pain.001, pain.002, camt.053, and camt.054 in bank integrations
 - [Bank integration for software products](https://www.isecure.fi/en/pankkiyhteys/): adding Finnish bank connectivity to a software product, build vs. buy
 - [Finnish bank Web Services channel](https://www.isecure.fi/en/web-services/): how the corporate Web Services (WS) channel works
@@ -37,6 +37,8 @@ Pricing: the base fee is 18 €/month plus bank-account licenses at 2 €/accoun
 - [ISECure REST API — File Exchange documentation](https://www.isecure.fi/wsapi_v2/): production API reference for authentication, certificates, bank file upload, listing, and download
 - [OpenAPI specification](https://www.isecure.fi/wsapi_v2.json): machine-readable OpenAPI 2.0 description of the REST API
 
+The stronger password profile is available on the existing File Exchange v2 endpoints in production and test. New tenants require it. Explicitly compatible existing tenant/API keys may continue legacy authentication, including new accounts under those tenants. SDKs never automatically downgrade. Password reset uses its own initialization challenge; Admin MFA is unchanged. See the reference for migration and the separate legacy reset flow.
+
 ## Test before bank onboarding
 
 An integrator can start while the real bank agreement and production certificates are still in progress. Processing API prepares and releases exact pain.001.001.09 bytes through a separate session; the customer's application verifies and signs those bytes locally; Bank Simulator accepts the signed synthetic file through the existing File Exchange API and returns synthetic feedback. Bank Simulator runs through the exact real-bank connection API: when onboarding is ready, that same File Exchange API contract targets a separately configured and qualified real-bank connection, while the simulator remains available for testing.
@@ -45,11 +47,11 @@ The current Processing and Bank Simulator examples run separately and do not cor
 
 ## SDKs and tooling
 
-- [TypeScript SDK](https://github.com/isecurefi/isecure-ts-client): official TypeScript client library
-- [Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client): Python client library; see its README for current API coverage
-- [C# SDK (Beta)](https://github.com/isecurefi/isecure-cs-client): .NET client library; see its README for current API coverage
+- [TypeScript SDK v5](https://github.com/isecurefi/isecure-ts-client): official TypeScript client; npm latest defaults to the stronger password profile, with explicit legacy selection
+- [Python SDK (Beta)](https://github.com/isecurefi/isecure-py-client): Python 1.0.0 wheel available from GitHub Releases; stronger password profile by default, explicit legacy selection; see its README for API coverage
+- [C# SDK (Beta)](https://github.com/isecurefi/isecure-cs-client): .NET 1.0.0 package available from GitHub Releases; stronger password profile by default, explicit legacy selection, and password reset; see its README for API coverage
 - [Rust SDK (Beta)](https://github.com/isecurefi/isecure-rust-client): transport-neutral Rust client; see its README for source installation and current API coverage; not published on crates.io
-- [PHP SDK and wscli](https://github.com/isecurefi/wscli-php): PHP client library and the `wscli` command-line tool
+- [PHP SDK and wscli](https://github.com/isecurefi/wscli-php): PHP 3.0.0 PasswordProfile helper defaults to the stronger profile; the existing `wscli` command-line tool and raw generated client retain legacy authentication
 
 ## Contact
 

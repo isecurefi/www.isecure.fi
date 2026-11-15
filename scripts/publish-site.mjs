@@ -48,6 +48,30 @@ export function assertReleaseId(value) {
   return value;
 }
 
+// Normal publication must retain the deployed history. Intentional rollback has its own command.
+export function assertPublicationHistory(
+  previousOriginPath,
+  revision,
+  cwd = process.cwd(),
+) {
+  const predecessor = releaseFromOriginPath(previousOriginPath);
+  if (!predecessor) return;
+  assertReleaseId(revision);
+  const result = spawnSync(
+    "git",
+    ["merge-base", "--is-ancestor", predecessor, revision],
+    {
+      cwd,
+      encoding: "utf8",
+      stdio: "pipe",
+    },
+  );
+  if (result.status !== 0)
+    throw new Error(
+      "Candidate does not include the deployed website revision; fetch and merge it before publication, or use the explicit rollback command",
+    );
+}
+
 function listFiles(directory) {
   return readdirSync(directory, { withFileTypes: true })
     .flatMap((entry) => {
@@ -482,6 +506,7 @@ function plan(options) {
   const revision = currentRevision();
   const distribution = getDistribution(options.distribution);
   const previousOriginPath = originPath(distribution, options.origin);
+  assertPublicationHistory(previousOriginPath, revision);
   const candidateOriginPath = `/${RELEASE_ROOT}/${revision}`;
   console.log(
     JSON.stringify(
@@ -530,6 +555,7 @@ function publish(options) {
 
   const distribution = getDistribution(options.distribution);
   const previousOriginPath = originPath(distribution, options.origin);
+  assertPublicationHistory(previousOriginPath, revision);
   const prefix = `${RELEASE_ROOT}/${revision}`;
   const candidateOriginPath = `/${prefix}`;
   const existingManifest = readExistingReleaseManifest(options.bucket, prefix);

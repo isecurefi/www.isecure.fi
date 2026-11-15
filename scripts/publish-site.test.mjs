@@ -7,6 +7,7 @@ import test from "node:test";
 
 import {
   assertReleaseId,
+  assertPublicationHistory,
   createReleaseManifest,
   detectSecret,
   releaseCacheControl,
@@ -206,4 +207,49 @@ test("a partial release is resumed and a completed release is immutable", () => 
     () => releaseNeedsUpload('{"revision":"other"}\n', manifest, false),
     /already differs/u,
   );
+});
+
+test("publication preserves deployed ancestry and refuses stale, divergent and unknown revisions", () => {
+  const cwd = mkdtempSync(join(tmpdir(), "isecure-publish-history-"));
+  const git = (...args) => {
+    const result = spawnSync("git", args, { cwd, encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim();
+  };
+  try {
+    git("init", "-q");
+    git("config", "user.name", "Synthetic release test");
+    git("config", "user.email", "release-test@example.invalid");
+    git("commit", "--allow-empty", "-qm", "base");
+    const base = git("rev-parse", "HEAD");
+    git("commit", "--allow-empty", "-qm", "deployed");
+    const deployed = git("rev-parse", "HEAD");
+    git("commit", "--allow-empty", "-qm", "candidate");
+    const candidate = git("rev-parse", "HEAD");
+    const origin = `/_releases/${deployed}`;
+    assertPublicationHistory(origin, candidate, cwd);
+    assertPublicationHistory(origin, deployed, cwd);
+    assertPublicationHistory("", candidate, cwd);
+    assert.throws(
+      () => assertPublicationHistory(origin, base, cwd),
+      /does not include/,
+    );
+    git("checkout", "--detach", base);
+    git("commit", "--allow-empty", "-qm", "divergent");
+    assert.throws(
+      () => assertPublicationHistory(origin, git("rev-parse", "HEAD"), cwd),
+      /does not include/,
+    );
+    assert.throws(
+      () =>
+        assertPublicationHistory(
+          `/_releases/${"a".repeat(40)}`,
+          candidate,
+          cwd,
+        ),
+      /does not include/,
+    );
+  } finally {
+    rmSync(cwd, { recursive: true, force: true });
+  }
 });
