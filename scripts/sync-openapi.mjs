@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { validatePgpPolicy } from "./pgp-policy-contract.mjs";
 import { mkdir, rename, writeFile } from "node:fs/promises";
 import { format } from "prettier";
 
@@ -39,6 +41,24 @@ if (errors.length > 0) {
   );
 }
 
+// Both references are resolved from the same immutable upstream revision.
+const pgpRawUrl = `https://raw.githubusercontent.com/isecurefi/wsapi-v2/${commit.sha}/pgp-policy-api.json`;
+const pgpResponse = await fetch(pgpRawUrl, { headers });
+if (!pgpResponse.ok)
+  throw new Error(`PGP download failed: ${pgpResponse.status}`);
+const pgpRaw = await pgpResponse.text();
+const pgp = JSON.parse(pgpRaw);
+const pgpErrors = validatePgpPolicy(pgp);
+if (pgpErrors.length) throw new Error(pgpErrors.join("\n"));
+const pgpText = await format(JSON.stringify(pgp), { parser: "json" });
+const digest = (v) => createHash("sha256").update(v).digest("hex");
+const pgpMetadata = {
+  repository,
+  source: pgpRawUrl,
+  commit: commit.sha,
+  sourceSha256: digest(pgpRaw),
+  snapshotSha256: digest(pgpText),
+};
 const metadata = {
   repository,
   source: rawUrl,
@@ -66,6 +86,11 @@ await Promise.all([
   rename(temporarySourceUrl, sourceUrl),
 ]);
 
+await writeFile(new URL("pgp-policy.openapi.json", dataDirectory), pgpText);
+await writeFile(
+  new URL("pgp-policy.source.json", dataDirectory),
+  await format(JSON.stringify(pgpMetadata), { parser: "json" }),
+);
 const summary = summarizeOpenApi(spec);
 console.log(
   `Synced OpenAPI ${summary.version}: ${summary.operationCount} operations, ${summary.definitionCount} schemas, commit ${commit.sha.slice(0, 12)}`,

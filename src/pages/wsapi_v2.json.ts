@@ -43,13 +43,13 @@ if (result.status === "verification_accepted") {
 }`,
   Register: `const registration = await client.register();
 console.log(registration.ApiKey);`,
-  InitPasswordReset: `// TypeScript v5: requests the recovery code and retains reset-bound discovery.
+  InitPasswordReset: `// TypeScript 6.1.0: requests the recovery code and retains reset-bound discovery.
 const initialization = await client.initPasswordReset();
 if (initialization.ResponseCode !== "00" || !initialization.Challenge) {
   throw new Error(initialization.ResponseText || "Missing reset challenge");
 }
 // Keep this client and initialization in memory until the user enters the code.`,
-  PasswordReset: `// TypeScript v5 default profile; do not fetch an InitLogin challenge.
+  PasswordReset: `// TypeScript 6.1.0 default profile; do not fetch an InitLogin challenge.
 // Call initPasswordReset() once, then ask the user for its recovery code.
 const initialization = await client.initPasswordReset();
 if (initialization.ResponseCode !== "00" || !initialization.Challenge) {
@@ -123,7 +123,9 @@ console.log(Usage.UniqueAccounts, Usage.MissingDays, Usage.Issues);`,
   ReadWorkspaceAuthority: `// The native workspace owner generates the one-use challenge and must verify
 // the signed assertion. Do not log, cache or persist it in the browser.
 const { Assertion } = await client.readWorkspaceAuthority(nativeChallenge);`,
-  DeleteKey: `const result = await client.deleteKey("DBCBE671");`,
+  DeleteKey: `// client.deleteKey(...) uses the unsupported legacy short-ID endpoint.
+// On Test/RC use deletePgpKey with a full primary fingerprint and revision;
+// see the separate PGP authorization reference.`,
   ListKeys: `const keys = await client.listKeys();`,
   UploadKey: `const result = await client.uploadPgpKey(
   process.env.ISECURE_PGP_PUBLIC_KEY!,
@@ -153,8 +155,8 @@ if (state.status === "needs_mfa") {
   RetireCert: `// Retires the active certificate for client's Bank; the integrator
 // owner may pass Account to retire a customer's certificate instead.
 const result = await client.retireCert({ Account: "customer@example.com" });`,
-  DeleteAccount: `// Permanent deletion. Requires an admin login with MFA at most
-// 10 minutes old and the exact email repeated as confirmation.
+  DeleteAccount: `// Soft-delete the customer account; audit history is retained.
+// Confirmation must match the email. Follow this endpoint's Admin/MFA requirements.
 const result = await client.deleteAccount(
   "customer@example.com",
   "customer@example.com",
@@ -202,7 +204,7 @@ export const GET: APIRoute = () => {
   );
   const sdkDescription = `Client SDKs:
 
-- [TypeScript SDK v5 (GA)](${TYPESCRIPT_SDK_URL}): supports Node.js and modern browser bundlers. Install with \`npm install isecure-ts-client\`.
+- [TypeScript SDK 6.1.0 (GA)](${TYPESCRIPT_SDK_URL}): supports Node.js and modern browser bundlers. Install with \`npm install isecure-ts-client\`.
 - [Python SDK 1.0.0 (Beta)](https://github.com/isecurefi/isecure-py-client/releases/tag/v1.0.0): install the wheel from the GitHub release; stronger password authentication is the default, with explicit legacy selection. See its README for API coverage.
 - [C# / .NET 10 SDK 1.0.0 (Beta)](${CSHARP_SDK_URL}/releases/tag/v1.0.0): install the NuGet package asset from the GitHub release. Registration, SMS/TOTP authentication, password reset, certificate enrollment and discovery, and signed file exchange are supported. Stronger password authentication is the default, with explicit legacy selection. NuGet.org publication is separate. See [coverage](${CSHARP_SDK_URL}/blob/main/docs/preview-scope.md) for remaining limits; the separate Processing API is outside this SDK.
 - [Rust SDK (Beta)](https://github.com/isecurefi/isecure-rust-client): transport-neutral Rust client for File Exchange. See its README for source installation and current API coverage; no crates.io release is published.
@@ -219,7 +221,7 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
 - [Processing API documentation](https://www.isecure.fi/apis/processing/): prepare, validate, approve and download payment files before local signing and File Exchange upload.
 - [Bank Simulator API documentation](https://www.isecure.fi/apis/bank-simulator/): configure synthetic banks and accounts, define scenarios, start runs and inspect results. Its control API is separate from the fixed File Exchange simulator example.
 
-Processing API is Beta, with Nordea validated payment-file profiles for Finland, Sweden, Norway and Denmark. The Bank Simulator control API is Experimental. Both are available in the test environment by request. Use the registration, initial login, MFA and account-management operations documented here for all three APIs. Processing and Bank Simulator then exchange the completed login for a separate [Processing session](https://www.isecure.fi/apis/processing/#operation/processing_session.exchange), with their own subscription and permission checks. File uploads and downloads continue through this File Exchange API.`;
+Processing uses its separate production endpoint at https://processing-api.isecure.fi; its former test endpoint is retired. Consult each linked reference for its own environment, enabled operations and current profiles. Use the registration, initial login, MFA and account-management operations documented here for all three APIs. Processing and Bank Simulator then exchange the completed login for a separate [Processing session](https://www.isecure.fi/apis/processing/#operation/processing_session.exchange), with their own subscription and permission checks. File uploads and downloads continue through this File Exchange API.`;
   publishedSpec.externalDocs = {
     description: "Official ISECure TypeScript SDK",
     url: TYPESCRIPT_SDK_URL,
@@ -249,7 +251,7 @@ Processing API is Beta, with Nordea validated payment-file profiles for Finland,
     {
       name: "Pgp",
       description:
-        "Manage the PGP public keys used for protected certificate exports.",
+        "Register public keys for upload authorization or certificate export. Per-bank policies and required signers have a separate Test/RC reference.",
     },
     {
       name: "Audit",

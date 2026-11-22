@@ -207,3 +207,22 @@ The user authorized public product discovery on the homepage: the primary
 navigation uses Products instead of Home, and the concise overview reuses public
 catalog records. Draft/unlisted products remain excluded. This promotion does not
 change product maturity or grant access.
+
+## PGP authorization reference
+
+`/apis/pgp-policy/` and its `openapi.json` are a separate Test/production-RC
+companion. Never merge these policy routes into the default V2 reference before
+V2 promotion is independently verified. The reusable reference component and
+reference-only security settings apply unchanged. `yarn api:sync --ref=<commit>`
+synchronizes both File Exchange and the PGP companion from the same exact
+`wsapi-v2` revision; normal builds remain offline and validate the companion digest.
+The upstream companion is generated from pinned backend config/template/render
+sources and records provenance. Update schemas there, not in a website-only copy.
+
+When SDK methods or policy semantics change, compile the built public samples with
+`node scripts/check-file-exchange-sdk-samples.mjs /path/to/released-sdk`, verify
+live route/stage availability read-only, and review named signers versus N, omission
+versus clearing, revision conflicts, initialization consent and irreversible locking.
+Keep opaque action credentials and fresh codes out of samples/logs except synthetic
+placeholders. PGP policy belongs to an account and bank; SDK publication never
+implies V2 promotion. Use public environment names and branded URLs.

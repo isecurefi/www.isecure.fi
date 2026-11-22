@@ -330,3 +330,13 @@ OpenAPI 3.0.3 and preserves schema-reference annotations with `allOf`. It reject
 unreviewed 3.1-only constructs rather than silently dropping their meaning.
 Public references omit AWS integrations; use the separately generated deployment
 contract for API Gateway imports, which have additional AWS-specific limitations.
+
+### PGP policy API documentation
+
+The Test/production-RC companion at `/apis/pgp-policy/` reuses the standard Scalar
+renderer. `yarn api:sync --ref=<wsapi-v2-commit>` updates it together with the main
+V2 mirror. The normal validation/build verifies its exact local snapshot and rejects
+accidental V2 targeting or missing authorization/lock fields. Its schemas originate
+from the upstream `pgp-policy-api.json`, generated from a recorded backend revision.
+After building, compile all File Exchange and PGP samples against the released SDK:
+`node scripts/check-file-exchange-sdk-samples.mjs /path/to/isecure-ts-client`.

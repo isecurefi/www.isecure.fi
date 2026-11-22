@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { validatePgpPolicy } from "./pgp-policy-contract.mjs";
 import { readFile } from "node:fs/promises";
 
 import { summarizeOpenApi, validateOpenApi } from "./openapi-utils.mjs";
@@ -34,3 +36,31 @@ try {
   console.error(`FAIL Could not validate OpenAPI document: ${error.message}`);
   process.exitCode = 1;
 }
+
+const pgpBytes = await readFile(
+  new URL("../src/data/pgp-policy.openapi.json", import.meta.url),
+  "utf8",
+);
+const pgpMetadata = JSON.parse(
+  await readFile(
+    new URL("../src/data/pgp-policy.source.json", import.meta.url),
+    "utf8",
+  ),
+);
+const pgpErrors = validatePgpPolicy(JSON.parse(pgpBytes));
+const mainMetadata = JSON.parse(await readFile(sourceUrl, "utf8"));
+if (
+  pgpMetadata.commit !== mainMetadata.commit ||
+  pgpMetadata.repository !== mainMetadata.repository
+)
+  pgpErrors.push(
+    "File Exchange and PGP references must use the same pinned upstream commit",
+  );
+
+if (
+  createHash("sha256").update(pgpBytes).digest("hex") !==
+  pgpMetadata.snapshotSha256
+)
+  pgpErrors.push("PGP snapshot digest differs from pinned source");
+if (pgpErrors.length) throw new Error(pgpErrors.join("\n"));
+console.log("PGP companion: 8 Test/RC operations, pinned source verified");

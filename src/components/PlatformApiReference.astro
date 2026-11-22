@@ -5,20 +5,43 @@ import processing from "../data/processing.openapi.json";
 import simulator from "../data/bank-simulator.openapi.json";
 import simulatorMetadata from "../data/platform-api.source-metadata.json";
 import processingMetadata from "../data/processing-api.source-metadata.json";
+import pgpPolicy from "../data/pgp-policy.openapi.json";
+import pgpMetadata from "../data/pgp-policy.source.json";
 interface Props {
-  kind: "processing" | "bank-simulator";
+  kind: "processing" | "bank-simulator" | "pgp-policy";
 }
 const { kind } = Astro.props;
-const metadata = kind === "processing" ? processingMetadata : simulatorMetadata;
-const spec = kind === "processing" ? processing : simulator;
+const revision =
+  kind === "pgp-policy"
+    ? pgpMetadata.commit
+    : (kind === "processing" ? processingMetadata : simulatorMetadata)
+        .repositoryRevision;
+const spec =
+  kind === "pgp-policy"
+    ? pgpPolicy
+    : kind === "processing"
+      ? processing
+      : simulator;
 const title = `${spec.info.title} documentation`;
 const description =
-  kind === "processing"
-    ? "Production Processing API reference: prepare and validate payments, generate XML, authenticate and handle errors. Includes TypeScript SDK examples and OpenAPI schemas."
-    : "Configure synthetic bank accounts and scenarios, run tests and inspect results. Experimental test API reference with authentication, TypeScript examples and OpenAPI 3.0 schemas.";
+  kind === "pgp-policy"
+    ? "Test and production RC PGP authorization reference: required signers, per-bank signature counts, blocking, key deletion and irreversible locking. SDK 6.1.0 examples."
+    : kind === "processing"
+      ? "Production Processing API reference: prepare and validate payments, generate XML, authenticate and handle errors. Includes TypeScript SDK examples and OpenAPI schemas."
+      : "Configure synthetic bank accounts and scenarios, run tests and inspect results. Experimental test API reference with authentication, TypeScript examples and OpenAPI 3.0 schemas.";
 const specPath = `/apis/${kind}/openapi.json`;
-const specUrl = `${specPath}?revision=${metadata.repositoryRevision}`;
-const operationCount = Object.keys(spec.paths).length;
+const specUrl = `${specPath}?revision=${revision}`;
+const operationCount = Object.values(spec.paths).reduce(
+  (count, path) =>
+    count +
+    Object.keys(path).filter((method) =>
+      ["get", "post", "put", "delete", "patch"].includes(method),
+    ).length,
+  0,
+);
+const schemaCount = Object.keys(
+  "definitions" in spec ? spec.definitions : spec.components.schemas,
+).length;
 ---
 
 <ApiDocsLayout
@@ -42,9 +65,7 @@ const operationCount = Object.keys(spec.paths).length;
     <div class="docs-loading" role="status">
       <span aria-hidden="true"></span><div>
         <strong>Loading API reference</strong><small
-          >{operationCount} operations · {
-            Object.keys(spec.components.schemas).length
-          } schemas</small
+          >{operationCount} operations · {schemaCount} schemas</small
         >
       </div>
     </div>
@@ -52,7 +73,7 @@ const operationCount = Object.keys(spec.paths).length;
       ><section class="noscript-message">
         <h1>{title}</h1><p>
           JavaScript is required for the browsable reference. Download the
-          complete <a href={specPath}>OpenAPI 3.0 JSON document</a>.
+          complete <a href={specPath}>OpenAPI JSON document</a>.
         </p>
       </section></noscript
     >
