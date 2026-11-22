@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
 
+import pgpPolicySpec from "../data/pgp-policy.openapi.json";
+
 import { sourceSpec } from "../lib/api-docs-source";
 import { CSHARP_SDK_SAMPLES, CSHARP_SDK_URL } from "../lib/csharp-sdk-samples";
 
@@ -33,6 +35,10 @@ const HTTP_METHODS = new Set([
 
 const TYPESCRIPT_SDK_URL = "https://github.com/isecurefi/isecure-ts-client";
 const BANK_SIMULATOR_GUIDE_URL = "https://www.isecure.fi/en/bank-simulator/";
+const actionMfaSample = pgpPolicySpec.paths["/session/action-mfa"].post[
+  "x-code-samples"
+].find((sample) => sample.lang === "TypeScript");
+if (!actionMfaSample) throw new Error("Missing action MFA TypeScript sample");
 const TYPESCRIPT_SDK_SAMPLES: Record<string, string> = {
   InitRegister: `// register() retrieves and answers the registration challenge.
 const registration = await client.register();`,
@@ -152,14 +158,25 @@ if (state.status === "needs_mfa") {
   // Prompt for the selected factor's code, then call submitMfaCode(code).
   // The client retains the new Session and ChallengeName.
 }`,
+  RequestActionMfa: actionMfaSample.source,
   RetireCert: `// Retires the active certificate for client's Bank; the integrator
 // owner may pass Account to retire a customer's certificate instead.
-const result = await client.retireCert({ Account: "customer@example.com" });`,
+const actionCredential = client.session.accessToken;
+if (!actionCredential) throw new Error("Complete Admin login first");
+const result = await client.retireCert({ Account: "customer@example.com" }, {
+  AccessToken: actionCredential,
+  MfaType: "SOFTWARE_TOKEN_MFA",
+  Code: freshAuthenticatorCode, // New established-factor code for this action.
+});`,
   DeleteAccount: `// Soft-delete the customer account; audit history is retained.
-// Confirmation must match the email. Follow this endpoint's Admin/MFA requirements.
+// Confirmation must match the email. A recent login alone is insufficient.
+const actionCredential = client.session.accessToken;
+if (!actionCredential) throw new Error("Complete Admin login first");
 const result = await client.deleteAccount(
   "customer@example.com",
   "customer@example.com",
+  { AccessToken: actionCredential, MfaType: "SOFTWARE_TOKEN_MFA",
+    Code: freshAuthenticatorCode }, // New established-factor code for this action.
 );`,
   VerifyTOTP: `const state = await client.verifyTotp(
   accessToken,
