@@ -1,8 +1,9 @@
-# Prepared search-page improvements
+# Search-page improvements
 
 Prepared 2026-11-26 against website release
-`2ae403cfa018f3d5aed782853d7805ce4c6d6542`. These changes are for review and
-are not part of the deployed simulator preview. They implement the next content
+`2ae403cfa018f3d5aed782853d7805ce4c6d6542`. The owner authorized review, merge
+and deployment of PR #3 on 2026-11-26. These changes are separate from the
+simulator preview. They implement the next content
 iteration for platform tasks `WEBSEO-002`, `WEBSEO-003` and `WEBSEO-004`;
 they do not close those measurement tasks.
 
@@ -38,8 +39,8 @@ landing pages. No new indexable route or product availability claim is added.
   new analytics destination or lead event is sent.
 
 The unlisted `/preview/bank-demo/` remains unlinked. Canonicals, reciprocal
-hreflang, existing routes and product maturity stay as published. Deployment
-of this draft and later public discovery of the demo are separate decisions.
+hreflang, existing routes and product maturity stay as published. This release
+does not authorize public discovery of the demo.
 
 ## Review and measurement
 
@@ -48,7 +49,7 @@ check the rendered guides on desktop and at 320px, including jump, copy and
 exact XML download. Review content accuracy, synthetic provenance, privacy,
 accessibility and the shared implementation before merging.
 
-After a separately authorized publication, compare equal 28-day GSC windows
+After publication, compare equal 28-day GSC windows
 with the normal reporting delay. Compare the same query/page, country and
 device groups; track impressions, position and CTR together. Inspect GA4
 `guide-example` selections and successful contact submissions separately.
