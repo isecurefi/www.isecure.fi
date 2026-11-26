@@ -86,6 +86,33 @@ const defaultFieldHeaders = {
 }[lang];
 const relatedHref = (s: string) =>
   lang === "fi" ? `/${s}/` : `/${lang}/${s}/`;
+const exampleIndex = t.sections.findIndex((section) => section.xml);
+const exampleCopy = {
+  fi: {
+    jump: "Katso XML-esimerkki",
+    copy: "Kopioi XML-esimerkki",
+    copied: "Kopioitu",
+    failed: "Valitse ja kopioi XML käsin.",
+    download: "Lataa kokonainen synteettinen alkutiliote (XML)",
+    note: "Simulaattorin camt.053.001.02-alkutiliote: 10 miljoonan euron testisaldo, ei tapahtumia. Erillinen, kokonainen tiedosto; yllä oleva esimerkki on lyhennetty.",
+  },
+  en: {
+    jump: "View XML example",
+    copy: "Copy XML example",
+    copied: "Copied",
+    failed: "Select and copy the XML manually.",
+    download: "Download complete synthetic opening statement (XML)",
+    note: "Simulator camt.053.001.02 opening statement: EUR 10 million test balance, no transactions. This is a separate complete file; the example above is shortened.",
+  },
+  se: {
+    jump: "Visa XML-exempel",
+    copy: "Kopiera XML-exempel",
+    copied: "Kopierat",
+    failed: "Markera och kopiera XML-texten manuellt.",
+    download: "Ladda ner ett komplett syntetiskt öppningskontoutdrag (XML)",
+    note: "Simulatorns camt.053.001.02-öppningskontoutdrag: testsaldo på 10 miljoner euro, inga transaktioner. Detta är en separat komplett fil; exemplet ovan är förkortat.",
+  },
+}[lang];
 ---
 
 <CatalogPageLayout
@@ -97,13 +124,23 @@ const relatedHref = (s: string) =>
   faq={t.faq}
   fullWidth
 >
-  <PageHero slot="hero" title={t.h1} lead={t.intro} />
+  <PageHero slot="hero" title={t.h1} lead={t.intro}>
+    {
+      exampleIndex >= 0 && (
+        <Actions>
+          <Button href="#xml-example" variant="secondary">
+            {exampleCopy.jump}
+          </Button>
+        </Actions>
+      )
+    }
+  </PageHero>
 
   <Section>
     <article class="guide-page">
       <Prose>
         {
-          t.sections.map((s) => (
+          t.sections.map((s, sectionIndex) => (
             <section>
               <h2>{s.h2}</h2>
               {s.paras.map((p) => (
@@ -148,7 +185,41 @@ const relatedHref = (s: string) =>
                   </tbody>
                 </table>
               )}
-              {s.xml && <pre set:text={s.xml} />}
+              {s.xml && (
+                <div
+                  id={sectionIndex === exampleIndex ? "xml-example" : undefined}
+                >
+                  <div class="example-tools">
+                    <button
+                      type="button"
+                      data-copy-example
+                      data-copied={exampleCopy.copied}
+                      data-copy-failed={exampleCopy.failed}
+                      data-analytics-content-type="developer-resource"
+                      data-analytics-item-id={`${slug}-xml-copy`}
+                      data-analytics-source="guide-example"
+                    >
+                      {exampleCopy.copy}
+                    </button>
+                    <span data-copy-status role="status" aria-live="polite" />
+                  </div>
+                  <pre set:text={s.xml} />
+                  {slug === "camt-053" && (
+                    <div class="example-download">
+                      <a
+                        href="/examples/camt-053.001.02-opening.xml"
+                        download
+                        data-analytics-content-type="developer-resource"
+                        data-analytics-item-id="camt-053-opening-xml"
+                        data-analytics-source="guide-example"
+                      >
+                        {exampleCopy.download}
+                      </a>
+                      <p>{exampleCopy.note}</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </section>
           ))
         }
@@ -226,7 +297,61 @@ const relatedHref = (s: string) =>
   }
 </CatalogPageLayout>
 
+<script>
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-copy-example]")
+    .forEach((button) => {
+      button.addEventListener("click", async () => {
+        const section = button.closest("section");
+        const status =
+          section?.querySelector<HTMLElement>("[data-copy-status]");
+        const xml = section?.querySelector("pre")?.textContent;
+        if (!status || !xml) return;
+        try {
+          await navigator.clipboard.writeText(xml);
+          status.textContent = button.dataset.copied ?? "Copied";
+        } catch {
+          status.textContent =
+            button.dataset.copyFailed ?? "Select and copy the XML manually.";
+        }
+      });
+    });
+</script>
+
 <style>
+  #xml-example {
+    scroll-margin-top: 100px;
+  }
+  .example-tools {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0 10px;
+    font-size: 13px;
+  }
+  .example-tools button {
+    font: inherit;
+    padding: 10px 14px;
+    min-height: 44px;
+    color: var(--landing-ink);
+    background: var(--landing-card);
+    border: 1px solid var(--landing-line);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .example-tools button:focus-visible {
+    outline: 2px solid var(--landing-accent);
+    outline-offset: 3px;
+  }
+  .example-download {
+    margin-top: 16px;
+  }
+  .example-download p {
+    font-size: 13px;
+    margin-top: 8px;
+    color: var(--landing-muted);
+  }
   /* Prose resets the first heading in each section, so space sections here. */
   .guide-page section + section {
     margin-top: 2.4em;
