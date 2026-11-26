@@ -251,7 +251,7 @@ const searchIntentPages = [
   ],
   [
     "en/camt-053/index.html",
-    "What is camt.053? An ISO 20022 bank statement",
+    "camt.053 bank statements: XML example and fields",
     "camt053",
     "camt.053",
   ],
@@ -269,7 +269,7 @@ const searchIntentPages = [
   ],
   [
     "en/camt-054/index.html",
-    "What is camt.054? A debit and credit notification",
+    "camt.054 notifications: XML example and camt.053 comparison",
     "camt054",
     "camt.054",
   ],
@@ -287,7 +287,7 @@ const searchIntentPages = [
   ],
   [
     "en/pain-002/index.html",
-    "What is pain.002? A payment status report",
+    "pain.002 payment status: codes and XML example",
     "pain002",
     "pain.002",
   ],
@@ -311,7 +311,7 @@ for (const [
   }
   const html = readFileSync(file, "utf8");
   if (!html.includes(`>${heading}</h1>`)) {
-    failures.push(`${relativeFile}: answer-first H1 is missing`);
+    failures.push(`${relativeFile}: expected search-intent H1 is missing`);
   }
   if (!html.includes(compactSpelling)) {
     failures.push(`${relativeFile}: common compact spelling is missing`);
