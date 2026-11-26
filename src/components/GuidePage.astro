@@ -141,9 +141,7 @@ const exampleCopy = {
       <Prose>
         {
           t.sections.map((s, sectionIndex) => (
-            <section
-              id={sectionIndex === exampleIndex ? "xml-example" : undefined}
-            >
+            <section>
               <h2>{s.h2}</h2>
               {s.paras.map((p) => (
                 <p>{p}</p>
@@ -188,7 +186,9 @@ const exampleCopy = {
                 </table>
               )}
               {s.xml && (
-                <>
+                <div
+                  id={sectionIndex === exampleIndex ? "xml-example" : undefined}
+                >
                   <div class="example-tools">
                     <button
                       type="button"
@@ -218,7 +218,7 @@ const exampleCopy = {
                       <p>{exampleCopy.note}</p>
                     </div>
                   )}
-                </>
+                </div>
               )}
             </section>
           ))
