@@ -1,0 +1,469 @@
+---
+import demo from "../data/bankDemo.json";
+---
+
+<section
+  class="bank-demo"
+  data-demo-endpoint={demo.endpoint}
+  aria-label="Read a simulator statement"
+>
+  <div class="demo-heading">
+    <div>
+      <span class="eyebrow">BANK SIMULATOR · TEST ENVIRONMENT</span><h2>
+        Your first bank statement
+      </h2><p>
+        Retrieve a real API response containing entirely synthetic data.
+      </p>
+    </div>
+    <span class="environment"
+      ><span aria-hidden="true">●</span> Synthetic account</span
+    >
+  </div>
+  <div class="demo-actions">
+    <button type="button" class="fetch-button" data-fetch
+      >Fetch statement <span aria-hidden="true">↗</span></button
+    >
+    <span class="fetch-note">No registration. No payment is created.</span>
+  </div>
+  <p class="request-status" data-status role="status" aria-live="polite">
+    Ready to connect to the ISECure test environment.
+  </p>
+  <div class="demo-empty" data-empty>
+    <div class="file-symbol" aria-hidden="true">XML</div>
+    <h3>A statement you can explore</h3>
+    <p>
+      View the account and balances, inspect the original XML, or download it
+      for your own integration.
+    </p>
+    <span class="format-label">camt.053.001.02</span>
+  </div>
+  <div data-result hidden>
+    <div class="result-toolbar">
+      <div class="view-switch" aria-label="Display format">
+        <button type="button" data-view="summary" aria-pressed="true"
+          >Statement</button
+        >
+        <button type="button" data-view="xml" aria-pressed="false"
+          >Original XML</button
+        >
+      </div>
+      <button type="button" class="download-button" data-download
+        >Download XML <span aria-hidden="true">↓</span></button
+      >
+    </div>
+    <div class="statement" data-panel="summary">
+      <div class="account-line">
+        <div>
+          <span class="label">Demo account</span><strong data-account></strong>
+        </div><span class="format-label">EUR · camt.053</span>
+      </div>
+      <div class="balances">
+        <div>
+          <span class="label">Opening balance</span><strong data-opening
+          ></strong>
+        </div><div>
+          <span class="label">Closing balance</span><strong data-closing
+          ></strong>
+        </div>
+      </div>
+      <div class="transaction-heading">
+        <h3>Transactions</h3><span>0 entries</span>
+      </div>
+      <p class="empty-transactions">
+        This is the simulator’s opening statement. The balances are seeded test
+        values; no payments have been made.
+      </p>
+    </div>
+    <div class="xml-panel" data-panel="xml" hidden>
+      <pre><code data-xml /></pre>
+    </div>
+    <div class="receipt">
+      <span data-retrieved></span><span data-delivery></span>
+    </div>
+  </div>
+  <div class="demo-footer">
+    <span>Powered by <code>isecure-ts-client</code> {demo.sdkVersion}</span><a
+      href="/wsapi_v2/">Explore the API <span aria-hidden="true">→</span></a
+    >
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>(".bank-demo");
+  if (root) {
+    const get = <T extends HTMLElement>(selector: string): T => {
+      const element = root.querySelector<T>(selector);
+      if (!element) throw new Error("Missing demo control");
+      return element;
+    };
+    const fetchButton = get<HTMLButtonElement>("[data-fetch]");
+    let xml = "";
+    const text = (node: Element | Document, tag: string): string =>
+      node.getElementsByTagNameNS("*", tag)[0]?.textContent?.trim() ?? "";
+    function showView(view: string): void {
+      root
+        ?.querySelectorAll<HTMLButtonElement>("[data-view]")
+        .forEach((button) =>
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.view === view),
+          ),
+        );
+      root?.querySelectorAll<HTMLElement>("[data-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== view;
+      });
+    }
+    root
+      .querySelectorAll<HTMLButtonElement>("[data-view]")
+      .forEach((button) =>
+        button.addEventListener("click", () =>
+          showView(button.dataset.view ?? "summary"),
+        ),
+      );
+    fetchButton.addEventListener("click", async () => {
+      fetchButton.disabled = true;
+      root.setAttribute("aria-busy", "true");
+      get("[data-status]").textContent =
+        "Connecting securely and retrieving the simulator statement…";
+      get("[data-status]").removeAttribute("data-error");
+      try {
+        const response = await fetch(root.dataset.demoEndpoint ?? "", {
+          credentials: "omit",
+          cache: "no-store",
+          signal: AbortSignal.timeout(25_000),
+        });
+        if (!response.ok)
+          throw new Error(
+            response.status === 429
+              ? "Please wait a moment before fetching again."
+              : "The test environment is temporarily unavailable. Please try again shortly.",
+          );
+        const value = await response.json();
+        if (
+          value.synthetic !== true ||
+          value.environment !== "test" ||
+          value.bank !== "simulator" ||
+          value.fileType !== "camt.053.001.02" ||
+          typeof value.xml !== "string" ||
+          !["live", "cached"].includes(value.delivery)
+        )
+          throw new Error("The demo returned an unexpected response.");
+        const document = new DOMParser().parseFromString(
+          value.xml,
+          "application/xml",
+        );
+        if (
+          document.querySelector("parsererror") ||
+          document.documentElement.namespaceURI !==
+            "urn:iso:std:iso:20022:tech:xsd:camt.053.001.02"
+        )
+          throw new Error("The statement could not be read.");
+        const account = text(document, "IBAN");
+        if (
+          account !== "FI2112345600000785" ||
+          document.getElementsByTagNameNS("*", "Ntry").length !== 0
+        )
+          throw new Error(
+            "The opening statement has changed. Please try again later.",
+          );
+        const money = (type: string): string => {
+          const balance = [...document.getElementsByTagNameNS("*", "Bal")].find(
+            (element) => text(element, "Cd") === type,
+          );
+          if (!balance) throw new Error("The statement is missing a balance.");
+          const amount = text(balance, "Amt");
+          if (amount !== "10000000.00" || text(balance, "CdtDbtInd") !== "CRDT")
+            throw new Error("Unexpected opening balance.");
+          return new Intl.NumberFormat("en-FI", {
+            style: "currency",
+            currency: "EUR",
+          }).format(10_000_000);
+        };
+        get("[data-account]").textContent = account.replace(
+          /(.{4})(?=.)/g,
+          "$1 ",
+        );
+        get("[data-opening]").textContent = money("OPBD");
+        get("[data-closing]").textContent = money("CLBD");
+        const retrieved = new Date(value.retrievedAt);
+        if (!Number.isFinite(retrieved.getTime()))
+          throw new Error("Missing retrieval time.");
+        xml = value.xml;
+        get("[data-xml]").textContent = xml;
+        get("[data-retrieved]").textContent =
+          `Retrieved ${retrieved.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "medium" })}`;
+        get("[data-delivery]").textContent =
+          value.delivery === "cached"
+            ? "Cached response · up to one minute old"
+            : "Retrieved from the test API";
+        get("[data-empty]").hidden = true;
+        get("[data-result]").hidden = false;
+        get("[data-status]").textContent =
+          "Statement ready. All account data is synthetic.";
+        showView("summary");
+      } catch (error) {
+        xml = "";
+        get("[data-result]").hidden = true;
+        get("[data-empty]").hidden = false;
+        get("[data-status]").setAttribute("data-error", "true");
+        get("[data-status]").textContent =
+          (error instanceof Error && error.message.startsWith("The ")) ||
+          (error instanceof Error && error.message.startsWith("Please "))
+            ? error.message
+            : "We couldn’t reach the test environment. Please try again shortly.";
+      } finally {
+        fetchButton.disabled = false;
+        root.removeAttribute("aria-busy");
+      }
+    });
+    get("[data-download]").addEventListener("click", () => {
+      if (!xml) return;
+      const url = URL.createObjectURL(
+        new Blob([xml], { type: "application/xml;charset=utf-8" }),
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "isecure-synthetic-opening-statement.xml";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+  }
+</script>
+
+<style>
+  .bank-demo {
+    border: 1px solid var(--landing-line);
+    border-radius: 20px;
+    background: var(--landing-card);
+    padding: clamp(20px, 4vw, 36px);
+    box-shadow: 0 14px 48px rgb(18 33 47 / 6%);
+  }
+  .demo-heading,
+  .demo-actions,
+  .result-toolbar,
+  .account-line,
+  .transaction-heading,
+  .receipt,
+  .demo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    font-weight: 700;
+    color: var(--landing-accent);
+  }
+  h2 {
+    font-size: clamp(22px, 3vw, 30px);
+    margin: 9px 0 8px;
+    letter-spacing: -0.035em;
+  }
+  p {
+    margin: 0;
+    color: var(--landing-muted);
+    line-height: 1.65;
+  }
+  .environment,
+  .format-label {
+    font-size: 12px;
+    background: var(--landing-soft);
+    color: var(--landing-muted);
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .environment span {
+    color: var(--landing-accent);
+    margin-right: 5px;
+  }
+  .demo-actions {
+    justify-content: flex-start;
+    margin-top: 26px;
+  }
+  button {
+    font: inherit;
+    cursor: pointer;
+    min-height: 44px;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+  }
+  button:focus-visible,
+  a:focus-visible {
+    outline: 3px solid var(--landing-blue);
+    outline-offset: 4px;
+  }
+  button:disabled {
+    opacity: 0.55;
+    cursor: wait;
+  }
+  .fetch-button {
+    color: var(--landing-primary-ink);
+    background: var(--landing-primary-bg);
+    border: 1px solid transparent;
+  }
+  .fetch-button:hover {
+    background: var(--landing-primary-hover);
+  }
+  .fetch-button span {
+    margin-left: 20px;
+  }
+  .fetch-note,
+  .request-status,
+  .receipt,
+  .demo-footer {
+    font-size: 12px;
+    color: var(--landing-muted);
+  }
+  .request-status {
+    margin-top: 14px;
+    min-height: 20px;
+  }
+  .request-status[data-error] {
+    color: #a53126;
+  }
+  .demo-empty {
+    text-align: center;
+    background: var(--landing-card-strong);
+    border: 1px dashed var(--landing-line);
+    border-radius: 12px;
+    padding: 32px 20px;
+    margin: 24px 0;
+  }
+  .demo-empty p {
+    max-width: 390px;
+    margin: 8px auto 20px;
+    font-size: 14px;
+  }
+  .file-symbol {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 15px 8px;
+    border: 1px solid var(--landing-line);
+    border-radius: 7px;
+    display: inline-block;
+    margin-bottom: 15px;
+    color: var(--landing-accent);
+  }
+  h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  .result-toolbar {
+    margin-top: 24px;
+  }
+  .view-switch {
+    display: flex;
+    gap: 4px;
+    background: var(--landing-soft);
+    padding: 4px;
+    border-radius: 10px;
+  }
+  .view-switch button {
+    border: 0;
+    background: transparent;
+    color: var(--landing-muted);
+  }
+  .view-switch button[aria-pressed="true"] {
+    background: var(--landing-card);
+    color: var(--landing-ink);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 9%);
+  }
+  .download-button {
+    background: transparent;
+    border: 1px solid var(--landing-line);
+    color: var(--landing-ink);
+  }
+  .statement,
+  .xml-panel {
+    margin-top: 20px;
+    border: 1px solid var(--landing-line);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .label {
+    font-size: 12px;
+    color: var(--landing-muted);
+    display: block;
+    margin-bottom: 5px;
+  }
+  .account-line strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .balances {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin: 28px 0;
+  }
+  .balances strong {
+    font-size: clamp(21px, 3.5vw, 30px);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  .transaction-heading {
+    border-top: 1px solid var(--landing-line);
+    padding-top: 20px;
+  }
+  .transaction-heading span {
+    font-size: 12px;
+    color: var(--landing-muted);
+  }
+  .empty-transactions {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  .xml-panel {
+    max-height: 420px;
+    overflow: auto;
+    background: var(--landing-card-strong);
+  }
+  pre {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .receipt {
+    margin: 12px 0 24px;
+    gap: 7px;
+  }
+  .demo-footer {
+    border-top: 1px solid var(--landing-line);
+    padding-top: 18px;
+  }
+  a {
+    color: var(--landing-accent);
+    text-underline-offset: 3px;
+  }
+  [hidden] {
+    display: none !important;
+  }
+  @media (max-width: 480px) {
+    .balances {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .statement,
+    .xml-panel {
+      padding: 18px;
+    }
+    .result-toolbar {
+      align-items: stretch;
+    }
+    .view-switch {
+      flex-grow: 1;
+    }
+    .view-switch button {
+      flex: 1;
+    }
+  }
+</style>

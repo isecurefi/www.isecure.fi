@@ -7,12 +7,14 @@
     "node": ">=22.12.0"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "3.1102.0",
     "@aws-sdk/client-sns": "^3.1102.0",
     "@aws-sdk/credential-provider-cognito-identity": "^3.972.65",
     "@popperjs/core": "^2.11.8",
     "@scalar/api-reference": "1.66.1",
     "bootstrap": "^5.3.8",
-    "highlight.js": "^11.11.1"
+    "highlight.js": "^11.11.1",
+    "isecure-ts-client": "6.1.0"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -21,6 +23,7 @@
     "astro": "^7.1.6",
     "autoprefixer": "^10.5.4",
     "cssnano": "^8.0.2",
+    "esbuild": "0.25.12",
     "eslint": "^10.8.0",
     "eslint-plugin-astro": "^3.1.0",
     "globals": "^17.9.0",

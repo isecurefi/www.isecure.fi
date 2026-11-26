@@ -13,6 +13,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) =>
+        !new URL(page).pathname.startsWith("/preview/") &&
         !page.includes("/thankyou/") &&
         !draftCatalogPaths.has(new URL(page).pathname) &&
         !page.includes("/images/logo-candidates/"),

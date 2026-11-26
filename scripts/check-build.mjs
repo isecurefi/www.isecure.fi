@@ -976,6 +976,24 @@ for (const sitemapFile of sitemapFiles) {
 const sitemapText = sitemapFiles
   .map((file) => readFileSync(file, "utf8"))
   .join("\n");
+if (sitemapText.includes("/preview/")) {
+  failures.push("Preview routes must remain outside sitemaps");
+}
+const demoPath = "preview/bank-demo/index.html";
+const demoHtml = readFileSync(join(dist, demoPath), "utf8");
+if (!demoHtml.includes('<meta name="robots" content="noindex, nofollow">')) {
+  failures.push("Bank demo preview must remain noindex and nofollow");
+}
+if (demoHtml.includes("example.invalid/statement")) {
+  failures.push("Bank demo preview requires its deployed endpoint");
+}
+for (const file of htmlFiles) {
+  if (relative(dist, file).split(sep).join("/").startsWith("preview/"))
+    continue;
+  if (/href="[^"#]*\/preview\/bank-demo\//u.test(readFileSync(file, "utf8"))) {
+    failures.push("Bank demo preview must not be linked from existing pages");
+  }
+}
 for (const guideUrl of simulatorGuideUrls) {
   if (!sitemapText.includes(guideUrl)) {
     failures.push(`Sitemap: missing Bank Simulator URL ${guideUrl}`);
