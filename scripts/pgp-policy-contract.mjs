@@ -13,9 +13,9 @@ export function validatePgpPolicy(spec) {
   if (
     spec.swagger !== "2.0" ||
     spec.host !== "ws-api.isecure.fi" ||
-    spec.basePath !== "/rc"
+    spec.basePath !== "/v2"
   )
-    errors.push("PGP companion must target production RC, never V2");
+    errors.push("PGP reference must target verified production V2");
   if (spec.schemes?.join() !== "https") errors.push("HTTPS is required");
   if (spec.paths?.["/pgp/policy"])
     errors.push("Whole-policy replacement is retired");

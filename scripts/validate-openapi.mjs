@@ -63,4 +63,4 @@ if (
 )
   pgpErrors.push("PGP snapshot digest differs from pinned source");
 if (pgpErrors.length) throw new Error(pgpErrors.join("\n"));
-console.log("PGP companion: 8 Test/RC operations, pinned source verified");
+console.log("PGP companion: 8 production operations, pinned source verified");

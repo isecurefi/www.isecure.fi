@@ -40,6 +40,29 @@ const actionMfaSample = pgpPolicySpec.paths["/session/action-mfa"].post[
 ].find((sample) => sample.lang === "TypeScript");
 if (!actionMfaSample) throw new Error("Missing action MFA TypeScript sample");
 const TYPESCRIPT_SDK_SAMPLES: Record<string, string> = {
+  ...Object.fromEntries(
+    Object.values(
+      pgpPolicySpec.paths as Record<
+        string,
+        Record<
+          string,
+          {
+            operationId: string;
+            "x-code-samples": Array<{ lang: string; source: string }>;
+          }
+        >
+      >,
+    ).flatMap((methods) =>
+      Object.values(methods).map((operation) => {
+        const sample = operation["x-code-samples"].find(
+          (item) => item.lang === "TypeScript",
+        );
+        if (!sample)
+          throw new Error(`Missing PGP SDK sample: ${operation.operationId}`);
+        return [operation.operationId, sample.source];
+      }),
+    ),
+  ),
   InitRegister: `// register() retrieves and answers the registration challenge.
 const registration = await client.register();`,
   VerifyEmail: `// After needs_email_verification; the client retains its AccessToken.
@@ -130,7 +153,7 @@ console.log(Usage.UniqueAccounts, Usage.MissingDays, Usage.Issues);`,
 // the signed assertion. Do not log, cache or persist it in the browser.
 const { Assertion } = await client.readWorkspaceAuthority(nativeChallenge);`,
   DeleteKey: `// client.deleteKey(...) uses the unsupported legacy short-ID endpoint.
-// On Test/RC use deletePgpKey with a full primary fingerprint and revision;
+// Use deletePgpKey with a full primary fingerprint and revision;
 // see the separate PGP authorization reference.`,
   ListKeys: `const keys = await client.listKeys();`,
   UploadKey: `const result = await client.uploadPgpKey(
@@ -235,6 +258,8 @@ The test-only bank identifier \`simulator\` is available at \`https://ws-api.tes
 
 ## Related API references
 
+- [PGP authorization guide](https://www.isecure.fi/apis/pgp-policy/): per-bank signature counts, required signers, key deletion and irreversible locking. Available on production V2 and Test; SDK 6.1.0 works without separate activation.
+
 - [Processing API documentation](https://www.isecure.fi/apis/processing/): prepare, validate, approve and download payment files before local signing and File Exchange upload.
 - [Bank Simulator API documentation](https://www.isecure.fi/apis/bank-simulator/): configure synthetic banks and accounts, define scenarios, start runs and inspect results. Its control API is separate from the fixed File Exchange simulator example.
 
@@ -268,7 +293,7 @@ Processing uses its separate production endpoint at https://processing-api.isecu
     {
       name: "Pgp",
       description:
-        "Register public keys for upload authorization or certificate export. Per-bank policies and required signers have a separate Test/RC reference.",
+        "Register public keys for upload authorization or certificate export. Configure per-bank signature counts, required signers, bank blocking and irreversible locking.",
     },
     {
       name: "Audit",

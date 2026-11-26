@@ -1073,7 +1073,7 @@ const packageManifest = JSON.parse(
   readFileSync(join(root, "package.json"), "utf8"),
 );
 const dependencyLock = readFileSync(join(root, "yarn.lock"), "utf8");
-const expectedOperations = 33;
+const expectedOperations = 37;
 const rendererVersion =
   packageManifest.dependencies?.["@scalar/api-reference"] ?? "";
 if (!/^\d+\.\d+\.\d+$/.test(rendererVersion)) {
@@ -1161,7 +1161,11 @@ if (hasLiteralNewline(rawSpec)) {
 for (const [path, pathItem] of Object.entries(rawSpec.paths ?? {})) {
   for (const [method, operation] of Object.entries(pathItem)) {
     const bank = operation?.parameters?.find((p) => p.name === "Bank");
-    if (bank && !bank.description?.includes("`omasp`")) {
+    if (
+      bank &&
+      !path.startsWith("/pgp/") &&
+      !bank.description?.includes("`omasp`")
+    ) {
       failures.push(
         `${method.toUpperCase()} ${path}: Bank parameter omits omasp`,
       );

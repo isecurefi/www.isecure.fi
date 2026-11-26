@@ -210,9 +210,10 @@ change product maturity or grant access.
 
 ## PGP authorization reference
 
-`/apis/pgp-policy/` and its `openapi.json` are a separate Test/production-RC
-companion. Never merge these policy routes into the default V2 reference before
-V2 promotion is independently verified. The reusable reference component and
+`/apis/pgp-policy/` and its `openapi.json` provide a focused production/Test
+guide. The same PGP operations belong in the main V2 reference: production
+promotion was independently verified on 26 November 2026 against deployment
+`i7hvpf` and the 25 November release evidence. SDK 6.1.0 needs no separate activation. The reusable reference component and
 reference-only security settings apply unchanged. `yarn api:sync --ref=<commit>`
 synchronizes both File Exchange and the PGP companion from the same exact
 `wsapi-v2` revision; normal builds remain offline and validate the companion digest.

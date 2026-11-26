@@ -1,7 +1,7 @@
 {
   "repository": "https://github.com/isecurefi/wsapi-v2",
-  "source": "https://raw.githubusercontent.com/isecurefi/wsapi-v2/267bb96ab7d2a5cbbdb525dfc643e43c38f6f6b6/pgp-policy-api.json",
-  "commit": "267bb96ab7d2a5cbbdb525dfc643e43c38f6f6b6",
-  "sourceSha256": "e2c5ef01ecb77ae0535ec647193c12b91e7731c2ae3e0acaad73866a866cff3e",
-  "snapshotSha256": "ed0f09a7cb37bc830305a365ff09726d0b54747e79bc933f0627187b638f2f9b"
+  "source": "https://raw.githubusercontent.com/isecurefi/wsapi-v2/3bf2a13b3e20cab1861fc0af69e114f13926eab8/pgp-policy-api.json",
+  "commit": "3bf2a13b3e20cab1861fc0af69e114f13926eab8",
+  "sourceSha256": "e55a924f7c91e2f572d118b85e38c660ce1b8ed520e971a0b585c1ce07736ded",
+  "snapshotSha256": "310f175c5b1cc4de942398d5b77a8461e89d9268a182a9c7e84900aa4ce02e28"
 }
