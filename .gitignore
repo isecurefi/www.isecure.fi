@@ -45,6 +45,7 @@ css/*.css
 # Generated files
 *.html
 !scripts/admin-screenshots/index.html
+!public/googlef9de7a9770f69bd9.html
 package-lock.json
 
 # Search Console pull: raw data dump + service-account key (never commit the key)
